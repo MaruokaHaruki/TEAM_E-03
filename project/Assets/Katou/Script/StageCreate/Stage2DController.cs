@@ -5,85 +5,85 @@ using UnityEngine;
 public class StageController : MonoBehaviour
 {
     /// <summary>
-    /// ’†S‚©‚ç‚¸‚ê‚Ä‚¢‚éƒxƒNƒgƒ‹—Ê
+    /// ä¸­å¿ƒã‹ã‚‰æŒ‡å®šã—ãŸãšã‚‰ã™ãƒ™ã‚¯ãƒˆãƒ«é‡
     /// </summary>
-    [SerializeField, Header("’†S‚©‚ç‚¸‚ê‚Ä‚¢‚éƒxƒNƒgƒ‹—Ê")] private Vector2 CenterShiftVec;
+    [SerializeField, Header("ä¸­å¿ƒã‹ã‚‰æŒ‡å®šã—ãŸãšã‚‰ã™ãƒ™ã‚¯ãƒˆãƒ«é‡")] private Vector2 CenterShiftVec;
 
     /// <summary>
-    /// ƒXƒe[ƒW‚Ì‘å‚«‚³
+    /// ã‚¹ãƒ†ãƒ¼ã‚¸ã®å¤§ãã•
     /// </summary>
-    [SerializeField, Header("ƒXƒe[ƒW‚Ì‘å‚«‚³")] private Vector2 StageSize = new Vector2(2f, 2f);
+    [SerializeField, Header("ã‚¹ãƒ†ãƒ¼ã‚¸ã®å¤§ãã•")] private Vector2 StageSize = new Vector2(2f, 2f);
 
     /// <summary>
-    /// Œú‚İ
+    /// åšã¿
     /// </summary>
-    [SerializeField, Header("Œú‚İ")] private float Thickness = 3f;
+    [SerializeField, Header("åšã¿")] private float Thickness = 3f;
 
     /// <summary>
-    /// ƒXƒe[ƒW˜AŒgƒtƒ‰ƒO
+    /// ã‚¹ãƒ†ãƒ¼ã‚¸é€£å‹•ãƒ•ãƒ©ã‚°
     /// </summary>
-    [SerializeField, Header("ƒXƒe[ƒW˜AŒgƒtƒ‰ƒO")] private bool StageCollaborationFlag;
+    [SerializeField, Header("ã‚¹ãƒ†ãƒ¼ã‚¸é€£å‹•ãƒ•ãƒ©ã‚°")] private bool StageCollaborationFlag;
 
     /// <summary>
-    /// ƒXƒ^[ƒgˆê‰ñ‚¾‚¯—LŒø‚É‚·‚é
+    /// ã‚¹ã‚¿ãƒ¼ãƒˆæ™‚ã«å‘¼ã‚“ã ã‹è¨˜éŒ²ã«ã™ã‚‹
     /// </summary>
-    [SerializeField, Header("ƒXƒ^[ƒgˆê‰ñ‚¾‚¯—LŒø‚É‚·‚é")] private bool StartFlag = true;
+    [SerializeField, Header("ã‚¹ã‚¿ãƒ¼ãƒˆæ™‚ã«å‘¼ã‚“ã ã‹è¨˜éŒ²ã«ã™ã‚‹")] private bool StartFlag = true;
 
     /// <summary>
-    /// İ’è—pƒIƒuƒWƒFƒNƒg İ’è‚ª‚È‚¯‚ê‚ÎƒLƒ…[ƒu
+    /// è¨­å®šç”¨ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ è¨­å®šãŒãªã‘ã‚Œã°ã‚­ãƒ¥ãƒ¼ãƒ–
     /// </summary>
-    [SerializeField, Header("İ’è—pƒIƒuƒWƒFƒNƒg\n  İ’è‚ª‚È‚¯‚ê‚ÎƒLƒ…[ƒu")] private GameObject SetInstantiateObject;
+    [SerializeField, Header("è¨­å®šç”¨ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ\n  è¨­å®šãŒãªã‘ã‚Œã°ã‚­ãƒ¥ãƒ¼ãƒ–")] private GameObject SetInstantiateObject;
 
     [System.Serializable, SerializeField]
     public class WallDatas
     {
         /// <summary>
-        /// •ÇƒIƒuƒWƒFƒNƒg
+        /// å£ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
         /// </summary>
-        [Header("•ÇƒIƒuƒWƒFƒNƒg")] public GameObject WallObject;
+        [Header("å£ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ")] public GameObject WallObject;
 
         /// <summary>
-        /// ”ñ“§‰ßƒtƒ‰ƒO
+        /// ä¸é€æ˜ãƒ•ãƒ©ã‚°
         /// </summary>
-        [Header("“§‰ßƒtƒ‰ƒO")] public bool InvisibleFlag;
+        [Header("é€æ˜ãƒ•ãƒ©ã‚°")] public bool InvisibleFlag;
 
         /// <summary>
-        /// ƒƒbƒVƒ…
+        /// ãƒ¡ãƒƒã‚·ãƒ¥
         /// </summary>
-        [Header("ƒƒbƒVƒ…")] public MeshRenderer WallMes;
+        [Header("ãƒ¡ãƒƒã‚·ãƒ¥")] public MeshRenderer WallMes;
 
         /// <summary>
-        /// L‚Î‚³‚È‚¢•ûŒü
+        /// æ‹¡å¼µã—ãªã„æ–¹å‘
         /// </summary>
-        [Header("L‚Î‚³‚È‚¢•ûŒü")] public Vector2 NotExtendVec;
+        [Header("æ‹¡å¼µã—ãªã„æ–¹å‘")] public Vector2 NotExtendVec;
 
         /// <summary>
-        /// ˜AŒgƒtƒ‰ƒO
+        /// é€£å‹•ãƒ•ãƒ©ã‚°
         /// </summary>
-        [Header("˜AŒgƒtƒ‰ƒO")] public bool CollaborationFlag;
+        [Header("é€£å‹•ãƒ•ãƒ©ã‚°")] public bool CollaborationFlag;
     }
 
-    /// <summary>’n–Ê</summary>
-    [SerializeField, Header("’n–Ê")] private WallDatas Floor;
-    /// <summary>“Vˆä</summary>
-    [SerializeField, Header("“Vˆä")] private WallDatas Ceiling;
-    /// <summary>Xƒvƒ‰ƒX•ûŒü‚Ì•Ç</summary>
-    [SerializeField, Header("Xƒvƒ‰ƒX•ûŒü‚Ì•Ç")] private WallDatas Wall_XPlus;
-    /// <summary>Xƒ}ƒCƒiƒX•ûŒü‚Ì•Ç</summary>
-    [SerializeField, Header("Xƒ}ƒCƒiƒX•ûŒü‚Ì•Ç")] private WallDatas Wall_XMinus;
+    /// <summary>åºŠ</summary>
+    [SerializeField, Header("åºŠ")] private WallDatas Floor;
+    /// <summary>å¤©äº•</summary>
+    [SerializeField, Header("å¤©äº•")] private WallDatas Ceiling;
+    /// <summary>Xãƒ—ãƒ©ã‚¹æ–¹å‘ã®å£</summary>
+    [SerializeField, Header("Xãƒ—ãƒ©ã‚¹æ–¹å‘ã®å£")] private WallDatas Wall_XPlus;
+    /// <summary>Xãƒã‚¤ãƒŠã‚¹æ–¹å‘ã®å£</summary>
+    [SerializeField, Header("Xãƒã‚¤ãƒŠã‚¹æ–¹å‘ã®å£")] private WallDatas Wall_XMinus;
 
 
     /// <summary>
-    /// ƒAƒ^ƒbƒ`
+    /// ã‚¢ã‚¿ãƒƒãƒæ™‚
     /// </summary>
     void OnValidate()
     {
-        // ƒf[ƒ^ƒIƒuƒWƒF‚É‚Ô‚¿‚Ş
-        Debug.Log("ƒAƒ^ƒbƒ`");
+        // ãƒ‡ãƒ¼ã‚¿ã‚ªãƒ–ã‚¸ã‚§ã‚¯ã«ç´ã¥ã‘ã‚‹
+        Debug.Log("ã‚¢ã‚¿ãƒƒãƒ");
 
         if (Application.isPlaying)
         {
-            Debug.Log("Ä¶’†");
+            Debug.Log("å†ç”Ÿä¸­");
             StageCollaborationFlag = true;
             return;
         }
@@ -98,25 +98,25 @@ public class StageController : MonoBehaviour
         }
         StartFlag = false;
 
-        // ƒXƒe[ƒW˜AŒgƒtƒ‰ƒO
+        // ã‚¹ãƒ†ãƒ¼ã‚¸é€£å‹•ãƒ•ãƒ©ã‚°
         StageCollaborationFlag = true;
 
-        // ’n–Ê
+        // åºŠ
         if (Floor == null)
         {
             Floor = SetOnValidateWallObujectProcess(Vector2.up, 1, "Floor");
         }
-        // “Vˆä
+        // å¤©äº•
         if (Ceiling == null)
         {
             Ceiling = SetOnValidateWallObujectProcess(Vector2.down, 2, "Ceiling");
         }
-        // Xƒvƒ‰ƒX
+        // Xãƒ—ãƒ©ã‚¹
         if (Wall_XPlus == null)
         {
             Wall_XPlus = SetOnValidateWallObujectProcess(Vector2.right, 3, "Wall (XPlus)");
         }
-        // Xƒ}ƒCƒiƒX
+        // Xãƒã‚¤ãƒŠã‚¹
         if (Wall_XMinus == null)
         {
             Wall_XMinus = SetOnValidateWallObujectProcess(Vector2.left, 4, "Wall (XMinus)");
@@ -124,31 +124,31 @@ public class StageController : MonoBehaviour
     }
 
     /// <summary>
-    /// •ÏX
+    /// æ›´æ–°æ™‚
     /// </summary>
     void Update()
     {
-        Debug.Log("XV");
+        Debug.Log("æ›´æ–°");
 
         if (StageCollaborationFlag)
         {
-            // ’n–Ê
+            // åºŠ
             SetUpdateWallObujectProcess(Floor);
-            // “Vˆä
+            // å¤©äº•
             SetUpdateWallObujectProcess(Ceiling);
-            //Xƒvƒ‰ƒX
+            //Xãƒ—ãƒ©ã‚¹
             SetUpdateWallObujectProcess(Wall_XPlus);
-            //Xƒ}ƒCƒiƒX
+            //Xãƒã‚¤ãƒŠã‚¹
             SetUpdateWallObujectProcess(Wall_XMinus);
         }
     }
 
     /// <summary>
-    /// •ÇÛ‚ÌˆÚ“®æ“¾
+    /// å£å®Ÿéš›ã®ç§»å‹•ã‚’å–å¾—
     /// </summary>
-    /// <param name="vec">•ûŒü</param>
-    /// <param name="StageSize">ƒXƒe[ƒWƒTƒCƒY</param>
-    /// <param name="scale">‘å‚«‚³</param>
+    /// <param name="vec">æ–¹å‘</param>
+    /// <param name="StageSize">ã‚¹ãƒ†ãƒ¼ã‚¸ã‚µã‚¤ã‚º</param>
+    /// <param name="scale">å¤§ãã•</param>
     /// <returns></returns>
     private Vector3 SetByTheWallPosition(Vector3 vec, float StageSize, float scale)
     {
@@ -156,36 +156,36 @@ public class StageController : MonoBehaviour
     }
 
     /// <summary>
-    /// ƒfƒ^ƒbƒ`
+    /// ãƒ‡ã‚¿ãƒƒãƒæ™‚
     /// </summary>
     void OnDestroy()
     {
-        Debug.Log("ƒfƒ^ƒbƒ`");
+        Debug.Log("ãƒ‡ã‚¿ãƒƒãƒ");
         if (StageCollaborationFlag)
         {
-            // ’n–Ê
+            // åºŠ
             SetOnDestroyWallObujectProcess(Floor);
-            // “Vˆä
+            // å¤©äº•
             SetOnDestroyWallObujectProcess(Ceiling);
-            // Xƒvƒ‰ƒX
+            // Xãƒ—ãƒ©ã‚¹
             SetOnDestroyWallObujectProcess(Wall_XPlus);
-            // Xƒ}ƒCƒiƒX
+            // Xãƒã‚¤ãƒŠã‚¹
             SetOnDestroyWallObujectProcess(Wall_XMinus);
         }
     }
 
     /// <summary>
-    /// ƒAƒ^ƒbƒ`ƒEƒH[ƒ‹ƒf[ƒ^ˆê‚Âİ’è
+    /// ã‚¢ã‚¿ãƒƒãƒæ™‚ ã‚¦ã‚©ãƒ¼ãƒ«ãƒ‡ãƒ¼ã‚¿ã®è¨­å®š
     /// </summary>
-    /// <param name="wallObject">ƒEƒH[ƒ‹ƒf[ƒ^ƒIƒuƒWƒFƒNƒg</param>
-    /// <param name="notExtendVec">L‚Î‚³‚È‚¢•ûŒü</param>
+    /// <param name="wallObject">ã‚¦ã‚©ãƒ¼ãƒ«ãƒ‡ãƒ¼ã‚¿ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ</param>
+    /// <param name="notExtendVec">æ‹¡å¼µã—ãªã„æ–¹å‘</param>
     private WallDatas SetOnValidateWallObujectProcess(Vector2 notExtendVec, int setWallObjectNumber, string name)
     {
         WallDatas setWallData = new WallDatas();
 
         if (setWallData.WallObject == null)
         {
-            // Wall‚ğqƒIƒuƒWƒFƒNƒg‚Æ‚µ‚Ä¶¬
+            // Wallå­ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã¨ã—ã¦ç”Ÿæˆ
             if (SetInstantiateObject != null)
             {
                 setWallData.WallObject = Instantiate(SetInstantiateObject);
@@ -197,25 +197,25 @@ public class StageController : MonoBehaviour
             setWallData.WallObject.transform.parent = this.transform;
             setWallData.WallObject.transform.localPosition = Vector3.zero;
 
-            // –¼‘O
+            // åå‰
             setWallData.WallObject.name = name;
 
-            // ƒ`ƒFƒbƒN—pƒXƒNƒŠƒvƒgİ’è
+            // ãƒã‚§ãƒƒã‚¯ç”¨ã‚¹ã‚¯ãƒªãƒ—ãƒˆè¨­å®š
             setWallData.WallObject.AddComponent<WallCheckDelete>().SetCheckData(setWallObjectNumber);
 
-            // “§‰ßƒtƒ‰ƒO‚ğ–³Œø‚©
+            // é€æ˜ãƒ•ãƒ©ã‚°ã‚’ç„¡åŠ¹ã«
             setWallData.InvisibleFlag = true;
 
-            // ƒƒbƒVƒ…æ“¾
+            // ãƒ¡ãƒƒã‚·ãƒ¥å–å¾—
             setWallData.WallMes = setWallData.WallObject.GetComponent<MeshRenderer>();
 
-            // L‚Î‚³‚È‚¢•ûŒüİ’è
+            // æ‹¡å¼µã—ãªã„æ–¹å‘è¨­å®š
             setWallData.NotExtendVec = notExtendVec;
 
-            // ˜AŒgƒtƒ‰ƒO
+            // é€£å‹•ãƒ•ãƒ©ã‚°
             setWallData.CollaborationFlag = true;
 
-            // ˆÊ’u@‘å‚«‚³ ‚»‚Ì‘¼İ’è
+            // ä½ç½® å¤§ãã• ãã®ä»–è¨­å®š
             SetSize_Position_Etc(setWallData);
         }
 
@@ -223,32 +223,32 @@ public class StageController : MonoBehaviour
     }
 
     /// <summary>
-    /// XVˆ—
+    /// æ›´æ–°å‡¦ç†
     /// </summary>
     /// <param name="wallObject"></param>
     private void SetUpdateWallObujectProcess(WallDatas wallObject)
     {
         if (wallObject.CollaborationFlag)
         {
-            // ˆÊ’u ‘å‚«‚³@‚»‚Ì‘¼İ’è
+            // ä½ç½® å¤§ãã• ãã®ä»–è¨­å®š
             SetSize_Position_Etc(wallObject);
         }
     }
 
     /// <summary>
-    /// ƒfƒ^ƒbƒ`ˆ— 
+    /// ãƒ‡ã‚¿ãƒƒãƒå‡¦ç† 
     /// </summary>
     /// <param name="wallObject"></param>
     private void SetOnDestroyWallObujectProcess(WallDatas wallObject)
     {
         if (!wallObject.CollaborationFlag)
         {
-            // qƒIƒuƒWƒFƒNƒg‚©‚çŠO‚·
+            // å­ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆå¤–ã‹ã‚‰å¤–ã™
             wallObject.WallObject.transform.SetParent(null);
         }
         else
         {
-            // íœ
+            // å‰Šé™¤
             if (Application.isPlaying)
             {
                 Destroy(wallObject.WallObject);
@@ -261,50 +261,50 @@ public class StageController : MonoBehaviour
     }
 
     /// <summary>
-    /// ƒTƒCƒY@À•W@‚»‚Ì‘¼İ’è
+    /// ã‚µã‚¤ã‚º åº§æ¨™ ãã®ä»–è¨­å®š
     /// </summary>
-    /// <param name="wallDataObject">İ’è•¨</param>
+    /// <param name="wallDataObject">è¨­å®šç‰©</param>
     private void SetSize_Position_Etc(WallDatas wallDataObject)
     {
-        // À•Wİ’è
+        // åº§æ¨™è¨­å®š
         wallDataObject.WallObject.transform.localPosition = (new Vector2(SetLocalPosOne(wallDataObject.NotExtendVec.x, StageSize.x),
                                                                          SetLocalPosOne(wallDataObject.NotExtendVec.y, StageSize.y)) + CenterShiftVec);
 
-        // ‘å‚«‚³İ’è
+        // å¤§ãã•è¨­å®š
         wallDataObject.WallObject.transform.localScale = new Vector3(SetLocalScaleOne(wallDataObject.NotExtendVec.x, StageSize.x),
                                                                      SetLocalScaleOne(wallDataObject.NotExtendVec.y, StageSize.y),
                                                                      0.1f);
 
-        // “§‰ßİ’è
+        // é€æ˜è¨­å®š
         wallDataObject.WallMes.enabled = wallDataObject.InvisibleFlag;
     }
 
     /// <summary>
-    /// 1À•Wİ’è—pŠÖ”
+    /// 1åº§æ¨™è¨­å®šç”¨é–¢æ•°
     /// </summary>
-    /// <param name="notExtendVolume">L‚Î‚³‚È‚¢•ûŒü</param>
-    /// <param name="stageSizeVolume">ƒXƒe[ƒWƒTƒCƒY</param>
-    /// <returns>1À•W</returns>
+    /// <param name="notExtendVolume">æ‹¡å¼µã—ãªã„æ–¹å‘</param>
+    /// <param name="stageSizeVolume">ã‚¹ãƒ†ãƒ¼ã‚¸ã‚µã‚¤ã‚º</param>
+    /// <returns>1åº§æ¨™</returns>
     float SetLocalPosOne(float notExtendVolume, float stageSizeVolume)
     {
         return ((notExtendVolume != 0.0f) ? (((stageSizeVolume * 0.5f) * -notExtendVolume) + ((Thickness * 0.5f) * -notExtendVolume)) : 0.0f);
     }
 
     /// <summary>
-    /// 1ƒTƒCƒYİ’è—pŠÖ”
+    /// 1ã‚µã‚¤ã‚ºè¨­å®šç”¨é–¢æ•°
     /// </summary>
-    /// <param name="notExtendVolume">L‚Î‚³‚È‚¢•ûŒü</param>
-    /// <param name="stageSizeVolume">ƒXƒe[ƒWƒTƒCƒY</param>
-    /// <returns>1ƒTƒCƒY</returns>
+    /// <param name="notExtendVolume">æ‹¡å¼µã—ãªã„æ–¹å‘</param>
+    /// <param name="stageSizeVolume">ã‚¹ãƒ†ãƒ¼ã‚¸ã‚µã‚¤ã‚º</param>
+    /// <returns>1ã‚µã‚¤ã‚º</returns>
     float SetLocalScaleOne(float notExtendVolume, float stageSizeVolume)
     {
         return Thickness + ((notExtendVolume != 0.0f) ? 0.0f : (stageSizeVolume + Thickness));
     }
 
     /// <summary>
-    /// ”š‚É‰‚¶‚½ƒEƒH[ƒ‹ƒf[ƒ^‚ğ•Ô‚·
+    /// ç•ªå·ã«å¿œã˜ãŸã‚¦ã‚©ãƒ¼ãƒ«ãƒ‡ãƒ¼ã‚¿ã‚’è¿”ã™
     /// </summary>
-    /// <param name="number">QÆƒiƒ“ƒo[</param>
+    /// <param name="number">å‚ç…§ãƒŠãƒ³ãƒãƒ¼</param>
     /// <returns></returns>
     private WallDatas GetWallDatas_Number(int number)
     {
@@ -327,10 +327,10 @@ public class StageController : MonoBehaviour
     }
 
     /// <summary>
-    /// ”š‚É‰‚¶‚½ƒIƒuƒWƒFƒNƒg‚ğ•Ô‚·
+    /// ç•ªå·ã«å¿œã˜ãŸã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’è¿”ã™
     /// </summary>
-    /// <param name="number">QÆƒiƒ“ƒo[</param>
-    /// <returns>ƒEƒH[ƒ‹ƒIƒuƒWƒFƒNƒg</returns>
+    /// <param name="number">å‚ç…§ãƒŠãƒ³ãƒãƒ¼</param>
+    /// <returns>ã‚¦ã‚©ãƒ¼ãƒ«ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ</returns>
     public GameObject GetWallObject_Number(int number)
     {
         WallDatas setData = GetWallDatas_Number(number);
@@ -343,10 +343,10 @@ public class StageController : MonoBehaviour
     }
 
     /// <summary>
-    /// ”š‚É‰‚¶‚½ƒIƒuƒWƒFƒNƒg‚Ì˜AŒgƒtƒ‰ƒOİ’è
+    /// ç•ªå·ã«å¿œã˜ãŸã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®é€£å‹•ãƒ•ãƒ©ã‚°è¨­å®š
     /// </summary>
-    /// <param name="number">QÆƒiƒ“ƒo[</param>
-    /// <param name="setFlag">İ’èƒtƒ‰ƒO</param>
+    /// <param name="number">å‚ç…§ãƒŠãƒ³ãƒãƒ¼</param>
+    /// <param name="setFlag">è¨­å®šãƒ•ãƒ©ã‚°</param>
     public void SetCollaborationFlag_Number(int number, bool setFlag)
     {
         WallDatas setData = GetWallDatas_Number(number);

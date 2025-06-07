@@ -3,9 +3,9 @@ using UnityEngine;
 public class TestAttack : MonoBehaviour
 {
     /// <summary>
-    /// —^ƒ_ƒ[ƒW—Ê
+    /// ä¸ãƒ€ãƒ¡ãƒ¼ã‚¸é‡
     /// </summary>
-    [SerializeField, Header("—^ƒ_ƒ[ƒW—Ê")] private int ToDamageVolume = 0;
+    [SerializeField, Header("ä¸ãƒ€ãƒ¡ãƒ¼ã‚¸é‡")] private int ToDamageVolume = 0;
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
@@ -18,6 +18,6 @@ public class TestAttack : MonoBehaviour
 
     private void OnCollisionStay2D(Collision2D collision)
     {
-        Debug.Log("‰½‚©‚É“–‚½‚Á‚Ä‚¢‚é");
+        Debug.Log("ä½•ã‹ã«å½“ãŸã‚Šç¶šã‘ã¦ã„ã‚‹");
     }
 }

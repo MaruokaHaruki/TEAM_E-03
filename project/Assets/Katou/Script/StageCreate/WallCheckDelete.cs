@@ -4,31 +4,33 @@ using UnityEngine;
 public class WallCheckDelete : MonoBehaviour
 {
     /// <summary>
-    /// ˜AŒgƒtƒ‰ƒOİ’è—p
+    /// é€£å‹•ãƒ•ãƒ©ã‚°è¨­å®šç”¨
     /// </summary>
     public bool SetStageCollaborationFlag;
     /// <summary>
-    /// ˜AŒgƒtƒ‰ƒO
+    /// é€£å‹•ãƒ•ãƒ©ã‚°
     /// </summary>
     private bool StageCollaborationFlag;
 
-    ///ƒ`ƒFƒbƒN—pƒiƒ“ƒo[
-    [SerializeField, Header("ƒ`ƒFƒbƒN—pƒiƒ“ƒo[")] private int CheckObjectTypeNumber = 0;
+    /// <summary>
+    /// ãƒã‚§ãƒƒã‚¯ç”¨ãƒŠãƒ³ãƒãƒ¼
+    /// </summary>
+    [SerializeField, Header("ãƒã‚§ãƒƒã‚¯ç”¨ãƒŠãƒ³ãƒãƒ¼")] private int CheckObjectTypeNumber = 0;
 
     /// <summary>
-    /// İ’è—pƒXƒe[ƒWƒRƒ“ƒgƒ[ƒ‰[
+    /// è¨­å®šç”¨ã‚¹ãƒ†ãƒ¼ã‚¸ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ©ãƒ¼
     /// </summary>
     private StageController SetStageController;
 
     void Start()
     {
-        // ˜AŒgƒtƒ‰ƒOİ’è
+        // é€£å‹•ãƒ•ãƒ©ã‚°è¨­å®š
         StageCollaborationFlag = SetStageCollaborationFlag = true;
 
-        // İ’è—pƒXƒe[ƒWƒRƒ“ƒgƒ[ƒ‰[
+        // è¨­å®šç”¨ã‚¹ãƒ†ãƒ¼ã‚¸ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ©ãƒ¼
         SetStageController = this.transform.parent.GetComponent<StageController>();
 
-        // ƒRƒ‰ƒCƒ_[‚ğ•t‚¯‘Ö‚¦‚é
+        // ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼ã‚’ä»˜ã‘æ›¿ãˆã‚‹
         BoxCollider deletecollider = this.gameObject.GetComponent<BoxCollider>();
         if (deletecollider != null)
         {
@@ -54,7 +56,7 @@ public class WallCheckDelete : MonoBehaviour
         GameObject checkObject = SetStageController.GetWallObject_Number(CheckObjectTypeNumber);
         if ((checkObject != this.gameObject) && StageCollaborationFlag)
         {
-            // íœ
+            // å‰Šé™¤
             if (Application.isPlaying)
             {
                 Destroy(this.gameObject);
@@ -66,7 +68,7 @@ public class WallCheckDelete : MonoBehaviour
         }
         else
         {
-            // ˜AŒgƒtƒ‰ƒOİ’è
+            // é€£å‹•ãƒ•ãƒ©ã‚°è¨­å®š
             if (StageCollaborationFlag != SetStageCollaborationFlag)
             {
                 StageCollaborationFlag = SetStageCollaborationFlag;
@@ -76,9 +78,9 @@ public class WallCheckDelete : MonoBehaviour
     }
 
     /// <summary>
-    /// ƒIƒuƒWƒFƒNƒgƒ^ƒCƒvƒiƒ“ƒo[
+    /// ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚¿ã‚¤ãƒ—ãƒŠãƒ³ãƒãƒ¼è¨­å®š
     /// </summary>
-    /// <param name="typeNumber">0ˆÈŠO‚ÌƒIƒuƒWƒFƒNƒgƒ^ƒCƒvƒiƒ“ƒo[</param>
+    /// <param name="typeNumber">0ä»¥å¤–ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚¿ã‚¤ãƒ—ãƒŠãƒ³ãƒãƒ¼</param>
     public void SetCheckData(int typeNumber)
     {
         CheckObjectTypeNumber = typeNumber;

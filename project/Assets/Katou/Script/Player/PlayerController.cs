@@ -6,26 +6,26 @@ using UnityEngine.UIElements;
 public class PlayerController : MonoBehaviour
 {
     /// <summary>
-    /// float ���W�v�Z �덷
+    /// float 座標計算 誤差
     /// </summary>
     private const float FloatPosError = 1.0f;
 
     /// <summary>
-    /// �v���C���[HP
+    /// プレイヤーHP
     /// </summary>
     [SerializeField, Header("HP")] private int PlayerHp;
 
     /// <summary>
-    /// �v���C���[���W�b�g�{�f�B
+    /// プレイヤーリジッドボディ
     /// </summary>
     private Rigidbody2D PlayerRigidbody;
 
     /// <summary>
-    /// �v���C���[�ړ����x ���ڐG���\��Ȃ�
+    /// プレイヤー移動速度 負の値を設定不可
     /// </summary>
-    [SerializeField, Header("�v���C���[�X�s�[�h"), Min(0.01f)] private float PlayerSpeed = 1.0f;
+    [SerializeField, Header("プレイヤースピード"), Min(0.01f)] private float PlayerSpeed = 1.0f;
     /// <summary>
-    /// ���x�ݒ�p
+    /// 絶対値設定用
     /// </summary>
     private float UnsignedSpeed
     {
@@ -34,43 +34,43 @@ public class PlayerController : MonoBehaviour
     }
 
     /// <summary>
-    /// ���W�b�g�{�f�B�ړ��t���O
+    /// リジッドボディ移動フラグ
     /// </summary>
-    [SerializeField, Header("���W�b�g�{�f�B�ړ��t���O")] private bool RigidbodyMoveFlag = true;
+    [SerializeField, Header("リジッドボディ移動フラグ")] private bool RigidbodyMoveFlag = true;
 
     /// <summary>
-    /// �d�͖������t���O
+    /// 重力無効化フラグ
     /// </summary>
-    [SerializeField, Header("�d�͖������t���O")] private bool GravityDeactivationFlag = true;
+    [SerializeField, Header("重力無効化フラグ")] private bool GravityDeactivationFlag = true;
 
-    /// <summary>�W�����v�t���O</summary>
-    [SerializeField, Header("�W�����v�t���O")] private bool JumpFlag;
-    /// <summary>�ő卂�x</summary>
-    [SerializeField, Header("�ő卂�x")] private float MaxHeight;
-    /// <summary>�Œፂ�x</summary>
-    [SerializeField, Header("�Œፂ�x")] private float MinHeight;
-    /// <summary>�W�����v�ړ����x</summary>
-    [SerializeField, Header("�W�����v�ړ����x")] private float JumpMoveSpeed;
-    /// <summary>�W�����v���x�@�b�P��</summary>
-    [SerializeField, Header("�W�����v���x�@�b�P��")] private float JumpSecondSpeed;
-    /// <summary>�W�����v�����b�� �m�F�p</summary>
+    /// <summary>ジャンプフラグ</summary>
+    [SerializeField, Header("ジャンプフラグ")] private bool JumpFlag;
+    /// <summary>最大高度</summary>
+    [SerializeField, Header("最大高度")] private float MaxHeight;
+    /// <summary>最低高度</summary>
+    [SerializeField, Header("最低高度")] private float MinHeight;
+    /// <summary>ジャンプ移動速度</summary>
+    [SerializeField, Header("ジャンプ移動速度")] private float JumpMoveSpeed;
+    /// <summary>ジャンプ速度 毎秒</summary>
+    [SerializeField, Header("ジャンプ速度 毎秒")] private float JumpSecondSpeed;
+    /// <summary>ジャンプ経過秒数 確認用</summary>
     private float CheckJumpSecond;
-    /// <summary>�W�����v�A�b�v�����x</summary>
-    [SerializeField, Header("�W�����v�A�b�v�ő厞���x")] private float JumpUpMaxSpeed;
-    /// <summary>�W�����v�_�E�������x</summary>
-    [SerializeField, Header("�W�����v�_�E���ő厞���x")] private float JumpDownMaxSpeed;
-    ///// <summary>�W�����v�A�b�v����</summary>
-    //[SerializeField, Header("�W�����v���s����")] private float JumpExecutionRatio;
-    /// <summary>�W�����v�d��</summary>
-    [SerializeField, Header("�W�����v�d��")] private float JumpGravity;
+    /// <summary>ジャンプアップ最大瞬時速度</summary>
+    [SerializeField, Header("ジャンプアップ最大瞬時速度")] private float JumpUpMaxSpeed;
+    /// <summary>ジャンプダウン最大瞬時速度</summary>
+    [SerializeField, Header("ジャンプダウン最大瞬時速度")] private float JumpDownMaxSpeed;
+    ///// <summary>ジャンプアップ比率</summary>
+    //[SerializeField, Header("ジャンプ実行比率")] private float JumpExecutionRatio;
+    /// <summary>ジャンプ重力</summary>
+    [SerializeField, Header("ジャンプ重力")] private float JumpGravity;
 
 
     /// <summary>
-    /// �t���[�����ۑ��p
+    /// フレーム番号保存用
     /// </summary>
-    [SerializeField, Header("�t���[�����ۑ��p")] private int FrameNumber;
+    [SerializeField, Header("フレーム番号保存用")] private int FrameNumber;
     /// <summary>
-    /// �t���[����
+    /// フレーム数
     /// </summary>
     public int Frame
     {
@@ -80,31 +80,31 @@ public class PlayerController : MonoBehaviour
 
     void Start()
     {
-        // �擾
+        // 取得
         {
             PlayerRigidbody = this.GetComponent<Rigidbody2D>();
         }
 
-        // ������
+        // 初期化
         {
-            // �t���[����
+            // フレーム数
             //FrameNumber = 0;
 
             // HP
             PlayerHp = 10;
 
-            // �W�����v�֌W
+            // ジャンプ関係
             {
-                // �W�����v�t���O
+                // ジャンプフラグ
                 JumpFlag = false;
 
-                // �ő�㏸���x
+                // 最大上昇速度
                 JumpUpMaxSpeed = 2f;
 
-                // �ő�~�����x
+                // 最大下降速度
                 JumpDownMaxSpeed = -2f;
 
-                // �d��
+                // 重力
                 JumpGravity = 0.2f;
             }
         }
@@ -112,7 +112,7 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        // �d�͖���������
+        // 重力無効化設定
         SetGravityDeactivation();
 
         if (Input.GetKeyDown(KeyCode.J))
@@ -123,16 +123,16 @@ public class PlayerController : MonoBehaviour
 
     void FixedUpdate()
     {
-        // �ړ�
+        // 移動
         float moveVec = Input.GetAxisRaw("Horizontal");
         MoveXVec(moveVec);
 
-        // �W�����v
+        // ジャンプ
         JumpProcess();
     }
 
     /// <summary>
-    /// �ړ��@��
+    /// 移動 左
     /// </summary>
     public void MoveLeft(float moveSpeed)
     {
@@ -140,7 +140,7 @@ public class PlayerController : MonoBehaviour
     }
 
     /// <summary>
-    /// �ړ��@�E
+    /// 移動 右
     /// </summary>
     public void MoveRight(float moveSpeed)
     {
@@ -148,7 +148,7 @@ public class PlayerController : MonoBehaviour
     }
 
     /// <summary>
-    /// �ړ��@X��
+    /// 移動 X軸
     /// </summary>
     public void MoveXVec(float moveSpeed)
     {
@@ -164,7 +164,7 @@ public class PlayerController : MonoBehaviour
     }
 
     /// <summary>
-    /// ���W�b�g�{�f�B�ړ��t���O�@�ݒ�
+    /// リジッドボディ移動フラグ 設定
     /// </summary>
     public void SetRigidbodyMoveFlag(bool rigidbodyMoveFlag)
     {
@@ -172,7 +172,7 @@ public class PlayerController : MonoBehaviour
     }
 
     /// <summary>
-    /// �W�����v���x�ݒ�
+    /// ジャンプ速度設定
     /// </summary>
     public void SetJumpSpeed(float upSpeed, float downSpeed)
     {
@@ -181,9 +181,9 @@ public class PlayerController : MonoBehaviour
     }
 
     /// <summary>
-    /// �W�����v�J�n
+    /// ジャンプ開始
     /// </summary>
-    /// <param name="jumpHeight">�W�����v�̓��B�_</param>
+    /// <param name="jumpHeight">ジャンプの到達点</param>
     public void SetJump(/*float jumpHeight*/)
     {
         if (JumpFlag == true)
@@ -199,18 +199,18 @@ public class PlayerController : MonoBehaviour
     }
 
     /// <summary>
-    /// �W�����v����
+    /// ジャンプ処理
     /// </summary>
     private void JumpProcess()
     {
         if (JumpFlag)
         {
-            // �W�����v������
+            // ジャンプ物理演算
             {
-                JumpMoveSpeed = (JumpSecondSpeed * 1/*�b*/) - (JumpGravity * 1/*�b��*/);
-                JumpSecondSpeed -= (JumpGravity * 1/*�b��*/);
+                JumpMoveSpeed = (JumpSecondSpeed * 1/*秒*/) - (JumpGravity * 1/*秒毎*/);
+                JumpSecondSpeed -= (JumpGravity * 1/*秒毎*/);
 
-                // �~�����x����ݒ�
+                // 下降速度上限設定
                 if (JumpSecondSpeed < JumpDownMaxSpeed)
                 {
                     JumpSecondSpeed = JumpDownMaxSpeed;
@@ -223,10 +223,10 @@ public class PlayerController : MonoBehaviour
                 //}
             }
 
-            // �W�����v
+            // ジャンプ
             this.transform.position += (Vector3.up * JumpMoveSpeed);
 
-            // �W�����v�I������ /*�n�ʂɓ����������ɂȂ邩��*/
+            // ジャンプ終了処理 /*地面に着地した際になるかも*/
             if ((Mathf.Sign(JumpMoveSpeed) == -1f) && ((MinHeight + FloatPosError) >= this.transform.position.y))
             {
                 Debug.Log(1000);
@@ -237,7 +237,7 @@ public class PlayerController : MonoBehaviour
     }
 
     /// <summary>
-    /// �d�͖���������
+    /// 重力無効化設定
     /// </summary>
     private void SetGravityDeactivation()
     {
@@ -264,7 +264,7 @@ public class PlayerController : MonoBehaviour
     }
 
     /// <summary>
-    /// �_���[�W
+    /// ダメージ
     /// </summary>
     public void Damage(int damage)
     {
@@ -274,7 +274,7 @@ public class PlayerController : MonoBehaviour
     }
 
     /// <summary>
-    /// HP�m�F
+    /// HP確認
     /// </summary>
     private void HpCheck()
     {
@@ -286,18 +286,18 @@ public class PlayerController : MonoBehaviour
     }
 
     /// <summary>
-    /// ���S����
+    /// 死亡処理
     /// </summary>
     private void DeathProcess()
     {
-        Debug.Log("���S");
+        Debug.Log("死亡");
     }
     
-    //*--------*      �ݒ� : �擾      *--------*//
+    //*--------*      設定 : 取得      *--------*//
 
-    /// <summary>�v���C���[HP�ݒ�</summary>
+    /// <summary>プレイヤーHP設定</summary>
     public void SetPlayerHp(int hp) {PlayerHp = hp; }
-    /// <summary>�v���C���[HP�擾</summary>
+    /// <summary>プレイヤーHP取得</summary>
     public int GetPlayerHp() { return PlayerHp; }
 
     //*--------*                       *--------*//
