@@ -72,6 +72,9 @@ public class PlayerController : MonoBehaviour
     /// <summary>
     /// フレーム数
     /// </summary>
+    /// 
+
+    [SerializeField,Header("ステート")]private PlayerState playerState;
     public int Frame
     {
         get { return FrameNumber; }
@@ -98,37 +101,49 @@ public class PlayerController : MonoBehaviour
                 // ジャンプフラグ
                 JumpFlag = false;
 
-                // 最大上昇速度
-                JumpUpMaxSpeed = 2f;
+                //// 最大上昇速度
+                //JumpUpMaxSpeed = 1.0f;
 
-                // 最大下降速度
-                JumpDownMaxSpeed = -2f;
+                //// 最大下降速度
+                //JumpDownMaxSpeed = -0.5f;
 
-                // 重力
-                JumpGravity = 0.2f;
+                //// 重力
+                //JumpGravity = 0.1f;
             }
         }
     }
 
     void Update()
     {
+        // 移動
+        float moveVec = Input.GetAxisRaw("Horizontal");
+        if (moveVec == 0)
+        {
+            playerState.SetState(PlayerState.State.Idle);//IdleStateに変化
+
+        }
+        else
+        {
+            playerState.SetState(PlayerState.State.Run);//RunStateに変化
+            MoveXVec(moveVec);
+
+        }
+
+        // ジャンプ
+        JumpProcess();
         // 重力無効化設定
         SetGravityDeactivation();
 
         if (Input.GetKeyDown(KeyCode.J))
         {
             SetJump();
+            playerState.SetState(PlayerState.State.Jump);//JumpStateに変化
         }
     }
 
     void FixedUpdate()
     {
-        // 移動
-        float moveVec = Input.GetAxisRaw("Horizontal");
-        MoveXVec(moveVec);
-
-        // ジャンプ
-        JumpProcess();
+       
     }
 
     /// <summary>
