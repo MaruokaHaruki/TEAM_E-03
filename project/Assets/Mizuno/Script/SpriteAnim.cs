@@ -20,7 +20,9 @@ public class SpriteAnim : MonoBehaviour
     void Start()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
-        player = GetComponent<Player>(); // 同じオブジェクトにある前提
+        player = GetComponent<Player>(); 
+        //  ↑同じオブジェクトにある前提
+        //  Player と SpriteAnim を別オブジェクトに分けた場合は public Player player;
 
         lastState = player.CurrentState;
         SetFirstFrame(lastState);
@@ -28,8 +30,10 @@ public class SpriteAnim : MonoBehaviour
 
     void Update()
     {
+        //プレイヤーの状態
         Player.State currentState = player.CurrentState;
 
+        //直前の状態と違わないか
         if (currentState != lastState)
         {
             currentFrame = 0;
@@ -38,7 +42,7 @@ public class SpriteAnim : MonoBehaviour
         }
 
         timer += Time.deltaTime;
-        if (timer >= frameDelay)
+        if (timer >= frameDelay)//フレーム更新
         {
             AdvanceFrame(currentState);
             timer = 0f;
