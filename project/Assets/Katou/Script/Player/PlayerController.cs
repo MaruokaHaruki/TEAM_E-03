@@ -7,6 +7,9 @@ using UnityEngine.Playables;
 
 public class PlayerController : MonoBehaviour
 {
+    private Vector3 m_Vel;
+    private Vector3 m_Acc;
+
     /// <summary>
     /// float 座標計算 誤差
     /// </summary>
@@ -63,7 +66,7 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     [SerializeField, Header("フレーム番号保存用")] private int FrameNumber;
 
-   // [SerializeField, Header("ステート")] private PlayerState playerState;
+    [SerializeField, Header("ステート")] private PlayerState playerState;
 
     // Input System関連
     private PlayerInputActions inputActions_;
@@ -91,9 +94,14 @@ public class PlayerController : MonoBehaviour
     void Awake()
     {
         inputActions_ = new PlayerInputActions();
-    }
 
-    void OnEnable()
+        m_Vel = new Vector3(0.0f, 0.0f, 0.0f);
+        m_Acc = new Vector3(0.0f, 0.0f, 0.0f);
+
+
+}
+
+void OnEnable()
     {
         inputActions_.Gameplay.Enable();
         
@@ -130,6 +138,9 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
+        m_Vel += m_Acc * Time.deltaTime;
+        this.transform.position += m_Vel * Time.deltaTime;
+
         // スティック回転による移動処理
         HandleStickRotationMovement();
 
@@ -163,6 +174,8 @@ public class PlayerController : MonoBehaviour
         {
             // スティック入力がない場合は方向をリセット
             rotationDirection_ = 0;
+            m_Acc = new Vector3(0f, 0f);
+            m_Vel *= 0.9f;
             // 累積回転量も素早く減衰
             accumulatedRotation_ *= 0.8f;
         }
@@ -182,16 +195,19 @@ public class PlayerController : MonoBehaviour
                     MoveXVec(finalMoveSpeed);
                 }
                 else if (RightMoveFlag) {
-                    MoveRight(finalMoveSpeed);
+                    //MoveRight(finalMoveSpeed);
+                    m_Acc+=new Vector3(10f, 0f);
                 }
                 else {
-                    MoveLeft(finalMoveSpeed);
+                   // MoveLeft(finalMoveSpeed);
+                    m_Acc += new Vector3(-10f, 0f);
+
                 }
             }
             else {
                 if (!JumpFlag) // ジャンプ中でなければIdleに
                 {
-                    //playerState.SetState(PlayerState.State.Idle);
+                    playerState.SetState(PlayerState.State.Idle);
                 }
             }
         }
@@ -208,7 +224,7 @@ public class PlayerController : MonoBehaviour
 
                 if (!JumpFlag) // ジャンプ中でなければIdleに
                 {
-                    //playerState.SetState(PlayerState.State.Idle);
+                    playerState.SetState(PlayerState.State.Idle);
                 }
             }
         }
@@ -232,6 +248,8 @@ public class PlayerController : MonoBehaviour
         {
             Debug.Log(this.gameObject.name);
             RightMoveFlag = !RightMoveFlag;
+            m_Vel *= -1.0f;
+
         }
         if (collision.gameObject.tag == "Stage") {
             JumpEndCheckObject(collision.gameObject);
@@ -264,20 +282,21 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     public void MoveXVec(float moveSpeed)
     {
-        if (RigidbodyMoveFlag)
-        {
-            PlayerRigidbody.linearVelocity = new Vector3(moveSpeed, PlayerRigidbody.linearVelocityY);
-        }
-        else
-        {
-            this.transform.position += (Vector3.right * moveSpeed * Time.deltaTime);
-        }
+
+        //if (RigidbodyMoveFlag)
+        //{
+        //    PlayerRigidbody.linearVelocity = new Vector3(moveSpeed, PlayerRigidbody.linearVelocityY);
+        //}
+        //else
+        //{
+        //    this.transform.position += (Vector3.right * moveSpeed * Time.deltaTime);
+        //}
         
-        // キャラクターの向きを設定
-        if (Mathf.Abs(moveSpeed) > 0.01f)
-        {
-            this.transform.localScale = new Vector3(Mathf.Sign(moveSpeed) * Mathf.Abs(this.transform.localScale.x), this.transform.localScale.y, this.transform.localScale.z);
-        }
+        //// キャラクターの向きを設定
+        //if (Mathf.Abs(moveSpeed) > 0.01f)
+        //{
+        //    this.transform.localScale = new Vector3(Mathf.Sign(moveSpeed) * Mathf.Abs(this.transform.localScale.x), this.transform.localScale.y, this.transform.localScale.z);
+        //}
     }
 
     /// <summary>
