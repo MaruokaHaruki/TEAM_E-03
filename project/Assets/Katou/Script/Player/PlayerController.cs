@@ -139,7 +139,7 @@ public class PlayerController : MonoBehaviour
         // 重力無効化設定
         SetGravityDeactivation();
     }
-
+    public bool Kibodo;
     /// <summary>
     /// スティック回転による移動処理（StickRotationToFPSと同じロジック）
     /// </summary>
@@ -174,29 +174,42 @@ public class PlayerController : MonoBehaviour
         
         // 方向を考慮した最終移動速度（符号を反転して右回転で右に移動するように修正）
         float finalMoveSpeed = -currentSpeed * rotationDirection_;
-
-        // 移動処理（回転量が十分にあり、かつ現在回転している場合のみ移動）
-        if (Mathf.Abs(finalMoveSpeed) > 0.01f && rotationDirection_ != 0 && accumulatedRotation_ > 1f)
-        {
-            playerState.SetState(PlayerState.State.Run);
-            if (false)
-            {
-                MoveXVec(finalMoveSpeed);
+        if (!Kibodo) {
+            // 移動処理（回転量が十分にあり、かつ現在回転している場合のみ移動）
+            if (Mathf.Abs(finalMoveSpeed) > 0.01f && rotationDirection_ != 0 && accumulatedRotation_ > 1f) {
+                playerState.SetState(PlayerState.State.Run);
+                if (false) {
+                    MoveXVec(finalMoveSpeed);
+                }
+                else if (RightMoveFlag) {
+                    MoveRight(finalMoveSpeed);
+                }
+                else {
+                    MoveLeft(finalMoveSpeed);
+                }
             }
-            else if (RightMoveFlag)
-            {
-                MoveRight(finalMoveSpeed);
-            }
-            else
-            {
-                MoveLeft(finalMoveSpeed);
+            else {
+                if (!JumpFlag) // ジャンプ中でなければIdleに
+                {
+                    playerState.SetState(PlayerState.State.Idle);
+                }
             }
         }
-        else
-        {
-            if (!JumpFlag) // ジャンプ中でなければIdleに
-            {
-                playerState.SetState(PlayerState.State.Idle);
+        else {
+            if (Input.GetKey(KeyCode.K)) {
+                if (RightMoveFlag) {
+                    MoveRight(11);
+                }
+                else {
+                    MoveLeft(11);
+                }
+            }
+            else {
+
+                if (!JumpFlag) // ジャンプ中でなければIdleに
+                {
+                    playerState.SetState(PlayerState.State.Idle);
+                }
             }
         }
 
@@ -210,14 +223,18 @@ public class PlayerController : MonoBehaviour
         }
         
         // デバッグ用（StickRotationToFPSのFPS表示のように）
-        Debug.Log($"回転量: {accumulatedRotation_:F1}, 速度: {currentSpeed:F1}, 方向: {rotationDirection_}");
+        //Debug.Log($"回転量: {accumulatedRotation_:F1}, 速度: {currentSpeed:F1}, 方向: {rotationDirection_}");
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.tag == "Wall")
+        if ((collision.gameObject.tag == "Wall") || (collision.gameObject.tag == "Player"))
         {
+            Debug.Log(this.gameObject.name);
             RightMoveFlag = !RightMoveFlag;
+        }
+        if (collision.gameObject.tag == "Stage") {
+            JumpEndCheckObject(collision.gameObject);
         }
     }
 
@@ -316,14 +333,6 @@ public class PlayerController : MonoBehaviour
 
             // ジャンプ
             this.transform.position += (Vector3.up * JumpMoveSpeed);
-        }
-    }
-
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        if (collision.gameObject.tag == "Stage")
-        {
-            JumpEndCheckObject(collision.gameObject);
         }
     }
 

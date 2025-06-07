@@ -8,10 +8,20 @@ public class HipCollision : MonoBehaviour
     {
         if(collision.gameObject.tag == "Player")
         {
-            if (this.transform.parent.gameObject != collision.gameObject)
+            if (playerController.transform.gameObject != collision.gameObject)
             {
                 playerController.Damage(1);
+
+                playerController.transform.position += (collision.transform.position - playerController.transform.position) * 3;
             }
+        }
+        
+    }
+
+    private void Update() {
+        if (playerController != null) {
+            this.transform.parent.position = playerController.transform.position;
+            this.transform.parent.localScale = playerController.transform.localScale;
         }
     }
 }
