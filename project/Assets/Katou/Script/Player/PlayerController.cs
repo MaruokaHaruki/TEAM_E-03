@@ -1,5 +1,6 @@
 using Unity.Collections;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using static UnityEditor.PlayerSettings;
 using UnityEngine.UIElements;
 
@@ -59,26 +60,58 @@ public class PlayerController : MonoBehaviour
     [SerializeField, Header("ジャンプアップ最大瞬時速度")] private float JumpUpMaxSpeed;
     /// <summary>ジャンプダウン最大瞬時速度</summary>
     [SerializeField, Header("ジャンプダウン最大瞬時速度")] private float JumpDownMaxSpeed;
-    ///// <summary>ジャンプアップ比率</summary>
-    //[SerializeField, Header("ジャンプ実行比率")] private float JumpExecutionRatio;
     /// <summary>ジャンプ重力</summary>
     [SerializeField, Header("ジャンプ重力")] private float JumpGravity;
-
 
     /// <summary>
     /// フレーム番号保存用
     /// </summary>
     [SerializeField, Header("フレーム番号保存用")] private int FrameNumber;
-    /// <summary>
-    /// フレーム数
-    /// </summary>
-    /// 
 
-    [SerializeField,Header("ステート")]private PlayerState playerState;
+    [SerializeField, Header("ステート")] private PlayerState playerState;
+
+    // Input System関連
+    private PlayerInputActions inputActions_;
+    private Vector2 lastInput_;          // 前フレームのスティック入力
+    private float accumulatedRotation_;  // 累積回転量（StickRotationToFPSと同じ仕組み）
+    private int rotationDirection_;      // 回転方向（1: 右回転, -1: 左回転, 0: 停止）
+
+    [Header("スティック回転移動設定")]
+    [SerializeField] private float minSpeed_ = 0.5f;          // 最小移動速度
+    [SerializeField] private float maxSpeed_ = 10f;           // 最大移動速度
+    [SerializeField] private float rotationToSpeedFactor_ = 0.8f; // 回転角→速度変換倍率
+    [SerializeField, Range(0f, 1f)] private float decayRate_ = 0.9f; // 減衰率
+    [SerializeField] private float minInputThreshold_ = 0.3f; // 最小入力閾値
+
     public int Frame
     {
         get { return FrameNumber; }
         set { FrameNumber = value; }
+    }
+
+    void Awake()
+    {
+        inputActions_ = new PlayerInputActions();
+    }
+
+    void OnEnable()
+    {
+        inputActions_.Gameplay.Enable();
+        
+        // ジャンプ入力のコールバック設定
+        inputActions_.Gameplay.Jump.performed += OnJumpPerformed;
+    }
+
+    void OnDisable()
+    {
+        inputActions_.Gameplay.Jump.performed -= OnJumpPerformed;
+        inputActions_.Gameplay.Disable();
+    }
+
+    private void OnJumpPerformed(InputAction.CallbackContext context)
+    {
+        SetJump();
+        playerState.SetState(PlayerState.State.Jump);
     }
 
     void Start()
@@ -90,55 +123,85 @@ public class PlayerController : MonoBehaviour
 
         // 初期化
         {
-            // フレーム数
-            //FrameNumber = 0;
-
-            // HP
             PlayerHp = 10;
-
-            // ジャンプ関係
-            {
-                // ジャンプフラグ
-                JumpFlag = false;
-
-                //// 最大上昇速度
-                //JumpUpMaxSpeed = 1.0f;
-
-                //// 最大下降速度
-                //JumpDownMaxSpeed = -0.5f;
-
-                //// 重力
-                //JumpGravity = 0.1f;
-            }
+            JumpFlag = false;
+            accumulatedRotation_ = 0f;
+            rotationDirection_ = 0;
         }
     }
 
     void Update()
     {
-        // 移動
-        float moveVec = Input.GetAxisRaw("Horizontal");
-        if (moveVec == 0)
-        {
-            playerState.SetState(PlayerState.State.Idle);//IdleStateに変化
+        // スティック回転による移動処理
+        HandleStickRotationMovement();
 
+        // ジャンプ処理
+        JumpProcess();
+        
+        // 重力無効化設定
+        SetGravityDeactivation();
+    }
+
+    /// <summary>
+    /// スティック回転による移動処理（StickRotationToFPSと同じロジック）
+    /// </summary>
+    private void HandleStickRotationMovement()
+    {
+        Vector2 stickInput = inputActions_.Gameplay.Move.ReadValue<Vector2>();
+
+        // スティックの回転を計算（2つのベクトルの角度差）
+        if (stickInput.magnitude > minInputThreshold_ && lastInput_.magnitude > minInputThreshold_)
+        {
+            float angle = Vector2.SignedAngle(lastInput_, stickInput);
+            
+            // 回転方向を記録（符号付きで方向を保持）
+            if (Mathf.Abs(angle) > 0.1f) // 最小回転閾値
+            {
+                rotationDirection_ = (int)Mathf.Sign(angle);
+                accumulatedRotation_ += Mathf.Abs(angle); // 絶対値で積算（StickRotationToFPSと同じ）
+            }
         }
         else
         {
-            playerState.SetState(PlayerState.State.Run);//RunStateに変化
-            MoveXVec(moveVec);
-
+            // スティック入力がない場合は方向をリセット
+            rotationDirection_ = 0;
+            // 累積回転量も素早く減衰
+            accumulatedRotation_ *= 0.8f;
         }
 
-        // ジャンプ
-        JumpProcess();
-        // 重力無効化設定
-        SetGravityDeactivation();
+        lastInput_ = stickInput;
 
-        if (Input.GetKeyDown(KeyCode.J))
+        // 回転量に応じた移動速度の計算（StickRotationToFPSのFPS計算と同じ仕組み）
+        float currentSpeed = Mathf.Clamp(minSpeed_ + accumulatedRotation_ * rotationToSpeedFactor_, minSpeed_, maxSpeed_);
+        
+        // 方向を考慮した最終移動速度（符号を反転して右回転で右に移動するように修正）
+        float finalMoveSpeed = -currentSpeed * rotationDirection_;
+
+        // 移動処理（回転量が十分にあり、かつ現在回転している場合のみ移動）
+        if (Mathf.Abs(finalMoveSpeed) > 0.01f && rotationDirection_ != 0 && accumulatedRotation_ > 1f)
         {
-            SetJump();
-            playerState.SetState(PlayerState.State.Jump);//JumpStateに変化
+            playerState.SetState(PlayerState.State.Run);
+            MoveXVec(finalMoveSpeed);
         }
+        else
+        {
+            if (!JumpFlag) // ジャンプ中でなければIdleに
+            {
+                playerState.SetState(PlayerState.State.Idle);
+            }
+        }
+
+        // 回転量を減衰（徐々に戻る）
+        accumulatedRotation_ *= decayRate_;
+        
+        // 累積回転量が小さくなったら方向もリセット
+        if (accumulatedRotation_ < 0.5f)
+        {
+            rotationDirection_ = 0;
+        }
+        
+        // デバッグ用（StickRotationToFPSのFPS表示のように）
+        Debug.Log($"回転量: {accumulatedRotation_:F1}, 速度: {currentSpeed:F1}, 方向: {rotationDirection_}");
     }
 
     void FixedUpdate()
@@ -169,13 +232,18 @@ public class PlayerController : MonoBehaviour
     {
         if (RigidbodyMoveFlag)
         {
-            PlayerRigidbody.linearVelocity = new Vector3(moveSpeed * UnsignedSpeed, PlayerRigidbody.linearVelocityY);
+            PlayerRigidbody.linearVelocity = new Vector3(moveSpeed, PlayerRigidbody.linearVelocityY);
         }
         else
         {
-            this.transform.position += (Vector3.right * moveSpeed * UnsignedSpeed);
+            this.transform.position += (Vector3.right * moveSpeed * Time.deltaTime);
         }
-        this.transform.localScale = new Vector3(Mathf.Sign(moveSpeed) * Mathf.Abs(this.transform.localScale.x), this.transform.localScale.y, this.transform.localScale.z);
+        
+        // キャラクターの向きを設定
+        if (Mathf.Abs(moveSpeed) > 0.01f)
+        {
+            this.transform.localScale = new Vector3(Mathf.Sign(moveSpeed) * Mathf.Abs(this.transform.localScale.x), this.transform.localScale.y, this.transform.localScale.z);
+        }
     }
 
     /// <summary>
@@ -198,8 +266,7 @@ public class PlayerController : MonoBehaviour
     /// <summary>
     /// ジャンプ開始
     /// </summary>
-    /// <param name="jumpHeight">ジャンプの到達点</param>
-    public void SetJump(/*float jumpHeight*/)
+    public void SetJump()
     {
         if (JumpFlag == true)
         {
@@ -208,7 +275,6 @@ public class PlayerController : MonoBehaviour
         JumpFlag = true;
         GravityDeactivationFlag = true;
         JumpSecondSpeed = JumpUpMaxSpeed;
-        //MaxHeight = jumpHeight;
         MinHeight = this.transform.position.y;
         CheckJumpSecond = 0f;
     }
@@ -222,31 +288,26 @@ public class PlayerController : MonoBehaviour
         {
             // ジャンプ物理演算
             {
-                JumpMoveSpeed = (JumpSecondSpeed * 1/*秒*/) - (JumpGravity * 1/*秒毎*/);
-                JumpSecondSpeed -= (JumpGravity * 1/*秒毎*/);
+                JumpMoveSpeed = (JumpSecondSpeed * Time.deltaTime) - (JumpGravity * Time.deltaTime);
+                JumpSecondSpeed -= (JumpGravity * Time.deltaTime);
 
                 // 下降速度上限設定
                 if (JumpSecondSpeed < JumpDownMaxSpeed)
                 {
                     JumpSecondSpeed = JumpDownMaxSpeed;
                 }
-                //if (Mathf.Sign(JumpMoveSpeed) == 1.0f)
-                //{
-                //}
-                //else
-                //{
-                //}
             }
 
             // ジャンプ
             this.transform.position += (Vector3.up * JumpMoveSpeed);
 
-            // ジャンプ終了処理 /*地面に着地した際になるかも*/
+            // ジャンプ終了処理
             if ((Mathf.Sign(JumpMoveSpeed) == -1f) && ((MinHeight + FloatPosError) >= this.transform.position.y))
             {
-                Debug.Log(1000);
+                Debug.Log("着地");
                 JumpFlag = false;
                 GravityDeactivationFlag = false;
+                playerState.SetState(PlayerState.State.Idle);
             }
         }
     }
@@ -259,22 +320,10 @@ public class PlayerController : MonoBehaviour
         if (GravityDeactivationFlag)
         {
             PlayerRigidbody.constraints = RigidbodyConstraints2D.FreezePositionY | RigidbodyConstraints2D.FreezeRotation;
-            //PlayerRigidbody.useFullKinematicContacts = true;
-/*            PlayerRigidbody.linearVelocityY = 0;
-            if (PlayerRigidbody.bodyType != RigidbodyType2D.Kinematic)
-            {
-                PlayerRigidbody.bodyType = RigidbodyType2D.Kinematic;
-            }*/
         }
         else
         {
             PlayerRigidbody.constraints = RigidbodyConstraints2D.FreezeRotation;
-            //PlayerRigidbody.useFullKinematicContacts = false;
-            /*            PlayerRigidbody.linearVelocityY = test;
-                        if (PlayerRigidbody.bodyType == RigidbodyType2D.Kinematic)
-                        {
-                            PlayerRigidbody.bodyType = RigidbodyType2D.Dynamic;
-                        }*/
         }
     }
 
@@ -284,7 +333,6 @@ public class PlayerController : MonoBehaviour
     public void Damage(int damage)
     {
         PlayerHp -= damage;
-
         HpCheck();
     }
 
@@ -316,4 +364,9 @@ public class PlayerController : MonoBehaviour
     public int GetPlayerHp() { return PlayerHp; }
 
     //*--------*                       *--------*//
+
+    void OnDestroy()
+    {
+        inputActions_?.Dispose();
+    }
 }

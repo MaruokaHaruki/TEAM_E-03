@@ -529,6 +529,10 @@ PrefabInstance:
       value: 0.2
       objectReference: {fileID: 0}
     - target: {fileID: 5078508010082219856, guid: d4b6e1dd0238816428793d607a4d3462, type: 3}
+      propertyPath: PlayerSpeed
+      value: 32
+      objectReference: {fileID: 0}
+    - target: {fileID: 5078508010082219856, guid: d4b6e1dd0238816428793d607a4d3462, type: 3}
       propertyPath: JumpUpMaxSpeed
       value: 0.5
       objectReference: {fileID: 0}
