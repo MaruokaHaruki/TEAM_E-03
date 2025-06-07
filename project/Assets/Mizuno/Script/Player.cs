@@ -13,9 +13,7 @@ public class Player : MonoBehaviour
         Attack
     }
 
-    private InputSystem_Actions m_Actions;                  // Source code representation of asset.
-    private InputSystem_Actions.PlayerActions m_Player;     // Source code representation of action map.
-
+    private Vector3 _velocity;
     public State CurrentState { get; private set; } = State.Idle;
 
     void Update()
@@ -26,7 +24,7 @@ public class Player : MonoBehaviour
         if (UnityEngine.Input.GetKeyDown(KeyCode.Alpha3)) SetState(State.Jump);
         if (UnityEngine.Input.GetKeyDown(KeyCode.Alpha4)) SetState(State.Attack);
 
-
+        transform.position += _velocity * Time.deltaTime;
     }
 
     public void SetState(State newState)
@@ -38,4 +36,12 @@ public class Player : MonoBehaviour
         }
     }
 
+    private void OnMove(InputValue value)
+    {
+        // MoveAction‚Ì“ü—Í’l‚ğæ“¾
+        var axis = value.Get<Vector2>();
+
+        // ˆÚ“®‘¬“x‚ğ•Û
+        _velocity = new Vector3(axis.x, 0, axis.y);
+    }
 }
