@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using static UnityEditor.PlayerSettings;
 using UnityEngine.UIElements;
+using UnityEngine.Playables;
 
 public class PlayerController : MonoBehaviour
 {
@@ -300,16 +301,32 @@ public class PlayerController : MonoBehaviour
 
             // ジャンプ
             this.transform.position += (Vector3.up * JumpMoveSpeed);
-
-            // ジャンプ終了処理
-            if ((Mathf.Sign(JumpMoveSpeed) == -1f) && ((MinHeight + FloatPosError) >= this.transform.position.y))
-            {
-                Debug.Log("着地");
-                JumpFlag = false;
-                GravityDeactivationFlag = false;
-                playerState.SetState(PlayerState.State.Idle);
-            }
         }
+    }    /// <summary>
+         /// 取得したオブジェクトが自分の下にある場合ジャンプを終わらせる
+         /// </summary>
+    public void JumpEndCheckObject(GameObject checkObject)
+    {
+        if ((GetObjectSize(checkObject, 1) > GetObjectSize(this.gameObject, -1)) &&
+            (GetObjectSize(checkObject, -1) < GetObjectSize(this.gameObject, 1)))
+        {
+            JumpEnd();
+        }
+    }
+
+    private float GetObjectSize(GameObject getObject, float direction)
+    {
+        return ((getObject.transform.lossyScale.x * 0.5f * direction) + getObject.transform.position.x);
+    }
+
+    /// <summary>
+    /// ジャンプ終了
+    /// </summary>
+    public void JumpEnd()
+    {
+        JumpFlag = false;
+        GravityDeactivationFlag = false;
+        playerState.SetState(PlayerState.State.Idle);
     }
 
     /// <summary>
