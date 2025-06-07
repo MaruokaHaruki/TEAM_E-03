@@ -1,60 +1,82 @@
 using UnityEngine;
 
+[RequireComponent(typeof(SpriteRenderer))]
 public class SpriteAnim : MonoBehaviour
 {
-    public Sprite[] animationFrames; // アニメーション用スプライト群
-    public KeyCode advanceKey = KeyCode.RightArrow; // アニメーションを進めるキー
+    public Sprite[] IdleSprites;
+    public Sprite[] RunSprites;
+    public Sprite[] JumpSprites;
+    public Sprite[] AttackSprites;
 
     private SpriteRenderer spriteRenderer;
-    private int currentFrame = 0;
+    private Player player;
 
-    private bool lowFps ; // 低FPSモードのフラグ
+    private int currentFrame = 0;
+    private float timer = 0f;
+    public float frameDelay = 0.2f;
+
+    private Player.State lastState;
 
     void Start()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
-        if (animationFrames.Length > 0)
-        {
-            spriteRenderer.sprite = animationFrames[0];
-        }
-        
-        lowFps = false; // 初期状態では低FPSモードではない
+        player = GetComponent<Player>(); // 同じオブジェクトにある前提
+
+        lastState = player.CurrentState;
+        SetFirstFrame(lastState);
     }
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Alpha1))
-        {
-            lowFps = true;
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha2))
-        {
-            lowFps = false;
-        }
+        Player.State currentState = player.CurrentState;
 
-
-        if (lowFps)
+        if (currentState != lastState)
         {
-
-            AdvanceFrame();
+            currentFrame = 0;
+            SetFirstFrame(currentState);
+            lastState = currentState;
         }
 
-        if(Input.GetKeyDown(KeyCode.Space))
+        timer += Time.deltaTime;
+        if (timer >= frameDelay)
         {
-            AdvanceFrame();
+            AdvanceFrame(currentState);
+            timer = 0f;
         }
     }
 
-    void AdvanceFrame()
+    void SetFirstFrame(Player.State state)
     {
-        if (animationFrames.Length == 0) return;
+        Sprite[] sprites = GetSpritesForState(state);
+        if (sprites.Length > 0)
+        {
+            spriteRenderer.sprite = sprites[0];
+        }
+    }
+
+    void AdvanceFrame(Player.State state)
+    {
+        Sprite[] sprites = GetSpritesForState(state);
+        if (sprites.Length == 0) return;
 
         currentFrame++;
-        if (currentFrame >= animationFrames.Length)
+        if (currentFrame >= sprites.Length)
         {
-            currentFrame = 0; // ループする場合。止めたいなら return;
+            currentFrame = 0;
         }
 
-        spriteRenderer.sprite = animationFrames[currentFrame];
+        spriteRenderer.sprite = sprites[currentFrame];
+    }
+
+    Sprite[] GetSpritesForState(Player.State state)
+    {
+        switch (state)
+        {
+            case Player.State.Idle: return IdleSprites;
+            case Player.State.Run: return RunSprites;
+            case Player.State.Jump: return JumpSprites;
+            case Player.State.Attack: return AttackSprites;
+            default: return IdleSprites;
+        }
     }
 }
