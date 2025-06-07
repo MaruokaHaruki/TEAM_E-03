@@ -101,6 +101,7 @@ GameObject:
   - component: {fileID: 3597014620124721594}
   - component: {fileID: 7705151108680869088}
   - component: {fileID: 9038444248951195998}
+  - component: {fileID: 5078508010082219856}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -168,7 +169,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: -1420016310, guid: 4480030d5be8b94429c271c88ea75d3b, type: 3}
+  m_Sprite: {fileID: -1732830277, guid: f8832312426abb2479d9048673d91e98, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -217,7 +218,7 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 10, y: 10.009766}
+    oldSize: {x: 8, y: 8}
     newSize: {x: 1, y: 1}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
@@ -233,7 +234,7 @@ Rigidbody2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8690154297914117597}
-  m_BodyType: 2
+  m_BodyType: 0
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
@@ -294,6 +295,49 @@ MonoBehaviour:
   - {fileID: -1701689632, guid: 34107fded58a2e244a159d21b86c3940, type: 3}
   - {fileID: 1069850097, guid: 34107fded58a2e244a159d21b86c3940, type: 3}
   - {fileID: -239675696, guid: 34107fded58a2e244a159d21b86c3940, type: 3}
-  JumpSprites: []
-  AttackSprites: []
+  JumpSprites:
+  - {fileID: 1760823745, guid: 31344c882649ffa419116aeb3f411b4f, type: 3}
+  - {fileID: 817936254, guid: 31344c882649ffa419116aeb3f411b4f, type: 3}
+  - {fileID: -1970236417, guid: 31344c882649ffa419116aeb3f411b4f, type: 3}
+  - {fileID: 897574274, guid: 31344c882649ffa419116aeb3f411b4f, type: 3}
+  - {fileID: -906245430, guid: 31344c882649ffa419116aeb3f411b4f, type: 3}
+  - {fileID: -918668796, guid: 31344c882649ffa419116aeb3f411b4f, type: 3}
+  - {fileID: -1211932177, guid: 31344c882649ffa419116aeb3f411b4f, type: 3}
+  AttackSprites:
+  - {fileID: -1420016310, guid: 4480030d5be8b94429c271c88ea75d3b, type: 3}
+  - {fileID: 1796801298, guid: 4480030d5be8b94429c271c88ea75d3b, type: 3}
+  - {fileID: 1341654873, guid: 4480030d5be8b94429c271c88ea75d3b, type: 3}
+  - {fileID: -525805343, guid: 4480030d5be8b94429c271c88ea75d3b, type: 3}
+  - {fileID: -638289879, guid: 4480030d5be8b94429c271c88ea75d3b, type: 3}
+  - {fileID: 1550402349, guid: 4480030d5be8b94429c271c88ea75d3b, type: 3}
+  - {fileID: -1447174566, guid: 4480030d5be8b94429c271c88ea75d3b, type: 3}
+  - {fileID: -2137227324, guid: 4480030d5be8b94429c271c88ea75d3b, type: 3}
+  - {fileID: -130007716, guid: 4480030d5be8b94429c271c88ea75d3b, type: 3}
+  - {fileID: -237499483, guid: 4480030d5be8b94429c271c88ea75d3b, type: 3}
   frameDelay: 0.1
+--- !u!114 &5078508010082219856
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8690154297914117597}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 223ca29ba430a2546b442305088fc72f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  PlayerHp: 10
+  PlayerSpeed: 1
+  RigidbodyMoveFlag: 1
+  GravityDeactivationFlag: 1
+  JumpFlag: 0
+  MaxHeight: 0
+  MinHeight: 0
+  JumpMoveSpeed: 0
+  JumpSecondSpeed: 0
+  JumpUpMaxSpeed: 0
+  JumpDownMaxSpeed: 0
+  JumpGravity: 0
+  FrameNumber: 0
+  playerState: {fileID: 7705151108680869088}
