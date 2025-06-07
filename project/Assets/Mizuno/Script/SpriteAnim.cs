@@ -84,4 +84,15 @@ public class SpriteAnim : MonoBehaviour
             default: return IdleSprites;
         }
     }
+
+    public PlayerState.State GetCurrentState()
+    {
+        return playerState.CurrentState;
+    }
+
+    public int GetCurrentFrame()
+    {
+        return currentFrame;
+    }
+
 }
