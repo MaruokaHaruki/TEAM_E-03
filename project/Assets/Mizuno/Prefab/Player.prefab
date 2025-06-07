@@ -26,7 +26,7 @@ Transform:
   m_GameObject: {fileID: 508104172815897704}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 1.6, y: 0, z: 0}
+  m_LocalPosition: {x: -2, y: -0.38, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -332,8 +332,6 @@ MonoBehaviour:
   RigidbodyMoveFlag: 1
   GravityDeactivationFlag: 1
   JumpFlag: 0
-  MaxHeight: 0
-  MinHeight: 0
   JumpMoveSpeed: 0
   JumpSecondSpeed: 0
   JumpUpMaxSpeed: 0
@@ -341,3 +339,8 @@ MonoBehaviour:
   JumpGravity: 0
   FrameNumber: 0
   playerState: {fileID: 7705151108680869088}
+  minSpeed_: 0.5
+  maxSpeed_: 10
+  rotationToSpeedFactor_: 0.8
+  decayRate_: 0.9
+  minInputThreshold_: 0.3
