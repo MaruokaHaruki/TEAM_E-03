@@ -68,6 +68,10 @@ public class SpriteAnim : MonoBehaviour
         if (currentFrame >= sprites.Length)
         {
             currentFrame = 0;
+            if(GetCurrentState()== PlayerState.State.Jump)
+            {
+                 SetState(PlayerState.State.Idle);
+            }
         }
 
         spriteRenderer.sprite = sprites[currentFrame];
@@ -88,6 +92,11 @@ public class SpriteAnim : MonoBehaviour
     public PlayerState.State GetCurrentState()
     {
         return playerState.CurrentState;
+    }
+
+    public PlayerState.State SetState(PlayerState.State nextState)
+    {
+        return nextState;
     }
 
     public int GetCurrentFrame()

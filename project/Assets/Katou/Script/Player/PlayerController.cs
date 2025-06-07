@@ -47,16 +47,10 @@ public class PlayerController : MonoBehaviour
 
     /// <summary>ジャンプフラグ</summary>
     [SerializeField, Header("ジャンプフラグ")] private bool JumpFlag;
-    /// <summary>最大高度</summary>
-    [SerializeField, Header("最大高度")] private float MaxHeight;
-    /// <summary>最低高度</summary>
-    [SerializeField, Header("最低高度")] private float MinHeight;
     /// <summary>ジャンプ移動速度</summary>
     [SerializeField, Header("ジャンプ移動速度")] private float JumpMoveSpeed;
     /// <summary>ジャンプ速度 毎秒</summary>
     [SerializeField, Header("ジャンプ速度 毎秒")] private float JumpSecondSpeed;
-    /// <summary>ジャンプ経過秒数 確認用</summary>
-    private float CheckJumpSecond;
     /// <summary>ジャンプアップ最大瞬時速度</summary>
     [SerializeField, Header("ジャンプアップ最大瞬時速度")] private float JumpUpMaxSpeed;
     /// <summary>ジャンプダウン最大瞬時速度</summary>
@@ -116,7 +110,6 @@ public class PlayerController : MonoBehaviour
     private void OnJumpPerformed(InputAction.CallbackContext context)
     {
         SetJump();
-        playerState.SetState(PlayerState.State.Jump);
     }
 
     void Start()
@@ -296,11 +289,10 @@ public class PlayerController : MonoBehaviour
         {
             return;
         }
+        playerState.SetState(PlayerState.State.Jump);
         JumpFlag = true;
         GravityDeactivationFlag = true;
         JumpSecondSpeed = JumpUpMaxSpeed;
-        MinHeight = this.transform.position.y;
-        CheckJumpSecond = 0f;
     }
 
     /// <summary>
@@ -325,9 +317,19 @@ public class PlayerController : MonoBehaviour
             // ジャンプ
             this.transform.position += (Vector3.up * JumpMoveSpeed);
         }
-    }    /// <summary>
-         /// 取得したオブジェクトが自分の下にある場合ジャンプを終わらせる
-         /// </summary>
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.tag == "Stage")
+        {
+            JumpEndCheckObject(collision.gameObject);
+        }
+    }
+
+    /// <summary>
+    /// 取得したオブジェクトが自分の下にある場合ジャンプを終わらせる
+    /// </summary>
     public void JumpEndCheckObject(GameObject checkObject)
     {
         if ((GetObjectSize(checkObject, 1) > GetObjectSize(this.gameObject, -1)) &&
@@ -341,6 +343,8 @@ public class PlayerController : MonoBehaviour
     {
         return ((getObject.transform.lossyScale.x * 0.5f * direction) + getObject.transform.position.x);
     }
+
+    
 
     /// <summary>
     /// ジャンプ終了
