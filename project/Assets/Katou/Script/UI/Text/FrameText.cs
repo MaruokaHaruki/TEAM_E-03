@@ -4,41 +4,41 @@ using UnityEngine;
 public class FrameText : MonoBehaviour
 {
     /// <summary>
-    /// ƒtƒŒ[ƒ€•`‰æ—pƒeƒLƒXƒg
+    /// ï¿½tï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½`ï¿½ï¿½pï¿½eï¿½Lï¿½Xï¿½g
     /// </summary>
     private TextMeshProUGUI FrameDrawText;
 
     /// <summary>
-    /// ƒtƒŒ[ƒ€”æ“¾—pƒvƒŒƒCƒ„[
+    /// ï¿½tï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½æ“¾ï¿½pï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½[
     /// </summary>
-    [SerializeField, Header("ƒtƒŒ[ƒ€”æ“¾—pƒvƒŒƒCƒ„[")] private PlayerController GetFramePlayer;
+    [SerializeField, Header("ï¿½tï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½æ“¾ï¿½pï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½[")] private PlayerController GetFramePlayer;
 
     void Start()
     {
-        // æ“¾
+        // ï¿½æ“¾
         {
-            // ƒtƒŒ[ƒ€•`‰æ—pƒeƒLƒXƒg
+            // ï¿½tï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½`ï¿½ï¿½pï¿½eï¿½Lï¿½Xï¿½g
             FrameDrawText = this.gameObject.GetComponent<TextMeshProUGUI>();
 
-            // ƒtƒŒ[ƒ€æ“¾—pƒvƒŒƒCƒ„[
+            // ï¿½tï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½æ“¾ï¿½pï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½[
             if (GetFramePlayer == null)
             {
                 GetFramePlayer = GameObject.FindWithTag("Player").GetComponent<PlayerController>();
             }
         }
 
-        // •`‰æ
+        // ï¿½`ï¿½ï¿½
         FrameNumberDraw();
     }
 
     void Update()
     {
-        // •`‰æ
+        // ï¿½`ï¿½ï¿½
         FrameNumberDraw();
     }
 
     /// <summary>
-    /// ƒtƒŒ[ƒ€”•`‰æ
+    /// ï¿½tï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½`ï¿½ï¿½
     /// </summary>
     private void FrameNumberDraw()
     {
