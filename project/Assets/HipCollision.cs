@@ -11,8 +11,6 @@ public class HipCollision : MonoBehaviour
             if (playerController.transform.gameObject != collision.gameObject)
             {
                 playerController.Damage(1);
-
-                playerController.transform.position += (collision.transform.position - playerController.transform.position) * 3;
             }
         }
         

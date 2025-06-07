@@ -228,10 +228,15 @@ public class PlayerController : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if ((collision.gameObject.tag == "Wall") || (collision.gameObject.tag == "Player"))
+        if (collision.gameObject.tag == "Wall")
         {
             Debug.Log(this.gameObject.name);
             RightMoveFlag = !RightMoveFlag;
+        }
+        if (collision.gameObject.tag == "Player")
+        {
+            RightMoveFlag = !RightMoveFlag;
+            this.transform.position += (this.transform.position - collision.transform.position) * 2;
         }
         if (collision.gameObject.tag == "Stage") {
             JumpEndCheckObject(collision.gameObject);
