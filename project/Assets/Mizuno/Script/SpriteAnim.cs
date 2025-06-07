@@ -21,8 +21,8 @@ public class SpriteAnim : MonoBehaviour
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
         player = GetComponent<Player>(); 
-        //  ª“¯‚¶ƒIƒuƒWƒFƒNƒg‚É‚ ‚é‘O’ñ
-        //  Player ‚Æ SpriteAnim ‚ð•ÊƒIƒuƒWƒFƒNƒg‚É•ª‚¯‚½ê‡‚Í public Player player;
+        //  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Iï¿½uï¿½Wï¿½Fï¿½Nï¿½gï¿½É‚ï¿½ï¿½ï¿½Oï¿½ï¿½
+        //  Player ï¿½ï¿½ SpriteAnim ï¿½ï¿½ÊƒIï¿½uï¿½Wï¿½Fï¿½Nï¿½gï¿½É•ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ê‡ï¿½ï¿½ public Player player;
 
         lastState = player.CurrentState;
         SetFirstFrame(lastState);
@@ -30,10 +30,10 @@ public class SpriteAnim : MonoBehaviour
 
     void Update()
     {
-        //ƒvƒŒƒCƒ„[‚Ìó‘Ô
+        //ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½[ï¿½Ìï¿½ï¿½
         Player.State currentState = player.CurrentState;
 
-        //’¼‘O‚Ìó‘Ô‚Æˆá‚í‚È‚¢‚©
+        //ï¿½ï¿½ï¿½Oï¿½Ìï¿½Ô‚Æˆï¿½ï¿½È‚ï¿½ï¿½ï¿½
         if (currentState != lastState)
         {
             currentFrame = 0;
@@ -42,7 +42,7 @@ public class SpriteAnim : MonoBehaviour
         }
 
         timer += Time.deltaTime;
-        if (timer >= frameDelay)//ƒtƒŒ[ƒ€XV
+        if (timer >= frameDelay)//ï¿½tï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½Xï¿½V
         {
             AdvanceFrame(currentState);
             timer = 0f;
