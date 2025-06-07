@@ -393,7 +393,7 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     private void DeathProcess()
     {
-        Debug.Log("死亡");
+        Debug.Log("[" +this.gameObject.name + "]の負け");
     }
     
     //*--------*      設定 : 取得      *--------*//
