@@ -131,6 +131,14 @@ public class PlayerController : MonoBehaviour
         JumpProcess();
     }
 
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.tag == "Stage")
+        {
+            JumpEndCheckObject(collision.gameObject);
+        }
+    }
+
     /// <summary>
     /// 移動 左
     /// </summary>
@@ -226,14 +234,40 @@ public class PlayerController : MonoBehaviour
             // ジャンプ
             this.transform.position += (Vector3.up * JumpMoveSpeed);
 
-            // ジャンプ終了処理 /*地面に着地した際になるかも*/
-            if ((Mathf.Sign(JumpMoveSpeed) == -1f) && ((MinHeight + FloatPosError) >= this.transform.position.y))
-            {
-                Debug.Log(1000);
-                JumpFlag = false;
-                GravityDeactivationFlag = false;
-            }
+            //// ジャンプ終了処理 /*地面に着地した際になるかも*/
+            //if ((Mathf.Sign(JumpMoveSpeed) == -1f) && ((MinHeight + FloatPosError) >= this.transform.position.y))
+            //{
+            //    Debug.Log(1000);
+            //    JumpFlag = false;
+            //    GravityDeactivationFlag = false;
+            //}
         }
+    }
+
+    /// <summary>
+    /// 取得したオブジェクトが自分の下にある場合ジャンプを終わらせる
+    /// </summary>
+    public void JumpEndCheckObject(GameObject checkObject)
+    {
+        if ((GetObjectSize(checkObject, 1) > GetObjectSize(this.gameObject, -1)) &&
+            (GetObjectSize(checkObject, -1) < GetObjectSize(this.gameObject, 1)))
+        {
+            JumpEnd();
+        }
+    }
+
+    private float GetObjectSize(GameObject getObject, float direction)
+    {
+        return ((getObject.transform.lossyScale.x * 0.5f * direction) + getObject.transform.position.x);
+    }
+
+    /// <summary>
+    /// ジャンプ終了
+    /// </summary>
+    public void JumpEnd()
+    {
+        JumpFlag = false;
+        GravityDeactivationFlag = false;
     }
 
     /// <summary>
@@ -244,22 +278,10 @@ public class PlayerController : MonoBehaviour
         if (GravityDeactivationFlag)
         {
             PlayerRigidbody.constraints = RigidbodyConstraints2D.FreezePositionY | RigidbodyConstraints2D.FreezeRotation;
-            //PlayerRigidbody.useFullKinematicContacts = true;
-/*            PlayerRigidbody.linearVelocityY = 0;
-            if (PlayerRigidbody.bodyType != RigidbodyType2D.Kinematic)
-            {
-                PlayerRigidbody.bodyType = RigidbodyType2D.Kinematic;
-            }*/
         }
         else
         {
             PlayerRigidbody.constraints = RigidbodyConstraints2D.FreezeRotation;
-            //PlayerRigidbody.useFullKinematicContacts = false;
-            /*            PlayerRigidbody.linearVelocityY = test;
-                        if (PlayerRigidbody.bodyType == RigidbodyType2D.Kinematic)
-                        {
-                            PlayerRigidbody.bodyType = RigidbodyType2D.Dynamic;
-                        }*/
         }
     }
 
