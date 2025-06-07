@@ -5,6 +5,8 @@ TagManager:
   serializedVersion: 3
   tags:
   - DataObject
+  - Wall
+  - Stage
   layers:
   - Default
   - TransparentFX

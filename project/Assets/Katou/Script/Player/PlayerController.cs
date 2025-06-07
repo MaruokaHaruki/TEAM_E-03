@@ -83,6 +83,10 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float rotationToSpeedFactor_ = 0.8f; // 回転角→速度変換倍率
     [SerializeField, Range(0f, 1f)] private float decayRate_ = 0.9f; // 減衰率
     [SerializeField] private float minInputThreshold_ = 0.3f; // 最小入力閾値
+    /// <summary>
+    /// 右移動フラグ
+    /// </summary>
+    [SerializeField, Header("右移動フラグ")] private bool RightMoveFlag;
 
     public int Frame
     {
@@ -138,7 +142,7 @@ public class PlayerController : MonoBehaviour
 
         // ジャンプ処理
         JumpProcess();
-        
+
         // 重力無効化設定
         SetGravityDeactivation();
     }
@@ -182,7 +186,18 @@ public class PlayerController : MonoBehaviour
         if (Mathf.Abs(finalMoveSpeed) > 0.01f && rotationDirection_ != 0 && accumulatedRotation_ > 1f)
         {
             playerState.SetState(PlayerState.State.Run);
-            MoveXVec(finalMoveSpeed);
+            if (false)
+            {
+                MoveXVec(finalMoveSpeed);
+            }
+            else if (RightMoveFlag)
+            {
+                MoveRight(finalMoveSpeed);
+            }
+            else
+            {
+                MoveLeft(finalMoveSpeed);
+            }
         }
         else
         {
@@ -203,6 +218,14 @@ public class PlayerController : MonoBehaviour
         
         // デバッグ用（StickRotationToFPSのFPS表示のように）
         Debug.Log($"回転量: {accumulatedRotation_:F1}, 速度: {currentSpeed:F1}, 方向: {rotationDirection_}");
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.tag == "Wall")
+        {
+            RightMoveFlag = !RightMoveFlag;
+        }
     }
 
     void FixedUpdate()

@@ -671,6 +671,13 @@ MonoBehaviour:
   JumpDownMaxSpeed: 0
   JumpGravity: 0
   FrameNumber: 0
+  playerState: {fileID: 0}
+  minSpeed_: 0.5
+  maxSpeed_: 10
+  rotationToSpeedFactor_: 0.8
+  decayRate_: 0.9
+  minInputThreshold_: 0.3
+  RightMoveFlag: 0
 --- !u!4 &914269127
 Transform:
   m_ObjectHideFlags: 0
@@ -1105,7 +1112,7 @@ GameObject:
   - component: {fileID: 1384707758}
   m_Layer: 0
   m_Name: Ground
-  m_TagString: Untagged
+  m_TagString: Stage
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1238,7 +1245,7 @@ GameObject:
   - component: {fileID: 1600785360}
   m_Layer: 0
   m_Name: WallRight
-  m_TagString: Untagged
+  m_TagString: Wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1745,6 +1752,13 @@ MonoBehaviour:
   JumpDownMaxSpeed: 0
   JumpGravity: 0
   FrameNumber: 0
+  playerState: {fileID: 0}
+  minSpeed_: 0.5
+  maxSpeed_: 10
+  rotationToSpeedFactor_: 0.8
+  decayRate_: 0.9
+  minInputThreshold_: 0.3
+  RightMoveFlag: 0
 --- !u!114 &1874137547
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1772,7 +1786,7 @@ GameObject:
   - component: {fileID: 1926090950}
   m_Layer: 0
   m_Name: WallLeft
-  m_TagString: Untagged
+  m_TagString: Wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
