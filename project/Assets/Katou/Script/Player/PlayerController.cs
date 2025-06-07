@@ -115,17 +115,17 @@ public class PlayerController : MonoBehaviour
         // 重力無効化設定
         SetGravityDeactivation();
 
-        if (Input.GetKeyDown(KeyCode.J))
-        {
-            SetJump();
-        }
+        //if (Input.GetKeyDown(KeyCode.J))
+        //{
+        //    SetJump();
+        //}
     }
 
     void FixedUpdate()
     {
-        // 移動
-        float moveVec = Input.GetAxisRaw("Horizontal");
-        MoveXVec(moveVec);
+        //// 移動
+        //float moveVec = Input.GetAxisRaw("Horizontal");
+        //MoveXVec(moveVec);
 
         // ジャンプ
         JumpProcess();
