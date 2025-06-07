@@ -63,7 +63,7 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     [SerializeField, Header("フレーム番号保存用")] private int FrameNumber;
 
-    [SerializeField, Header("ステート")] private PlayerState playerState;
+   // [SerializeField, Header("ステート")] private PlayerState playerState;
 
     // Input System関連
     private PlayerInputActions inputActions_;
@@ -177,7 +177,7 @@ public class PlayerController : MonoBehaviour
         if (!Kibodo) {
             // 移動処理（回転量が十分にあり、かつ現在回転している場合のみ移動）
             if (Mathf.Abs(finalMoveSpeed) > 0.01f && rotationDirection_ != 0 && accumulatedRotation_ > 1f) {
-                playerState.SetState(PlayerState.State.Run);
+               // playerState.SetState(PlayerState.State.Run);
                 if (false) {
                     MoveXVec(finalMoveSpeed);
                 }
@@ -191,7 +191,7 @@ public class PlayerController : MonoBehaviour
             else {
                 if (!JumpFlag) // ジャンプ中でなければIdleに
                 {
-                    playerState.SetState(PlayerState.State.Idle);
+                    //playerState.SetState(PlayerState.State.Idle);
                 }
             }
         }
@@ -208,7 +208,7 @@ public class PlayerController : MonoBehaviour
 
                 if (!JumpFlag) // ジャンプ中でなければIdleに
                 {
-                    playerState.SetState(PlayerState.State.Idle);
+                    //playerState.SetState(PlayerState.State.Idle);
                 }
             }
         }
@@ -306,7 +306,7 @@ public class PlayerController : MonoBehaviour
         {
             return;
         }
-        playerState.SetState(PlayerState.State.Jump);
+       // playerState.SetState(PlayerState.State.Jump);
         JumpFlag = true;
         GravityDeactivationFlag = true;
         JumpSecondSpeed = JumpUpMaxSpeed;
@@ -362,7 +362,7 @@ public class PlayerController : MonoBehaviour
     {
         JumpFlag = false;
         GravityDeactivationFlag = false;
-        playerState.SetState(PlayerState.State.Idle);
+        //playerState.SetState(PlayerState.State.Idle);
     }
 
     /// <summary>
