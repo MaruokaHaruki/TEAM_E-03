@@ -12,5 +12,5 @@ EditorBuildSettings:
     path: Assets/Mizuno/Mizuno_Chara.unity
     guid: 730d7529cb2434d44b9811ea1a7b290b
   m_configObjects:
-    com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+    com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 8e4a717ecb9791b488cbe0448907e9fe, type: 3}
   m_UseUCBPForAssetBundles: 0
