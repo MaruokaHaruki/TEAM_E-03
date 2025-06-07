@@ -6,26 +6,26 @@ using UnityEngine.UIElements;
 public class PlayerController : MonoBehaviour
 {
     /// <summary>
-    /// float À•WŒvZ Œë·
+    /// float ï¿½ï¿½ï¿½Wï¿½vï¿½Z ï¿½ë·
     /// </summary>
     private const float FloatPosError = 1.0f;
 
     /// <summary>
-    /// ƒvƒŒƒCƒ„[HP
+    /// ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½[HP
     /// </summary>
     [SerializeField, Header("HP")] private int PlayerHp;
 
     /// <summary>
-    /// ƒvƒŒƒCƒ„[ƒŠƒWƒbƒgƒ{ƒfƒB
+    /// ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½Wï¿½bï¿½gï¿½{ï¿½fï¿½B
     /// </summary>
     private Rigidbody2D PlayerRigidbody;
 
     /// <summary>
-    /// ƒvƒŒƒCƒ„[ˆÚ“®‘¬“x ’¼ÚG‚ê‚é—\’è‚È‚µ
+    /// ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½[ï¿½Ú“ï¿½ï¿½ï¿½ï¿½x ï¿½ï¿½ï¿½ÚGï¿½ï¿½ï¿½\ï¿½ï¿½È‚ï¿½
     /// </summary>
-    [SerializeField, Header("ƒvƒŒƒCƒ„[ƒXƒs[ƒh"), Min(0.01f)] private float PlayerSpeed = 1.0f;
+    [SerializeField, Header("ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½[ï¿½Xï¿½sï¿½[ï¿½h"), Min(0.01f)] private float PlayerSpeed = 1.0f;
     /// <summary>
-    /// ‘¬“xİ’è—p
+    /// ï¿½ï¿½ï¿½xï¿½İ’ï¿½p
     /// </summary>
     private float UnsignedSpeed
     {
@@ -34,43 +34,43 @@ public class PlayerController : MonoBehaviour
     }
 
     /// <summary>
-    /// ƒŠƒWƒbƒgƒ{ƒfƒBˆÚ“®ƒtƒ‰ƒO
+    /// ï¿½ï¿½ï¿½Wï¿½bï¿½gï¿½{ï¿½fï¿½Bï¿½Ú“ï¿½ï¿½tï¿½ï¿½ï¿½O
     /// </summary>
-    [SerializeField, Header("ƒŠƒWƒbƒgƒ{ƒfƒBˆÚ“®ƒtƒ‰ƒO")] private bool RigidbodyMoveFlag = true;
+    [SerializeField, Header("ï¿½ï¿½ï¿½Wï¿½bï¿½gï¿½{ï¿½fï¿½Bï¿½Ú“ï¿½ï¿½tï¿½ï¿½ï¿½O")] private bool RigidbodyMoveFlag = true;
 
     /// <summary>
-    /// d—Í–³Œø‰»ƒtƒ‰ƒO
+    /// ï¿½dï¿½Í–ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½tï¿½ï¿½ï¿½O
     /// </summary>
-    [SerializeField, Header("d—Í–³Œø‰»ƒtƒ‰ƒO")] private bool GravityDeactivationFlag = true;
+    [SerializeField, Header("ï¿½dï¿½Í–ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½tï¿½ï¿½ï¿½O")] private bool GravityDeactivationFlag = true;
 
-    /// <summary>ƒWƒƒƒ“ƒvƒtƒ‰ƒO</summary>
-    [SerializeField, Header("ƒWƒƒƒ“ƒvƒtƒ‰ƒO")] private bool JumpFlag;
-    /// <summary>Å‘å‚“x</summary>
-    [SerializeField, Header("Å‘å‚“x")] private float MaxHeight;
-    /// <summary>Å’á‚“x</summary>
-    [SerializeField, Header("Å’á‚“x")] private float MinHeight;
-    /// <summary>ƒWƒƒƒ“ƒvˆÚ“®‘¬“x</summary>
-    [SerializeField, Header("ƒWƒƒƒ“ƒvˆÚ“®‘¬“x")] private float JumpMoveSpeed;
-    /// <summary>ƒWƒƒƒ“ƒv‘¬“x@•b’PˆÊ</summary>
-    [SerializeField, Header("ƒWƒƒƒ“ƒv‘¬“x@•b’PˆÊ")] private float JumpSecondSpeed;
-    /// <summary>ƒWƒƒƒ“ƒvˆ—•b” Šm”F—p</summary>
+    /// <summary>ï¿½Wï¿½ï¿½ï¿½ï¿½ï¿½vï¿½tï¿½ï¿½ï¿½O</summary>
+    [SerializeField, Header("ï¿½Wï¿½ï¿½ï¿½ï¿½ï¿½vï¿½tï¿½ï¿½ï¿½O")] private bool JumpFlag;
+    /// <summary>ï¿½Å‘å‚ï¿½x</summary>
+    [SerializeField, Header("ï¿½Å‘å‚ï¿½x")] private float MaxHeight;
+    /// <summary>ï¿½Å’á‚ï¿½x</summary>
+    [SerializeField, Header("ï¿½Å’á‚ï¿½x")] private float MinHeight;
+    /// <summary>ï¿½Wï¿½ï¿½ï¿½ï¿½ï¿½vï¿½Ú“ï¿½ï¿½ï¿½ï¿½x</summary>
+    [SerializeField, Header("ï¿½Wï¿½ï¿½ï¿½ï¿½ï¿½vï¿½Ú“ï¿½ï¿½ï¿½ï¿½x")] private float JumpMoveSpeed;
+    /// <summary>ï¿½Wï¿½ï¿½ï¿½ï¿½ï¿½vï¿½ï¿½ï¿½xï¿½@ï¿½bï¿½Pï¿½ï¿½</summary>
+    [SerializeField, Header("ï¿½Wï¿½ï¿½ï¿½ï¿½ï¿½vï¿½ï¿½ï¿½xï¿½@ï¿½bï¿½Pï¿½ï¿½")] private float JumpSecondSpeed;
+    /// <summary>ï¿½Wï¿½ï¿½ï¿½ï¿½ï¿½vï¿½ï¿½ï¿½ï¿½ï¿½bï¿½ï¿½ ï¿½mï¿½Fï¿½p</summary>
     private float CheckJumpSecond;
-    /// <summary>ƒWƒƒƒ“ƒvƒAƒbƒv‘¬“x</summary>
-    [SerializeField, Header("ƒWƒƒƒ“ƒvƒAƒbƒvÅ‘å‘¬“x")] private float JumpUpMaxSpeed;
-    /// <summary>ƒWƒƒƒ“ƒvƒ_ƒEƒ“‘¬“x</summary>
-    [SerializeField, Header("ƒWƒƒƒ“ƒvƒ_ƒEƒ“Å‘å‘¬“x")] private float JumpDownMaxSpeed;
-    ///// <summary>ƒWƒƒƒ“ƒvƒAƒbƒvŠ„‡</summary>
-    //[SerializeField, Header("ƒWƒƒƒ“ƒvÀsŠ„‡")] private float JumpExecutionRatio;
-    /// <summary>ƒWƒƒƒ“ƒvd—Í</summary>
-    [SerializeField, Header("ƒWƒƒƒ“ƒvd—Í")] private float JumpGravity;
+    /// <summary>ï¿½Wï¿½ï¿½ï¿½ï¿½ï¿½vï¿½Aï¿½bï¿½vï¿½ï¿½ï¿½ï¿½ï¿½x</summary>
+    [SerializeField, Header("ï¿½Wï¿½ï¿½ï¿½ï¿½ï¿½vï¿½Aï¿½bï¿½vï¿½Å‘åï¿½ï¿½ï¿½x")] private float JumpUpMaxSpeed;
+    /// <summary>ï¿½Wï¿½ï¿½ï¿½ï¿½ï¿½vï¿½_ï¿½Eï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½x</summary>
+    [SerializeField, Header("ï¿½Wï¿½ï¿½ï¿½ï¿½ï¿½vï¿½_ï¿½Eï¿½ï¿½ï¿½Å‘åï¿½ï¿½ï¿½x")] private float JumpDownMaxSpeed;
+    ///// <summary>ï¿½Wï¿½ï¿½ï¿½ï¿½ï¿½vï¿½Aï¿½bï¿½vï¿½ï¿½ï¿½ï¿½</summary>
+    //[SerializeField, Header("ï¿½Wï¿½ï¿½ï¿½ï¿½ï¿½vï¿½ï¿½ï¿½sï¿½ï¿½ï¿½ï¿½")] private float JumpExecutionRatio;
+    /// <summary>ï¿½Wï¿½ï¿½ï¿½ï¿½ï¿½vï¿½dï¿½ï¿½</summary>
+    [SerializeField, Header("ï¿½Wï¿½ï¿½ï¿½ï¿½ï¿½vï¿½dï¿½ï¿½")] private float JumpGravity;
 
 
     /// <summary>
-    /// ƒtƒŒ[ƒ€”•Û‘¶—p
+    /// ï¿½tï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½Û‘ï¿½ï¿½p
     /// </summary>
-    [SerializeField, Header("ƒtƒŒ[ƒ€”•Û‘¶—p")] private int FrameNumber;
+    [SerializeField, Header("ï¿½tï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½Û‘ï¿½ï¿½p")] private int FrameNumber;
     /// <summary>
-    /// ƒtƒŒ[ƒ€”
+    /// ï¿½tï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½ï¿½
     /// </summary>
     public int Frame
     {
@@ -80,31 +80,31 @@ public class PlayerController : MonoBehaviour
 
     void Start()
     {
-        // æ“¾
+        // ï¿½æ“¾
         {
             PlayerRigidbody = this.GetComponent<Rigidbody2D>();
         }
 
-        // ‰Šú‰»
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         {
-            // ƒtƒŒ[ƒ€”
+            // ï¿½tï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½ï¿½
             //FrameNumber = 0;
 
             // HP
             PlayerHp = 10;
 
-            // ƒWƒƒƒ“ƒvŠÖŒW
+            // ï¿½Wï¿½ï¿½ï¿½ï¿½ï¿½vï¿½ÖŒW
             {
-                // ƒWƒƒƒ“ƒvƒtƒ‰ƒO
+                // ï¿½Wï¿½ï¿½ï¿½ï¿½ï¿½vï¿½tï¿½ï¿½ï¿½O
                 JumpFlag = false;
 
-                // Å‘åã¸‘¬“x
+                // ï¿½Å‘ï¿½ã¸ï¿½ï¿½ï¿½x
                 JumpUpMaxSpeed = 2f;
 
-                // Å‘å~‰º‘¬“x
+                // ï¿½Å‘ï¿½~ï¿½ï¿½ï¿½ï¿½ï¿½x
                 JumpDownMaxSpeed = -2f;
 
-                // d—Í
+                // ï¿½dï¿½ï¿½
                 JumpGravity = 0.2f;
             }
         }
@@ -112,7 +112,7 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        // d—Í–³Œø‰»‘€ì
+        // ï¿½dï¿½Í–ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         SetGravityDeactivation();
 
         if (Input.GetKeyDown(KeyCode.J))
@@ -123,16 +123,16 @@ public class PlayerController : MonoBehaviour
 
     void FixedUpdate()
     {
-        // ˆÚ“®
+        // ï¿½Ú“ï¿½
         float moveVec = Input.GetAxisRaw("Horizontal");
         MoveXVec(moveVec);
 
-        // ƒWƒƒƒ“ƒv
+        // ï¿½Wï¿½ï¿½ï¿½ï¿½ï¿½v
         JumpProcess();
     }
 
     /// <summary>
-    /// ˆÚ“®@¶
+    /// ï¿½Ú“ï¿½ï¿½@ï¿½ï¿½
     /// </summary>
     public void MoveLeft(float moveSpeed)
     {
@@ -140,7 +140,7 @@ public class PlayerController : MonoBehaviour
     }
 
     /// <summary>
-    /// ˆÚ“®@‰E
+    /// ï¿½Ú“ï¿½ï¿½@ï¿½E
     /// </summary>
     public void MoveRight(float moveSpeed)
     {
@@ -148,7 +148,7 @@ public class PlayerController : MonoBehaviour
     }
 
     /// <summary>
-    /// ˆÚ“®@X²
+    /// ï¿½Ú“ï¿½ï¿½@Xï¿½ï¿½
     /// </summary>
     public void MoveXVec(float moveSpeed)
     {
@@ -164,7 +164,7 @@ public class PlayerController : MonoBehaviour
     }
 
     /// <summary>
-    /// ƒŠƒWƒbƒgƒ{ƒfƒBˆÚ“®ƒtƒ‰ƒO@İ’è
+    /// ï¿½ï¿½ï¿½Wï¿½bï¿½gï¿½{ï¿½fï¿½Bï¿½Ú“ï¿½ï¿½tï¿½ï¿½ï¿½Oï¿½@ï¿½İ’ï¿½
     /// </summary>
     public void SetRigidbodyMoveFlag(bool rigidbodyMoveFlag)
     {
@@ -172,7 +172,7 @@ public class PlayerController : MonoBehaviour
     }
 
     /// <summary>
-    /// ƒWƒƒƒ“ƒv‘¬“xİ’è
+    /// ï¿½Wï¿½ï¿½ï¿½ï¿½ï¿½vï¿½ï¿½ï¿½xï¿½İ’ï¿½
     /// </summary>
     public void SetJumpSpeed(float upSpeed, float downSpeed)
     {
@@ -181,9 +181,9 @@ public class PlayerController : MonoBehaviour
     }
 
     /// <summary>
-    /// ƒWƒƒƒ“ƒvŠJn
+    /// ï¿½Wï¿½ï¿½ï¿½ï¿½ï¿½vï¿½Jï¿½n
     /// </summary>
-    /// <param name="jumpHeight">ƒWƒƒƒ“ƒv‚Ì“’B“_</param>
+    /// <param name="jumpHeight">ï¿½Wï¿½ï¿½ï¿½ï¿½ï¿½vï¿½Ì“ï¿½ï¿½Bï¿½_</param>
     public void SetJump(/*float jumpHeight*/)
     {
         if (JumpFlag == true)
@@ -199,18 +199,18 @@ public class PlayerController : MonoBehaviour
     }
 
     /// <summary>
-    /// ƒWƒƒƒ“ƒvˆ—
+    /// ï¿½Wï¿½ï¿½ï¿½ï¿½ï¿½vï¿½ï¿½ï¿½ï¿½
     /// </summary>
     private void JumpProcess()
     {
         if (JumpFlag)
         {
-            // ƒWƒƒƒ“ƒv’†ˆ—
+            // ï¿½Wï¿½ï¿½ï¿½ï¿½ï¿½vï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
             {
-                JumpMoveSpeed = (JumpSecondSpeed * 1/*•b*/) - (JumpGravity * 1/*•b”*/);
-                JumpSecondSpeed -= (JumpGravity * 1/*•b”*/);
+                JumpMoveSpeed = (JumpSecondSpeed * 1/*ï¿½b*/) - (JumpGravity * 1/*ï¿½bï¿½ï¿½*/);
+                JumpSecondSpeed -= (JumpGravity * 1/*ï¿½bï¿½ï¿½*/);
 
-                // ~‰º‘¬“xãŒÀİ’è
+                // ï¿½~ï¿½ï¿½ï¿½ï¿½ï¿½xï¿½ï¿½ï¿½ï¿½İ’ï¿½
                 if (JumpSecondSpeed < JumpDownMaxSpeed)
                 {
                     JumpSecondSpeed = JumpDownMaxSpeed;
@@ -223,10 +223,10 @@ public class PlayerController : MonoBehaviour
                 //}
             }
 
-            // ƒWƒƒƒ“ƒv
+            // ï¿½Wï¿½ï¿½ï¿½ï¿½ï¿½v
             this.transform.position += (Vector3.up * JumpMoveSpeed);
 
-            // ƒWƒƒƒ“ƒvI—¹”»’è /*’n–Ê‚É“–‚½‚Á‚½‚É‚È‚é‚©‚à*/
+            // ï¿½Wï¿½ï¿½ï¿½ï¿½ï¿½vï¿½Iï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ /*ï¿½nï¿½Ê‚É“ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½É‚È‚é‚©ï¿½ï¿½*/
             if ((Mathf.Sign(JumpMoveSpeed) == -1f) && ((MinHeight + FloatPosError) >= this.transform.position.y))
             {
                 Debug.Log(1000);
@@ -237,7 +237,7 @@ public class PlayerController : MonoBehaviour
     }
 
     /// <summary>
-    /// d—Í–³Œø‰»‘€ì
+    /// ï¿½dï¿½Í–ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     /// </summary>
     private void SetGravityDeactivation()
     {
@@ -264,7 +264,7 @@ public class PlayerController : MonoBehaviour
     }
 
     /// <summary>
-    /// ƒ_ƒ[ƒW
+    /// ï¿½_ï¿½ï¿½ï¿½[ï¿½W
     /// </summary>
     public void Damage(int damage)
     {
@@ -274,7 +274,7 @@ public class PlayerController : MonoBehaviour
     }
 
     /// <summary>
-    /// HPŠm”F
+    /// HPï¿½mï¿½F
     /// </summary>
     private void HpCheck()
     {
@@ -286,18 +286,18 @@ public class PlayerController : MonoBehaviour
     }
 
     /// <summary>
-    /// €–Sˆ—
+    /// ï¿½ï¿½ï¿½Sï¿½ï¿½ï¿½ï¿½
     /// </summary>
     private void DeathProcess()
     {
-        Debug.Log("€–S");
+        Debug.Log("ï¿½ï¿½ï¿½S");
     }
     
-    //*--------*      İ’è : æ“¾      *--------*//
+    //*--------*      ï¿½İ’ï¿½ : ï¿½æ“¾      *--------*//
 
-    /// <summary>ƒvƒŒƒCƒ„[HPİ’è</summary>
+    /// <summary>ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½[HPï¿½İ’ï¿½</summary>
     public void SetPlayerHp(int hp) {PlayerHp = hp; }
-    /// <summary>ƒvƒŒƒCƒ„[HPæ“¾</summary>
+    /// <summary>ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½[HPï¿½æ“¾</summary>
     public int GetPlayerHp() { return PlayerHp; }
 
     //*--------*                       *--------*//
