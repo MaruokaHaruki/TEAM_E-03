@@ -5,7 +5,6 @@ using UnityEngine.Windows;
 
 public class Player : MonoBehaviour
 {
-    private Vector3 inputVal;
     public enum State
     {
         Idle,
@@ -39,9 +38,4 @@ public class Player : MonoBehaviour
         }
     }
 
-    public void OnMove(InputValue inputValue)
-    {
-        inputVal = new Vector3(inputValue.Get<Vector2>().x, 0f, inputValue.Get<Vector2>().y);
-        Debug.Log(inputValue);
-    }
 }
