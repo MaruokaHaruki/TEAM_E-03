@@ -661,7 +661,7 @@ MonoBehaviour:
   PlayerHp: 0
   PlayerSpeed: 1
   RigidbodyMoveFlag: 1
-  GravityDeactivationFlag: 1
+  GravityDeactivationFlag: 0
   JumpFlag: 0
   MaxHeight: 0
   MinHeight: 0
@@ -1735,7 +1735,7 @@ MonoBehaviour:
   PlayerHp: 0
   PlayerSpeed: 1
   RigidbodyMoveFlag: 1
-  GravityDeactivationFlag: 1
+  GravityDeactivationFlag: 0
   JumpFlag: 0
   MaxHeight: 0
   MinHeight: 0
