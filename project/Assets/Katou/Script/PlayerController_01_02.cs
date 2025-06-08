@@ -131,9 +131,11 @@ public class PlayerController_01_02 : MonoBehaviour
         // 壁との衝突処理
         if (collision.gameObject.tag == "Wall")
         {
-            time = 0; // 無敵時間リセット
-            SetMoveVecs(collision.transform.position.x > this.transform.position.x);
-            currentPower = 0; // 壁に衝突したらパワーリセット
+            if (!OnGroundCheckObject(collision.gameObject)) {
+                time = 0; // 無敵時間リセット
+                SetMoveVecs(collision.transform.position.x > this.transform.position.x);
+                currentPower = 0; // 壁に衝突したらパワーリセット
+            }
         }
 
         // 他のプレイヤーとの衝突処理
@@ -144,20 +146,36 @@ public class PlayerController_01_02 : MonoBehaviour
             {
                 Destroy(collision.gameObject);
             }
+            if (!OnGroundCheckObject(collision.gameObject)) {
 
-            // 衝突位置に応じて移動方向を設定し、少し離す
-            if (collision.transform.position.x < this.transform.position.x)
-            {
-                SetMoveVecs(false);
-                this.transform.position += new Vector3(0.1f, 0f);
+                // 衝突位置に応じて移動方向を設定し、少し離す
+                if (collision.transform.position.x < this.transform.position.x) {
+                    SetMoveVecs(false);
+                    this.transform.position += new Vector3(0.1f, 0f);
+                }
+                else {
+                    SetMoveVecs(true);
+                    this.transform.position += new Vector3(-0.1f, 0f);
+                }
+                currentPower = 0; // 他プレイヤーに衝突したらパワーリセット
             }
-            else
-            {
-                SetMoveVecs(true);
-                this.transform.position += new Vector3(-0.1f, 0f);
-            }
-            currentPower = 0; // 他プレイヤーに衝突したらパワーリセット
         }
+    }
+
+    /// <summary>
+    /// 取得したオブジェクトが自分の下にある場合true
+    /// </summary>
+    public bool OnGroundCheckObject(GameObject checkObject) {
+        if ((GetObjectSize(checkObject, 1) > GetObjectSize(this.gameObject, -1)) &&
+            (GetObjectSize(checkObject, -1) < GetObjectSize(this.gameObject, 1)) &&
+            (checkObject.transform.position.y < this.transform.position.y)) {
+            return true;
+        }
+        return false;
+    }
+
+    private float GetObjectSize(GameObject getObject, float direction) {
+        return ((getObject.transform.lossyScale.x * 0.5f * direction) + getObject.transform.position.x);
     }
 
     /// <summary>
