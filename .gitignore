@@ -24,3 +24,4 @@ MemoryCaptures/
 # ビルド結果
 Build/
 Builds/
+/project/Assets/Katou/Script/ObjectController.cs

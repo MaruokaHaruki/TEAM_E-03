@@ -110,7 +110,7 @@ public class TestJump : MonoBehaviour
 
     private void OnCollisionStay2D(Collision2D collision)
     {
-        if (OnGroundCheckObject(collision.gameObject) && (collision.gameObject.tag != "Wall"))
+        if (OnGroundCheckObject(collision.gameObject) /*&& (collision.gameObject.tag != "Wall")*/)
         {
             OnGround = true;
         }
@@ -119,7 +119,7 @@ public class TestJump : MonoBehaviour
     private void OnCollisionEnter2D(Collision2D collision)
     {
         // ジャンプチェック
-        if (OnGroundCheckObject(collision.gameObject) && (collision.gameObject.tag != "Wall"))
+        if (OnGroundCheckObject(collision.gameObject) /*&& (collision.gameObject.tag != "Wall")*/)
         {
             JumpEnd();
         }
