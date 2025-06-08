@@ -306,7 +306,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &314650791
 Transform:
   m_ObjectHideFlags: 0
@@ -1399,11 +1399,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   AlwaysVec: {x: 3, y: 0}
-  KeyVec: {x: 3, y: 0}
-  SetKeyVec: {x: 3, y: 0}
-  KeyPlusAmount: 0.5
-  KeyMinusAmount: -0.5
-  KeyMaxAmount: 5
+  maxPower: 100
+  powerIncreaseAmount: 10
+  powerDecreaseRate: 5
+  powerToSpeedFactor: 0.1
   KeyKFlag: 1
   Hp: 0
   CheckTime: 0
@@ -1731,11 +1730,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   AlwaysVec: {x: 0, y: 0}
-  KeyVec: {x: 0, y: 0}
-  SetKeyVec: {x: 0, y: 0}
-  KeyPlusAmount: 0
-  KeyMinusAmount: 0
-  KeyMaxAmount: 0
+  maxPower: 100
+  powerIncreaseAmount: 10
+  powerDecreaseRate: 5
+  powerToSpeedFactor: 0.1
   KeyKFlag: 0
   Hp: 0
   CheckTime: 0
@@ -1775,11 +1773,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   AlwaysVec: {x: 3, y: 0}
-  KeyVec: {x: 3, y: 0}
-  SetKeyVec: {x: 3, y: 0}
-  KeyPlusAmount: 0.5
-  KeyMinusAmount: -0.5
-  KeyMaxAmount: 10
+  maxPower: 100
+  powerIncreaseAmount: 10
+  powerDecreaseRate: 5
+  powerToSpeedFactor: 0.1
   KeyKFlag: 1
   Hp: 0
   CheckTime: 0
@@ -1996,7 +1993,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6935def2d5415c844bb713adf0ca1e02, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Player: {fileID: 2141266925}
+  Player: {fileID: 2026193524}
   HipDamageFlag: 1
 --- !u!61 &1630154462
 BoxCollider2D:
@@ -2591,7 +2588,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1922895916
 Transform:
   m_ObjectHideFlags: 0
@@ -2619,7 +2616,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6935def2d5415c844bb713adf0ca1e02, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Player: {fileID: 1500749850}
+  Player: {fileID: 1569928235}
   HipDamageFlag: 0
 --- !u!61 &1922895918
 BoxCollider2D:
@@ -3024,11 +3021,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   AlwaysVec: {x: -3, y: 0}
-  KeyVec: {x: -3, y: 0}
-  SetKeyVec: {x: -3, y: 0}
-  KeyPlusAmount: -0.5
-  KeyMinusAmount: 0.5
-  KeyMaxAmount: 5
+  maxPower: 100
+  powerIncreaseAmount: 10
+  powerDecreaseRate: 5
+  powerToSpeedFactor: 0.1
   KeyKFlag: 0
   Hp: 0
   CheckTime: 0
@@ -3318,11 +3314,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   AlwaysVec: {x: -1.5, y: 0}
-  KeyVec: {x: -1.5, y: 0}
-  SetKeyVec: {x: -1.5, y: 0}
-  KeyPlusAmount: -0.25
-  KeyMinusAmount: 0.25
-  KeyMaxAmount: 2.5
+  maxPower: 100
+  powerIncreaseAmount: 10
+  powerDecreaseRate: 5
+  powerToSpeedFactor: 0.1
   KeyKFlag: 0
   Hp: 0
   CheckTime: 0.5
