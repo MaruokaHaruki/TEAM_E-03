@@ -1942,7 +1942,7 @@ MonoBehaviour:
   DownMoveSpeed: 0
   JumpSecondSpeed: 0
   CheckJumpSecond: 0
-  JumpPower: 0.1
+  JumpPower: 0.04
   DownMaxSpeed: 0.2
   GravityPower: 0.2
   keyMFlag: 1
@@ -3190,7 +3190,7 @@ MonoBehaviour:
   DownMoveSpeed: 0
   JumpSecondSpeed: 0
   CheckJumpSecond: 0
-  JumpPower: 0.1
+  JumpPower: 0.04
   DownMaxSpeed: 0.2
   GravityPower: 0.2
   keyMFlag: 0
