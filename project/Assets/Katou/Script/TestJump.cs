@@ -22,6 +22,7 @@ public class TestJump : MonoBehaviour
     [SerializeField, Header(" W     v _ E   ő厞   x")] private float DownMaxSpeed;
     /// <summary> W     v d  </summary>
     [SerializeField, Header(" W     v d  ")] private float GravityPower;
+    private float NowGravityPower;
 
     /// <summary>
     /// 地面の上にいるフラグ
@@ -36,6 +37,9 @@ public class TestJump : MonoBehaviour
         this.gameObject.GetComponent<Rigidbody2D>().gravityScale = 0;
 
         OnGround = false;
+
+        NowGravityPower = 0;
+        JumpCount = 0;
     }
 
     private void Update()
@@ -63,7 +67,17 @@ public class TestJump : MonoBehaviour
 
         if (!GetGroundFlag())
         {
-            DownMoveSpeed -= GravityPower * Time.deltaTime;
+            NowGravityPower += GravityPower * Time.deltaTime;
+            // 最低速度設定
+            if (NowGravityPower < -Mathf.Abs(DownMaxSpeed))
+            {
+                NowGravityPower = -Mathf.Abs(DownMaxSpeed);
+            }
+
+
+            DownMoveSpeed -= NowGravityPower;
+
+
             // y軸処理
             this.transform.position += (Vector3.up * DownMoveSpeed);
         }
@@ -82,9 +96,6 @@ public class TestJump : MonoBehaviour
             return;
         }
         JumpCount += 1;
-        JumpSecondSpeed = JumpPower;
-        CheckJumpSecond = 0f;
-
     }
 
 
@@ -96,30 +107,25 @@ public class TestJump : MonoBehaviour
     {
         if (JumpCount > 0)
         {
-            DownMoveSpeed += JumpSecondSpeed;
-            JumpSecondSpeed -= (GravityPower * Time.deltaTime);
+            DownMoveSpeed += JumpPower;
 
-            // 最大秒速度
-            if (JumpSecondSpeed < -Mathf.Abs(DownMaxSpeed))
-            {
-                JumpSecondSpeed = -Mathf.Abs(DownMaxSpeed);
-            }
         }
     }
 
 
     private void OnCollisionStay2D(Collision2D collision)
     {
-        if (OnGroundCheckObject(collision.gameObject) && (collision.gameObject.tag != "Wall"))
+        if (OnGroundCheckObject(collision.gameObject) /*&& (collision.gameObject.tag != "Wall")*/)
         {
             OnGround = true;
+            NowGravityPower = 0;
         }
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
         // ジャンプチェック
-        if (OnGroundCheckObject(collision.gameObject) && (collision.gameObject.tag != "Wall"))
+        if (OnGroundCheckObject(collision.gameObject) /*&& (collision.gameObject.tag != "Wall")*/)
         {
             JumpEnd();
         }
