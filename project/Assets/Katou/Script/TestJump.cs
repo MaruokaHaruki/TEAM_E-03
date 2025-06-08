@@ -5,8 +5,7 @@ using UnityEngine;
  * ジャンプ
  * 追う側切り替えフラグ
  */
-public class TestJump : MonoBehaviour
-{
+public class TestJump : MonoBehaviour {
     /// <summary>ジャンプ数</summary>
     [SerializeField] private int JumpCount;
     [SerializeField, Header("最大ジャンプ数")] private int MaxJumpCount;
@@ -22,6 +21,7 @@ public class TestJump : MonoBehaviour
     [SerializeField, Header(" W     v _ E   ő厞   x")] private float DownMaxSpeed;
     /// <summary> W     v d  </summary>
     [SerializeField, Header(" W     v d  ")] private float GravityPower;
+    private float NowGravityPower;
 
     /// <summary>
     /// 地面の上にいるフラグ
@@ -29,31 +29,28 @@ public class TestJump : MonoBehaviour
     private bool OnGround;
 
     [SerializeField] private bool keyMFlag;
-    
-    void Start()
-    {
+
+    void Start() {
         // リジットボディ重力削除
         this.gameObject.GetComponent<Rigidbody2D>().gravityScale = 0;
 
         OnGround = false;
+
+        NowGravityPower = 0;
+        JumpCount = 0;
     }
 
-    private void Update()
-    {
+    private void Update() {
         // 移動初期化
         DownMoveSpeed = 0;
 
-        if (keyMFlag)
-        {
-            if (Input.GetKeyDown(KeyCode.M))
-            {
+        if (keyMFlag) {
+            if (Input.GetKeyDown(KeyCode.M)) {
                 StartJump();
             }
         }
-        else
-        {
-            if (Input.GetKeyDown(KeyCode.C))
-            {
+        else {
+            if (Input.GetKeyDown(KeyCode.C)) {
                 StartJump();
             }
         }
@@ -61,11 +58,19 @@ public class TestJump : MonoBehaviour
         // ジャンプ
         JumpProcess();
 
-        if (!GetGroundFlag())
-        {
-            DownMoveSpeed -= GravityPower * Time.deltaTime;
+        if (!GetGroundFlag()) {
+            NowGravityPower += GravityPower * Time.deltaTime;
+            // 最低速度設定
+            if (NowGravityPower < -Mathf.Abs(DownMaxSpeed)) {
+                NowGravityPower = -Mathf.Abs(DownMaxSpeed);
+            }
+
+
+            DownMoveSpeed -= NowGravityPower;
+
+
             // y軸処理
-            this.transform.position += (Vector3.up * DownMoveSpeed);
+            this.transform.position += (Vector3.up * DownMoveSpeed/* * Time.deltaTime*/);
         }
 
         OnGround = false;
@@ -75,16 +80,11 @@ public class TestJump : MonoBehaviour
     /// <summary>
     /// ジャンプスタート
     /// </summary>
-    public void StartJump()
-    {
-        if (JumpCount >= MaxJumpCount)
-        {
+    public void StartJump() {
+        if (JumpCount >= MaxJumpCount) {
             return;
         }
         JumpCount += 1;
-        JumpSecondSpeed = JumpPower;
-        CheckJumpSecond = 0f;
-
     }
 
 
@@ -92,35 +92,24 @@ public class TestJump : MonoBehaviour
     /// <summary>
     /// ジャンプ処理
     /// </summary>
-    public void JumpProcess()
-    {
-        if (JumpCount > 0)
-        {
-            DownMoveSpeed += JumpSecondSpeed;
-            JumpSecondSpeed -= (GravityPower * Time.deltaTime);
+    public void JumpProcess() {
+        if (JumpCount > 0) {
+            DownMoveSpeed += JumpPower;
 
-            // 最大秒速度
-            if (JumpSecondSpeed < -Mathf.Abs(DownMaxSpeed))
-            {
-                JumpSecondSpeed = -Mathf.Abs(DownMaxSpeed);
-            }
         }
     }
 
 
-    private void OnCollisionStay2D(Collision2D collision)
-    {
-        if (OnGroundCheckObject(collision.gameObject) && (collision.gameObject.tag != "Wall"))
-        {
+    private void OnCollisionStay2D(Collision2D collision) {
+        if (OnGroundCheckObject(collision.gameObject) /*&& (collision.gameObject.tag != "Wall")*/) {
             OnGround = true;
+            NowGravityPower = 0;
         }
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
+    private void OnCollisionEnter2D(Collision2D collision) {
         // ジャンプチェック
-        if (OnGroundCheckObject(collision.gameObject) && (collision.gameObject.tag != "Wall"))
-        {
+        if (OnGroundCheckObject(collision.gameObject) /*&& (collision.gameObject.tag != "Wall")*/) {
             JumpEnd();
         }
     }
@@ -131,32 +120,27 @@ public class TestJump : MonoBehaviour
     /// <summary>
     /// 取得したオブジェクトが自分の下にある場合true
     /// </summary>
-    public bool OnGroundCheckObject(GameObject checkObject)
-    {
+    public bool OnGroundCheckObject(GameObject checkObject) {
         if ((GetObjectSize(checkObject, 1) > GetObjectSize(this.gameObject, -1)) &&
             (GetObjectSize(checkObject, -1) < GetObjectSize(this.gameObject, 1)) &&
-            (checkObject.transform.position.y < this.transform.position.y))
-        {
+            (checkObject.transform.position.y < this.transform.position.y)) {
             return true;
         }
         return false;
     }
 
-    private float GetObjectSize(GameObject getObject, float direction)
-    {
+    private float GetObjectSize(GameObject getObject, float direction) {
         return ((getObject.transform.lossyScale.x * 0.5f * direction) + getObject.transform.position.x);
     }
 
     /// <summary>
     /// ジャンプ終了
     /// </summary>
-    public void JumpEnd()
-    {
+    public void JumpEnd() {
         JumpCount = 0;
     }
 
-    private bool GetGroundFlag()
-    {
+    private bool GetGroundFlag() {
         return OnGround && (JumpCount == 0);
     }
 }
