@@ -2617,7 +2617,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Player: {fileID: 1569928235}
-  HipDamageFlag: 0
+  HipDamageFlag: 1
 --- !u!61 &1922895918
 BoxCollider2D:
   m_ObjectHideFlags: 0
