@@ -1942,9 +1942,9 @@ MonoBehaviour:
   DownMoveSpeed: 0
   JumpSecondSpeed: 0
   CheckJumpSecond: 0
-  JumpPower: 0.2
+  JumpPower: 0.1
   DownMaxSpeed: 0.2
-  GravityPower: 0.84
+  GravityPower: 0.32
   keyMFlag: 1
 --- !u!1 &1630154459
 GameObject:
@@ -3190,9 +3190,9 @@ MonoBehaviour:
   DownMoveSpeed: 0
   JumpSecondSpeed: 0
   CheckJumpSecond: 0
-  JumpPower: 0.2
+  JumpPower: 0.1
   DownMaxSpeed: 0.2
-  GravityPower: 0.84
+  GravityPower: 0.32
   keyMFlag: 0
 --- !u!1 &2124248993
 GameObject:
