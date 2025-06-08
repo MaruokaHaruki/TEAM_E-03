@@ -375,7 +375,7 @@ MonoBehaviour:
       height: 863.99994
     m_MinimalGUI: 1
   m_defaultScale: 0.5456019
-  m_LastWindowPixelSize: {x: 1286.5, y: 615.5}
+  m_LastWindowPixelSize: {x: 1029.2, y: 492.40002}
   m_ClearInEditMode: 1
   m_NoCameraWarning: 1
   m_LowResolutionForAspectRatios: 01000000000000000000
@@ -404,7 +404,7 @@ MonoBehaviour:
   m_Pos:
     serializedVersion: 2
     x: 0
-    y: 79.200005
+    y: 24
     width: 215.8
     height: 486.8
   m_SerializedDataModeController:
@@ -469,8 +469,8 @@ MonoBehaviour:
     m_TextWithWhitespace: "Scene\u200B"
   m_Pos:
     serializedVersion: 2
-    x: 216.8
-    y: 79.200005
+    x: 217.8
+    y: 24
     width: 1029.2
     height: 486.8
   m_SerializedDataModeController:
@@ -1041,7 +1041,7 @@ MonoBehaviour:
   m_AudioPlay: 0
   m_DebugDrawModesUseInteractiveLightBakingData: 0
   m_Position:
-    m_Target: {x: -5.948569, y: -0.3464166, z: 0.033632066}
+    m_Target: {x: 32.309784, y: -3.6971722, z: -0.1818682}
     speed: 2
     m_Value: {x: -5.948569, y: -0.3464166, z: 0.033632066}
   m_RenderMode: 0
@@ -1073,7 +1073,7 @@ MonoBehaviour:
       m_Fade:
         m_Target: 0
         speed: 2
-        m_Value: 1
+        m_Value: 0
       m_Color: {r: 0.5, g: 0.5, b: 0.5, a: 0.4}
       m_Pivot: {x: 0, y: 0, z: 0}
       m_Size: {x: 1, y: 1}
@@ -1091,9 +1091,9 @@ MonoBehaviour:
   m_Rotation:
     m_Target: {x: 0, y: 0, z: 0, w: 1}
     speed: 2
-    m_Value: {x: -0.0000000014500593, y: 0.00000017818893, z: 0.000000022354195, w: 0.99999994}
+    m_Value: {x: 0, y: 0, z: 0, w: 1}
   m_Size:
-    m_Target: 11.818663
+    m_Target: 18.90075
     speed: 2
     m_Value: 11.818663
   m_Ortho:
@@ -1113,8 +1113,8 @@ MonoBehaviour:
     m_FarClip: 10000
     m_DynamicClip: 1
     m_OcclusionCulling: 0
-  m_LastSceneViewRotation: {x: -0.008057648, y: 0.9901551, z: 0.124217145, w: 0.06425223}
-  m_LastSceneViewOrtho: 1
+  m_LastSceneViewRotation: {x: -0.08717229, y: 0.89959055, z: -0.21045254, w: -0.3726226}
+  m_LastSceneViewOrtho: 0
   m_Viewpoint:
     m_SceneView: {fileID: 14}
     m_CameraOverscanSettings:
@@ -1223,7 +1223,7 @@ MonoBehaviour:
   m_Pos:
     serializedVersion: 2
     x: 0
-    y: 592
+    y: 536.8
     width: 1247
     height: 178
   m_SerializedDataModeController:
@@ -1267,7 +1267,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: faa60000
     m_LastClickedID: 42746
-    m_ExpandedIDs: 0000000000ca9a3b
+    m_ExpandedIDs: 0000000056a6000058a60000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -1296,7 +1296,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: 00000000
+    m_ExpandedIDs: 0000000056a6000058a60000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -1450,8 +1450,8 @@ MonoBehaviour:
     m_TextWithWhitespace: "Inspector\u200B"
   m_Pos:
     serializedVersion: 2
-    x: 1248
-    y: 79.200005
+    x: 1249
+    y: 24
     width: 287
     height: 690.8
   m_SerializedDataModeController:
