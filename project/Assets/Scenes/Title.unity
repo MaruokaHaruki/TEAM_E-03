@@ -439,8 +439,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 37c49cc50c19c4b4792fd11f8a64f841, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sceneToLoad: GameScene
-  sceneAsset: {fileID: 102900000, guid: 27825aad66bcc9443b4668faf498a540, type: 3}
+  sceneToLoad: katou
+  sceneAsset: {fileID: 102900000, guid: 45396054baf6cdc46bee32d78724a804, type: 3}
 --- !u!4 &836022727
 Transform:
   m_ObjectHideFlags: 0
@@ -1035,15 +1035,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3200357480503453588, guid: b19c3c82bb13ae140ab338e11f3bd568, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 3200357480503453588, guid: b19c3c82bb13ae140ab338e11f3bd568, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 3200357480503453588, guid: b19c3c82bb13ae140ab338e11f3bd568, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 3200357480503453588, guid: b19c3c82bb13ae140ab338e11f3bd568, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -1079,7 +1079,7 @@ PrefabInstance:
       objectReference: {fileID: 8300000, guid: 1f3c904efada6f0459945672b0e10031, type: 3}
     - target: {fileID: 7308765483759475213, guid: b19c3c82bb13ae140ab338e11f3bd568, type: 3}
       propertyPath: sceneBGMList.Array.data[1].sceneName
-      value: GameScene
+      value: katou
       objectReference: {fileID: 0}
     - target: {fileID: 7308765483759475213, guid: b19c3c82bb13ae140ab338e11f3bd568, type: 3}
       propertyPath: sceneBGMList.Array.data[2].sceneName

@@ -57,11 +57,9 @@ public class PlayerController_01_02 : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
-    {
+    void Update() {
         time += Time.deltaTime;
-        if (time < CheckTime)
-        {
+        if (time < CheckTime) {
             // 無敵状態(七色にひかる)
             // スプライトの色を七色に変更する
             GetComponent<SpriteRenderer>().material = InvincibleMaterial;
@@ -70,8 +68,7 @@ public class PlayerController_01_02 : MonoBehaviour
                 GetComponent<SpriteRenderer>().material.SetColor("_Color", Color.HSVToRGB(Mathf.PingPong(Time.time * 0.5f, 1), 1, 1)); // HSVToRGBのHは0-1の範囲が良いのでPingPongを使用
             }
         }
-        else
-        {
+        else {
             // 通常状態(元の色に戻る)
             //GetComponent<SpriteRenderer>().material = IdeMaterial;
         }
@@ -81,34 +78,26 @@ public class PlayerController_01_02 : MonoBehaviour
 
         // キーが押されていない場合、パワーを減少させる
         KeyCode targetKey = KeyKFlag ? KeyCode.K : KeyCode.D;
-        if (!Input.GetKey(targetKey))
-        {
+        if (!Input.GetKey(targetKey)) {
             currentPower -= powerDecreaseRate * Time.deltaTime;
-            if (currentPower < 0)
-            {
+            if (currentPower < 0) {
                 currentPower = 0;
             }
         }
 
         // KキーまたはDキーの入力でパワー増加
-        if (KeyKFlag)
-        {
-            if (Input.GetKeyDown(KeyCode.K))
-            {
+        if (KeyKFlag) {
+            if (Input.GetKeyDown(KeyCode.K)) {
                 currentPower += powerIncreaseAmount;
-                if (currentPower > maxPower)
-                {
+                if (currentPower > maxPower) {
                     currentPower = maxPower;
                 }
             }
         }
-        else
-        {
-            if (Input.GetKeyDown(KeyCode.D))
-            {
+        else {
+            if (Input.GetKeyDown(KeyCode.D)) {
                 currentPower += powerIncreaseAmount;
-                if (currentPower > maxPower)
-                {
+                if (currentPower > maxPower) {
                     currentPower = maxPower;
                 }
             }
@@ -124,12 +113,19 @@ public class PlayerController_01_02 : MonoBehaviour
         this.transform.position += (Vector3)MoveVec * Time.deltaTime;
 
         // HPが0以下になったら破棄
-        if (Hp <= 0)
-        {
+        if (Hp <= 0) {
             Destroy(this.gameObject);
+            if (SceneManagerScript.Instance) {
+                if (KeyKFlag) {
+                    SceneManagerScript.Instance.winnerName = "PlayerB";
+                }
+                else {
+                    SceneManagerScript.Instance.winnerName = "PlayerA";
+                }
+                SceneManagerScript.Instance.FadeOutScene("Result");
+            }
         }
     }
-
     private void OnCollisionEnter2D(Collision2D collision)
     {
         // 壁との衝突処理

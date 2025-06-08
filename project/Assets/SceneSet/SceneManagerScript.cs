@@ -9,8 +9,8 @@ public class SceneManagerScript : SingletonMonoBehaviour<SceneManagerScript>
     private string nextScene;
     public string winnerName;
 
-    public GameObject fadePanel;             // ƒtƒF[ƒh—p‚ÌUIƒpƒlƒ‹iImagej
-    public float fadeDuration = 1.0f;   // ƒtƒF[ƒh‚ÌŠ®—¹‚É‚©‚©‚éŠÔ
+    public GameObject fadePanel;             // ï¿½tï¿½Fï¿½[ï¿½hï¿½pï¿½ï¿½UIï¿½pï¿½lï¿½ï¿½ï¿½iImageï¿½j
+    public float fadeDuration = 1.0f;   // ï¿½tï¿½Fï¿½[ï¿½hï¿½ÌŠï¿½ï¿½ï¿½ï¿½É‚ï¿½ï¿½ï¿½ï¿½éï¿½ï¿½
 
     private GameObject canvas;
    
@@ -37,21 +37,21 @@ public class SceneManagerScript : SingletonMonoBehaviour<SceneManagerScript>
 
     public IEnumerator FadeOutAndLoadScene()
     {
-        canvas.GetComponentInChildren<Image>().enabled = true;                 // ƒpƒlƒ‹‚ğ—LŒø‰»
-        float elapsedTime = 0.0f;                 // Œo‰ßŠÔ‚ğ‰Šú‰»
-        Color startColor = canvas.GetComponentInChildren<Image>().color;       // ƒtƒF[ƒhƒpƒlƒ‹‚ÌŠJnF‚ğæ“¾
-        Color endColor = new Color(startColor.r, startColor.g, startColor.b, 1.0f); // ƒtƒF[ƒhƒpƒlƒ‹‚ÌÅIF‚ğİ’è
+        canvas.GetComponentInChildren<Image>().enabled = true;                 // ï¿½pï¿½lï¿½ï¿½ï¿½ï¿½Lï¿½ï¿½ï¿½ï¿½
+        float elapsedTime = 0.0f;                 // ï¿½oï¿½ßï¿½ï¿½Ô‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+        Color startColor = canvas.GetComponentInChildren<Image>().color;       // ï¿½tï¿½Fï¿½[ï¿½hï¿½pï¿½lï¿½ï¿½ï¿½ÌŠJï¿½nï¿½Fï¿½ï¿½æ“¾
+        Color endColor = new Color(startColor.r, startColor.g, startColor.b, 1.0f); // ï¿½tï¿½Fï¿½[ï¿½hï¿½pï¿½lï¿½ï¿½ï¿½ÌÅIï¿½Fï¿½ï¿½İ’ï¿½
 
-        // ƒtƒF[ƒhƒAƒEƒgƒAƒjƒ[ƒVƒ‡ƒ“‚ğÀs
+        // ï¿½tï¿½Fï¿½[ï¿½hï¿½Aï¿½Eï¿½gï¿½Aï¿½jï¿½ï¿½ï¿½[ï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½s
         while (elapsedTime < fadeDuration)
         {
-            elapsedTime += Time.deltaTime;                        // Œo‰ßŠÔ‚ğ‘‚â‚·
-            float t = Mathf.Clamp01(elapsedTime / fadeDuration);  // ƒtƒF[ƒh‚Ìis“x‚ğŒvZ
-            canvas.GetComponentInChildren<Image>().color = Color.Lerp(startColor, endColor, t); // ƒpƒlƒ‹‚ÌF‚ğ•ÏX‚µ‚ÄƒtƒF[ƒhƒAƒEƒg
-            yield return null;                                     // 1ƒtƒŒ[ƒ€‘Ò‹@
+            elapsedTime += Time.deltaTime;                        // ï¿½oï¿½ßï¿½ï¿½Ô‚ğ‘‚â‚·
+            float t = Mathf.Clamp01(elapsedTime / fadeDuration);  // ï¿½tï¿½Fï¿½[ï¿½hï¿½Ìiï¿½sï¿½xï¿½ï¿½vï¿½Z
+            canvas.GetComponentInChildren<Image>().color = Color.Lerp(startColor, endColor, t); // ï¿½pï¿½lï¿½ï¿½ï¿½ÌFï¿½ï¿½ÏXï¿½ï¿½ï¿½Äƒtï¿½Fï¿½[ï¿½hï¿½Aï¿½Eï¿½g
+            yield return null;                                     // 1ï¿½tï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½Ò‹@
         }
 
-        canvas.GetComponentInChildren<Image>().color = endColor;  // ƒtƒF[ƒh‚ªŠ®—¹‚µ‚½‚çÅIF‚Éİ’è
+        canvas.GetComponentInChildren<Image>().color = endColor;  // ï¿½tï¿½Fï¿½[ï¿½hï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÅIï¿½Fï¿½Éİ’ï¿½
      
         SceneManager.LoadScene(nextScene);
 
@@ -65,7 +65,7 @@ public class SceneManagerScript : SingletonMonoBehaviour<SceneManagerScript>
         canvas.GetComponentInChildren<Image>().enabled = true;
         float elapsedTime = 0.0f;
         Color startColor = canvas.GetComponentInChildren<Image>().color;
-        Color endColor = new Color(startColor.r, startColor.g, startColor.b, 0.0f); // ƒ¿0‚Ö
+        Color endColor = new Color(startColor.r, startColor.g, startColor.b, 0.0f); // ï¿½ï¿½0ï¿½ï¿½
 
         while (elapsedTime < fadeDuration)
         {
@@ -76,7 +76,7 @@ public class SceneManagerScript : SingletonMonoBehaviour<SceneManagerScript>
         }
 
         canvas.GetComponentInChildren<Image>().color = endColor;
-        canvas.GetComponentInChildren<Image>().enabled = false; // ƒtƒF[ƒh‚ªI‚í‚Á‚½‚ç”ñ•\¦
+        canvas.GetComponentInChildren<Image>().enabled = false; // ï¿½tï¿½Fï¿½[ï¿½hï¿½ï¿½ï¿½Iï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½\ï¿½ï¿½
     }
 
 
@@ -91,12 +91,12 @@ public class SceneManagerScript : SingletonMonoBehaviour<SceneManagerScript>
 
     public void LoadSceneByName(string sceneName)
     {
-        SceneManager.LoadScene(sceneName); // Œ»İ‚ÌƒV[ƒ“‚ğ’u‚«Š·‚¦‚é
+        SceneManager.LoadScene(sceneName); // ï¿½ï¿½ï¿½İ‚ÌƒVï¿½[ï¿½ï¿½ï¿½ï¿½uï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     }
 
     public void LoadSceneByIndex(int sceneIndex)
     {
-        SceneManager.LoadScene(sceneIndex); // ƒrƒ‹ƒhƒCƒ“ƒfƒbƒNƒX‚Åw’è
+        SceneManager.LoadScene(sceneIndex); // ï¿½rï¿½ï¿½ï¿½hï¿½Cï¿½ï¿½ï¿½fï¿½bï¿½Nï¿½Xï¿½Åwï¿½ï¿½
     }
 
     void OnEnable()
@@ -147,7 +147,7 @@ public class SceneManagerScript : SingletonMonoBehaviour<SceneManagerScript>
             //fadePanel = GameObject.Find("FadePanel")?.GetComponent<Image>();
         }
 
-        // Äæ“¾Œã‚É FadeIn Às
+        // ï¿½Äæ“¾ï¿½ï¿½ï¿½ FadeIn ï¿½ï¿½ï¿½s
         if (canvas != null)
         {
 
