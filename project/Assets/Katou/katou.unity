@@ -1944,7 +1944,7 @@ MonoBehaviour:
   CheckJumpSecond: 0
   JumpPower: 0.1
   DownMaxSpeed: 0.2
-  GravityPower: 0.32
+  GravityPower: 0.2
   keyMFlag: 1
 --- !u!1 &1630154459
 GameObject:
@@ -3192,7 +3192,7 @@ MonoBehaviour:
   CheckJumpSecond: 0
   JumpPower: 0.1
   DownMaxSpeed: 0.2
-  GravityPower: 0.32
+  GravityPower: 0.2
   keyMFlag: 0
 --- !u!1 &2124248993
 GameObject:

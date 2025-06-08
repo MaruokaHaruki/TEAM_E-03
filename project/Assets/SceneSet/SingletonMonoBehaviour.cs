@@ -5,29 +5,29 @@ using System;
 
 public abstract class SingletonMonoBehaviour<T> : MonoBehaviour where T : MonoBehaviour
 {
-    // Œp³æ‚Åu”jŠü‚Í‚Å‚«‚È‚¢‚©Hv‚ğw’è
+    // ï¿½pï¿½ï¿½ï¿½ï¿½Åuï¿½jï¿½ï¿½ï¿½Í‚Å‚ï¿½ï¿½È‚ï¿½ï¿½ï¿½ï¿½Hï¿½vï¿½ï¿½wï¿½ï¿½
     protected bool dontDestroyOnLoad = true;
 
-    // Œp³‚µ‚½ƒNƒ‰ƒX‚ÌÀ‘Ì
+    // ï¿½pï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½Xï¿½Ìï¿½ï¿½ï¿½
     private static T instance;
 
     public static T Instance
     {
         get
         {
-            // ƒCƒ“ƒXƒ^ƒ“ƒX‚ª‚Ü‚¾–³‚¢ê‡
+            // ï¿½Cï¿½ï¿½ï¿½Xï¿½^ï¿½ï¿½ï¿½Xï¿½ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ê‡
             if (!instance)
             {
                 Type t = typeof(T);
 
-                // Œp³æ‚ÌƒXƒNƒŠƒvƒg‚ğƒAƒ^ƒbƒ`‚µ‚Ä‚¢‚éƒIƒuƒWƒFƒNƒg‚ğŒŸõ
+                // ï¿½pï¿½ï¿½ï¿½ï¿½ÌƒXï¿½Nï¿½ï¿½ï¿½vï¿½gï¿½ï¿½Aï¿½^ï¿½bï¿½`ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½Iï¿½uï¿½Wï¿½Fï¿½Nï¿½gï¿½ï¿½ï¿½ï¿½ï¿½
                // instance = (T)FindObjectOfType(t);
                 instance = (T)FindAnyObjectByType(t);
 
-                // Œ©‚Â‚©‚ç‚È‚©‚Á‚½ê‡
+                // ï¿½ï¿½ï¿½Â‚ï¿½ï¿½ï¿½È‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ê‡
                 if (!instance)
                 {
-                    Debug.LogError(t + " ‚ªƒAƒ^ƒbƒ`‚³‚ê‚Ä‚¢‚éƒIƒuƒWƒFƒNƒg‚ª‚ ‚è‚Ü‚¹‚ñ");
+                    Debug.LogError(t + " ï¿½ï¿½ï¿½Aï¿½^ï¿½bï¿½`ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½Iï¿½uï¿½Wï¿½Fï¿½Nï¿½gï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½");
                 }
             }
 
@@ -37,14 +37,14 @@ public abstract class SingletonMonoBehaviour<T> : MonoBehaviour where T : MonoBe
 
     protected virtual void Awake()
     {
-        // ƒCƒ“ƒXƒ^ƒ“ƒX‚ª•¡”‘¶İ‚·‚éê‡‚Í©g‚ğ”jŠü
+        // ï¿½Cï¿½ï¿½ï¿½Xï¿½^ï¿½ï¿½ï¿½Xï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½İ‚ï¿½ï¿½ï¿½ê‡ï¿½Íï¿½ï¿½gï¿½ï¿½jï¿½ï¿½
         if (this != Instance)
         {
             Destroy(this.gameObject);
             return;
         }
 
-        // Œp³æ‚Å”jŠü•s‰Â”\‚ªw’è‚³‚ê‚½ê‡‚ÍƒV[ƒ“‘JˆÚ‚à”jŠü‚µ‚È‚¢
+        // ï¿½pï¿½ï¿½ï¿½ï¿½Å”jï¿½ï¿½ï¿½sï¿½Â”\ï¿½ï¿½ï¿½wï¿½è‚³ï¿½ê‚½ï¿½ê‡ï¿½ÍƒVï¿½[ï¿½ï¿½ï¿½Jï¿½Úï¿½ï¿½ï¿½jï¿½ï¿½ï¿½ï¿½ï¿½È‚ï¿½
         if (dontDestroyOnLoad)
         {
             transform.parent = null;
@@ -55,7 +55,7 @@ public abstract class SingletonMonoBehaviour<T> : MonoBehaviour where T : MonoBe
 
     protected virtual void OnDestroy()
     {
-        // ”jŠü‚³‚ê‚½ê‡‚ÍÀ‘Ì‚Ìíœ‚ğs‚¤
+        // ï¿½jï¿½ï¿½ï¿½ï¿½ï¿½ê‚½ï¿½ê‡ï¿½Íï¿½ï¿½Ì‚Ìíœï¿½ï¿½sï¿½ï¿½
         if (this == Instance)
         {
             instance = null;
