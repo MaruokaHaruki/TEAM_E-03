@@ -3,23 +3,23 @@ using UnityEngine;
 public class PlayerController_01_02 : MonoBehaviour
 {
     /// <summary>
-    /// ˆÚ“®•ûŒü
+    /// ï¿½Ú“ï¿½ï¿½ï¿½ï¿½ï¿½
     /// </summary>
     private Vector2 MoveVec;
 
     /// <summary>
-    /// í‚É‰e‹¿‚·‚éƒxƒNƒgƒ‹
+    /// ï¿½ï¿½É‰eï¿½ï¿½ï¿½ï¿½ï¿½ï¿½xï¿½Nï¿½gï¿½ï¿½
     /// </summary>
-    [SerializeField, Header("í‚É‰e‹¿‚·‚éƒxƒNƒgƒ‹")] private Vector2 AlwaysVec;
+    [SerializeField, Header("ï¿½ï¿½É‰eï¿½ï¿½ï¿½ï¿½ï¿½ï¿½xï¿½Nï¿½gï¿½ï¿½")] private Vector2 AlwaysVec;
 
     /// <summary>
-    /// ‰Ÿ‚µ‚½‚Æ‚«‚ÌƒxƒNƒgƒ‹
+    /// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ‚ï¿½ï¿½Ìƒxï¿½Nï¿½gï¿½ï¿½
     /// </summary>
     [SerializeField] private Vector2 KeyVec;
-    [SerializeField, Header("KeyVecƒŠƒZƒbƒg—p")] private Vector2 SetKeyVec;
-    [SerializeField, Header("KeyVec‘‰Á—p")] private float KeyPlusAmount;
-    [SerializeField, Header("KeyVecŒ¸­—p")] private float KeyMinusAmount;
-    [SerializeField, Header("KeyVecÅ‘åˆÚ“®—Ê")] private float KeyMaxAmount;
+    [SerializeField, Header("KeyVecï¿½ï¿½ï¿½Zï¿½bï¿½gï¿½p")] private Vector2 SetKeyVec;
+    [SerializeField, Header("KeyVecï¿½ï¿½ï¿½ï¿½ï¿½p")] private float KeyPlusAmount;
+    [SerializeField, Header("KeyVecï¿½ï¿½ï¿½ï¿½ï¿½p")] private float KeyMinusAmount;
+    [SerializeField, Header("KeyVecï¿½Å‘ï¿½Ú“ï¿½ï¿½ï¿½")] private float KeyMaxAmount;
 
     [SerializeField] private bool KeyKFlag;
 
@@ -44,11 +44,11 @@ public class PlayerController_01_02 : MonoBehaviour
         time += Time.deltaTime;
         if (time < CheckTime)
         {
-            // ’ÊíF
+            // ï¿½Êï¿½F
         }
         else
         {
-            // –³“G
+            // ï¿½ï¿½ï¿½G
         }
 
         MoveVec = Vector2.zero;
@@ -157,9 +157,9 @@ public class PlayerController_01_02 : MonoBehaviour
     }
 
     /// <summary>
-    /// ˆÚ“®•ûŒüİ’è
+    /// ï¿½Ú“ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½İ’ï¿½
     /// </summary>
-    /// <param name="vecFlag">¶•ûŒüƒtƒ‰ƒO</param>
+    /// <param name="vecFlag">ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½tï¿½ï¿½ï¿½O</param>
     private void SetMoveVecs(bool leftVecFlag)
     {
         if (!leftVecFlag)
@@ -186,7 +186,7 @@ public class PlayerController_01_02 : MonoBehaviour
     }
 
     /// <summary>
-    /// ˆÚ“®•ûŒüæ“¾
+    /// ï¿½Ú“ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½æ“¾
     /// </summary>
     public float GetMoveDirection()
     {
@@ -194,7 +194,7 @@ public class PlayerController_01_02 : MonoBehaviour
     }
 
     /// <summary>
-    /// ˆÚ“®—Êæ“¾
+    /// ï¿½Ú“ï¿½ï¿½Êæ“¾
     /// </summary>
     /// <returns></returns>
     public Vector2 GetMoveVec()
