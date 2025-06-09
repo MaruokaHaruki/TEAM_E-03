@@ -24,13 +24,13 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Rotate",
-                    "type": "Value",
-                    "id": "8ec88b56-03cd-4da9-8e9b-eb66404ebcd9",
-                    "expectedControlType": "Vector2",
+                    "name": "Push",
+                    "type": "Button",
+                    "id": "16d9ffb4-8812-4c14-a564-069cb3788618",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
-                    "initialStateCheck": true
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -58,12 +58,12 @@
                 },
                 {
                     "name": "",
-                    "id": "8863f950-ef4d-4266-817f-41035c79d83f",
-                    "path": "<Gamepad>/rightStick",
+                    "id": "09dbbbc2-3e5d-45e9-a7f3-76b9483679c9",
+                    "path": "<Gamepad>/buttonWest",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Rotate",
+                    "action": "Push",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
