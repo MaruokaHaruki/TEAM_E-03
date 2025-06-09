@@ -22,7 +22,6 @@ public class TestJump : MonoBehaviour
     [SerializeField, Header(" W     v _ E   ő厞   x")] private float DownMaxSpeed;
     /// <summary> W     v d  </summary>
     [SerializeField, Header(" W     v d  ")] private float GravityPower;
-    private float NowGravityPower;
 
     /// <summary>
     /// 地面の上にいるフラグ
@@ -37,15 +36,10 @@ public class TestJump : MonoBehaviour
         this.gameObject.GetComponent<Rigidbody2D>().gravityScale = 0;
 
         OnGround = false;
-
-        NowGravityPower = 0;
-        JumpCount = 0;
     }
 
     private void Update()
     {
-        // 移動初期化
-        DownMoveSpeed = 0;
 
         if (keyMFlag)
         {
@@ -61,30 +55,25 @@ public class TestJump : MonoBehaviour
                 StartJump();
             }
         }
+    }
+
+    private void FixedUpdate()
+    {
+        // 移動初期化
+        DownMoveSpeed = 0;
 
         // ジャンプ
         JumpProcess();
 
         if (!GetGroundFlag())
         {
-            NowGravityPower += GravityPower * Time.deltaTime;
-            // 最低速度設定
-            if (NowGravityPower < -Mathf.Abs(DownMaxSpeed))
-            {
-                NowGravityPower = -Mathf.Abs(DownMaxSpeed);
-            }
-
-
-            DownMoveSpeed -= NowGravityPower;
-
-
+            DownMoveSpeed -= GravityPower * Time.deltaTime;
             // y軸処理
             this.transform.position += (Vector3.up * DownMoveSpeed);
         }
 
         OnGround = false;
     }
-
 
     /// <summary>
     /// ジャンプスタート
@@ -96,6 +85,9 @@ public class TestJump : MonoBehaviour
             return;
         }
         JumpCount += 1;
+        JumpSecondSpeed = JumpPower;
+        CheckJumpSecond = 0f;
+
     }
 
 
@@ -107,8 +99,14 @@ public class TestJump : MonoBehaviour
     {
         if (JumpCount > 0)
         {
-            DownMoveSpeed += JumpPower;
+            DownMoveSpeed += JumpSecondSpeed;
+            JumpSecondSpeed -= (GravityPower * Time.deltaTime);
 
+            // 最大秒速度
+            if (JumpSecondSpeed < -Mathf.Abs(DownMaxSpeed))
+            {
+                JumpSecondSpeed = -Mathf.Abs(DownMaxSpeed);
+            }
         }
     }
 
@@ -118,7 +116,6 @@ public class TestJump : MonoBehaviour
         if (OnGroundCheckObject(collision.gameObject) /*&& (collision.gameObject.tag != "Wall")*/)
         {
             OnGround = true;
-            NowGravityPower = 0;
         }
     }
 
