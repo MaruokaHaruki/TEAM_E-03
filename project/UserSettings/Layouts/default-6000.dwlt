@@ -302,8 +302,8 @@ MonoBehaviour:
     m_TextWithWhitespace: "Game\u200B"
   m_Pos:
     serializedVersion: 2
-    x: 153.6
-    y: 79.200005
+    x: 154.6
+    y: 24
     width: 977.2001
     height: 458.8
   m_SerializedDataModeController:
@@ -375,7 +375,7 @@ MonoBehaviour:
       height: 863.99994
     m_MinimalGUI: 1
   m_defaultScale: 0.506713
-  m_LastWindowPixelSize: {x: 1221.5001, y: 573.5}
+  m_LastWindowPixelSize: {x: 977.2001, y: 458.8}
   m_ClearInEditMode: 1
   m_NoCameraWarning: 1
   m_LowResolutionForAspectRatios: 01000000000000000000
@@ -404,7 +404,7 @@ MonoBehaviour:
   m_Pos:
     serializedVersion: 2
     x: 0
-    y: 79.200005
+    y: 24
     width: 152.6
     height: 458.8
   m_SerializedDataModeController:
@@ -421,8 +421,8 @@ MonoBehaviour:
   m_SceneHierarchy:
     m_TreeViewState:
       scrollPos: {x: 0, y: 0}
-      m_SelectedIDs: 1a940100
-      m_LastClickedID: 103450
+      m_SelectedIDs: 
+      m_LastClickedID: 0
       m_ExpandedIDs: 7042faff5e4afafff44afaff4a4cfaff8050faffe05dfaff2062faff4e63faff1069faff6278faffa283faff4289faff1693faff60a6faff56b2faff62b5faff24bafaff4409fbff9c09fbff9827fbff8c62fbff9269fbffaa6efbff327dfbff688bfbff00b3fbff80bafbfff0c1fbffa8c8fbffbcd5fbff0c07fcffd808fcfff052fcff20fbffff42a6000046a600007ea6000096a60000b6fd0000bafd0000fafd0000680e01006c0e0100ac0e0100e00e0100001b0100041b0100ba200100ee2001001a2801001e280100083f01000c3f0100
       m_RenameOverlay:
         m_UserAcceptedRename: 0
@@ -1223,7 +1223,7 @@ MonoBehaviour:
   m_Pos:
     serializedVersion: 2
     x: 0
-    y: 564
+    y: 508.8
     width: 1131.8
     height: 206
   m_SerializedDataModeController:
@@ -1267,21 +1267,21 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 12a90000
     m_LastClickedID: 43282
-    m_ExpandedIDs: 000000003ca70000eead000006ae000074ae000076ae000078ae00007aae000000b0000002b00000
+    m_ExpandedIDs: 00000000c2a80000c4a80000c6a80000c8a80000caa80000cca80000cea80000d0a80000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
-      m_Name: Katou
-      m_OriginalName: Katou
+      m_Name: 
+      m_OriginalName: 
       m_EditFieldRect:
         serializedVersion: 2
         x: 0
         y: 0
         width: 0
         height: 0
-      m_UserData: 43282
+      m_UserData: 0
       m_IsWaitingForDelay: 0
       m_IsRenaming: 0
-      m_OriginalEventType: 0
+      m_OriginalEventType: 11
       m_IsRenamingFilename: 1
       m_TrimLeadingAndTrailingWhitespace: 0
       m_ClientGUIView: {fileID: 10}
@@ -1296,7 +1296,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: 0000000012a90000eead000006ae000074ae000076ae000078ae00007aae000000b0000002b00000
+    m_ExpandedIDs: 00000000c2a80000c4a80000c6a80000c8a80000caa80000cca80000cea80000d0a80000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -1450,8 +1450,8 @@ MonoBehaviour:
     m_TextWithWhitespace: "Inspector\u200B"
   m_Pos:
     serializedVersion: 2
-    x: 1132.8
-    y: 79.200005
+    x: 1133.8
+    y: 24
     width: 402.19995
     height: 690.8
   m_SerializedDataModeController:
