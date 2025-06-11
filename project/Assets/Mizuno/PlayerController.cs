@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEditor.Rendering.LookDev;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -5,6 +6,13 @@ using UnityEngine.InputSystem;
 [RequireComponent(typeof(Rigidbody2D))]
 public class PlayerController : MonoBehaviour
 {
+
+
+    public enum PlayerNumber { PlayerA, PlayerB }
+
+    [SerializeField, Header("プレイヤー番号")]
+    private PlayerNumber playerNumber;
+
     [SerializeField, Header("移動設定")]
     public float moveSpeed;
 
@@ -18,6 +26,10 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField, Header("進行方向")]
     private int direction = 1; // 1: 右, -1: 左
+
+    [SerializeField, Header("方向反転のクールダウン時間")]
+    private float flipCooldownTime = 0.3f;
+    private float lastFlipTime = -999f;
 
     [SerializeField, Header("攻撃の当たり判定")]
     private GameObject HitCircle;
@@ -34,18 +46,23 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField, Header("ノックバックの高さ")]
     private float knockbackUpForce = 2.0f;
-   
+
     [SerializeField, Header("揺らすカメラ")]
     private CameraShake cameraShake;
 
     private Rigidbody2D rb;
     private PlayerInputActions inputActions;
-    
+
     // 入力状態を保持する変数
     private bool isPush;
     private bool isJumpPressed;
     private bool isGrounded;
 
+    [SerializeField, Header("牛のスプライト")]
+    GameObject sprite;
+
+    //振動の強さ
+    public float vibrationStrength = 0.1f;
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -54,18 +71,30 @@ public class PlayerController : MonoBehaviour
 
     private void OnEnable()
     {
-        inputActions.Player.Enable();
+        inputActions.Enable();
 
 
-        inputActions.Player.Push.performed += ctx => isPush = true;
+        switch (playerNumber)
+        {
+            case PlayerNumber.PlayerA:
+                inputActions.PlayerA.Enable();
+                inputActions.PlayerA.Push.performed += ctx => isPush = true;
+                inputActions.PlayerA.Jump.performed += ctx => isJumpPressed = true;
+                break;
 
-        inputActions.Player.Jump.performed += ctx => isJumpPressed = true;
+            case PlayerNumber.PlayerB:
+                inputActions.PlayerB.Enable();
+                inputActions.PlayerB.Push.performed += ctx => isPush = true;
+                inputActions.PlayerB.Jump.performed += ctx => isJumpPressed = true;
+                break;
+        }
     }
 
     private void OnDisable()
     {
-        inputActions.Player.Disable();
+        inputActions.Disable();
     }
+
 
     private void FixedUpdate()
     {
@@ -89,43 +118,36 @@ public class PlayerController : MonoBehaviour
 
 
     }
-    /// /デバッグ用
-    //private void OnDrawGizmosSelected()
-    //{
-    //    if (groundCheck != null)
-    //    {
-    //        Gizmos.color = Color.green;
-    //        Gizmos.DrawWireSphere(groundCheck.position, groundCheckRadius);
-    //    }
-    //}
 
-    private void UpdateHitCirclePosition()
-    {
-        // 進行方向と逆方向にHitCircleを配置
-        float offsetX = Mathf.Abs(HitCircle.transform.localPosition.x); 
-        HitCircle.transform.localPosition = new Vector3(-direction * offsetX, HitCircle.transform.localPosition.y, HitCircle.transform.localPosition.z);
-    }
 
     private void OnCollisionEnter2D(Collision2D col)
     {
+        Debug.Log($"{gameObject.name} hit {col.gameObject.name}");
         if (col.gameObject.CompareTag("Wall") || col.gameObject.CompareTag("Player"))
         {
+            if (Time.time - lastFlipTime < flipCooldownTime) return; // クールダウン中は何もしない
+
             // 方向反転
             direction *= -1;
+            lastFlipTime = Time.time;
 
-            // HitCircleの位置反転
-            UpdateHitCirclePosition();
+            // 進行方向のスプライトを反転
+            Vector3 localScale = sprite.transform.localScale;
+            localScale.x = Mathf.Abs(localScale.x) * direction;
+            sprite.transform.localScale = localScale;
 
             // ノックバック処理（プレイヤーとのみ）
             if (col.gameObject.CompareTag("Player"))
             {
                 Knockback();
             }
-
             // カメラ振動処理
             if (cameraShake != null)
             {
-                cameraShake.Shake(0.15f, 0.1f); // 秒、強さ
+
+                cameraShake.Shake(0.2f, 0.3f); // 秒、強さ
+                StartCoroutine(Vib());
+
             }
 
             // 無敵時間処理
@@ -134,6 +156,7 @@ public class PlayerController : MonoBehaviour
                 StartCoroutine(TemporarilyDisableHitCircle());
             }
         }
+
     }
 
     // HitCircleを一時的に無効化するコルーチン
@@ -171,4 +194,20 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    private System.Collections.IEnumerator Vib()
+    {
+        if (Gamepad.current != null)
+        {
+            float[] strengths = { 0.8f, 0.5f, 0.3f, 0.1f };
+            float[] durations = { 0.02f, 0.02f, 0.02f, 0.02f };
+
+            for (int i = 0; i < strengths.Length; i++)
+            {
+                Gamepad.current.SetMotorSpeeds(strengths[i], strengths[i]);
+                yield return new WaitForSeconds(durations[i]);
+            }
+
+            Gamepad.current.SetMotorSpeeds(0, 0);
+        }
+    }
 }

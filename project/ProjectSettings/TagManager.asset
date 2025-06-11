@@ -8,6 +8,7 @@ TagManager:
   - Ground
   - PlayerA
   - PlayerB
+  - HitCircle
   layers:
   - Default
   - TransparentFX
