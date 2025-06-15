@@ -77,10 +77,16 @@ public class Player : MonoBehaviour {
     public float autoMoveSpeed_ = 3.0f;
 
     [Tooltip("連打時のスピードアップ倍率")]
-    public float speedBoostMultiplier_ = .5f;
+    public float speedBoostMultiplier_ = 1.5f;
 
     [Tooltip("スピードブーストの持続時間")]
     public float speedBoostDuration_ = 0.5f;
+
+    //========================================
+    // 【速度交換設定】
+    [Header("速度交換設定")]
+    [Tooltip("プレイヤー衝突時の速度交換機能を有効にするか")]
+    public bool enableSpeedTransfer_ = true;
 
     //========================================
     // 【連打ゲージ設定】
@@ -247,6 +253,12 @@ public class Player : MonoBehaviour {
         if (Input.GetKeyDown(KeyCode.Tab)) {
             isAutoMode_ = !isAutoMode_;
             Debug.Log($"[MODE CHANGE] : {(isAutoMode_ ? "自動移動モード" : "通常操作モード")}に切り替わりました");
+        }
+
+        // F3キーで速度交換機能のON/OFFを切り替え
+        if (Input.GetKeyDown(KeyCode.F3)) {
+            enableSpeedTransfer_ = !enableSpeedTransfer_;
+            Debug.Log($"[SPEED TRANSFER TOGGLE] : 速度交換機能が {(enableSpeedTransfer_ ? "有効" : "無効")} になりました");
         }
 
         //========================================
@@ -512,6 +524,43 @@ public class Player : MonoBehaviour {
             // これにより、衝突ペアに対して一度だけ判定ロジックが実行されるようになります。
             if (gameObject.GetInstanceID() < otherPlayer.gameObject.GetInstanceID()) {
                 return;
+            }
+
+            // 速度交換ロジック
+            if (isAutoMode_ && otherPlayer.isAutoMode_ && enableSpeedTransfer_ && otherPlayer.enableSpeedTransfer_) {
+                float mySpeed = GetCurrentEffectiveSpeed();
+                float otherSpeed = otherPlayer.GetCurrentEffectiveSpeed();
+
+                // 速度差が十分にある場合のみ速度交換を実行
+                if (Mathf.Abs(mySpeed - otherSpeed) > 0.5f) {
+                    Player fasterPlayer = null;
+                    Player slowerPlayer = null;
+                    float fasterSpeed = 0;
+
+                    if (mySpeed > otherSpeed) {
+                        fasterPlayer = this;
+                        slowerPlayer = otherPlayer;
+                        fasterSpeed = mySpeed;
+                    } else {
+                        fasterPlayer = otherPlayer;
+                        slowerPlayer = this;
+                        fasterSpeed = otherSpeed;
+                    }
+
+                    // 遅い方のプレイヤーが速い方の速度を受け継ぐ
+                    slowerPlayer.AdjustGaugeToAchieveSpeed(fasterSpeed);
+
+                    // 速い方のプレイヤーは最低速度に戻る
+                    fasterPlayer.currentComboGauge_ = 0.0f;
+                    fasterPlayer.isSpeedBoosted_ = false;
+
+                    // 両プレイヤーの方向を反転
+                    ReverseDirection();
+                    otherPlayer.ReverseDirection();
+
+                    Debug.Log($"[SPEED TRANSFER] : {fasterPlayer.gameObject.name}(速度:{fasterSpeed:F2}) -> {slowerPlayer.gameObject.name} へ速度移譲");
+                    return; // 速度交換が発生した場合、通常の衝突処理はスキップ
+                }
             }
 
             // 無敵状態の判定
@@ -798,6 +847,59 @@ public class Player : MonoBehaviour {
         if (percentage >= 20.0f) return 2;
         if (percentage >= minEffectiveGauge_ / maxComboGauge_ * 100.0f) return 1;
         return 0;
+    }
+
+    /// 現在の有効な移動速度を取得
+    public float GetCurrentEffectiveSpeed() {
+        float baseSpeed = autoMoveSpeed_;
+        
+        // スピードブーストの適用
+        if (isSpeedBoosted_) {
+            baseSpeed *= speedBoostMultiplier_;
+        }
+
+        // 無敵状態中の速度倍率
+        if (isInvincible_) {
+            baseSpeed *= invincibilitySpeedMultiplier_;
+        }
+
+        // 連打ゲージによる速度倍率（無敵状態中は適用しない）
+        if (!isInvincible_) {
+            float gaugeMultiplier = GetGaugeSpeedMultiplier();
+            baseSpeed *= gaugeMultiplier;
+        }
+
+        return baseSpeed;
+    }
+
+    /// 指定された目標速度に到達するように連打ゲージを調整
+    public void AdjustGaugeToAchieveSpeed(float targetSpeed) {
+        // 基本速度を計算（スピードブーストと無敵状態を除く）
+        float baseSpeed = autoMoveSpeed_;
+        
+        // 目標とする速度倍率を計算
+        float targetMultiplier = targetSpeed / baseSpeed;
+        
+        // 速度倍率に基づいて連打ゲージを設定
+        SetComboGaugeForTargetSpeedMultiplier(targetMultiplier);
+        
+        Debug.Log($"[GAUGE ADJUST] : {gameObject.name} - 目標速度:{targetSpeed:F2} のためゲージを {currentComboGauge_:F1} に調整");
+    }
+
+    /// 目標とする速度倍率に基づいて連打ゲージを設定
+    private void SetComboGaugeForTargetSpeedMultiplier(float targetMultiplier) {
+        if (targetMultiplier <= 1.0f) {
+            currentComboGauge_ = 0.0f;
+            return;
+        }
+
+        // maxGaugeSpeedMultiplier_に到達するのに必要なゲージ量を逆算
+        float requiredRatio = (targetMultiplier - 1.0f) / (maxGaugeSpeedMultiplier_ - 1.0f);
+        requiredRatio = Mathf.Clamp01(requiredRatio);
+        
+        // 実際のゲージ値を計算
+        float requiredGauge = minEffectiveGauge_ + (requiredRatio * (maxComboGauge_ - minEffectiveGauge_));
+        currentComboGauge_ = Mathf.Min(requiredGauge, maxComboGauge_);
     }
 
     /// ゲージ情報をデバッグ表示用に取得
