@@ -83,6 +83,24 @@ public class Player : MonoBehaviour {
     public float speedBoostDuration_ = 0.5f;
 
     //========================================
+    // 【連打ゲージ設定】
+    [Header("連打ゲージ設定")]
+    [Tooltip("連打ゲージの最大値")]
+    public float maxComboGauge_ = 100.0f;
+
+    [Tooltip("1回の連打で増加するゲージ量")]
+    public float comboGaugePerHit_ = 15.0f;
+
+    [Tooltip("ゲージの自然減少速度（毎秒）")]
+    public float gaugeDrainRate_ = 20.0f;
+
+    [Tooltip("ゲージに応じた最大速度倍率")]
+    public float maxGaugeSpeedMultiplier_ = 3.0f;
+
+    [Tooltip("ゲージが効果を発揮する最低値")]
+    public float minEffectiveGauge_ = 10.0f;
+
+    //========================================
     // 【無敵状態設定】
     [Header("無敵状態設定")]
     [Tooltip("壁反射後の無敵時間（秒）")]
@@ -93,6 +111,24 @@ public class Player : MonoBehaviour {
 
     [Tooltip("無敵状態中の移動速度倍率")]
     public float invincibilitySpeedMultiplier_ = 2.0f;
+
+    //========================================
+    // 【プレイヤー識別・キー設定】
+    [Header("プレイヤー設定")]
+    [Tooltip("プレイヤーの識別ID（A, B など）")]
+    public string playerID_ = "A";
+
+    [Tooltip("移動キー（左）")]
+    public KeyCode moveLeftKey_ = KeyCode.A;
+
+    [Tooltip("移動キー（右）")]
+    public KeyCode moveRightKey_ = KeyCode.D;
+
+    [Tooltip("ジャンプキー")]
+    public KeyCode jumpKey_ = KeyCode.P;
+
+    [Tooltip("キー設定変更モード")]
+    public bool isKeySettingMode_ = false;
 
 
     ///--------------------------------------------------------------
@@ -134,10 +170,20 @@ public class Player : MonoBehaviour {
     private bool isSpeedBoosted_ = false;       // 現在スピードブースト中か
 
     //========================================
+    // 【連打ゲージ関連】
+    private float currentComboGauge_ = 0.0f;    // 現在の連打ゲージ値
+    private float lastInputTime_ = 0.0f;        // 最後の入力時間
+
+    //========================================
     // 【無敵状態関連】
     private bool isInvincible_ = false;         // 現在無敵状態か
     private float invincibilityTimer_ = 0.0f;   // 無敵状態の残り時間
     private Color originalColor_ = Color.white; // 元の色を保存用
+
+    //========================================
+    // 【キー設定関連】
+    private KeyCode pendingKey_ = KeyCode.None; // 設定待ちのキー
+    private string settingTarget_ = "";         // 設定対象（"moveLeft", "moveRight", "jump"）
 
 
     ///--------------------------------------------------------------
@@ -167,6 +213,10 @@ public class Player : MonoBehaviour {
             // 元の色を保存
             originalColor_ = spriteRenderer_.color;
         }
+
+        //========================================
+        // プレイヤー別デフォルトキー設定
+        SetDefaultKeys();
     }
 
 
@@ -200,12 +250,34 @@ public class Player : MonoBehaviour {
         }
 
         //========================================
+        // 【キー設定モードの処理】
+        if (Input.GetKeyDown(KeyCode.F1) && playerID_ == "A") {
+            ToggleKeySettingMode();
+        }
+        else if (Input.GetKeyDown(KeyCode.F2) && playerID_ == "B") {
+            ToggleKeySettingMode();
+        }
+
+        // キー設定モード中の処理
+        if (isKeySettingMode_) {
+            HandleKeySettingInput();
+            return; // キー設定モード中は他の処理をスキップ
+        }
+
+        //========================================
         // 【移動処理の振り分け】
         if (isAutoMode_) {
             AutoMove();
         }
         else {
             Move();
+        }
+
+        //========================================
+        // 【連打ゲージの自然減少】
+        if (currentComboGauge_ > 0.0f) {
+            currentComboGauge_ -= gaugeDrainRate_ * Time.deltaTime;
+            currentComboGauge_ = Mathf.Max(0.0f, currentComboGauge_);
         }
     }
 
@@ -277,9 +349,16 @@ public class Player : MonoBehaviour {
     private void Move() {
         //========================================
         // 【入力データの取得】
-        // Input Managerで設定された軸から入力値を取得
-        float horizontal = Input.GetAxisRaw("Horizontal");     // 水平入力（-1, 0, 1）
-        bool jumpPressed = Input.GetButtonDown("Jump");        // ジャンプボタンの押下判定
+        // プレイヤー別のキー設定を使用
+        float horizontal = 0.0f;
+        if (Input.GetKey(moveRightKey_)) {
+            horizontal += 1.0f;
+        }
+        if (Input.GetKey(moveLeftKey_)) {
+            horizontal -= 1.0f;
+        }
+        
+        bool jumpPressed = Input.GetKeyDown(jumpKey_);
 
         //========================================
         // 【入力データの保存】
@@ -343,20 +422,24 @@ public class Player : MonoBehaviour {
         wasHittingWall_ = isHitWallFront_;  // 前フレームの壁衝突状態を保存
 
         //========================================
-        // 【連打によるスピードアップ処理】
-        bool moveInputPressed = Input.GetButtonDown("Horizontal") ||
-                               Input.GetKeyDown(KeyCode.A) ||
-                               Input.GetKeyDown(KeyCode.D) ||
-                               Input.GetKeyDown(KeyCode.LeftArrow) ||
-                               Input.GetKeyDown(KeyCode.RightArrow);
+        // 【連打によるゲージ蓄積処理】
+        bool moveInputPressed = Input.GetKeyDown(moveLeftKey_) ||
+                               Input.GetKeyDown(moveRightKey_);
 
-        if (moveInputPressed) {
-            // 移動入力が押された時：スピードブーストを発動
-            isSpeedBoosted_ = true;
-            speedBoostTimer_ = speedBoostDuration_;
+        // 無敵状態中は連打ゲージ蓄積を無効化
+        if (moveInputPressed && !isInvincible_) {
+            // 連打ゲージを増加
+            currentComboGauge_ += comboGaugePerHit_;
+            currentComboGauge_ = Mathf.Min(maxComboGauge_, currentComboGauge_);
+            lastInputTime_ = Time.time;
+            
+            Debug.Log($"[COMBO GAUGE] : Player {playerID_} - ゲージ: {currentComboGauge_:F1}/{maxComboGauge_} ({GetGaugePercentage():F1}%)");
+        }
+        else if (moveInputPressed && isInvincible_) {
+            Debug.Log($"[COMBO GAUGE] : Player {playerID_} - 無敵状態中のため連打ゲージ蓄積が無効化されました");
         }
 
-        // スピードブーストタイマーの更新
+        // スピードブーストタイマーの更新（従来の一時的なブースト）
         if (isSpeedBoosted_) {
             speedBoostTimer_ -= Time.deltaTime;
             if (speedBoostTimer_ <= 0.0f) {
@@ -367,7 +450,7 @@ public class Player : MonoBehaviour {
         //========================================
         // 【ジャンプ入力の処理】
         // 地面に接触している時のみジャンプを許可
-        bool jumpPressed = Input.GetButtonDown("Jump");
+        bool jumpPressed = Input.GetKeyDown(jumpKey_);
         if (isGround_ && jumpPressed) {
             isJumping_ = true;
         }
@@ -379,13 +462,21 @@ public class Player : MonoBehaviour {
         // 【自動移動の実行】
         // 現在の方向に基づいて移動入力を設定
         float currentSpeed = autoMoveSpeed_;
+        
+        // 従来のスピードブースト
         if (isSpeedBoosted_) {
             currentSpeed *= speedBoostMultiplier_;
         }
 
-        // 無敵状態中は高速移動
+        // 無敵状態中は規定の高速移動のみ適用、連打ゲージは無効
         if (isInvincible_) {
             currentSpeed *= invincibilitySpeedMultiplier_;
+            //Debug.Log($"[AUTO MOVE] : Player {playerID_} - 無敵状態中のため規定高速移動のみ適用 (x{invincibilitySpeedMultiplier_:F2})");
+        }
+        else {
+            // 通常状態時のみ連打ゲージによるスピードアップを適用
+            float gaugeSpeedMultiplier = GetGaugeSpeedMultiplier();
+            currentSpeed *= gaugeSpeedMultiplier;
         }
 
         inputHorizontal_ = new Vector2(currentDirection_ * currentSpeed / maxSpeed_, 0.0f);
@@ -505,7 +596,7 @@ public class Player : MonoBehaviour {
                 ReverseDirection();
             }
             else if (!otherIsAheadOfMe && amIAheadOfOther) {
-                // ケース3: 相手 (otherPlayer) が自分 (this) の背後から攻撃
+                // ケース3: 相相手 (otherPlayer) が自分 (this) の背後から攻撃
                 if (!thisIsInvincible) {
                     // 自分が通常状態の場合のみダメージを受ける
                     Debug.Log($"[INFO] {otherPlayer.gameObject.name} が {gameObject.name} の背後から攻撃。{gameObject.name} にダメージ。{otherPlayer.gameObject.name} は反転。");
@@ -575,9 +666,142 @@ public class Player : MonoBehaviour {
     }
 
     //---------------------------------------------------------------
+    //                      プレイヤー別デフォルトキー設定
+    /// プレイヤーIDに基づいてデフォルトのキー設定を適用
+    private void SetDefaultKeys() {
+        switch (playerID_.ToUpper()) {
+            case "A":
+                moveLeftKey_ = KeyCode.A;
+                moveRightKey_ = KeyCode.D;
+                jumpKey_ = KeyCode.P;
+                break;
+            case "B":
+                moveLeftKey_ = KeyCode.H;
+                moveRightKey_ = KeyCode.K;
+                jumpKey_ = KeyCode.Q;
+                break;
+            default:
+                Debug.LogWarning($"[KEY SETTING] : 未知のプレイヤーID '{playerID_}'。デフォルト設定を使用します。");
+                break;
+        }
+        Debug.Log($"[KEY SETTING] : Player {playerID_} - 左:{moveLeftKey_}, 右:{moveRightKey_}, ジャンプ:{jumpKey_}");
+    }
+
+    //---------------------------------------------------------------
+    //                      キー設定モード切り替え
+    /// キー設定モードのオン/オフを切り替え
+    private void ToggleKeySettingMode() {
+        isKeySettingMode_ = !isKeySettingMode_;
+        if (isKeySettingMode_) {
+            Debug.Log($"[KEY SETTING] : Player {playerID_} がキー設定モードに入りました");
+            Debug.Log("1: 左移動キー設定, 2: 右移動キー設定, 3: ジャンプキー設定, ESC: 終了");
+        }
+        else {
+            Debug.Log($"[KEY SETTING] : Player {playerID_} がキー設定モードを終了しました");
+            settingTarget_ = "";
+            pendingKey_ = KeyCode.None;
+        }
+    }
+
+    //---------------------------------------------------------------
+    //                      キー設定入力処理
+    /// キー設定モード中の入力処理
+    private void HandleKeySettingInput() {
+        // ESCキーで設定モード終了
+        if (Input.GetKeyDown(KeyCode.Escape)) {
+            ToggleKeySettingMode();
+            return;
+        }
+
+        // 設定対象が決まっていない場合、対象選択を処理
+        if (string.IsNullOrEmpty(settingTarget_)) {
+            if (Input.GetKeyDown(KeyCode.Alpha1)) {
+                settingTarget_ = "moveLeft";
+                Debug.Log($"[KEY SETTING] : Player {playerID_} - 左移動キーを設定してください（現在: {moveLeftKey_}）");
+            }
+            else if (Input.GetKeyDown(KeyCode.Alpha2)) {
+                settingTarget_ = "moveRight";
+                Debug.Log($"[KEY SETTING] : Player {playerID_} - 右移動キーを設定してください（現在: {moveRightKey_}）");
+            }
+            else if (Input.GetKeyDown(KeyCode.Alpha3)) {
+                settingTarget_ = "jump";
+                Debug.Log($"[KEY SETTING] : Player {playerID_} - ジャンプキーを設定してください（現在: {jumpKey_}）");
+            }
+        }
+        // 設定対象が決まっている場合、キー入力を待機
+        else {
+            foreach (KeyCode key in System.Enum.GetValues(typeof(KeyCode))) {
+                if (Input.GetKeyDown(key) && key != KeyCode.Escape) {
+                    SetKey(settingTarget_, key);
+                    settingTarget_ = "";
+                    Debug.Log("1: 左移動キー設定, 2: 右移動キー設定, 3: ジャンプキー設定, ESC: 終了");
+                    break;
+                }
+            }
+        }
+    }
+
+    //---------------------------------------------------------------
+    //                      キー設定適用
+    /// 指定されたキーを設定対象に適用
+    private void SetKey(string target, KeyCode key) {
+        switch (target) {
+            case "moveLeft":
+                moveLeftKey_ = key;
+                Debug.Log($"[KEY SETTING] : Player {playerID_} の左移動キーを {key} に設定しました");
+                break;
+            case "moveRight":
+                moveRightKey_ = key;
+                Debug.Log($"[KEY SETTING] : Player {playerID_} の右移動キーを {key} に設定しました");
+                break;
+            case "jump":
+                jumpKey_ = key;
+                Debug.Log($"[KEY SETTING] : Player {playerID_} のジャンプキーを {key} に設定しました");
+                break;
+        }
+    }
+
+    //---------------------------------------------------------------
     //                      向き反転処理
     public void ReverseDirection() {
         currentDirection_ *= -1.0f;
         transform.localScale = new Vector3(-transform.localScale.x, 1, 1);
+    }
+
+    //---------------------------------------------------------------
+    //                      連打ゲージ関連メソッド
+    /// 現在のゲージ量に基づく速度倍率を計算
+    private float GetGaugeSpeedMultiplier() {
+        if (currentComboGauge_ < minEffectiveGauge_) {
+            return 1.0f; // ゲージが最低値未満の場合は通常速度
+        }
+
+        // ゲージの割合を計算（0.0～1.0）
+        float gaugeRatio = (currentComboGauge_ - minEffectiveGauge_) / (maxComboGauge_ - minEffectiveGauge_);
+        gaugeRatio = Mathf.Clamp01(gaugeRatio);
+
+        // 1.0から最大倍率まで線形補間
+        return Mathf.Lerp(1.0f, maxGaugeSpeedMultiplier_, gaugeRatio);
+    }
+
+    /// 現在のゲージ量をパーセンテージで取得
+    private float GetGaugePercentage() {
+        return (currentComboGauge_ / maxComboGauge_) * 100.0f;
+    }
+
+    /// 現在のゲージレベルを取得（5段階）
+    private int GetGaugeLevel() {
+        float percentage = GetGaugePercentage();
+        if (percentage >= 80.0f) return 5;
+        if (percentage >= 60.0f) return 4;
+        if (percentage >= 40.0f) return 3;
+        if (percentage >= 20.0f) return 2;
+        if (percentage >= minEffectiveGauge_ / maxComboGauge_ * 100.0f) return 1;
+        return 0;
+    }
+
+    /// ゲージ情報をデバッグ表示用に取得
+    public string GetGaugeDebugInfo() {
+        return $"Player {playerID_} - Gauge: {currentComboGauge_:F1}/{maxComboGauge_} ({GetGaugePercentage():F1}%) Level: {GetGaugeLevel()} Speed: x{GetGaugeSpeedMultiplier():F2}";
     }
 }
