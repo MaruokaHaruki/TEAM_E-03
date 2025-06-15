@@ -82,6 +82,12 @@ public class Player : MonoBehaviour {
     [Tooltip("スピードブーストの持続時間")]
     public float speedBoostDuration_ = 0.5f;
 
+    //========================================
+    // 【無敵状態設定】
+    [Header("無敵状態設定")]
+    [Tooltip("壁反射後の無敵時間（秒）")]
+    public float invincibilityDuration_ = 3.0f;
+
 
     ///--------------------------------------------------------------
     ///                      【プライベート変数】
@@ -120,6 +126,11 @@ public class Player : MonoBehaviour {
     private float speedBoostTimer_ = 0.0f;      // スピードブーストの残り時間
     private bool isSpeedBoosted_ = false;       // 現在スピードブースト中か
 
+    //========================================
+    // 【無敵状態関連】
+    private bool isInvincible_ = false;         // 現在無敵状態か
+    private float invincibilityTimer_ = 0.0f;   // 無敵状態の残り時間
+
 
     ///--------------------------------------------------------------
     ///                      初期化処理
@@ -144,6 +155,16 @@ public class Player : MonoBehaviour {
     ///--------------------------------------------------------------
     ///                      メインループ処理
     private void Update() {
+        //========================================
+        // 【無敵状態タイマーの更新】
+        if (isInvincible_) {
+            invincibilityTimer_ -= Time.deltaTime;
+            if (invincibilityTimer_ <= 0.0f) {
+                isInvincible_ = false;
+                Debug.Log($"[INVINCIBILITY] : {gameObject.name} の無敵状態が終了しました");
+            }
+        }
+
         //========================================
         // 【モード切り替え処理】
         // Tabキーで通常操作と自動移動を切り替え
@@ -287,7 +308,11 @@ public class Player : MonoBehaviour {
         // 前方の壁に衝突した場合、移動方向を反転
         if (isHitWallFront_ && !wasHittingWall_) {
             currentDirection_ *= -1.0f;  // 移動方向を反転
-            Debug.Log($"[AUTO MOVE] : 壁に衝突しました。方向を反転します。新しい方向: {(currentDirection_ > 0 ? "右" : "左")}");
+            
+            // 壁反射時に無敵状態を付与
+            isInvincible_ = true;
+            invincibilityTimer_ = invincibilityDuration_;
+            Debug.Log($"[AUTO MOVE] : {gameObject.name} が壁に衝突しました。方向を反転し、無敵状態になりました。新しい方向: {(currentDirection_ > 0 ? "右" : "左")}");
         }
         wasHittingWall_ = isHitWallFront_;  // 前フレームの壁衝突状態を保存
 
@@ -367,6 +392,10 @@ public class Player : MonoBehaviour {
                 return;
             }
 
+            // 無敵状態の判定
+            bool thisIsInvincible = isInvincible_;
+            bool otherIsInvincible = otherPlayer.isInvincible_;
+
             // 自分(this)から見た相手(otherPlayer)の相対X位置
             float relativeXToOther = otherPlayer.transform.position.x - transform.position.x;
             // 自分の進行方向の符号 (+1 or -1)
@@ -382,41 +411,83 @@ public class Player : MonoBehaviour {
             bool amIAheadOfOther = Mathf.Sign(relativeXToMe) == otherDirSign;
 
             if (otherIsAheadOfMe && amIAheadOfOther) {
-                // ケース1: 正面衝突 (お互いに正面を向いている)
-                Debug.Log($"[INFO] {gameObject.name} と {otherPlayer.gameObject.name} が正面衝突。両者反転、ノックバック。");
-                // ダメージなし
-                ReverseDirection();         // 自分を反転
-                otherPlayer.ReverseDirection(); // 相手を反転
+                // ケース1: 正面衝突の各パターン
+                if (thisIsInvincible && otherIsInvincible) {
+                    // 無敵正面 VS 無敵正面：お互いノーダメージでノックバック+反射
+                    Debug.Log($"[INFO] {gameObject.name}(無敵) と {otherPlayer.gameObject.name}(無敵) が正面衝突。両者無敵のためノーダメージ、ノックバック+反転。");
+                    ReverseDirection();
+                    otherPlayer.ReverseDirection();
+                    
+                    // 両者にノックバックを適用
+                    Vector2 knockBackDirToMe = (transform.position - otherPlayer.transform.position).normalized;
+                    if (knockBackDirToMe == Vector2.zero) knockBackDirToMe = (Random.insideUnitCircle).normalized;
+                    rigidbody2D_.AddForce(knockBackDirToMe * 5f, ForceMode2D.Impulse);
 
-                // 両者にノックバックを適用
-                Vector2 knockBackDirToMe = (transform.position - otherPlayer.transform.position).normalized;
-                if (knockBackDirToMe == Vector2.zero) knockBackDirToMe = (Random.insideUnitCircle).normalized; //完全に重なった場合
-                rigidbody2D_.AddForce(knockBackDirToMe * 5f, ForceMode2D.Impulse); // 5fは仮のノックバック力
+                    Vector2 knockBackDirToOther = (otherPlayer.transform.position - transform.position).normalized;
+                    if (knockBackDirToOther == Vector2.zero) knockBackDirToOther = (Random.insideUnitCircle).normalized;
+                    otherPlayer.rigidbody2D_.AddForce(knockBackDirToOther * 5f, ForceMode2D.Impulse);
+                }
+                else if (thisIsInvincible && !otherIsInvincible) {
+                    // 無敵正面 VS 通常正面：通常正面がダメージ+ノックバック+どちらも反転
+                    Debug.Log($"[INFO] {gameObject.name}(無敵) と {otherPlayer.gameObject.name}(通常) が正面衝突。{otherPlayer.gameObject.name}にダメージ。");
+                    otherPlayer.TakeDamage(20);
+                    KnockBack(otherPlayer);
+                    ReverseDirection();
+                    otherPlayer.ReverseDirection();
+                }
+                else if (!thisIsInvincible && otherIsInvincible) {
+                    // 通常正面 VS 無敵正面：通常正面がダメージ+ノックバック+どちらも反転
+                    Debug.Log($"[INFO] {gameObject.name}(通常) と {otherPlayer.gameObject.name}(無敵) が正面衝突。{gameObject.name}にダメージ。");
+                    TakeDamage(20);
+                    Vector2 knockBackDirToThis = (transform.position - otherPlayer.transform.position).normalized;
+                    if (knockBackDirToThis == Vector2.zero) knockBackDirToThis = (Random.insideUnitCircle).normalized;
+                    rigidbody2D_.AddForce(knockBackDirToThis * 10f, ForceMode2D.Impulse);
+                    ReverseDirection();
+                    otherPlayer.ReverseDirection();
+                }
+                else {
+                    // 通常状態同士の正面衝突：今まで通り
+                    Debug.Log($"[INFO] {gameObject.name} と {otherPlayer.gameObject.name} が正面衝突。両者反転、ノックバック。");
+                    ReverseDirection();
+                    otherPlayer.ReverseDirection();
 
-                Vector2 knockBackDirToOther = (otherPlayer.transform.position - transform.position).normalized;
-                if (knockBackDirToOther == Vector2.zero) knockBackDirToOther = (Random.insideUnitCircle).normalized; //完全に重なった場合
-                otherPlayer.rigidbody2D_.AddForce(knockBackDirToOther * 5f, ForceMode2D.Impulse); // 5fは仮のノックバック力
+                    Vector2 knockBackDirToMe = (transform.position - otherPlayer.transform.position).normalized;
+                    if (knockBackDirToMe == Vector2.zero) knockBackDirToMe = (Random.insideUnitCircle).normalized;
+                    rigidbody2D_.AddForce(knockBackDirToMe * 5f, ForceMode2D.Impulse);
+
+                    Vector2 knockBackDirToOther = (otherPlayer.transform.position - transform.position).normalized;
+                    if (knockBackDirToOther == Vector2.zero) knockBackDirToOther = (Random.insideUnitCircle).normalized;
+                    otherPlayer.rigidbody2D_.AddForce(knockBackDirToOther * 5f, ForceMode2D.Impulse);
+                }
             }
-            // ケース2: 自分 (this) が相手 (otherPlayer) の背後から攻撃
-            // 条件: 相手は自分の正面にいて、かつ、自分は相手の正面にはいない (つまり相手の背後にいる)
             else if (otherIsAheadOfMe && !amIAheadOfOther) {
-                Debug.Log($"[INFO] {gameObject.name} が {otherPlayer.gameObject.name} の背後から攻撃。{otherPlayer.gameObject.name} にダメージ。{gameObject.name} は反転。");
-                otherPlayer.TakeDamage(20);
-                KnockBack(otherPlayer); // KnockBackメソッドは target をノックバックさせる
-                ReverseDirection();     // 自分は反転
+                // ケース2: 自分 (this) が相手 (otherPlayer) の背後から攻撃
+                if (!otherIsInvincible) {
+                    // 相手が通常状態の場合のみダメージを与える
+                    Debug.Log($"[INFO] {gameObject.name} が {otherPlayer.gameObject.name} の背後から攻撃。{otherPlayer.gameObject.name} にダメージ。{gameObject.name} は反転。");
+                    otherPlayer.TakeDamage(20);
+                    KnockBack(otherPlayer);
+                } else {
+                    // 相手が無敵状態の場合はダメージなし
+                    Debug.Log($"[INFO] {gameObject.name} が {otherPlayer.gameObject.name}(無敵) の背後から攻撃したが、ダメージなし。{gameObject.name} は反転。");
+                }
+                ReverseDirection();
             }
-            // ケース3: 相手 (otherPlayer) が自分 (this) の背後から攻撃
-            // 条件: 相手は自分の正面にはおらず (つまり自分の背後にいて)、かつ、自分は相手の正面にいる
             else if (!otherIsAheadOfMe && amIAheadOfOther) {
-                Debug.Log($"[INFO] {otherPlayer.gameObject.name} が {gameObject.name} の背後から攻撃。{gameObject.name} にダメージ。{otherPlayer.gameObject.name} は反転。");
-                TakeDamage(20);
-                // 自分をノックバックさせる (相手から押される方向)
-                Vector2 knockBackDirToThis = (transform.position - otherPlayer.transform.position).normalized;
-                if (knockBackDirToThis == Vector2.zero) knockBackDirToThis = (Random.insideUnitCircle).normalized;
-                rigidbody2D_.AddForce(knockBackDirToThis * 10f, ForceMode2D.Impulse); // 10fは仮のノックバック力
-                otherPlayer.ReverseDirection(); // 攻撃してきた相手を反転
+                // ケース3: 相手 (otherPlayer) が自分 (this) の背後から攻撃
+                if (!thisIsInvincible) {
+                    // 自分が通常状態の場合のみダメージを受ける
+                    Debug.Log($"[INFO] {otherPlayer.gameObject.name} が {gameObject.name} の背後から攻撃。{gameObject.name} にダメージ。{otherPlayer.gameObject.name} は反転。");
+                    TakeDamage(20);
+                    Vector2 knockBackDirToThis = (transform.position - otherPlayer.transform.position).normalized;
+                    if (knockBackDirToThis == Vector2.zero) knockBackDirToThis = (Random.insideUnitCircle).normalized;
+                    rigidbody2D_.AddForce(knockBackDirToThis * 10f, ForceMode2D.Impulse);
+                } else {
+                    // 自分が無敵状態の場合はダメージなし
+                    Debug.Log($"[INFO] {otherPlayer.gameObject.name} が {gameObject.name}(無敵) の背後から攻撃したが、ダメージなし。{otherPlayer.gameObject.name} は反転。");
+                }
+                otherPlayer.ReverseDirection();
             }
-            // それ以外のケース (例: 横並びですれ違うなど) はログで確認
             else {
                 Debug.Log($"[INFO] {gameObject.name} と {otherPlayer.gameObject.name} が衝突 (判定外のケース)。otherIsAheadOfMe: {otherIsAheadOfMe}, amIAheadOfOther: {amIAheadOfOther}");
             }
