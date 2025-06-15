@@ -51,7 +51,7 @@ public class PlayerController : MonoBehaviour
     private CameraShake cameraShake;
 
     private Rigidbody2D rb;
-    private PlayerInputActions inputActions;
+    private PlayerABInputActions inputActions;
 
     // 入力状態を保持する変数
     private bool isPush;
@@ -66,7 +66,7 @@ public class PlayerController : MonoBehaviour
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
-        inputActions = new PlayerInputActions();
+        inputActions = new PlayerABInputActions();
     }
 
     private void OnEnable()
@@ -122,13 +122,16 @@ public class PlayerController : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D col)
     {
-        Debug.Log($"{gameObject.name} hit {col.gameObject.name}");
+        //Debug.Log($"{gameObject.name} hit {col.gameObject.name}");
         if (col.gameObject.CompareTag("Wall") || col.gameObject.CompareTag("Player"))
         {
-            if (Time.time - lastFlipTime < flipCooldownTime) return; // クールダウン中は何もしない
+            
 
             // 方向反転
             direction *= -1;
+
+
+            if (Time.time - lastFlipTime < flipCooldownTime) return; // クールダウン中は何もしない
             lastFlipTime = Time.time;
 
             // 進行方向のスプライトを反転
