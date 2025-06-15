@@ -620,22 +620,22 @@ public class Player : MonoBehaviour {
     //---------------------------------------------------------------
     //                      ダメージ処理
     public void TakeDamage(int amount) {
-        currentHp_ -= amount;
-        Debug.Log($"[DAMAGE] : {gameObject.name} が {amount} ダメージを受けた（残りHP: {currentHp_}）");
+        // GameManagerに処理を委譲
+        if (GameManager.Instance != null) {
+            GameManager.Instance.TakeDamage(playerID_, amount);
+            
+            // 自身のHPも同期して更新
+            currentHp_ = GameManager.Instance.GetPlayerCurrentHp(playerID_);
+        }
+        else {
+            // GameManagerが存在しない場合の従来処理
+            currentHp_ -= amount;
+            Debug.Log($"[DAMAGE] : {gameObject.name} が {amount} ダメージを受けた（残りHP: {currentHp_}）");
 
-        if (currentHp_ <= 0) {
-            currentHp_ = 0;
-            GameManager.Instance.CurrentGameState = GameManager.GameState.GameOver;
-
-            // 勝者を通知
-            if (gameObject.name.Contains("1")) {
-                GameManager.Instance.CurrentWinner = GameManager.Winner.Player2;
+            if (currentHp_ <= 0) {
+                currentHp_ = 0;
+                Debug.Log($"[GAME OVER] : {gameObject.name} が敗北しました");
             }
-            else {
-                GameManager.Instance.CurrentWinner = GameManager.Winner.Player1;
-            }
-
-            Debug.Log($"[GAME OVER] : 勝者は {GameManager.Instance.CurrentWinner}");
         }
     }
 
