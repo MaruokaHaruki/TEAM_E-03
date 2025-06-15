@@ -88,6 +88,9 @@ public class Player : MonoBehaviour {
     [Tooltip("壁反射後の無敵時間（秒）")]
     public float invincibilityDuration_ = 3.0f;
 
+    [Tooltip("虹色エフェクトの変化速度")]
+    public float rainbowSpeed_ = 2.0f;
+
 
     ///--------------------------------------------------------------
     ///                      【プライベート変数】
@@ -96,6 +99,7 @@ public class Player : MonoBehaviour {
     // 必要なUnityコンポーネントへの参照を保持
     private Animator animator_ = null;          // アニメーション制御用
     private Rigidbody2D rigidbody2D_ = null;    // 物理演算制御用
+    private SpriteRenderer spriteRenderer_ = null; // スプライト色変更用
 
     //========================================
     // 【状態フラグ】
@@ -130,6 +134,7 @@ public class Player : MonoBehaviour {
     // 【無敵状態関連】
     private bool isInvincible_ = false;         // 現在無敵状態か
     private float invincibilityTimer_ = 0.0f;   // 無敵状態の残り時間
+    private Color originalColor_ = Color.white; // 元の色を保存用
 
 
     ///--------------------------------------------------------------
@@ -149,6 +154,16 @@ public class Player : MonoBehaviour {
         if (rigidbody2D_ == null) {
             Debug.LogError("[ERROR] : Rigidbody2D component not found on Player object. 物理演算制御ができません。");
         }
+        //========================================
+        // スプライトレンダラー取得と存在確認
+        spriteRenderer_ = GetComponent<SpriteRenderer>();
+        if (spriteRenderer_ == null) {
+            Debug.LogError("[ERROR] : SpriteRenderer component not found on Player object. 色変更エフェクトができません。");
+        }
+        else {
+            // 元の色を保存
+            originalColor_ = spriteRenderer_.color;
+        }
     }
 
 
@@ -159,8 +174,16 @@ public class Player : MonoBehaviour {
         // 【無敵状態タイマーの更新】
         if (isInvincible_) {
             invincibilityTimer_ -= Time.deltaTime;
+            
+            // 虹色エフェクトの更新
+            UpdateRainbowEffect();
+            
             if (invincibilityTimer_ <= 0.0f) {
                 isInvincible_ = false;
+                // 元の色に戻す
+                if (spriteRenderer_ != null) {
+                    spriteRenderer_.color = originalColor_;
+                }
                 Debug.Log($"[INVINCIBILITY] : {gameObject.name} の無敵状態が終了しました");
             }
         }
@@ -522,6 +545,25 @@ public class Player : MonoBehaviour {
     private void KnockBack(Player target) {
         Vector2 knockDir = (target.transform.position - transform.position).normalized;
         target.rigidbody2D_.AddForce(knockDir * 10f, ForceMode2D.Impulse);
+    }
+
+    //---------------------------------------------------------------
+    //                      虹色エフェクト更新処理
+    /// 無敵状態時にスプライトを虹色に輝かせる
+    private void UpdateRainbowEffect() {
+        if (spriteRenderer_ == null) return;
+
+        // HSVカラーシステムを使用して虹色を生成
+        // Hue（色相）を時間に応じて0～1の範囲で変化させる
+        float hue = (Time.time * rainbowSpeed_) % 1.0f;
+        
+        // HSVからRGBに変換して適用
+        Color rainbowColor = Color.HSVToRGB(hue, 1.0f, 1.0f);
+        
+        // 元の透明度を維持
+        rainbowColor.a = originalColor_.a;
+        
+        spriteRenderer_.color = rainbowColor;
     }
 
     //---------------------------------------------------------------
