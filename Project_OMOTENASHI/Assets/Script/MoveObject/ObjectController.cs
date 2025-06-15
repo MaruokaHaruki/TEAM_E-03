@@ -5,48 +5,48 @@ using UnityEngine;
 public class ObjectController : MonoBehaviour
 {
     /// <summary>
-    /// ”•\¦—pƒeƒLƒXƒg
+    /// æ•°å­—è¡¨ç¤ºç”¨ãƒ†ã‚­ã‚¹ãƒˆ
     /// </summary>
-    [SerializeField, Header("”•\¦—pƒeƒLƒXƒg")] private TextMeshProUGUI NumberText;
+    [SerializeField, Header("æ•°å­—è¡¨ç¤ºç”¨ãƒ†ã‚­ã‚¹ãƒˆ")] private TextMeshProUGUI NumberText;
     /// <summary>
-    /// ”•\¦—pƒeƒLƒXƒg\"ƒ|ƒWƒVƒ‡ƒ“
+    /// æ•°å­—è¡¨ç¤ºç”¨ãƒ†ã‚­ã‚¹ãƒˆã®ãƒã‚¸ã‚·ãƒ§ãƒ³
     /// </summary>
-    [SerializeField, Header("”•\¦—pƒeƒLƒXƒg\"ƒ|ƒWƒVƒ‡ƒ“")] private RectTransform NumberTextPos;
+    [SerializeField, Header("æ•°å­—è¡¨ç¤ºç”¨ãƒ†ã‚­ã‚¹ãƒˆã®ãƒã‚¸ã‚·ãƒ§ãƒ³")] private RectTransform NumberTextPos;
     /// <summary>
-    /// ƒ|ƒWƒVƒ‡ƒ“İ’è—p”{—¦”ä—¦
+    /// ãƒã‚¸ã‚·ãƒ§ãƒ³è¨­å®šç”¨å€ç‡
     /// </summary>
-    [SerializeField, Header("ƒ|ƒWƒVƒ‡ƒ“İ’è—p”{—¦”ä—¦")] private Vector2 SetNumberTextRatio;
+    [SerializeField, Header("ãƒã‚¸ã‚·ãƒ§ãƒ³è¨­å®šç”¨å€ç‡")] private Vector2 SetNumberTextRatio;
 
     /// <summary>
-    /// ƒeƒLƒXƒgˆÊ’uC³—pƒJƒƒ‰
+    /// ãƒ†ã‚­ã‚¹ãƒˆä½ç½®ä¿®æ­£ç”¨ã‚«ãƒ¡ãƒ©
     /// </summary>
-    [SerializeField, Header("ƒƒCƒ“ƒJƒƒ‰")] private Camera MainCamera;
+    [SerializeField, Header("ä¿®æ­£ç”¨ã‚«ãƒ¡ãƒ©")] private Camera MainCamera;
 
     /// <summary>
-    /// İ’èƒ|ƒWƒVƒ‡ƒ“
+    /// è¨­å®šãƒã‚¸ã‚·ãƒ§ãƒ³
     /// </summary>
-    [SerializeField, Header("İ’èƒ|ƒWƒVƒ‡ƒ“ [0A0A0]‚È‚ç’u‚¢‚Ä‚ ‚éƒ|ƒWƒVƒ‡ƒ“‚É•ÏX‚³‚ê‚é")] private Vector2 SetPosition;
-    [SerializeField, Header("–Ú•Wƒ|ƒWƒVƒ‡ƒ“ [0A0A0]‚È‚çİ’èƒ|ƒWƒVƒ‡ƒ“‚ÌƒTƒCƒY•ªã‚ÌÀ•W‚É‚È‚é")] private Vector2 TargetPosition;
+    [SerializeField, Header("è¨­å®šãƒã‚¸ã‚·ãƒ§ãƒ³ [0,0,0]ãªã‚‰ç½®ã„ã¦ã‚‹ãƒã‚¸ã‚·ãƒ§ãƒ³ã«å¤‰æ›´ã•ã‚Œã‚‹")] private Vector2 SetPosition;
+    [SerializeField, Header("ç›®æ¨™ãƒã‚¸ã‚·ãƒ§ãƒ³ [0,0,0]ãªã‚‰è¨­å®šãƒã‚¸ã‚·ãƒ§ãƒ³ã®ã‚µã‚¤ã‚ºåˆ†ã®åº§æ¨™ã«ãªã‚‹")] private Vector2 TargetPosition;
 
     /// <summary>
-    /// ‰Ÿ‚·”š
+    /// é–‹å§‹ç•ªå·
     /// </summary>
-    [SerializeField, Header("‰Ÿ‚·”š")] private int StartKeyType;
+    [SerializeField, Header("é–‹å§‹ç•ªå·")] private int StartKeyType;
     private int SetNumber = -1;
     private KeyCode SetKeyCode = KeyCode.None;
 
     /// <summary>
-    /// ‹N“®ƒtƒ‰ƒO
+    /// ç§»å‹•ãƒ•ãƒ©ã‚°
     /// </summary>
-    [SerializeField, Header("s“®ƒtƒ‰ƒO")] private bool MoveFlag;
+    [SerializeField, Header("ç§»å‹•ãƒ•ãƒ©ã‚°")] private bool MoveFlag;
 
     /// <summary>
-    /// ˆÚ“®‘¬“x
+    /// ç§»å‹•é€Ÿåº¦
     /// </summary>
-    [SerializeField, Header("ˆÚ“®‘¬“x")] private float MoveSpeed;
+    [SerializeField, Header("ç§»å‹•é€Ÿåº¦")] private float MoveSpeed;
 
     /// <summary>
-    /// ‚Ü‚Á‚·‚®ˆÚ“®ƒtƒ‰ƒO
+    /// ã¾ã£ã™ãç§»å‹•ãƒ•ãƒ©ã‚°
     /// </summary>
     [SerializeField] private bool StraightMoveFlag = true;
 
@@ -59,14 +59,14 @@ public class ObjectController : MonoBehaviour
     [SerializeField] private bool ThreeDimensionalFlag = false;
 
     /// <summary>
-    /// ‹N“®Œo‰ßŠÔ
+    /// çµŒéæ™‚é–“
     /// </summary>
     private float ElapsedTime;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        // æ“¾
+        // å–å¾—
         {
             if (MainCamera == null)
             {
@@ -86,7 +86,7 @@ public class ObjectController : MonoBehaviour
             }
         }
 
-        // İ’è
+        // è¨­å®š
         {
             if (SetPosition == Vector2.zero)
             {
@@ -125,9 +125,9 @@ public class ObjectController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        // ”•`‰æ
+        // æç”»
         NumberText.text = StartKeyType.ToString();
-        // ƒeƒLƒXƒg”z’u‘€ì—p
+        // ãƒ†ã‚­ã‚¹ãƒˆé…ç½®èª¿æ•´ç”¨
         if (ThreeDimensionalFlag)
         {
             Vector2 setVec =  this.transform.position - MainCamera.transform.position;
@@ -178,7 +178,7 @@ public class ObjectController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        // ‹N“®’†ˆ—
+        // ç§»å‹•å‡¦ç†
         if (MoveFlag)
         {
             ElapsedTime += Time.deltaTime;
@@ -196,7 +196,7 @@ public class ObjectController : MonoBehaviour
             {
                 MoveFlag = false;
                 SwayVec = StartSwayVec;
-                // ˆÚ“®
+                // ç§»å‹•
             }
             /*else if (ElapsedTime >= SwayTime)
             {
@@ -236,11 +236,11 @@ public class ObjectController : MonoBehaviour
 
     private void TargetMove(Vector2 targetPos)
     {
-        // ˆÚ“®—Êæ“¾
+        // ç§»å‹•é‡å–å¾—
         Vector2 setMoveVec = GetTargetVec(this.transform.position, targetPos);
         Vector3 setVec = new Vector3((setMoveVec.x == 0) ? 0 : Mathf.Sign(setMoveVec.x), (setMoveVec.y == 0) ? 0 : Mathf.Sign(setMoveVec.y), 0.0f);
 
-        // ˆÚ“®
+        // ç§»å‹•
         {
             if (StraightMoveFlag)
             {
