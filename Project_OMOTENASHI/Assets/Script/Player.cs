@@ -39,10 +39,10 @@ public class Player : MonoBehaviour {
     // ジャンプと重力制御に関する設定値
     [Header("ジャンプ・重力設定")]
     [Tooltip("独自重力の強さ。Unityのデフォルト重力に追加される")]
-    public float gravity_ = 1.5f;
+    public float gravity_ = 0.2f;
 
     [Tooltip("ジャンプ時に加える瞬間的な力の大きさ")]
-    public float jumpForce_ = 8.0f;
+    public float jumpForce_ = 4.0f;
 
     [Tooltip("ジャンプの理論的最大高度（現在未使用）")]
     public float jumpHeight_ = 4.0f;
@@ -74,10 +74,10 @@ public class Player : MonoBehaviour {
     public bool isAutoMode_ = false;
 
     [Tooltip("自動移動時の基本速度")]
-    public float autoMoveSpeed_ = 1.0f;
+    public float autoMoveSpeed_ = 3.0f;
 
     [Tooltip("連打時のスピードアップ倍率")]
-    public float speedBoostMultiplier_ = 2.5f;
+    public float speedBoostMultiplier_ = .5f;
 
     [Tooltip("スピードブーストの持続時間")]
     public float speedBoostDuration_ = 0.5f;
@@ -89,16 +89,16 @@ public class Player : MonoBehaviour {
     public float maxComboGauge_ = 100.0f;
 
     [Tooltip("1回の連打で増加するゲージ量")]
-    public float comboGaugePerHit_ = 20.0f;
+    public float comboGaugePerHit_ = 15.0f;
 
     [Tooltip("ゲージの自然減少速度（毎秒）")]
-    public float gaugeDrainRate_ = 15.0f;
+    public float gaugeDrainRate_ = 20.0f;
 
     [Tooltip("ゲージに応じた最大速度倍率")]
-    public float maxGaugeSpeedMultiplier_ = 8.0f;
+    public float maxGaugeSpeedMultiplier_ = 3.0f;
 
     [Tooltip("ゲージが効果を発揮する最低値")]
-    public float minEffectiveGauge_ = 5.0f;
+    public float minEffectiveGauge_ = 10.0f;
 
     //========================================
     // 【無敵状態設定】
@@ -773,15 +773,15 @@ public class Player : MonoBehaviour {
     /// 現在のゲージ量に基づく速度倍率を計算
     private float GetGaugeSpeedMultiplier() {
         if (currentComboGauge_ < minEffectiveGauge_) {
-            return 0.5f; // ゲージが最低値未満の場合は通常速度の半分
+            return 1.0f; // ゲージが最低値未満の場合は通常速度
         }
 
         // ゲージの割合を計算（0.0～1.0）
         float gaugeRatio = (currentComboGauge_ - minEffectiveGauge_) / (maxComboGauge_ - minEffectiveGauge_);
         gaugeRatio = Mathf.Clamp01(gaugeRatio);
 
-        // 0.5から最大倍率まで線形補間（連打なしでは非常に遅い）
-        return Mathf.Lerp(0.5f, maxGaugeSpeedMultiplier_, gaugeRatio);
+        // 1.0から最大倍率まで線形補間
+        return Mathf.Lerp(1.0f, maxGaugeSpeedMultiplier_, gaugeRatio);
     }
 
     /// 現在のゲージ量をパーセンテージで取得
