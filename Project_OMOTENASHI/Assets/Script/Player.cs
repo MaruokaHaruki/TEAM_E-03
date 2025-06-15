@@ -646,14 +646,14 @@ public class Player : MonoBehaviour {
         target.rigidbody2D_.AddForce(knockDir * 10f, ForceMode2D.Impulse);
     }
 
-    //---------------------------------------------------------------
+    //--------------------------------------------------------------
     //                      虹色エフェクト更新処理
     /// 無敵状態時にスプライトを虹色に輝かせる
     private void UpdateRainbowEffect() {
         if (spriteRenderer_ == null) return;
 
         // HSVカラーシステムを使用して虹色を生成
-        // Hue（色相）を時間に応じて0～1の範囲で変化させる
+        // Hue（色相）を時間に応じて0-～1の範囲で変化させる
         float hue = (Time.time * rainbowSpeed_) % 1.0f;
         
         // HSVからRGBに変換して適用
@@ -673,12 +673,12 @@ public class Player : MonoBehaviour {
             case "A":
                 moveLeftKey_ = KeyCode.A;
                 moveRightKey_ = KeyCode.D;
-                jumpKey_ = KeyCode.P;
+                jumpKey_ = KeyCode.W;
                 break;
             case "B":
-                moveLeftKey_ = KeyCode.H;
-                moveRightKey_ = KeyCode.K;
-                jumpKey_ = KeyCode.Q;
+                moveLeftKey_ = KeyCode.J;
+                moveRightKey_ = KeyCode.L;
+                jumpKey_ = KeyCode.I;
                 break;
             default:
                 Debug.LogWarning($"[KEY SETTING] : 未知のプレイヤーID '{playerID_}'。デフォルト設定を使用します。");
