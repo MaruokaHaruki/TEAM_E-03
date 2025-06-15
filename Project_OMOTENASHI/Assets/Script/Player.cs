@@ -91,6 +91,9 @@ public class Player : MonoBehaviour {
     [Tooltip("虹色エフェクトの変化速度")]
     public float rainbowSpeed_ = 2.0f;
 
+    [Tooltip("無敵状態中の移動速度倍率")]
+    public float invincibilitySpeedMultiplier_ = 2.0f;
+
 
     ///--------------------------------------------------------------
     ///                      【プライベート変数】
@@ -378,6 +381,11 @@ public class Player : MonoBehaviour {
         float currentSpeed = autoMoveSpeed_;
         if (isSpeedBoosted_) {
             currentSpeed *= speedBoostMultiplier_;
+        }
+
+        // 無敵状態中は高速移動
+        if (isInvincible_) {
+            currentSpeed *= invincibilitySpeedMultiplier_;
         }
 
         inputHorizontal_ = new Vector2(currentDirection_ * currentSpeed / maxSpeed_, 0.0f);
