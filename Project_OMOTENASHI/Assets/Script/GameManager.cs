@@ -87,6 +87,9 @@ public class GameManager : MonoBehaviour
         else {
             Destroy(gameObject); // 既に存在する場合は新しいインスタンスを破棄
         }
+
+        //シーンの起動はプレイ中
+        CurrentGameState = GameState.Playing;
     }
 
     ///--------------------------------------------------------------
