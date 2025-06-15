@@ -44,6 +44,9 @@ public class GameManager : MonoBehaviour
         else {
             Destroy(gameObject); // 既に存在する場合は新しいインスタンスを破棄
         }
+
+        //シーンの起動はプレイ中
+        CurrentGameState = GameState.Playing;
     }
 
     ///--------------------------------------------------------------
@@ -57,6 +60,11 @@ public class GameManager : MonoBehaviour
     ///						 更新
     void Update()
     {
-        
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            CurrentGameState = GameState.GameOver;
+            SceneManagerScript.Instance.winnerName = "aaa";
+            SceneManagerScript.Instance.FadeOutScene("Result");
+        }
     }
 }
