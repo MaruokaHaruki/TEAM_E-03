@@ -8,7 +8,7 @@ using UnityEngine;
 public class TestJump : MonoBehaviour {
     /// <summary>ジャンプ数</summary>
     [SerializeField] private int JumpCount;
-    [SerializeField, Header("最大ジャンプ数")] private int MaxJumpCount;
+    [SerializeField, Header("最大ジャンプ数")] private int MaxJumpCount = 1;
     /// <summary>j</summary>
     [SerializeField] private float DownMoveSpeed;
     /// <summary> W     v   x @ b P  </summary>
@@ -28,54 +28,91 @@ public class TestJump : MonoBehaviour {
     /// </summary>
     private bool OnGround;
 
-    [SerializeField] private bool keyMFlag;
+    [SerializeField, Header("ジャンプキー")] private KeyCode MoveKey;
+    [SerializeField] private bool KeyMFlag;
+
+    [SerializeField] private bool RigidbodyMoveFlag = true;
+    [SerializeField] private Rigidbody2D MyRigidbody2D;
 
     void Start() {
-        // リジットボディ重力削除
-        this.gameObject.GetComponent<Rigidbody2D>().gravityScale = 0;
 
-        OnGround = false;
+        // 取得
+        {
+            if (MyRigidbody2D == null)
+            {
+                MyRigidbody2D = this.gameObject.GetComponent<Rigidbody2D>();
+            }
+        }
 
-        NowGravityPower = 0;
-        JumpCount = 0;
+        // 設定
+        {
+            // リジットボディ重力削除
+            if (RigidbodyMoveFlag)
+            {// 仮置き
+                JumpPower = 500.0f;
+            }
+            else
+            {
+                MyRigidbody2D.gravityScale = 0;
+            }
+
+            OnGround = false;
+
+            NowGravityPower = 0;
+            JumpCount = 0;
+
+            if (MoveKey == KeyCode.None)
+            {
+                if (KeyMFlag)
+                {
+                    MoveKey = KeyCode.M;
+                }
+                else
+                {
+                    MoveKey = KeyCode.C;
+                }
+            }
+        }
     }
 
-    private void Update() {
+    private void Update()
+    {
+        if (Input.GetKeyDown(MoveKey))
+        {
+            StartJump();
+        }
+    }
+
+    private void FixedUpdate()
+    {
         // 移動初期化
         DownMoveSpeed = 0;
 
-        if (keyMFlag) {
-            if (Input.GetKeyDown(KeyCode.M)) {
-                StartJump();
+        if (!RigidbodyMoveFlag)
+        {
+            // ジャンプ
+            JumpProcess();
+
+            if (!GetGroundFlag())
+            {
+                NowGravityPower += GravityPower * Time.deltaTime;
+                // 最低速度設定
+                if (NowGravityPower < -Mathf.Abs(DownMaxSpeed))
+                {
+                    NowGravityPower = -Mathf.Abs(DownMaxSpeed);
+                }
+
+
+                DownMoveSpeed -= NowGravityPower;
+
+
+                // y軸処理
+                this.transform.position += (Vector3.up * DownMoveSpeed/* * Time.deltaTime*/);
             }
+
+            OnGround = false;
         }
-        else {
-            if (Input.GetKeyDown(KeyCode.C)) {
-                StartJump();
-            }
-        }
-
-        // ジャンプ
-        JumpProcess();
-
-        if (!GetGroundFlag()) {
-            NowGravityPower += GravityPower * Time.deltaTime;
-            // 最低速度設定
-            if (NowGravityPower < -Mathf.Abs(DownMaxSpeed)) {
-                NowGravityPower = -Mathf.Abs(DownMaxSpeed);
-            }
-
-
-            DownMoveSpeed -= NowGravityPower;
-
-
-            // y軸処理
-            this.transform.position += (Vector3.up * DownMoveSpeed/* * Time.deltaTime*/);
-        }
-
-        OnGround = false;
     }
-
 
     /// <summary>
     /// ジャンプスタート
@@ -85,6 +122,10 @@ public class TestJump : MonoBehaviour {
             return;
         }
         JumpCount += 1;
+        if (RigidbodyMoveFlag)
+        {
+            MyRigidbody2D.AddForce(new Vector2(0.0f, JumpPower));
+        }
     }
 
 
@@ -121,8 +162,8 @@ public class TestJump : MonoBehaviour {
     /// 取得したオブジェクトが自分の下にある場合true
     /// </summary>
     public bool OnGroundCheckObject(GameObject checkObject) {
-        if ((GetObjectSize(checkObject, 1) > GetObjectSize(this.gameObject, -1)) &&
-            (GetObjectSize(checkObject, -1) < GetObjectSize(this.gameObject, 1)) &&
+        if (((GetObjectSize(checkObject, 1) - 0.5f) > GetObjectSize(this.gameObject, -1)) &&
+            ((GetObjectSize(checkObject, -1) + 0.5f) < GetObjectSize(this.gameObject, 1)) &&
             (checkObject.transform.position.y < this.transform.position.y)) {
             return true;
         }
