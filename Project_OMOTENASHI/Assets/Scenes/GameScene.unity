@@ -261,7 +261,7 @@ Transform:
   m_GameObject: {fileID: 214818668}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.219, y: 0, z: 0}
+  m_LocalPosition: {x: 0.219, y: 0.05100012, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -688,7 +688,7 @@ Transform:
   m_GameObject: {fileID: 896691774}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.204, y: 0, z: 0}
+  m_LocalPosition: {x: -0.204, y: 0.037, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1083,7 +1083,7 @@ Transform:
   m_GameObject: {fileID: 1129193999}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: -0.009, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2486,7 +2486,7 @@ Transform:
   m_GameObject: {fileID: 1467870217}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.219, y: 0, z: 0}
+  m_LocalPosition: {x: -0.219, y: 0.051, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2594,29 +2594,29 @@ MonoBehaviour:
   dragOnStop_: 5
   dragOnMove_: 0
   groundCheck_: {fileID: 1129194000}
-  gravity_: 7.94
-  jumpForce_: 5
+  gravity_: 20
+  jumpForce_: 10
   jumpHeight_: 4
   wallCheckFront_: {fileID: 1467870218}
   wallCheckBuck_: {fileID: 214818669}
   maxHp_: 100
   currentHp_: 100
   isAutoMode_: 1
-  autoMoveSpeed_: 3
-  speedBoostMultiplier_: 1.5
+  autoMoveSpeed_: 1
+  speedBoostMultiplier_: 2.5
   speedBoostDuration_: 0.5
   maxComboGauge_: 100
-  comboGaugePerHit_: 15
-  gaugeDrainRate_: 20
-  maxGaugeSpeedMultiplier_: 3
-  minEffectiveGauge_: 10
+  comboGaugePerHit_: 20
+  gaugeDrainRate_: 15
+  maxGaugeSpeedMultiplier_: 8
+  minEffectiveGauge_: 5
   invincibilityDuration_: 0
   rainbowSpeed_: 2
   invincibilitySpeedMultiplier_: 2
   playerID_: B
-  moveLeftKey_: 107
-  moveRightKey_: 107
-  jumpKey_: 113
+  moveLeftKey_: 97
+  moveRightKey_: 100
+  jumpKey_: 112
   isKeySettingMode_: 0
   isGround_: 0
   isJumping_: 0
@@ -2711,8 +2711,8 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1129194002}
-  - {fileID: 214818671}
   - {fileID: 1467870220}
+  - {fileID: 214818671}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1517558328
@@ -3205,8 +3205,8 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1354623086}
-  - {fileID: 1956489828}
   - {fileID: 896691775}
+  - {fileID: 1956489828}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1716098619
@@ -3226,27 +3226,27 @@ MonoBehaviour:
   dragOnStop_: 5
   dragOnMove_: 0
   groundCheck_: {fileID: 1354623087}
-  gravity_: 8
-  jumpForce_: 5
+  gravity_: 20
+  jumpForce_: 10
   jumpHeight_: 4
   wallCheckFront_: {fileID: 896691777}
   wallCheckBuck_: {fileID: 1956489830}
   maxHp_: 100
   currentHp_: 100
   isAutoMode_: 1
-  autoMoveSpeed_: 3
-  speedBoostMultiplier_: 1.5
+  autoMoveSpeed_: 1
+  speedBoostMultiplier_: 2.5
   speedBoostDuration_: 0.5
   maxComboGauge_: 100
-  comboGaugePerHit_: 15
-  gaugeDrainRate_: 20
-  maxGaugeSpeedMultiplier_: 3
-  minEffectiveGauge_: 10
+  comboGaugePerHit_: 20
+  gaugeDrainRate_: 15
+  maxGaugeSpeedMultiplier_: 8
+  minEffectiveGauge_: 5
   invincibilityDuration_: 0
   rainbowSpeed_: 2
   invincibilitySpeedMultiplier_: 2
   playerID_: A
-  moveLeftKey_: 100
+  moveLeftKey_: 97
   moveRightKey_: 100
   jumpKey_: 112
   isKeySettingMode_: 0
@@ -3440,7 +3440,7 @@ Transform:
   m_GameObject: {fileID: 1956489827}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.236, y: 0, z: 0}
+  m_LocalPosition: {x: 0.236, y: 0.03699994, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
