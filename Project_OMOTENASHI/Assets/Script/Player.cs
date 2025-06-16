@@ -95,13 +95,13 @@ public class Player : MonoBehaviour {
     public float maxComboGauge_ = 100.0f;
 
     [Tooltip("1回の連打で増加するゲージ量")]
-    public float comboGaugePerHit_ = 15.0f;
+    public float comboGaugePerHit_ = 8.0f;
 
     [Tooltip("ゲージの自然減少速度（毎秒）")]
     public float gaugeDrainRate_ = 20.0f;
 
     [Tooltip("ゲージに応じた最大速度倍率")]
-    public float maxGaugeSpeedMultiplier_ = 3.0f;
+    public float maxGaugeSpeedMultiplier_ = 5.0f;
 
     [Tooltip("ゲージが効果を発揮する最低値")]
     public float minEffectiveGauge_ = 10.0f;
@@ -819,7 +819,7 @@ public class Player : MonoBehaviour {
 
     //---------------------------------------------------------------
     //                      連打ゲージ関連メソッド
-    /// 現在のゲージ量に基づく速度倍率を計算
+    /// 現在のゲージ量に基づく速度倍率を計算（イーズイン効果付き）
     private float GetGaugeSpeedMultiplier() {
         if (currentComboGauge_ < minEffectiveGauge_) {
             return 1.0f; // ゲージが最低値未満の場合は通常速度
@@ -829,8 +829,11 @@ public class Player : MonoBehaviour {
         float gaugeRatio = (currentComboGauge_ - minEffectiveGauge_) / (maxComboGauge_ - minEffectiveGauge_);
         gaugeRatio = Mathf.Clamp01(gaugeRatio);
 
-        // 1.0から最大倍率まで線形補間
-        return Mathf.Lerp(1.0f, maxGaugeSpeedMultiplier_, gaugeRatio);
+        // イーズイン効果を適用（2乗カーブで緩やかに始まり急激に上昇）
+        float easedRatio = gaugeRatio * gaugeRatio;
+
+        // 1.0から最大倍率まで補間
+        return Mathf.Lerp(1.0f, maxGaugeSpeedMultiplier_, easedRatio);
     }
 
     /// 現在のゲージ量をパーセンテージで取得
@@ -893,9 +896,14 @@ public class Player : MonoBehaviour {
             return;
         }
 
-        // maxGaugeSpeedMultiplier_に到達するのに必要なゲージ量を逆算
-        float requiredRatio = (targetMultiplier - 1.0f) / (maxGaugeSpeedMultiplier_ - 1.0f);
-        requiredRatio = Mathf.Clamp01(requiredRatio);
+        // イーズイン効果を考慮した逆算処理
+        // targetMultiplier = Lerp(1.0, maxGaugeSpeedMultiplier_, easedRatio)
+        // easedRatio = (targetMultiplier - 1.0) / (maxGaugeSpeedMultiplier_ - 1.0)
+        float easedRatio = (targetMultiplier - 1.0f) / (maxGaugeSpeedMultiplier_ - 1.0f);
+        easedRatio = Mathf.Clamp01(easedRatio);
+        
+        // イーズイン効果の逆関数を適用（平方根でeasedRatioから元のratioを復元）
+        float requiredRatio = Mathf.Sqrt(easedRatio);
         
         // 実際のゲージ値を計算
         float requiredGauge = minEffectiveGauge_ + (requiredRatio * (maxComboGauge_ - minEffectiveGauge_));

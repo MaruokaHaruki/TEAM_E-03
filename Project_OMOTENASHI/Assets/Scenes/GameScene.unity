@@ -1452,26 +1452,6 @@ Tilemap:
       m_TileObjectToInstantiateIndex: 65535
       dummyAlignment: 0
       m_AllTileFlags: 1073741825
-  - first: {x: -6, y: -4, z: 0}
-    second:
-      serializedVersion: 2
-      m_TileIndex: 0
-      m_TileSpriteIndex: 0
-      m_TileMatrixIndex: 0
-      m_TileColorIndex: 0
-      m_TileObjectToInstantiateIndex: 65535
-      dummyAlignment: 0
-      m_AllTileFlags: 1073741825
-  - first: {x: 5, y: -4, z: 0}
-    second:
-      serializedVersion: 2
-      m_TileIndex: 0
-      m_TileSpriteIndex: 0
-      m_TileMatrixIndex: 0
-      m_TileColorIndex: 0
-      m_TileObjectToInstantiateIndex: 65535
-      dummyAlignment: 0
-      m_AllTileFlags: 1073741825
   - first: {x: 10, y: -4, z: 0}
     second:
       serializedVersion: 2
@@ -1523,66 +1503,6 @@ Tilemap:
       dummyAlignment: 0
       m_AllTileFlags: 1073741825
   - first: {x: -11, y: -1, z: 0}
-    second:
-      serializedVersion: 2
-      m_TileIndex: 0
-      m_TileSpriteIndex: 0
-      m_TileMatrixIndex: 0
-      m_TileColorIndex: 0
-      m_TileObjectToInstantiateIndex: 65535
-      dummyAlignment: 0
-      m_AllTileFlags: 1073741825
-  - first: {x: -3, y: -1, z: 0}
-    second:
-      serializedVersion: 2
-      m_TileIndex: 0
-      m_TileSpriteIndex: 0
-      m_TileMatrixIndex: 0
-      m_TileColorIndex: 0
-      m_TileObjectToInstantiateIndex: 65535
-      dummyAlignment: 0
-      m_AllTileFlags: 1073741825
-  - first: {x: -2, y: -1, z: 0}
-    second:
-      serializedVersion: 2
-      m_TileIndex: 0
-      m_TileSpriteIndex: 0
-      m_TileMatrixIndex: 0
-      m_TileColorIndex: 0
-      m_TileObjectToInstantiateIndex: 65535
-      dummyAlignment: 0
-      m_AllTileFlags: 1073741825
-  - first: {x: -1, y: -1, z: 0}
-    second:
-      serializedVersion: 2
-      m_TileIndex: 0
-      m_TileSpriteIndex: 0
-      m_TileMatrixIndex: 0
-      m_TileColorIndex: 0
-      m_TileObjectToInstantiateIndex: 65535
-      dummyAlignment: 0
-      m_AllTileFlags: 1073741825
-  - first: {x: 0, y: -1, z: 0}
-    second:
-      serializedVersion: 2
-      m_TileIndex: 0
-      m_TileSpriteIndex: 0
-      m_TileMatrixIndex: 0
-      m_TileColorIndex: 0
-      m_TileObjectToInstantiateIndex: 65535
-      dummyAlignment: 0
-      m_AllTileFlags: 1073741825
-  - first: {x: 1, y: -1, z: 0}
-    second:
-      serializedVersion: 2
-      m_TileIndex: 0
-      m_TileSpriteIndex: 0
-      m_TileMatrixIndex: 0
-      m_TileColorIndex: 0
-      m_TileObjectToInstantiateIndex: 65535
-      dummyAlignment: 0
-      m_AllTileFlags: 1073741825
-  - first: {x: 2, y: -1, z: 0}
     second:
       serializedVersion: 2
       m_TileIndex: 0
@@ -1904,13 +1824,13 @@ Tilemap:
       m_AllTileFlags: 1073741825
   m_AnimatedTiles: {}
   m_TileAssetArray:
-  - m_RefCount: 68
+  - m_RefCount: 60
     m_Data: {fileID: 11400000, guid: 25d07711ee7435846a5747e76b953c28, type: 2}
   m_TileSpriteArray:
-  - m_RefCount: 68
+  - m_RefCount: 60
     m_Data: {fileID: 2537882373423050008, guid: 840d3f0ad2ea63e4c9c0279eeb80c928, type: 3}
   m_TileMatrixArray:
-  - m_RefCount: 68
+  - m_RefCount: 60
     m_Data:
       e00: 1
       e01: 0
@@ -1929,7 +1849,7 @@ Tilemap:
       e32: 0
       e33: 1
   m_TileColorArray:
-  - m_RefCount: 68
+  - m_RefCount: 60
     m_Data: {r: 1, g: 1, b: 1, a: 1}
   m_TileObjectToInstantiateArray: []
   m_AnimationFrameRate: 1
@@ -2595,7 +2515,7 @@ MonoBehaviour:
   dragOnMove_: 0
   groundCheck_: {fileID: 1129194000}
   gravity_: 20
-  jumpForce_: 10
+  jumpForce_: 8
   jumpHeight_: 4
   wallCheckFront_: {fileID: 1467870218}
   wallCheckBuck_: {fileID: 214818669}
@@ -2605,6 +2525,7 @@ MonoBehaviour:
   autoMoveSpeed_: 1
   speedBoostMultiplier_: 2.5
   speedBoostDuration_: 0.5
+  enableSpeedTransfer_: 1
   maxComboGauge_: 100
   comboGaugePerHit_: 20
   gaugeDrainRate_: 15
@@ -3227,7 +3148,7 @@ MonoBehaviour:
   dragOnMove_: 0
   groundCheck_: {fileID: 1354623087}
   gravity_: 20
-  jumpForce_: 10
+  jumpForce_: 8
   jumpHeight_: 4
   wallCheckFront_: {fileID: 896691777}
   wallCheckBuck_: {fileID: 1956489830}
@@ -3237,6 +3158,7 @@ MonoBehaviour:
   autoMoveSpeed_: 1
   speedBoostMultiplier_: 2.5
   speedBoostDuration_: 0.5
+  enableSpeedTransfer_: 1
   maxComboGauge_: 100
   comboGaugePerHit_: 20
   gaugeDrainRate_: 15
