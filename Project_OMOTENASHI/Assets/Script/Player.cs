@@ -83,25 +83,19 @@ public class Player : MonoBehaviour {
     public float speedBoostDuration_ = 0.5f;
 
     //========================================
-    // 【速度交換設定】
-    [Header("速度交換設定")]
-    [Tooltip("プレイヤー衝突時の速度交換機能を有効にするか")]
-    public bool enableSpeedTransfer_ = true;
-
-    //========================================
     // 【連打ゲージ設定】
     [Header("連打ゲージ設定")]
     [Tooltip("連打ゲージの最大値")]
     public float maxComboGauge_ = 100.0f;
 
     [Tooltip("1回の連打で増加するゲージ量")]
-    public float comboGaugePerHit_ = 8.0f;
+    public float comboGaugePerHit_ = 15.0f;
 
     [Tooltip("ゲージの自然減少速度（毎秒）")]
     public float gaugeDrainRate_ = 20.0f;
 
     [Tooltip("ゲージに応じた最大速度倍率")]
-    public float maxGaugeSpeedMultiplier_ = 5.0f;
+    public float maxGaugeSpeedMultiplier_ = 3.0f;
 
     [Tooltip("ゲージが効果を発揮する最低値")]
     public float minEffectiveGauge_ = 10.0f;
@@ -233,10 +227,10 @@ public class Player : MonoBehaviour {
         // 【無敵状態タイマーの更新】
         if (isInvincible_) {
             invincibilityTimer_ -= Time.deltaTime;
-            
+
             // 虹色エフェクトの更新
             UpdateRainbowEffect();
-            
+
             if (invincibilityTimer_ <= 0.0f) {
                 isInvincible_ = false;
                 // 元の色に戻す
@@ -253,12 +247,6 @@ public class Player : MonoBehaviour {
         if (Input.GetKeyDown(KeyCode.Tab)) {
             isAutoMode_ = !isAutoMode_;
             Debug.Log($"[MODE CHANGE] : {(isAutoMode_ ? "自動移動モード" : "通常操作モード")}に切り替わりました");
-        }
-
-        // F3キーで速度交換機能のON/OFFを切り替え
-        if (Input.GetKeyDown(KeyCode.F3)) {
-            enableSpeedTransfer_ = !enableSpeedTransfer_;
-            Debug.Log($"[SPEED TRANSFER TOGGLE] : 速度交換機能が {(enableSpeedTransfer_ ? "有効" : "無効")} になりました");
         }
 
         //========================================
@@ -369,7 +357,7 @@ public class Player : MonoBehaviour {
         if (Input.GetKey(moveLeftKey_)) {
             horizontal -= 1.0f;
         }
-        
+
         bool jumpPressed = Input.GetKeyDown(jumpKey_);
 
         //========================================
@@ -425,7 +413,7 @@ public class Player : MonoBehaviour {
         // 前方の壁に衝突した場合、移動方向を反転
         if (isHitWallFront_ && !wasHittingWall_) {
             currentDirection_ *= -1.0f;  // 移動方向を反転
-            
+
             // 壁反射時に無敵状態を付与
             isInvincible_ = true;
             invincibilityTimer_ = invincibilityDuration_;
@@ -444,7 +432,7 @@ public class Player : MonoBehaviour {
             currentComboGauge_ += comboGaugePerHit_;
             currentComboGauge_ = Mathf.Min(maxComboGauge_, currentComboGauge_);
             lastInputTime_ = Time.time;
-            
+
             Debug.Log($"[COMBO GAUGE] : Player {playerID_} - ゲージ: {currentComboGauge_:F1}/{maxComboGauge_} ({GetGaugePercentage():F1}%)");
         }
         else if (moveInputPressed && isInvincible_) {
@@ -474,7 +462,7 @@ public class Player : MonoBehaviour {
         // 【自動移動の実行】
         // 現在の方向に基づいて移動入力を設定
         float currentSpeed = autoMoveSpeed_;
-        
+
         // 従来のスピードブースト
         if (isSpeedBoosted_) {
             currentSpeed *= speedBoostMultiplier_;
@@ -526,43 +514,6 @@ public class Player : MonoBehaviour {
                 return;
             }
 
-            // 速度交換ロジック
-            if (isAutoMode_ && otherPlayer.isAutoMode_ && enableSpeedTransfer_ && otherPlayer.enableSpeedTransfer_) {
-                float mySpeed = GetCurrentEffectiveSpeed();
-                float otherSpeed = otherPlayer.GetCurrentEffectiveSpeed();
-
-                // 速度差が十分にある場合のみ速度交換を実行
-                if (Mathf.Abs(mySpeed - otherSpeed) > 0.5f) {
-                    Player fasterPlayer = null;
-                    Player slowerPlayer = null;
-                    float fasterSpeed = 0;
-
-                    if (mySpeed > otherSpeed) {
-                        fasterPlayer = this;
-                        slowerPlayer = otherPlayer;
-                        fasterSpeed = mySpeed;
-                    } else {
-                        fasterPlayer = otherPlayer;
-                        slowerPlayer = this;
-                        fasterSpeed = otherSpeed;
-                    }
-
-                    // 遅い方のプレイヤーが速い方の速度を受け継ぐ
-                    slowerPlayer.AdjustGaugeToAchieveSpeed(fasterSpeed);
-
-                    // 速い方のプレイヤーは最低速度に戻る
-                    fasterPlayer.currentComboGauge_ = 0.0f;
-                    fasterPlayer.isSpeedBoosted_ = false;
-
-                    // 両プレイヤーの方向を反転
-                    ReverseDirection();
-                    otherPlayer.ReverseDirection();
-
-                    Debug.Log($"[SPEED TRANSFER] : {fasterPlayer.gameObject.name}(速度:{fasterSpeed:F2}) -> {slowerPlayer.gameObject.name} へ速度移譲");
-                    return; // 速度交換が発生した場合、通常の衝突処理はスキップ
-                }
-            }
-
             // 無敵状態の判定
             bool thisIsInvincible = isInvincible_;
             bool otherIsInvincible = otherPlayer.isInvincible_;
@@ -588,7 +539,7 @@ public class Player : MonoBehaviour {
                     Debug.Log($"[INFO] {gameObject.name}(無敵) と {otherPlayer.gameObject.name}(無敵) が正面衝突。両者無敵のためノーダメージ、ノックバック+反転。");
                     ReverseDirection();
                     otherPlayer.ReverseDirection();
-                    
+
                     // 両者にノックバックを適用
                     Vector2 knockBackDirToMe = (transform.position - otherPlayer.transform.position).normalized;
                     if (knockBackDirToMe == Vector2.zero) knockBackDirToMe = (Random.insideUnitCircle).normalized;
@@ -638,7 +589,8 @@ public class Player : MonoBehaviour {
                     Debug.Log($"[INFO] {gameObject.name} が {otherPlayer.gameObject.name} の背後から攻撃。{otherPlayer.gameObject.name} にダメージ。{gameObject.name} は反転。");
                     otherPlayer.TakeDamage(20);
                     KnockBack(otherPlayer);
-                } else {
+                }
+                else {
                     // 相手が無敵状態の場合はダメージなし
                     Debug.Log($"[INFO] {gameObject.name} が {otherPlayer.gameObject.name}(無敵) の背後から攻撃したが、ダメージなし。{gameObject.name} は反転。");
                 }
@@ -653,7 +605,8 @@ public class Player : MonoBehaviour {
                     Vector2 knockBackDirToThis = (transform.position - otherPlayer.transform.position).normalized;
                     if (knockBackDirToThis == Vector2.zero) knockBackDirToThis = (Random.insideUnitCircle).normalized;
                     rigidbody2D_.AddForce(knockBackDirToThis * 10f, ForceMode2D.Impulse);
-                } else {
+                }
+                else {
                     // 自分が無敵状態の場合はダメージなし
                     Debug.Log($"[INFO] {otherPlayer.gameObject.name} が {gameObject.name}(無敵) の背後から攻撃したが、ダメージなし。{otherPlayer.gameObject.name} は反転。");
                 }
@@ -672,7 +625,7 @@ public class Player : MonoBehaviour {
         // GameManagerに処理を委譲
         if (GameManager.Instance != null) {
             GameManager.Instance.TakeDamage(playerID_, amount);
-            
+
             // 自身のHPも同期して更新
             currentHp_ = GameManager.Instance.GetPlayerCurrentHp(playerID_);
         }
@@ -704,13 +657,13 @@ public class Player : MonoBehaviour {
         // HSVカラーシステムを使用して虹色を生成
         // Hue（色相）を時間に応じて0-～1の範囲で変化させる
         float hue = (Time.time * rainbowSpeed_) % 1.0f;
-        
+
         // HSVからRGBに変換して適用
         Color rainbowColor = Color.HSVToRGB(hue, 1.0f, 1.0f);
-        
+
         // 元の透明度を維持
         rainbowColor.a = originalColor_.a;
-        
+
         spriteRenderer_.color = rainbowColor;
     }
 
@@ -819,7 +772,7 @@ public class Player : MonoBehaviour {
 
     //---------------------------------------------------------------
     //                      連打ゲージ関連メソッド
-    /// 現在のゲージ量に基づく速度倍率を計算（イーズイン効果付き）
+    /// 現在のゲージ量に基づく速度倍率を計算
     private float GetGaugeSpeedMultiplier() {
         if (currentComboGauge_ < minEffectiveGauge_) {
             return 1.0f; // ゲージが最低値未満の場合は通常速度
@@ -829,11 +782,8 @@ public class Player : MonoBehaviour {
         float gaugeRatio = (currentComboGauge_ - minEffectiveGauge_) / (maxComboGauge_ - minEffectiveGauge_);
         gaugeRatio = Mathf.Clamp01(gaugeRatio);
 
-        // イーズイン効果を適用（2乗カーブで緩やかに始まり急激に上昇）
-        float easedRatio = gaugeRatio * gaugeRatio;
-
-        // 1.0から最大倍率まで補間
-        return Mathf.Lerp(1.0f, maxGaugeSpeedMultiplier_, easedRatio);
+        // 1.0から最大倍率まで線形補間
+        return Mathf.Lerp(1.0f, maxGaugeSpeedMultiplier_, gaugeRatio);
     }
 
     /// 現在のゲージ量をパーセンテージで取得
@@ -850,64 +800,6 @@ public class Player : MonoBehaviour {
         if (percentage >= 20.0f) return 2;
         if (percentage >= minEffectiveGauge_ / maxComboGauge_ * 100.0f) return 1;
         return 0;
-    }
-
-    /// 現在の有効な移動速度を取得
-    public float GetCurrentEffectiveSpeed() {
-        float baseSpeed = autoMoveSpeed_;
-        
-        // スピードブーストの適用
-        if (isSpeedBoosted_) {
-            baseSpeed *= speedBoostMultiplier_;
-        }
-
-        // 無敵状態中の速度倍率
-        if (isInvincible_) {
-            baseSpeed *= invincibilitySpeedMultiplier_;
-        }
-
-        // 連打ゲージによる速度倍率（無敵状態中は適用しない）
-        if (!isInvincible_) {
-            float gaugeMultiplier = GetGaugeSpeedMultiplier();
-            baseSpeed *= gaugeMultiplier;
-        }
-
-        return baseSpeed;
-    }
-
-    /// 指定された目標速度に到達するように連打ゲージを調整
-    public void AdjustGaugeToAchieveSpeed(float targetSpeed) {
-        // 基本速度を計算（スピードブーストと無敵状態を除く）
-        float baseSpeed = autoMoveSpeed_;
-        
-        // 目標とする速度倍率を計算
-        float targetMultiplier = targetSpeed / baseSpeed;
-        
-        // 速度倍率に基づいて連打ゲージを設定
-        SetComboGaugeForTargetSpeedMultiplier(targetMultiplier);
-        
-        Debug.Log($"[GAUGE ADJUST] : {gameObject.name} - 目標速度:{targetSpeed:F2} のためゲージを {currentComboGauge_:F1} に調整");
-    }
-
-    /// 目標とする速度倍率に基づいて連打ゲージを設定
-    private void SetComboGaugeForTargetSpeedMultiplier(float targetMultiplier) {
-        if (targetMultiplier <= 1.0f) {
-            currentComboGauge_ = 0.0f;
-            return;
-        }
-
-        // イーズイン効果を考慮した逆算処理
-        // targetMultiplier = Lerp(1.0, maxGaugeSpeedMultiplier_, easedRatio)
-        // easedRatio = (targetMultiplier - 1.0) / (maxGaugeSpeedMultiplier_ - 1.0)
-        float easedRatio = (targetMultiplier - 1.0f) / (maxGaugeSpeedMultiplier_ - 1.0f);
-        easedRatio = Mathf.Clamp01(easedRatio);
-        
-        // イーズイン効果の逆関数を適用（平方根でeasedRatioから元のratioを復元）
-        float requiredRatio = Mathf.Sqrt(easedRatio);
-        
-        // 実際のゲージ値を計算
-        float requiredGauge = minEffectiveGauge_ + (requiredRatio * (maxComboGauge_ - minEffectiveGauge_));
-        currentComboGauge_ = Mathf.Min(requiredGauge, maxComboGauge_);
     }
 
     /// ゲージ情報をデバッグ表示用に取得
