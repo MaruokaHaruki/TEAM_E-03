@@ -554,12 +554,7 @@ public class Player : MonoBehaviour {
                     fasterPlayer.currentComboGauge_ = 0.0f;
                     fasterPlayer.isSpeedBoosted_ = false;
 
-                    // 両プレイヤーの方向を反転
-                    ReverseDirection();
-                    otherPlayer.ReverseDirection();
-
                     Debug.Log($"[SPEED TRANSFER] : {fasterPlayer.gameObject.name}(速度:{fasterSpeed:F2}) -> {slowerPlayer.gameObject.name} へ速度移譲");
-                    return; // 速度交換が発生した場合、通常の衝突処理はスキップ
                 }
             }
 
