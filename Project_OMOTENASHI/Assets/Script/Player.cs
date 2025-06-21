@@ -8,13 +8,25 @@ using UnityEngine;
 //=============================================================================
 /// プレイヤーキャラクターの移動、ジャンプ、アニメーション制御を統合管理するクラス
 /// 2D横スクロールアクションゲーム用のプレイヤーコントローラー
-public class Player : MonoBehaviour {
+public class Player : MonoBehaviour {   
     ///--------------------------------------------------------------
     ///                      【パブリック変数】
+    
     //========================================
-    // 【水平移動パラメータ】
-    // プレイヤーの左右移動に関する設定値
-    [Header("水平移動設定")]
+    // 【プレイヤー識別・基本設定】
+    [Header("プレイヤー設定")]
+    [Tooltip("プレイヤーの識別ID（A, B など）")]
+    public string playerID_ = "A";
+
+    [Tooltip("プレイヤーの最大HP値")]
+    public int maxHp_ = 100;
+
+    [Tooltip("プレイヤーの現在HP値")]
+    public int currentHp_ = 100;
+
+    //========================================
+    // 【移動設定】
+    [Header("移動設定")]
     [Tooltip("プレイヤーの最大移動速度（単位/秒）")]
     public float maxSpeed_ = 5.0f;
 
@@ -28,15 +40,7 @@ public class Player : MonoBehaviour {
     public float dragOnMove_ = 0.0f;
 
     //========================================
-    // 【接地判定システム】
-    // 地面との接触状態を検出するための参照
-    [Header("接地判定")]
-    [Tooltip("地面との接触を判定するGroundCheckコンポーネント")]
-    public GroundCheck groundCheck_;
-
-    //========================================
-    // 【垂直移動パラメータ】
-    // ジャンプと重力制御に関する設定値
+    // 【ジャンプ・重力設定】
     [Header("ジャンプ・重力設定")]
     [Tooltip("独自重力の強さ。Unityのデフォルト重力に追加される")]
     public float gravity_ = 0.2f;
@@ -44,28 +48,17 @@ public class Player : MonoBehaviour {
     [Tooltip("ジャンプ時に加える瞬間的な力の大きさ")]
     public float jumpForce_ = 4.0f;
 
-    [Tooltip("ジャンプの理論的最大高度（現在未使用）")]
-    public float jumpHeight_ = 4.0f;
-
     //========================================
-    // 【壁接触判定システム】
-    // 左右の壁との接触を検出し、壁への張り付きを防ぐ
-    [Header("壁接触判定")]
+    // 【判定システム】
+    [Header("判定システム")]
+    [Tooltip("地面との接触を判定するGroundCheckコンポーネント")]
+    public GroundCheck groundCheck_;
+
     [Tooltip("前方（進行方向）の壁を検出するコンポーネント")]
     public WallCheckFront wallCheckFront_;
 
     [Tooltip("後方の壁を検出するコンポーネント")]
     public WallCheckBuck wallCheckBuck_;
-
-    //========================================
-    // 【プレイヤーステータス】
-    // HPや体力などのゲーム内パラメータ
-    [Header("プレイヤーステータス")]
-    [Tooltip("プレイヤーの最大HP値")]
-    public int maxHp_ = 100;
-
-    [Tooltip("プレイヤーの現在HP値")]
-    public int currentHp_ = 100;
 
     //========================================
     // 【自動移動設定】
@@ -81,12 +74,6 @@ public class Player : MonoBehaviour {
 
     [Tooltip("スピードブーストの持続時間")]
     public float speedBoostDuration_ = 0.5f;
-
-    //========================================
-    // 【速度交換設定】
-    [Header("速度交換設定")]
-    [Tooltip("プレイヤー衝突時の速度交換機能を有効にするか")]
-    public bool enableSpeedTransfer_ = true;
 
     //========================================
     // 【連打ゲージ設定】
@@ -107,7 +94,7 @@ public class Player : MonoBehaviour {
     public float minEffectiveGauge_ = 10.0f;
 
     //========================================
-    // 【無敵状態設定】
+    // 【特殊状態設定】
     [Header("無敵状態設定")]
     [Tooltip("壁反射後の無敵時間（秒）")]
     public float invincibilityDuration_ = 3.0f;
@@ -119,11 +106,17 @@ public class Player : MonoBehaviour {
     public float invincibilitySpeedMultiplier_ = 2.0f;
 
     //========================================
-    // 【プレイヤー識別・キー設定】
-    [Header("プレイヤー設定")]
-    [Tooltip("プレイヤーの識別ID（A, B など）")]
-    public string playerID_ = "A";
+    // 【機能有効化設定】
+    [Header("機能設定")]
+    [Tooltip("プレイヤー衝突時の速度交換機能を有効にするか")]
+    public bool enableSpeedTransfer_ = true;
 
+    [Tooltip("キー設定変更モード")]
+    public bool isKeySettingMode_ = false;
+
+    //========================================
+    // 【キー設定】
+    [Header("キー設定")]
     [Tooltip("移動キー（左）")]
     public KeyCode moveLeftKey_ = KeyCode.A;
 
@@ -132,65 +125,8 @@ public class Player : MonoBehaviour {
 
     [Tooltip("ジャンプキー")]
     public KeyCode jumpKey_ = KeyCode.P;
-
-    [Tooltip("キー設定変更モード")]
-    public bool isKeySettingMode_ = false;
-
-
-    ///--------------------------------------------------------------
-    ///                      【プライベート変数】
     //========================================
-    // 【コンポーネント参照】
-    // 必要なUnityコンポーネントへの参照を保持
-    private Animator animator_ = null;          // アニメーション制御用
-    private Rigidbody2D rigidbody2D_ = null;    // 物理演算制御用
-    private SpriteRenderer spriteRenderer_ = null; // スプライト色変更用
-
-    //========================================
-    // 【状態フラグ】
-    // プレイヤーの現在の行動状態を追跡
-    public bool isGround_ = false;             // 地面に接触している状態
-    public bool isJumping_ = false;            // ジャンプ動作を実行中
-
-    //========================================
-    // 【入力データ】
-    // プレイヤーからの入力情報を一時保存
-    private Vector2 inputHorizontal_ = Vector2.zero;  // 左右移動入力（-1～1）
-    private Vector2 inputVertical_ = Vector2.zero;    // 上下入力（現在未使用）
-
-    //========================================
-    // 【壁接触状態】
-    // 各方向の壁との接触状況を記録
-    private bool isHitWallFront_ = false;      // 前方の壁に接触中
-    private bool isHitWallBuck_ = false;       // 後方の壁に接触中
-
-    //========================================
-    // 【定数設定】
-    //private string groundTag_ = "Ground";       // 地面として認識するオブジェクトのタグ
-
-    //========================================
-    // 【自動移動関連】
-    private float currentDirection_ = 1.0f;     // 現在の移動方向（1.0f=右、-1.0f=左）
-    private bool wasHittingWall_ = false;       // 前フレームで壁に衝突していたか
-    private float speedBoostTimer_ = 0.0f;      // スピードブーストの残り時間
-    private bool isSpeedBoosted_ = false;       // 現在スピードブースト中か
-
-    //========================================
-    // 【連打ゲージ関連】
-    private float currentComboGauge_ = 0.0f;    // 現在の連打ゲージ値
-    private float lastInputTime_ = 0.0f;        // 最後の入力時間
-
-    //========================================
-    // 【無敵状態関連】
-    private bool isInvincible_ = false;         // 現在無敵状態か
-    private float invincibilityTimer_ = 0.0f;   // 無敵状態の残り時間
-    private Color originalColor_ = Color.white; // 元の色を保存用    //========================================
-    // 【キー設定関連】
-    private KeyCode pendingKey_ = KeyCode.None; // 設定待ちのキー
-    private string settingTarget_ = "";         // 設定対象（"moveLeft", "moveRight", "jump"）
-
-    //========================================
-    // 【特別ルール機能】
+    // 【特別ルール設定】
     [Header("特別ルール設定")]
     [Tooltip("2段ジャンプ機能を有効にするか")]
     public bool enableDoubleJump_ = false;
@@ -204,11 +140,60 @@ public class Player : MonoBehaviour {
     [Tooltip("踏みつけスタン時間（秒）")]
     public float stompStunDuration_ = 2.0f;
 
-    // 内部状態変数
-    private bool hasDoubleJumped_ = false;      // 2段ジャンプを使用したか
-    private bool isStunned_ = false;            // スタン状態か
-    private float stunTimer_ = 0.0f;            // スタンの残り時間
-    private bool shouldReverseOnLanding_ = false; // 着地時に反転するか
+
+    ///--------------------------------------------------------------
+    ///                      【プライベート変数】
+    
+    //========================================
+    // 【コンポーネント参照】
+    private Animator animator_ = null;
+    private Rigidbody2D rigidbody2D_ = null;
+    private SpriteRenderer spriteRenderer_ = null;
+
+    //========================================
+    // 【状態フラグ】
+    public bool isGround_ = false;
+    public bool isJumping_ = false;
+
+    //========================================
+    // 【入力データ】
+    private Vector2 inputHorizontal_ = Vector2.zero;
+    private Vector2 inputVertical_ = Vector2.zero;
+
+    //========================================
+    // 【壁接触状態】
+    private bool isHitWallFront_ = false;
+    private bool isHitWallBuck_ = false;
+
+    //========================================
+    // 【自動移動関連】
+    private float currentDirection_ = 1.0f;
+    private bool wasHittingWall_ = false;
+    private float speedBoostTimer_ = 0.0f;
+    private bool isSpeedBoosted_ = false;
+
+    //========================================
+    // 【連打ゲージ関連】
+    private float currentComboGauge_ = 0.0f;
+    private float lastInputTime_ = 0.0f;
+
+    //========================================
+    // 【無敵状態関連】
+    private bool isInvincible_ = false;
+    private float invincibilityTimer_ = 0.0f;
+    private Color originalColor_ = Color.white;
+
+    //========================================
+    // 【キー設定関連】
+    private KeyCode pendingKey_ = KeyCode.None;
+    private string settingTarget_ = "";
+
+    //========================================
+    // 【特別ルール関連】
+    private bool hasDoubleJumped_ = false;
+    private bool isStunned_ = false;
+    private float stunTimer_ = 0.0f;
+    private bool shouldReverseOnLanding_ = false;
 
 
     ///--------------------------------------------------------------
@@ -243,11 +228,10 @@ public class Player : MonoBehaviour {
         // プレイヤー別デフォルトキー設定
         SetDefaultKeys();
     }
-
-
     ///--------------------------------------------------------------
     ///                      メインループ処理
-    private void Update() {        //========================================
+    private void Update() {
+        //========================================
         // 【スタン状態タイマーの更新】
         if (isStunned_) {
             stunTimer_ -= Time.deltaTime;
@@ -281,7 +265,9 @@ public class Player : MonoBehaviour {
         if (Input.GetKeyDown(KeyCode.Tab)) {
             isAutoMode_ = !isAutoMode_;
             Debug.Log($"[MODE CHANGE] : {(isAutoMode_ ? "自動移動モード" : "通常操作モード")}に切り替わりました");
-        }        // F3キーで速度交換機能のON/OFFを切り替え
+        }
+
+        // F3キーで速度交換機能のON/OFFを切り替え
         if (Input.GetKeyDown(KeyCode.F3)) {
             enableSpeedTransfer_ = !enableSpeedTransfer_;
             Debug.Log($"[SPEED TRANSFER TOGGLE] : 速度交換機能が {(enableSpeedTransfer_ ? "有効" : "無効")} になりました");
@@ -328,17 +314,16 @@ public class Player : MonoBehaviour {
             currentComboGauge_ = Mathf.Max(0.0f, currentComboGauge_);
         }
     }
-
-
     ///--------------------------------------------------------------
     ///                      物理演算更新処理
-    private void FixedUpdate() {        //========================================
+    private void FixedUpdate() {
+        //========================================
         // 【環境状態の更新】
         // 周囲の壁や地面との接触状況を最新状態に更新
         bool wasGrounded = isGround_;  // 前フレームの地面接触状態を保存
-        isGround_ = groundCheck_.IsGround();                    // 足元の地面接触判定
-        isHitWallFront_ = wallCheckFront_.IsHitWallFront();    // 前方壁接触判定
-        isHitWallBuck_ = wallCheckBuck_.IsHitWallBuck();       // 後方壁接触判定
+        isGround_ = groundCheck_.IsGround();
+        isHitWallFront_ = wallCheckFront_.IsHitWallFront();
+        isHitWallBuck_ = wallCheckBuck_.IsHitWallBuck();
 
         //========================================
         // 【反転ジャンプの処理】
@@ -357,18 +342,18 @@ public class Player : MonoBehaviour {
         //========================================
         // 【水平移動の物理計算】
         // 現在速度と目標速度の差分から必要な力を算出
-        float currentVelocityX = rigidbody2D_.velocity.x;      // 現在のX軸速度を取得
-        float targetSpeed = inputHorizontal_.x * maxSpeed_;     // 入力に基づく目標速度を計算
-        float speedDiff = targetSpeed - currentVelocityX;      // 速度差分を算出
-        float accelRate = acceleration_;                        // 加速度を適用
-        float movement = speedDiff * accelRate;                 // 実際に加える力を計算
+        float currentVelocityX = rigidbody2D_.velocity.x;
+        float targetSpeed = inputHorizontal_.x * maxSpeed_;
+        float speedDiff = targetSpeed - currentVelocityX;
+        float accelRate = acceleration_;
+        float movement = speedDiff * accelRate;
 
         //========================================
         // 【壁張り付き防止システム】
         // 壁に向かって移動入力がある場合は移動を制限し、
         // 壁に張り付いて動けなくなる現象を防ぐ
-        bool blockFront = isHitWallFront_ && inputHorizontal_.x < 0;  // 前方壁があり左入力時
-        bool blockBuck = isHitWallFront_ && inputHorizontal_.x > 0;   // 後方壁があり右入力時
+        bool blockFront = isHitWallFront_ && inputHorizontal_.x < 0;
+        bool blockBuck = isHitWallFront_ && inputHorizontal_.x > 0;
 
         if (!blockFront && !blockBuck) {
             // 壁による移動制限がない場合のみ移動力を適用
@@ -404,8 +389,6 @@ public class Player : MonoBehaviour {
         rigidbody2D_.AddForce(Vector2.down * gravity_, ForceMode2D.Force);
     }
 
-
-
     ///--------------------------------------------------------------
     ///                      入力処理・移動制御
     private void Move() {
@@ -424,15 +407,15 @@ public class Player : MonoBehaviour {
 
         //========================================
         // 【入力データの保存】
-        // 取得した入力をベクトル形式で保存し、物理演算処理で使用
-        inputHorizontal_ = new Vector2(horizontal, 0.0f);      // 水平入力をベクトル化
-        inputVertical_ = Vector2.zero;                          // 垂直入力（将来の拡張用）        //========================================
+        inputHorizontal_ = new Vector2(horizontal, 0.0f);
+        inputVertical_ = Vector2.zero;
+
+        //========================================
         // 【ジャンプ入力の処理】
-        // 地面に接触している時またはスタン状態でないときジャンプを許可
         if (!isStunned_) {
             if (isGround_) {
                 if (jumpPressed) {
-                    isJumping_ = true;  // ジャンプフラグを立てる（FixedUpdateで実行）
+                    isJumping_ = true;
                     
                     // 反転ジャンプが有効な場合は着地時反転フラグを立てる
                     if (enableReverseJump_) {
@@ -448,7 +431,7 @@ public class Player : MonoBehaviour {
                     Debug.Log($"[DOUBLE JUMP] : {gameObject.name} が2段ジャンプを実行しました");
                 }
                 else {
-                    isJumping_ = false;     // 空中ではジャンプフラグを無効化
+                    isJumping_ = false;
                 }
             }
         }
@@ -458,32 +441,23 @@ public class Player : MonoBehaviour {
 
         //========================================
         // 【アニメーション状態の更新】
-        // 現在の状態をAnimatorに送信してアニメーション制御
-        animator_.SetBool("Jump", !isGround_);  // 空中にいる間はジャンプアニメーション
+        animator_.SetBool("Jump", !isGround_);
 
         //========================================
         // 【キャラクター向きとアニメーションの制御】
-        // 移動方向に応じてスプライトを反転し、適切なアニメーションを再生
         if (horizontal > 0) {
-            // 右方向への移動
-            transform.localScale = new Vector3(-1, 1, 1);       // 右向きに反転
-            animator_.SetBool("Run", true);                     // 走行アニメーション開始
+            transform.localScale = new Vector3(-1, 1, 1);
+            animator_.SetBool("Run", true);
         }
         else if (horizontal < 0) {
-            // 左方向への移動
-            transform.localScale = new Vector3(1, 1, 1);        // 左向き（標準方向）
-            animator_.SetBool("Run", true);                     // 走行アニメーション開始
+            transform.localScale = new Vector3(1, 1, 1);
+            animator_.SetBool("Run", true);
         }
         else {
-            // 停止状態
-            animator_.SetBool("Run", false);                    // 待機アニメーション
+            animator_.SetBool("Run", false);
         }
-    }
-
-    //---------------------------------------------------------------
+    }    //---------------------------------------------------------------
     //                      自動移動制御
-    // プレイヤーの向いている方に進行｡壁にあたった場合は反転する｡
-    // 操作はジャンプは可能だが、移動は連打でスピードが上がるのみ｡
     private void AutoMove() {
         //========================================
         // 【壁衝突判定と方向転換】
@@ -522,7 +496,9 @@ public class Player : MonoBehaviour {
             if (speedBoostTimer_ <= 0.0f) {
                 isSpeedBoosted_ = false;
             }
-        }        //========================================
+        }
+
+        //========================================
         // 【ジャンプ入力の処理】
         // 地面に接触している時のみジャンプを許可
         bool jumpPressed = Input.GetKeyDown(jumpKey_);
@@ -561,7 +537,6 @@ public class Player : MonoBehaviour {
         // 無敵状態中は規定の高速移動のみ適用、連打ゲージは無効
         if (isInvincible_) {
             currentSpeed *= invincibilitySpeedMultiplier_;
-            //Debug.Log($"[AUTO MOVE] : Player {playerID_} - 無敵状態中のため規定高速移動のみ適用 (x{invincibilitySpeedMultiplier_:F2})");
         }
         else {
             // 通常状態時のみ連打ゲージによるスピードアップを適用
