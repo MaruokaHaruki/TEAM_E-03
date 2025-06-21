@@ -190,10 +190,10 @@ public class Player : MonoBehaviour {
 
     //========================================
     // 【特別ルール関連】
-    private bool hasDoubleJumped_ = false;
-    private bool isStunned_ = false;
-    private float stunTimer_ = 0.0f;
-    private bool shouldReverseOnLanding_ = false;
+    public bool hasDoubleJumped_ = false;
+    public bool isStunned_ = false;
+    public float stunTimer_ = 0.0f;
+    public bool shouldReverseOnLanding_ = false;
 
 
     ///--------------------------------------------------------------

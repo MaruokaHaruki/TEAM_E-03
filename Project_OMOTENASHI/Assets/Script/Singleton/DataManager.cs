@@ -7,7 +7,7 @@ public class DataManager : SingletonMonoBehaviour<DataManager>
 {
     private int NowGameNumber;
     
-    [SerializeField, Header("ƒQ[ƒ€ƒf[ƒ^")] private List<GameData> GameDatas;
+    [SerializeField, Header("ï¿½Qï¿½[ï¿½ï¿½ï¿½fï¿½[ï¿½^")] private List<GameData> GameDatas;
 
     private void Start()
     {
@@ -16,6 +16,7 @@ public class DataManager : SingletonMonoBehaviour<DataManager>
 
     public void NextGameScene()
     {
+        NowGameNumber += 1;
         if (NowGameNumber < GameDatas.Count)
         {
         }
@@ -24,11 +25,10 @@ public class DataManager : SingletonMonoBehaviour<DataManager>
         }
     }
 
-    /*----------* GetESet *----------*/
+    /*----------* Get_Set *----------*/
     internal GameData GetNowGameData()
     {
-        NowGameNumber += 1;
-        return GameDatas[NowGameNumber - 1];
+        return GameDatas[NowGameNumber];
     }
 
     internal GameData GetGameData(int number)

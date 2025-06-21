@@ -302,7 +302,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 941ce2d0ca24c3e4c9c46f3b7f08cbfe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GameDatas: []
+  GameDatas:
+  - flag: 1
+    Health: 100
+    DoubleJump: 1
+    Stomp: 0
+    ReverseJump: 0
+    PlayerAScore: 100
+    PlayerBScore: 100
 --- !u!4 &526265063
 Transform:
   m_ObjectHideFlags: 0

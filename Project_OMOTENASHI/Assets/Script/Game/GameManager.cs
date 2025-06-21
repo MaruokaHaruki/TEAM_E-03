@@ -78,13 +78,16 @@ public class GameManager : MonoBehaviour
 
     ///--------------------------------------------------------------
     ///						 初期化前初期化
-    private void Awake() {
+    private void Awake()
+    {
         // シングルトンの設定
-        if (Instance == null) {
+        if (Instance == null)
+        {
             Instance = this;
             DontDestroyOnLoad(gameObject); // シーンを跨いでオブジェクトを保持
         }
-        else {
+        else
+        {
             Destroy(gameObject); // 既に存在する場合は新しいインスタンスを破棄
         }
 
@@ -96,8 +99,22 @@ public class GameManager : MonoBehaviour
     ///						 初期化
     void Start()
     {
+
         // プレイヤーの初期化
         InitializePlayers();
+
+        //データマネージャからプレイヤーデータを取得
+        GameData gameData = GameObject.FindWithTag("DataManager").GetComponent<DataManager>().GetNowGameData();
+
+        // プレイヤー1とプレイヤー2の設定
+        player1_.playerID_ = "Player1";
+        player1_.enableDoubleJump_ = gameData.DoubleJump;
+        player1_.enableStomp_ = gameData.Stomp;
+        player1_.enableReverseJump_ = gameData.ReverseJump;
+        if (player2_ != null) {
+            player2_.playerID_ = "Player2";
+
+        }
         
         // UIの初期化
         InitializeUI();
