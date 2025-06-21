@@ -184,12 +184,31 @@ public class Player : MonoBehaviour {
     // 【無敵状態関連】
     private bool isInvincible_ = false;         // 現在無敵状態か
     private float invincibilityTimer_ = 0.0f;   // 無敵状態の残り時間
-    private Color originalColor_ = Color.white; // 元の色を保存用
-
-    //========================================
+    private Color originalColor_ = Color.white; // 元の色を保存用    //========================================
     // 【キー設定関連】
     private KeyCode pendingKey_ = KeyCode.None; // 設定待ちのキー
     private string settingTarget_ = "";         // 設定対象（"moveLeft", "moveRight", "jump"）
+
+    //========================================
+    // 【特別ルール機能】
+    [Header("特別ルール設定")]
+    [Tooltip("2段ジャンプ機能を有効にするか")]
+    public bool enableDoubleJump_ = false;
+    
+    [Tooltip("踏みつけ機能を有効にするか")]
+    public bool enableStomp_ = false;
+    
+    [Tooltip("反転ジャンプ機能を有効にするか")]
+    public bool enableReverseJump_ = false;
+    
+    [Tooltip("踏みつけスタン時間（秒）")]
+    public float stompStunDuration_ = 2.0f;
+
+    // 内部状態変数
+    private bool hasDoubleJumped_ = false;      // 2段ジャンプを使用したか
+    private bool isStunned_ = false;            // スタン状態か
+    private float stunTimer_ = 0.0f;            // スタンの残り時間
+    private bool shouldReverseOnLanding_ = false; // 着地時に反転するか
 
 
     ///--------------------------------------------------------------
@@ -228,7 +247,16 @@ public class Player : MonoBehaviour {
 
     ///--------------------------------------------------------------
     ///                      メインループ処理
-    private void Update() {
+    private void Update() {        //========================================
+        // 【スタン状態タイマーの更新】
+        if (isStunned_) {
+            stunTimer_ -= Time.deltaTime;
+            if (stunTimer_ <= 0.0f) {
+                isStunned_ = false;
+                Debug.Log($"[STUN] : {gameObject.name} のスタンが回復しました");
+            }
+        }
+
         //========================================
         // 【無敵状態タイマーの更新】
         if (isInvincible_) {
@@ -253,12 +281,20 @@ public class Player : MonoBehaviour {
         if (Input.GetKeyDown(KeyCode.Tab)) {
             isAutoMode_ = !isAutoMode_;
             Debug.Log($"[MODE CHANGE] : {(isAutoMode_ ? "自動移動モード" : "通常操作モード")}に切り替わりました");
-        }
-
-        // F3キーで速度交換機能のON/OFFを切り替え
+        }        // F3キーで速度交換機能のON/OFFを切り替え
         if (Input.GetKeyDown(KeyCode.F3)) {
             enableSpeedTransfer_ = !enableSpeedTransfer_;
             Debug.Log($"[SPEED TRANSFER TOGGLE] : 速度交換機能が {(enableSpeedTransfer_ ? "有効" : "無効")} になりました");
+        }
+
+        // 6キーで全員の連打ゲージを0にする
+        if (Input.GetKeyDown(KeyCode.Alpha6)) {
+            Player[] allPlayers = FindObjectsOfType<Player>();
+            foreach (Player player in allPlayers) {
+                player.currentComboGauge_ = 0.0f;
+                player.isSpeedBoosted_ = false;
+            }
+            Debug.Log("[RESET SPEED] : 全プレイヤーの速度がリセットされました");
         }
 
         //========================================
@@ -296,13 +332,27 @@ public class Player : MonoBehaviour {
 
     ///--------------------------------------------------------------
     ///                      物理演算更新処理
-    private void FixedUpdate() {
-        //========================================
+    private void FixedUpdate() {        //========================================
         // 【環境状態の更新】
         // 周囲の壁や地面との接触状況を最新状態に更新
+        bool wasGrounded = isGround_;  // 前フレームの地面接触状態を保存
         isGround_ = groundCheck_.IsGround();                    // 足元の地面接触判定
         isHitWallFront_ = wallCheckFront_.IsHitWallFront();    // 前方壁接触判定
         isHitWallBuck_ = wallCheckBuck_.IsHitWallBuck();       // 後方壁接触判定
+
+        //========================================
+        // 【反転ジャンプの処理】
+        // 空中から着地した瞬間に反転ジャンプが有効なら方向転換
+        if (enableReverseJump_ && !wasGrounded && isGround_ && shouldReverseOnLanding_) {
+            ReverseDirection();
+            shouldReverseOnLanding_ = false;
+            Debug.Log($"[REVERSE JUMP] : {gameObject.name} が着地時に方向反転しました");
+        }
+
+        // 地面に接触したら2段ジャンプフラグをリセット
+        if (isGround_ && !wasGrounded) {
+            hasDoubleJumped_ = false;
+        }
 
         //========================================
         // 【水平移動の物理計算】
@@ -376,19 +426,34 @@ public class Player : MonoBehaviour {
         // 【入力データの保存】
         // 取得した入力をベクトル形式で保存し、物理演算処理で使用
         inputHorizontal_ = new Vector2(horizontal, 0.0f);      // 水平入力をベクトル化
-        inputVertical_ = Vector2.zero;                          // 垂直入力（将来の拡張用）
-
-        //========================================
+        inputVertical_ = Vector2.zero;                          // 垂直入力（将来の拡張用）        //========================================
         // 【ジャンプ入力の処理】
-        // 地面に接触している時のみジャンプを許可
-        // 空中での多段ジャンプを防止
-        if (isGround_) {
-            if (jumpPressed) {
-                isJumping_ = true;  // ジャンプフラグを立てる（FixedUpdateで実行）
+        // 地面に接触している時またはスタン状態でないときジャンプを許可
+        if (!isStunned_) {
+            if (isGround_) {
+                if (jumpPressed) {
+                    isJumping_ = true;  // ジャンプフラグを立てる（FixedUpdateで実行）
+                    
+                    // 反転ジャンプが有効な場合は着地時反転フラグを立てる
+                    if (enableReverseJump_) {
+                        shouldReverseOnLanding_ = true;
+                    }
+                }
+            }
+            else {
+                // 2段ジャンプの処理
+                if (enableDoubleJump_ && jumpPressed && !hasDoubleJumped_) {
+                    isJumping_ = true;
+                    hasDoubleJumped_ = true;
+                    Debug.Log($"[DOUBLE JUMP] : {gameObject.name} が2段ジャンプを実行しました");
+                }
+                else {
+                    isJumping_ = false;     // 空中ではジャンプフラグを無効化
+                }
             }
         }
         else {
-            isJumping_ = false;     // 空中ではジャンプフラグを無効化
+            isJumping_ = false; // スタン中はジャンプ不可
         }
 
         //========================================
@@ -457,17 +522,30 @@ public class Player : MonoBehaviour {
             if (speedBoostTimer_ <= 0.0f) {
                 isSpeedBoosted_ = false;
             }
-        }
-
-        //========================================
+        }        //========================================
         // 【ジャンプ入力の処理】
         // 地面に接触している時のみジャンプを許可
         bool jumpPressed = Input.GetKeyDown(jumpKey_);
-        if (isGround_ && jumpPressed) {
-            isJumping_ = true;
+        if (!isStunned_) {
+            if (isGround_ && jumpPressed) {
+                isJumping_ = true;
+                
+                // 反転ジャンプが有効な場合は着地時反転フラグを立てる
+                if (enableReverseJump_) {
+                    shouldReverseOnLanding_ = true;
+                }
+            }
+            else if (!isGround_ && enableDoubleJump_ && jumpPressed && !hasDoubleJumped_) {
+                isJumping_ = true;
+                hasDoubleJumped_ = true;
+                Debug.Log($"[DOUBLE JUMP] : {gameObject.name} が2段ジャンプを実行しました");
+            }
+            else if (!isGround_) {
+                isJumping_ = false;
+            }
         }
-        else if (!isGround_) {
-            isJumping_ = false;
+        else {
+            isJumping_ = false; // スタン中はジャンプ不可
         }
 
         //========================================
@@ -511,11 +589,30 @@ public class Player : MonoBehaviour {
             transform.localScale = new Vector3(1, 1, 1);
         }
     }
-
-
     //---------------------------------------------------------------
     //                      衝突判定処理
     private void OnCollisionEnter2D(Collision2D collision) {
+        // 踏みつけ判定
+        if (enableStomp_ && collision.gameObject.CompareTag("Player")) {
+            Player otherPlayer = collision.gameObject.GetComponent<Player>();
+            if (otherPlayer == null || otherPlayer == this) return;
+
+            // 自分が相手より上にいて、下向きの速度を持っている場合は踏みつけ
+            bool isAbove = transform.position.y > otherPlayer.transform.position.y + 0.5f;
+            bool isMovingDown = rigidbody2D_.velocity.y < -1.0f;
+            
+            if (isAbove && isMovingDown && !otherPlayer.isStunned_) {
+                // 踏みつけ成功
+                otherPlayer.ApplyStun(stompStunDuration_);
+                
+                // 踏みつけた側は跳ね返る
+                rigidbody2D_.velocity = new Vector2(rigidbody2D_.velocity.x, jumpForce_ * 0.7f);
+                
+                Debug.Log($"[STOMP] : {gameObject.name} が {otherPlayer.gameObject.name} を踏みつけました");
+                return; // 踏みつけ成功時は通常の衝突処理をスキップ
+            }
+        }
+
         if (collision.gameObject.CompareTag("Player")) {
             Player otherPlayer = collision.gameObject.GetComponent<Player>();
             if (otherPlayer == null || otherPlayer == this) return;
@@ -908,5 +1005,14 @@ public class Player : MonoBehaviour {
     /// ゲージ情報をデバッグ表示用に取得
     public string GetGaugeDebugInfo() {
         return $"Player {playerID_} - Gauge: {currentComboGauge_:F1}/{maxComboGauge_} ({GetGaugePercentage():F1}%) Level: {GetGaugeLevel()} Speed: x{GetGaugeSpeedMultiplier():F2}";
+    }
+
+    //---------------------------------------------------------------
+    //                      踏みつけスタン処理
+    /// 踏みつけによるスタン状態を適用
+    public void ApplyStun(float stunDuration) {
+        isStunned_ = true;
+        stunTimer_ = stunDuration;
+        Debug.Log($"[STUN] : {gameObject.name} が {stunDuration}秒間スタンしました");
     }
 }
