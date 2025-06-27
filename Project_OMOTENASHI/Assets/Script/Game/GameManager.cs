@@ -102,19 +102,6 @@ public class GameManager : MonoBehaviour
 
         // プレイヤーの初期化
         InitializePlayers();
-
-        //データマネージャからプレイヤーデータを取得
-        GameData gameData = GameObject.FindWithTag("DataManager").GetComponent<DataManager>().GetNowGameData();
-
-        // プレイヤー1とプレイヤー2の設定
-        player1_.playerID_ = "Player1";
-        player1_.enableDoubleJump_ = gameData.DoubleJump;
-        player1_.enableStomp_ = gameData.Stomp;
-        player1_.enableReverseJump_ = gameData.ReverseJump;
-        if (player2_ != null) {
-            player2_.playerID_ = "Player2";
-
-        }
         
         // UIの初期化
         InitializeUI();
@@ -253,6 +240,11 @@ public class GameManager : MonoBehaviour
         string winnerName = GetWinnerName();
         
         Debug.Log($"[GAME OVER] : {defeatedPlayerName} が敗北しました。勝者は {winnerName} です！");
+
+        // ラウンドマネージャーに勝利を通知
+        if (RoundManager.Instance != null) {
+            RoundManager.Instance.OnPlayerWin(CurrentWinner);
+        }
     }
 
     ///--------------------------------------------------------------
