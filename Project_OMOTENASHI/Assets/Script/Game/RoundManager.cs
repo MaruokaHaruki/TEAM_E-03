@@ -33,6 +33,16 @@ public class RoundManager : MonoBehaviour {
     [Tooltip("勝利に必要なスコア")]
     public int targetScore = 5;
 
+    [Header("ラウンド勝利演出")]
+    [Tooltip("ラウンド勝利パネル")]
+    public GameObject roundWinPanel;
+
+    [Tooltip("ラウンド勝利テキスト")]
+    public Text roundWinText;
+
+    [Tooltip("ラウンド勝利演出の表示時間")]
+    public float roundWinDisplayTime = 2.0f;
+
     [Header("ゲーム終了演出")]
     [Tooltip("ゲーム終了パネル")]
     public GameObject gameEndPanel;
@@ -50,8 +60,10 @@ public class RoundManager : MonoBehaviour {
     private RoundSettings currentRoundSettings;
     private bool isRoundTransition = false;
     private bool isGameEnd = false;
+    private bool isRoundWinDisplay = false;
     private float roundStartTimer = 0f;
     private float gameEndTimer = 0f;
+    private float roundWinTimer = 0f;
     private const float ROUND_START_DISPLAY_TIME = 3f;
     private const float ROUND_END_DELAY = 2f; // ラウンド終了から次ラウンド開始までの遅延
 
@@ -77,6 +89,14 @@ public class RoundManager : MonoBehaviour {
             roundStartTimer -= Time.deltaTime;
             if (roundStartTimer <= 0f) {
                 EndRoundTransition();
+            }
+        }
+
+        // ラウンド勝利演出の処理
+        if (isRoundWinDisplay) {
+            roundWinTimer -= Time.deltaTime;
+            if (roundWinTimer <= 0f) {
+                EndRoundWinDisplay();
             }
         }
 
@@ -228,17 +248,69 @@ public class RoundManager : MonoBehaviour {
                 break;
         }
 
+        // ラウンド勝利表示を開始
+        StartRoundWinDisplay(winner);
+    }
+
+    /// <summary>
+    /// ラウンド勝利表示開始
+    /// </summary>
+    private void StartRoundWinDisplay(GameManager.Winner winner) {
+        isRoundWinDisplay = true;
+        roundWinTimer = roundWinDisplayTime;
+
+        if (roundWinPanel != null) {
+            roundWinPanel.SetActive(true);
+        }
+
+        if (roundWinText != null) {
+            string winnerText = "";
+            switch (winner) {
+                case GameManager.Winner.Player1:
+                    winnerText = "Player 1 の勝利！";
+                    break;
+                case GameManager.Winner.Player2:
+                    winnerText = "Player 2 の勝利！";
+                    break;
+                case GameManager.Winner.None:
+                    winnerText = "引き分け！";
+                    break;
+            }
+            roundWinText.text = $"ラウンド {currentRoundNumber} 終了\n{winnerText}\n\n現在のスコア\nP1: {player1Score}  P2: {player2Score}";
+        }
+
+        // ゲームを一時停止
+        if (GameManager.Instance != null) {
+            GameManager.Instance.CurrentGameState = GameManager.GameState.Paused;
+        }
+
+        Debug.Log($"[ROUND MANAGER] : ラウンド {currentRoundNumber} の勝利表示を開始します");
+    }
+
+    /// <summary>
+    /// ラウンド勝利表示終了
+    /// </summary>
+    private void EndRoundWinDisplay() {
+        isRoundWinDisplay = false;
+
+        if (roundWinPanel != null) {
+            roundWinPanel.SetActive(false);
+        }
+
         // 勝利条件チェック
         if (player1Score >= targetScore || player2Score >= targetScore) {
             // 目標スコア到達でゲーム終了
+            Debug.Log($"[ROUND MANAGER] : 目標スコア到達！ゲーム終了へ移行");
             EndGame();
         }
         else if (currentRoundNumber >= roundSettingsList.Count) {
             // 全ラウンド終了でゲーム終了
+            Debug.Log($"[ROUND MANAGER] : 全ラウンド終了！ゲーム終了へ移行");
             EndGame();
         }
         else {
             // 次のラウンドに進む
+            Debug.Log($"[ROUND MANAGER] : 次のラウンドへ進行");
             StartCoroutine(DelayedNextRound());
         }
     }
@@ -267,35 +339,6 @@ public class RoundManager : MonoBehaviour {
         else {
             // 全ラウンド終了
             EndGame();
-        }
-    }
-
-    /// <summary>
-    /// ゲーム終了処理
-    /// </summary>
-    private void EndGame() {
-        // 最終勝者を決定
-        GameManager.Winner finalWinner;
-        if (player1Score > player2Score) {
-            finalWinner = GameManager.Winner.Player1;
-        }
-        else if (player2Score > player1Score) {
-            finalWinner = GameManager.Winner.Player2;
-        }
-        else {
-            // 同点の場合
-            finalWinner = GameManager.Winner.None;
-        }
-
-        Debug.Log($"[ROUND MANAGER] : ゲーム終了！ 最終勝者: {finalWinner}");
-        Debug.Log($"[ROUND MANAGER] : 最終スコア - Player1: {player1Score}, Player2: {player2Score}");
-
-        // ゲーム終了演出を開始
-        StartGameEndTransition(finalWinner);
-
-        // GameManagerにゲーム終了を通知
-        if (GameManager.Instance != null) {
-            GameManager.Instance.SetGameOver(finalWinner);
         }
     }
 
@@ -333,6 +376,35 @@ public class RoundManager : MonoBehaviour {
         // ゲームを一時停止
         if (GameManager.Instance != null) {
             GameManager.Instance.CurrentGameState = GameManager.GameState.Paused;
+        }
+    }
+
+    /// <summary>
+    /// ゲーム終了処理
+    /// </summary>
+    private void EndGame() {
+        // 最終勝者を決定
+        GameManager.Winner finalWinner;
+        if (player1Score > player2Score) {
+            finalWinner = GameManager.Winner.Player1;
+        }
+        else if (player2Score > player1Score) {
+            finalWinner = GameManager.Winner.Player2;
+        }
+        else {
+            // 同点の場合
+            finalWinner = GameManager.Winner.None;
+        }
+
+        Debug.Log($"[ROUND MANAGER] : ゲーム終了！ 最終勝者: {finalWinner}");
+        Debug.Log($"[ROUND MANAGER] : 最終スコア - Player1: {player1Score}, Player2: {player2Score}");
+
+        // ゲーム終了演出を開始（finalWinnerを渡す）
+        StartGameEndTransition(finalWinner);
+
+        // GameManagerにゲーム終了を通知（finalWinnerを渡す）
+        if (GameManager.Instance != null) {
+            GameManager.Instance.SetGameOver(finalWinner);
         }
     }
 
@@ -381,9 +453,14 @@ public class RoundManager : MonoBehaviour {
         player2Score = 0;
         isGameEnd = false;
         isRoundTransition = false;
+        isRoundWinDisplay = false;
         
         if (gameEndPanel != null) {
             gameEndPanel.SetActive(false);
+        }
+        
+        if (roundWinPanel != null) {
+            roundWinPanel.SetActive(false);
         }
         
         InitializeRound();
@@ -395,7 +472,7 @@ public class RoundManager : MonoBehaviour {
     /// 現在がラウンド進行中かどうかを判定
     /// </summary>
     public bool IsRoundInProgress() {
-        return !isRoundTransition && !isGameEnd && GameManager.Instance.CurrentGameState == GameManager.GameState.Playing;
+        return !isRoundTransition && !isGameEnd && !isRoundWinDisplay && GameManager.Instance.CurrentGameState == GameManager.GameState.Playing;
     }
 
     /// <summary>

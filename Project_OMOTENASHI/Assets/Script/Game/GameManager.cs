@@ -226,41 +226,31 @@ public class GameManager : MonoBehaviour
     ///--------------------------------------------------------------
     ///						 プレイヤー敗北処理
     private void OnPlayerDefeated(string defeatedPlayerId) {
-        // ラウンドシステムが有効な場合はゲームオーバーにしない
-        if (RoundManager.Instance != null) {
-            // 勝者を決定
-            if (player1_ != null && player1_.playerID_ == defeatedPlayerId) {
-                CurrentWinner = Winner.Player2;
-            }
-            else if (player2_ != null && player2_.playerID_ == defeatedPlayerId) {
-                CurrentWinner = Winner.Player1;
-            }
+        // 勝者を決定
+        Winner roundWinner = Winner.None;
+        if (player1_ != null && player1_.playerID_ == defeatedPlayerId) {
+            roundWinner = Winner.Player2;
+        }
+        else if (player2_ != null && player2_.playerID_ == defeatedPlayerId) {
+            roundWinner = Winner.Player1;
+        }
 
-            string defeatedPlayerName = GetPlayerName(defeatedPlayerId);
-            string winnerName = GetWinnerName();
-            
+        string defeatedPlayerName = GetPlayerName(defeatedPlayerId);
+        string winnerName = GetWinnerName(roundWinner);
+        
+        // ラウンドシステムが有効な場合
+        if (RoundManager.Instance != null) {
             Debug.Log($"[ROUND END] : {defeatedPlayerName} が敗北しました。ラウンド勝者は {winnerName} です！");
 
-            // ラウンドマネージャーに勝利を通知（ゲームオーバー状態にはしない）
-            RoundManager.Instance.OnPlayerWin(CurrentWinner);
+            // ラウンドマネージャーに勝利を通知（ゲーム状態は変更しない）
+            RoundManager.Instance.OnPlayerWin(roundWinner);
             
-            // 勝者をリセット（次のラウンドのため）
-            CurrentWinner = Winner.None;
+            // CurrentWinnerはラウンドマネージャーが最終的に設定するまで変更しない
         }
         else {
             // ラウンドシステムが無効な場合は従来通りゲームオーバー
             CurrentGameState = GameState.GameOver;
-
-            // 勝者を決定
-            if (player1_ != null && player1_.playerID_ == defeatedPlayerId) {
-                CurrentWinner = Winner.Player2;
-            }
-            else if (player2_ != null && player2_.playerID_ == defeatedPlayerId) {
-                CurrentWinner = Winner.Player1;
-            }
-
-            string defeatedPlayerName = GetPlayerName(defeatedPlayerId);
-            string winnerName = GetWinnerName();
+            CurrentWinner = roundWinner;
             
             Debug.Log($"[GAME OVER] : {defeatedPlayerName} が敗北しました。勝者は {winnerName} です！");
         }
@@ -279,9 +269,9 @@ public class GameManager : MonoBehaviour
     }
 
     ///--------------------------------------------------------------
-    ///						 勝者名取得
-    private string GetWinnerName() {
-        switch (CurrentWinner) {
+    ///						 勝者名取得（オーバーロード追加）
+    private string GetWinnerName(Winner winner) {
+        switch (winner) {
             case Winner.Player1:
                 return player1Name_;
             case Winner.Player2:
@@ -289,6 +279,12 @@ public class GameManager : MonoBehaviour
             default:
                 return "引き分け";
         }
+    }
+
+    ///--------------------------------------------------------------
+    ///						 勝者名取得（既存メソッド）
+    private string GetWinnerName() {
+        return GetWinnerName(CurrentWinner);
     }
 
     ///--------------------------------------------------------------
@@ -343,7 +339,7 @@ public class GameManager : MonoBehaviour
         CurrentGameState = GameState.GameOver;
         CurrentWinner = winner;
         
-        string winnerName = GetWinnerName();
+        string winnerName = GetWinnerName(winner);
         Debug.Log($"[FINAL GAME OVER] : 全ラウンド終了！最終勝者は {winnerName} です！");
     }
 

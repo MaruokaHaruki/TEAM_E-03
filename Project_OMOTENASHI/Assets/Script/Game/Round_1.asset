@@ -14,12 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   roundNumber: 1
   roundName: Round 1
-  winPoints: 1
+  winPoints: 100
   enableDoubleJump: 1
   enableStomp: 0
   enableReverseJump: 0
   enableSpeedTransfer: 1
-  playerMaxHp: 100
+  playerMaxHp: 10
   baseSpeed: 5
   jumpForce: 4
   invincibilityDuration: 0
