@@ -15,12 +15,12 @@ MonoBehaviour:
   roundNumber: 1
   roundName: Round 1
   winPoints: 1
-  enableDoubleJump: 0
+  enableDoubleJump: 1
   enableStomp: 0
   enableReverseJump: 0
   enableSpeedTransfer: 1
   playerMaxHp: 100
   baseSpeed: 5
   jumpForce: 4
-  invincibilityDuration: 3
+  invincibilityDuration: 0
   stompStunDuration: 2

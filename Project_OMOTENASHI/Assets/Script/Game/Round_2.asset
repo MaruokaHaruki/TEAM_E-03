@@ -12,15 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6541e5f56171b044d9778d5dc8dcc68e, type: 3}
   m_Name: Round_2
   m_EditorClassIdentifier: 
-  roundNumber: 1
-  roundName: Round 1
+  roundNumber: 2
+  roundName: Round 2
   winPoints: 1
   enableDoubleJump: 0
   enableStomp: 0
-  enableReverseJump: 0
+  enableReverseJump: 1
   enableSpeedTransfer: 1
   playerMaxHp: 100
   baseSpeed: 5
   jumpForce: 4
-  invincibilityDuration: 3
+  invincibilityDuration: 0
   stompStunDuration: 2

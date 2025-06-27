@@ -27,7 +27,7 @@ public class RoundSettings : ScriptableObject {
 
     [Header("ゲームバランス設定")]
     [Tooltip("プレイヤーの最大HP")]
-    public int playerMaxHp = 100;
+    public int playerMaxHp = 10;
 
     [Tooltip("基本移動速度")]
     public float baseSpeed = 5.0f;
@@ -37,7 +37,7 @@ public class RoundSettings : ScriptableObject {
 
     [Header("特殊ルール")]
     [Tooltip("無敵時間")]
-    public float invincibilityDuration = 3.0f;
+    public float invincibilityDuration = 0.0f;
 
     [Tooltip("踏みつけスタン時間")]
     public float stompStunDuration = 2.0f;

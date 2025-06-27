@@ -33,11 +33,27 @@ public class RoundManager : MonoBehaviour {
     [Tooltip("勝利に必要なスコア")]
     public int targetScore = 5;
 
+    [Header("ゲーム終了演出")]
+    [Tooltip("ゲーム終了パネル")]
+    public GameObject gameEndPanel;
+
+    [Tooltip("ゲーム終了テキスト")]
+    public Text gameEndText;
+
+    [Tooltip("最終スコア表示テキスト")]
+    public Text finalScoreText;
+
+    [Tooltip("ゲーム終了演出の表示時間")]
+    public float gameEndDisplayTime = 5.0f;
+
     // プライベート変数
     private RoundSettings currentRoundSettings;
     private bool isRoundTransition = false;
+    private bool isGameEnd = false;
     private float roundStartTimer = 0f;
+    private float gameEndTimer = 0f;
     private const float ROUND_START_DISPLAY_TIME = 3f;
+    private const float ROUND_END_DELAY = 2f; // ラウンド終了から次ラウンド開始までの遅延
 
     // シングルトン
     public static RoundManager Instance { get; private set; }
@@ -64,6 +80,15 @@ public class RoundManager : MonoBehaviour {
             }
         }
 
+        // ゲーム終了演出の処理
+        if (isGameEnd) {
+            gameEndTimer -= Time.deltaTime;
+            if (gameEndTimer <= 0f) {
+                // ゲーム終了演出終了後の処理
+                EndGameTransition();
+            }
+        }
+
         UpdateUI();
     }
 
@@ -73,6 +98,12 @@ public class RoundManager : MonoBehaviour {
     private void InitializeRound() {
         if (currentRoundNumber <= roundSettingsList.Count) {
             currentRoundSettings = roundSettingsList[currentRoundNumber - 1];
+            
+            // プレイヤーの状態をリセット
+            if (GameManager.Instance != null) {
+                GameManager.Instance.RestartRound();
+            }
+            
             ApplyRoundSettings();
             StartRoundTransition();
             Debug.Log($"[ROUND MANAGER] : ラウンド {currentRoundNumber} を開始します");
@@ -199,11 +230,29 @@ public class RoundManager : MonoBehaviour {
 
         // 勝利条件チェック
         if (player1Score >= targetScore || player2Score >= targetScore) {
+            // 目標スコア到達でゲーム終了
+            EndGame();
+        }
+        else if (currentRoundNumber >= roundSettingsList.Count) {
+            // 全ラウンド終了でゲーム終了
             EndGame();
         }
         else {
-            NextRound();
+            // 次のラウンドに進む
+            StartCoroutine(DelayedNextRound());
         }
+    }
+
+    /// <summary>
+    /// 遅延付きで次のラウンドに進む
+    /// </summary>
+    private System.Collections.IEnumerator DelayedNextRound() {
+        // ラウンド終了の表示
+        Debug.Log($"[ROUND MANAGER] : ラウンド {currentRoundNumber} 終了。{ROUND_END_DELAY}秒後に次のラウンドを開始します。");
+        
+        yield return new UnityEngine.WaitForSeconds(ROUND_END_DELAY);
+        
+        NextRound();
     }
 
     /// <summary>
@@ -225,11 +274,82 @@ public class RoundManager : MonoBehaviour {
     /// ゲーム終了処理
     /// </summary>
     private void EndGame() {
-        GameManager.Winner finalWinner = player1Score > player2Score ?
-            GameManager.Winner.Player1 : GameManager.Winner.Player2;
+        // 最終勝者を決定
+        GameManager.Winner finalWinner;
+        if (player1Score > player2Score) {
+            finalWinner = GameManager.Winner.Player1;
+        }
+        else if (player2Score > player1Score) {
+            finalWinner = GameManager.Winner.Player2;
+        }
+        else {
+            // 同点の場合
+            finalWinner = GameManager.Winner.None;
+        }
 
         Debug.Log($"[ROUND MANAGER] : ゲーム終了！ 最終勝者: {finalWinner}");
         Debug.Log($"[ROUND MANAGER] : 最終スコア - Player1: {player1Score}, Player2: {player2Score}");
+
+        // ゲーム終了演出を開始
+        StartGameEndTransition(finalWinner);
+
+        // GameManagerにゲーム終了を通知
+        if (GameManager.Instance != null) {
+            GameManager.Instance.SetGameOver(finalWinner);
+        }
+    }
+
+    /// <summary>
+    /// ゲーム終了演出開始
+    /// </summary>
+    private void StartGameEndTransition(GameManager.Winner winner) {
+        isGameEnd = true;
+        gameEndTimer = gameEndDisplayTime;
+
+        if (gameEndPanel != null) {
+            gameEndPanel.SetActive(true);
+        }
+
+        if (gameEndText != null) {
+            string winnerText = "";
+            switch (winner) {
+                case GameManager.Winner.Player1:
+                    winnerText = "Player 1 の勝利！";
+                    break;
+                case GameManager.Winner.Player2:
+                    winnerText = "Player 2 の勝利！";
+                    break;
+                case GameManager.Winner.None:
+                    winnerText = "引き分け！";
+                    break;
+            }
+            gameEndText.text = $"ゲーム終了\n{winnerText}";
+        }
+
+        if (finalScoreText != null) {
+            finalScoreText.text = $"最終スコア\nPlayer 1: {player1Score}\nPlayer 2: {player2Score}";
+        }
+
+        // ゲームを一時停止
+        if (GameManager.Instance != null) {
+            GameManager.Instance.CurrentGameState = GameManager.GameState.Paused;
+        }
+    }
+
+    /// <summary>
+    /// ゲーム終了演出終了
+    /// </summary>
+    private void EndGameTransition() {
+        isGameEnd = false;
+
+        if (gameEndPanel != null) {
+            gameEndPanel.SetActive(false);
+        }
+
+        // ゲーム状態をゲームオーバーに設定
+        if (GameManager.Instance != null) {
+            GameManager.Instance.CurrentGameState = GameManager.GameState.GameOver;
+        }
     }
 
     /// <summary>
@@ -253,12 +373,35 @@ public class RoundManager : MonoBehaviour {
     }
 
     /// <summary>
-    /// ゲームリセット
+    /// ゲーム全体をリセット
     /// </summary>
     public void ResetGame() {
         currentRoundNumber = 1;
         player1Score = 0;
         player2Score = 0;
+        isGameEnd = false;
+        isRoundTransition = false;
+        
+        if (gameEndPanel != null) {
+            gameEndPanel.SetActive(false);
+        }
+        
         InitializeRound();
+        
+        Debug.Log("[ROUND MANAGER] : ゲーム全体がリセットされました");
+    }
+
+    /// <summary>
+    /// 現在がラウンド進行中かどうかを判定
+    /// </summary>
+    public bool IsRoundInProgress() {
+        return !isRoundTransition && !isGameEnd && GameManager.Instance.CurrentGameState == GameManager.GameState.Playing;
+    }
+
+    /// <summary>
+    /// 現在のラウンド進捗情報を取得
+    /// </summary>
+    public string GetRoundProgressInfo() {
+        return $"ラウンド {currentRoundNumber}/{roundSettingsList.Count} - スコア P1:{player1Score} P2:{player2Score} (目標:{targetScore})";
     }
 }
