@@ -102,19 +102,6 @@ public class GameManager : MonoBehaviour
 
         // プレイヤーの初期化
         InitializePlayers();
-
-        //データマネージャからプレイヤーデータを取得
-        GameData gameData = GameObject.FindWithTag("DataManager").GetComponent<DataManager>().GetNowGameData();
-
-        // プレイヤー1とプレイヤー2の設定
-        player1_.playerID_ = "Player1";
-        player1_.enableDoubleJump_ = gameData.DoubleJump;
-        player1_.enableStomp_ = gameData.Stomp;
-        player1_.enableReverseJump_ = gameData.ReverseJump;
-        if (player2_ != null) {
-            player2_.playerID_ = "Player2";
-
-        }
         
         // UIの初期化
         InitializeUI();
@@ -239,20 +226,44 @@ public class GameManager : MonoBehaviour
     ///--------------------------------------------------------------
     ///						 プレイヤー敗北処理
     private void OnPlayerDefeated(string defeatedPlayerId) {
-        CurrentGameState = GameState.GameOver;
+        // ラウンドシステムが有効な場合はゲームオーバーにしない
+        if (RoundManager.Instance != null) {
+            // 勝者を決定
+            if (player1_ != null && player1_.playerID_ == defeatedPlayerId) {
+                CurrentWinner = Winner.Player2;
+            }
+            else if (player2_ != null && player2_.playerID_ == defeatedPlayerId) {
+                CurrentWinner = Winner.Player1;
+            }
 
-        // 勝者を決定
-        if (player1_ != null && player1_.playerID_ == defeatedPlayerId) {
-            CurrentWinner = Winner.Player2;
-        }
-        else if (player2_ != null && player2_.playerID_ == defeatedPlayerId) {
-            CurrentWinner = Winner.Player1;
-        }
+            string defeatedPlayerName = GetPlayerName(defeatedPlayerId);
+            string winnerName = GetWinnerName();
+            
+            Debug.Log($"[ROUND END] : {defeatedPlayerName} が敗北しました。ラウンド勝者は {winnerName} です！");
 
-        string defeatedPlayerName = GetPlayerName(defeatedPlayerId);
-        string winnerName = GetWinnerName();
-        
-        Debug.Log($"[GAME OVER] : {defeatedPlayerName} が敗北しました。勝者は {winnerName} です！");
+            // ラウンドマネージャーに勝利を通知（ゲームオーバー状態にはしない）
+            RoundManager.Instance.OnPlayerWin(CurrentWinner);
+            
+            // 勝者をリセット（次のラウンドのため）
+            CurrentWinner = Winner.None;
+        }
+        else {
+            // ラウンドシステムが無効な場合は従来通りゲームオーバー
+            CurrentGameState = GameState.GameOver;
+
+            // 勝者を決定
+            if (player1_ != null && player1_.playerID_ == defeatedPlayerId) {
+                CurrentWinner = Winner.Player2;
+            }
+            else if (player2_ != null && player2_.playerID_ == defeatedPlayerId) {
+                CurrentWinner = Winner.Player1;
+            }
+
+            string defeatedPlayerName = GetPlayerName(defeatedPlayerId);
+            string winnerName = GetWinnerName();
+            
+            Debug.Log($"[GAME OVER] : {defeatedPlayerName} が敗北しました。勝者は {winnerName} です！");
+        }
     }
 
     ///--------------------------------------------------------------
@@ -324,5 +335,102 @@ public class GameManager : MonoBehaviour
         }
 
         Debug.Log("[GAME MANAGER] : ゲームがリスタートされました。");
+    }
+
+    ///--------------------------------------------------------------
+    ///						 ゲーム終了処理（ラウンドマネージャー用）
+    public void SetGameOver(Winner winner) {
+        CurrentGameState = GameState.GameOver;
+        CurrentWinner = winner;
+        
+        string winnerName = GetWinnerName();
+        Debug.Log($"[FINAL GAME OVER] : 全ラウンド終了！最終勝者は {winnerName} です！");
+    }
+
+    ///--------------------------------------------------------------
+    ///						 ラウンドリスタート
+    public void RestartRound() {
+        // HPを最大値に戻す
+        if (player1_ != null) {
+            // ラウンド設定からHPを取得
+            if (RoundManager.Instance != null && RoundManager.Instance.GetCurrentRoundSettings() != null) {
+                int roundMaxHp = RoundManager.Instance.GetCurrentRoundSettings().playerMaxHp;
+                playerMaxHp_[player1_.playerID_] = roundMaxHp;
+                playerCurrentHp_[player1_.playerID_] = roundMaxHp;
+                player1_.maxHp_ = roundMaxHp;
+                player1_.currentHp_ = roundMaxHp;
+                // プレイヤー1の位置を設定
+                player1_.transform.position = RoundManager.Instance.GetCurrentRoundSettings().player1StartPosition;
+            }
+            else {
+                playerCurrentHp_[player1_.playerID_] = playerMaxHp_[player1_.playerID_];
+                player1_.currentHp_ = playerMaxHp_[player1_.playerID_];
+            }
+        }
+
+        if (player2_ != null) {
+            // ラウンド設定からHPを取得
+            if (RoundManager.Instance != null && RoundManager.Instance.GetCurrentRoundSettings() != null) {
+                int roundMaxHp = RoundManager.Instance.GetCurrentRoundSettings().playerMaxHp;
+                playerMaxHp_[player2_.playerID_] = roundMaxHp;
+                playerCurrentHp_[player2_.playerID_] = roundMaxHp;
+                player2_.maxHp_ = roundMaxHp;
+                player2_.currentHp_ = roundMaxHp;
+                // プレイヤー2の位置を設定
+                player2_.transform.position = RoundManager.Instance.GetCurrentRoundSettings().player2StartPosition;
+            }
+            else {
+                playerCurrentHp_[player2_.playerID_] = playerMaxHp_[player2_.playerID_];
+                player2_.currentHp_ = playerMaxHp_[player2_.playerID_];
+            }
+        }
+
+        // ゲーム状態をプレイ中に戻す
+        CurrentGameState = GameState.Playing;
+        CurrentWinner = Winner.None;
+
+        // プレイヤーの特殊状態をリセット
+        ResetPlayerStates();
+
+        Debug.Log("[GAME MANAGER] : ラウンドがリスタートされました。");
+    }
+
+    ///--------------------------------------------------------------
+    ///						 プレイヤー状態リセット
+    private void ResetPlayerStates() {
+        if (player1_ != null) {
+            // スタン状態をリセット
+            player1_.isStunned_ = false;
+            player1_.stunTimer_ = 0.0f;
+            
+            // 無敵状態をリセット
+            if (player1_.GetComponent<SpriteRenderer>() != null) {
+                player1_.GetComponent<SpriteRenderer>().color = Color.white;
+            }
+            
+            // 2段ジャンプフラグをリセット
+            player1_.hasDoubleJumped_ = false;
+            
+            // 反転ジャンプフラグをリセット
+            player1_.shouldReverseOnLanding_ = false;
+            
+            // プレイヤーを初期位置に戻す（必要に応じて）
+            // player1_.transform.position = initialPlayer1Position;
+        }
+
+        if (player2_ != null) {
+            // プレイヤー2も同様にリセット
+            player2_.isStunned_ = false;
+            player2_.stunTimer_ = 0.0f;
+            
+            if (player2_.GetComponent<SpriteRenderer>() != null) {
+                player2_.GetComponent<SpriteRenderer>().color = Color.white;
+            }
+            
+            player2_.hasDoubleJumped_ = false;
+            player2_.shouldReverseOnLanding_ = false;
+            
+            // player2_.transform.position = initialPlayer2Position;
+        }
     }
 }

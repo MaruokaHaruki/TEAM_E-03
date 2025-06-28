@@ -1089,6 +1089,61 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1507770439}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1145151329
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1145151331}
+  - component: {fileID: 1145151330}
+  m_Layer: 0
+  m_Name: RoundManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1145151330
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1145151329}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d6ec02d39e439de4684e45f7bf056d52, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  roundSettingsList:
+  - {fileID: 11400000, guid: 51e9856d446579041997f2b1d354eb6d, type: 2}
+  - {fileID: 11400000, guid: 42e453f728060204b9cd6941cc4d058a, type: 2}
+  currentRoundNumber: 1
+  roundInfoText: {fileID: 0}
+  scoreText: {fileID: 0}
+  roundStartPanel: {fileID: 0}
+  roundStartText: {fileID: 0}
+  player1Score: 0
+  player2Score: 0
+  targetScore: 5
+--- !u!4 &1145151331
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1145151329}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.1185013, y: -0.092996314, z: -0.005860837}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1235442300
 GameObject:
   m_ObjectHideFlags: 0
@@ -2509,38 +2564,45 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3e1b9cecd8318664db2fda0eba4cdbe3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerID_: B
+  maxHp_: 100
+  currentHp_: 100
   maxSpeed_: 5
   acceleration_: 15
   dragOnStop_: 5
   dragOnMove_: 0
-  groundCheck_: {fileID: 1129194000}
   gravity_: 20
   jumpForce_: 8
-  jumpHeight_: 4
+  groundCheck_: {fileID: 1129194000}
   wallCheckFront_: {fileID: 1467870218}
   wallCheckBuck_: {fileID: 214818669}
-  maxHp_: 100
-  currentHp_: 100
   isAutoMode_: 1
   autoMoveSpeed_: 1
   speedBoostMultiplier_: 2.5
   speedBoostDuration_: 0.5
-  enableSpeedTransfer_: 1
   maxComboGauge_: 100
   comboGaugePerHit_: 20
   gaugeDrainRate_: 15
   maxGaugeSpeedMultiplier_: 8
   minEffectiveGauge_: 5
-  invincibilityDuration_: 0
-  rainbowSpeed_: 2
-  invincibilitySpeedMultiplier_: 2
-  playerID_: B
+  invincibilityDuration_: 1
+  rainbowSpeed_: 1
+  invincibilitySpeedMultiplier_: 1
+  enableSpeedTransfer_: 1
+  isKeySettingMode_: 0
   moveLeftKey_: 97
   moveRightKey_: 100
   jumpKey_: 112
-  isKeySettingMode_: 0
+  enableDoubleJump_: 0
+  enableStomp_: 0
+  enableReverseJump_: 0
+  stompStunDuration_: 2
   isGround_: 0
   isJumping_: 0
+  hasDoubleJumped_: 0
+  isStunned_: 0
+  stunTimer_: 0
+  shouldReverseOnLanding_: 0
 --- !u!95 &1507770437
 Animator:
   serializedVersion: 7
@@ -3142,38 +3204,45 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3e1b9cecd8318664db2fda0eba4cdbe3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerID_: A
+  maxHp_: 100
+  currentHp_: 100
   maxSpeed_: 5
   acceleration_: 15
   dragOnStop_: 5
   dragOnMove_: 0
-  groundCheck_: {fileID: 1354623087}
   gravity_: 20
   jumpForce_: 8
-  jumpHeight_: 4
+  groundCheck_: {fileID: 1354623087}
   wallCheckFront_: {fileID: 896691777}
   wallCheckBuck_: {fileID: 1956489830}
-  maxHp_: 100
-  currentHp_: 100
   isAutoMode_: 1
   autoMoveSpeed_: 1
   speedBoostMultiplier_: 2.5
   speedBoostDuration_: 0.5
-  enableSpeedTransfer_: 1
   maxComboGauge_: 100
   comboGaugePerHit_: 20
   gaugeDrainRate_: 15
   maxGaugeSpeedMultiplier_: 8
   minEffectiveGauge_: 5
-  invincibilityDuration_: 0
-  rainbowSpeed_: 2
-  invincibilitySpeedMultiplier_: 2
-  playerID_: A
+  invincibilityDuration_: 1
+  rainbowSpeed_: 1
+  invincibilitySpeedMultiplier_: 1
+  enableSpeedTransfer_: 1
+  isKeySettingMode_: 0
   moveLeftKey_: 97
   moveRightKey_: 100
   jumpKey_: 112
-  isKeySettingMode_: 0
+  enableDoubleJump_: 0
+  enableStomp_: 0
+  enableReverseJump_: 0
+  stompStunDuration_: 2
   isGround_: 0
   isJumping_: 0
+  hasDoubleJumped_: 0
+  isStunned_: 0
+  stunTimer_: 0
+  shouldReverseOnLanding_: 0
 --- !u!95 &1716098620
 Animator:
   serializedVersion: 7
@@ -3508,6 +3577,7 @@ SceneRoots:
   m_Roots:
   - {fileID: 1569451787}
   - {fileID: 1029747753}
+  - {fileID: 1145151331}
   - {fileID: 1713472116}
   - {fileID: 1716098618}
   - {fileID: 1507770439}
