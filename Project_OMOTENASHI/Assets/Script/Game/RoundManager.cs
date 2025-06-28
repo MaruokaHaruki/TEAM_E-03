@@ -46,13 +46,23 @@ public class RoundManager : MonoBehaviour {
     [Tooltip("ゲーム終了演出の表示時間")]
     public float gameEndDisplayTime = 5.0f;
 
+    [Header("ラウンド演出")]
+    [Tooltip("ラウンド間の待機時間")]
+    public float roundTransitionDelay = 2.0f;
+
+    [Tooltip("ラウンド開始カウントダウン表示テキスト")]
+    public Text countdownText;
+
     // プライベート変数
     private RoundSettings currentRoundSettings;
     private bool isRoundTransition = false;
     private bool isGameEnd = false;
     private float roundStartTimer = 0f;
     private float gameEndTimer = 0f;
-    private const float ROUND_START_DISPLAY_TIME = 3f;
+    private float countdownTimer = 0f;
+    private bool isCountingDown = false;
+    private const float COUNTDOWN_DURATION = 3f;
+    private const float ROUND_START_DISPLAY_TIME = 2f; // 短縮
     private const float ROUND_END_DELAY = 2f; // ラウンド終了から次ラウンド開始までの遅延
 
     // シングルトン
@@ -74,17 +84,21 @@ public class RoundManager : MonoBehaviour {
     void Update() {
         // ラウンド開始演出の処理
         if (isRoundTransition) {
-            roundStartTimer -= Time.deltaTime;
+            roundStartTimer -= Time.unscaledDeltaTime;
             if (roundStartTimer <= 0f) {
                 EndRoundTransition();
             }
         }
 
+        // カウントダウン処理
+        if (isCountingDown) {
+            UpdateCountdown();
+        }
+
         // ゲーム終了演出の処理
         if (isGameEnd) {
-            gameEndTimer -= Time.deltaTime;
+            gameEndTimer -= Time.unscaledDeltaTime;
             if (gameEndTimer <= 0f) {
-                // ゲーム終了演出終了後の処理
                 EndGameTransition();
             }
         }
@@ -127,11 +141,15 @@ public class RoundManager : MonoBehaviour {
             // プレイヤー1に設定を適用
             if (player1 != null) {
                 ApplySettingsToPlayer(player1);
+                // プレイヤー1の位置を設定
+                player1.transform.position = currentRoundSettings.player1StartPosition;
             }
 
             // プレイヤー2に設定を適用
             if (player2 != null) {
                 ApplySettingsToPlayer(player2);
+                // プレイヤー2の位置を設定
+                player2.transform.position = currentRoundSettings.player2StartPosition;
             }
         }
     }
@@ -167,7 +185,13 @@ public class RoundManager : MonoBehaviour {
 
         if (roundStartText != null) {
             roundStartText.text = $"{currentRoundSettings.roundName}\n" +
-                                  $"新機能: {GetNewFeaturesText()}";
+                                  $"新機能: {GetNewFeaturesText()}\n\n" +
+                                  $"プレイヤーの準備をしてください";
+        }
+
+        // カウントダウンテキストを非表示
+        if (countdownText != null) {
+            countdownText.gameObject.SetActive(false);
         }
 
         // ゲームを一時停止
@@ -186,10 +210,65 @@ public class RoundManager : MonoBehaviour {
             roundStartPanel.SetActive(false);
         }
 
+        // カウントダウンを開始
+        StartCountdown();
+    }
+
+    /// <summary>
+    /// カウントダウン開始
+    /// </summary>
+    private void StartCountdown() {
+        isCountingDown = true;
+        countdownTimer = COUNTDOWN_DURATION;
+
+        if (countdownText != null) {
+            countdownText.gameObject.SetActive(true);
+        }
+
+        // ゲームは一時停止のまま
+        if (GameManager.Instance != null) {
+            GameManager.Instance.CurrentGameState = GameManager.GameState.Paused;
+        }
+    }
+
+    /// <summary>
+    /// カウントダウン処理
+    /// </summary>
+    private void UpdateCountdown() {
+        if (!isCountingDown) return;
+
+        countdownTimer -= Time.unscaledDeltaTime; // unscaledDeltaTimeを使用して一時停止の影響を受けない
+
+        if (countdownText != null) {
+            if (countdownTimer > 1f) {
+                countdownText.text = Mathf.Ceil(countdownTimer).ToString();
+            }
+            else if (countdownTimer > 0f) {
+                countdownText.text = "START!";
+            }
+            else {
+                // カウントダウン終了
+                EndCountdown();
+            }
+        }
+    }
+
+    /// <summary>
+    /// カウントダウン終了
+    /// </summary>
+    private void EndCountdown() {
+        isCountingDown = false;
+
+        if (countdownText != null) {
+            countdownText.gameObject.SetActive(false);
+        }
+
         // ゲームを再開
         if (GameManager.Instance != null) {
             GameManager.Instance.CurrentGameState = GameManager.GameState.Playing;
         }
+
+        Debug.Log($"[ROUND MANAGER] : ラウンド {currentRoundNumber} 開始！");
     }
 
     /// <summary>
@@ -248,9 +327,9 @@ public class RoundManager : MonoBehaviour {
     /// </summary>
     private System.Collections.IEnumerator DelayedNextRound() {
         // ラウンド終了の表示
-        Debug.Log($"[ROUND MANAGER] : ラウンド {currentRoundNumber} 終了。{ROUND_END_DELAY}秒後に次のラウンドを開始します。");
+        Debug.Log($"[ROUND MANAGER] : ラウンド {currentRoundNumber} 終了。{roundTransitionDelay}秒後に次のラウンドを開始します。");
         
-        yield return new UnityEngine.WaitForSeconds(ROUND_END_DELAY);
+        yield return new UnityEngine.WaitForSeconds(roundTransitionDelay);
         
         NextRound();
     }

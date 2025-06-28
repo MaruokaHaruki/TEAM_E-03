@@ -359,6 +359,8 @@ public class GameManager : MonoBehaviour
                 playerCurrentHp_[player1_.playerID_] = roundMaxHp;
                 player1_.maxHp_ = roundMaxHp;
                 player1_.currentHp_ = roundMaxHp;
+                // プレイヤー1の位置を設定
+                player1_.transform.position = RoundManager.Instance.GetCurrentRoundSettings().player1StartPosition;
             }
             else {
                 playerCurrentHp_[player1_.playerID_] = playerMaxHp_[player1_.playerID_];
@@ -374,6 +376,8 @@ public class GameManager : MonoBehaviour
                 playerCurrentHp_[player2_.playerID_] = roundMaxHp;
                 player2_.maxHp_ = roundMaxHp;
                 player2_.currentHp_ = roundMaxHp;
+                // プレイヤー2の位置を設定
+                player2_.transform.position = RoundManager.Instance.GetCurrentRoundSettings().player2StartPosition;
             }
             else {
                 playerCurrentHp_[player2_.playerID_] = playerMaxHp_[player2_.playerID_];

@@ -12,6 +12,13 @@ public class RoundSettings : ScriptableObject {
     [Tooltip("勝利時獲得ポイント")]
     public int winPoints = 1;
 
+    [Header("プレイヤー開始位置")]
+    [Tooltip("プレイヤー1の開始位置")]
+    public Vector3 player1StartPosition = new Vector3(-3f, 0f, 0f);
+
+    [Tooltip("プレイヤー2の開始位置")]
+    public Vector3 player2StartPosition = new Vector3(3f, 0f, 0f);
+
     [Header("プレイヤー機能設定")]
     [Tooltip("2段ジャンプ機能を有効にするか")]
     public bool enableDoubleJump = false;
