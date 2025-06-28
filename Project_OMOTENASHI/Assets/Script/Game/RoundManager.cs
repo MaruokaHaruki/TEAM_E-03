@@ -2,7 +2,18 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Collections.Generic;
 
+//=============================================================================
+/// ラウンドマネージャー
 public class RoundManager : MonoBehaviour {
+    ///--------------------------------------------------------------
+    ///						 public変数
+    //========================================
+    // シングルトン
+    public static RoundManager Instance { get; private set; }
+
+    ///--------------------------------------------------------------
+    ///						 ラウンド設定
+    //========================================
     [Header("ラウンド設定")]
     [Tooltip("全ラウンドの設定データ")]
     public List<RoundSettings> roundSettingsList = new List<RoundSettings>();
@@ -10,6 +21,9 @@ public class RoundManager : MonoBehaviour {
     [Tooltip("現在のラウンド番号（1から開始）")]
     public int currentRoundNumber = 1;
 
+    ///--------------------------------------------------------------
+    ///						 UI要素
+    //========================================
     [Header("UI要素")]
     [Tooltip("ラウンド情報表示テキスト")]
     public Text roundInfoText;
@@ -23,6 +37,9 @@ public class RoundManager : MonoBehaviour {
     [Tooltip("ラウンド開始テキスト")]
     public Text roundStartText;
 
+    ///--------------------------------------------------------------
+    ///						 スコア管理
+    //========================================
     [Header("スコア管理")]
     [Tooltip("プレイヤー1のスコア")]
     public int player1Score = 0;
@@ -33,6 +50,9 @@ public class RoundManager : MonoBehaviour {
     [Tooltip("勝利に必要なスコア")]
     public int targetScore = 5;
 
+    ///--------------------------------------------------------------
+    ///						 ゲーム終了演出
+    //========================================
     [Header("ゲーム終了演出")]
     [Tooltip("ゲーム終了パネル")]
     public GameObject gameEndPanel;
@@ -46,6 +66,9 @@ public class RoundManager : MonoBehaviour {
     [Tooltip("ゲーム終了演出の表示時間")]
     public float gameEndDisplayTime = 5.0f;
 
+    ///--------------------------------------------------------------
+    ///						 ラウンド演出
+    //========================================
     [Header("ラウンド演出")]
     [Tooltip("ラウンド間の待機時間")]
     public float roundTransitionDelay = 2.0f;
@@ -53,7 +76,10 @@ public class RoundManager : MonoBehaviour {
     [Tooltip("ラウンド開始カウントダウン表示テキスト")]
     public Text countdownText;
 
-    // プライベート変数
+    ///--------------------------------------------------------------
+    ///						 private変数
+    //========================================
+    // ラウンド管理
     private RoundSettings currentRoundSettings;
     private bool isRoundTransition = false;
     private bool isGameEnd = false;
@@ -61,14 +87,16 @@ public class RoundManager : MonoBehaviour {
     private float gameEndTimer = 0f;
     private float countdownTimer = 0f;
     private bool isCountingDown = false;
+    
+    // 定数
     private const float COUNTDOWN_DURATION = 3f;
-    private const float ROUND_START_DISPLAY_TIME = 2f; // 短縮
-    private const float ROUND_END_DELAY = 2f; // ラウンド終了から次ラウンド開始までの遅延
+    private const float ROUND_START_DISPLAY_TIME = 2f;
+    private const float ROUND_END_DELAY = 2f;
 
-    // シングルトン
-    public static RoundManager Instance { get; private set; }
-
+    ///--------------------------------------------------------------
+    ///						 初期化前初期化
     private void Awake() {
+        // シングルトンの設定
         if (Instance == null) {
             Instance = this;
         }
@@ -77,10 +105,14 @@ public class RoundManager : MonoBehaviour {
         }
     }
 
+    ///--------------------------------------------------------------
+    ///						 初期化
     void Start() {
         InitializeRound();
     }
 
+    ///--------------------------------------------------------------
+    ///						 更新
     void Update() {
         // ラウンド開始演出の処理
         if (isRoundTransition) {
@@ -106,9 +138,8 @@ public class RoundManager : MonoBehaviour {
         UpdateUI();
     }
 
-    /// <summary>
-    /// ラウンドの初期化
-    /// </summary>
+    ///--------------------------------------------------------------
+    ///						 ラウンド初期化
     private void InitializeRound() {
         if (currentRoundNumber <= roundSettingsList.Count) {
             currentRoundSettings = roundSettingsList[currentRoundNumber - 1];
@@ -127,9 +158,8 @@ public class RoundManager : MonoBehaviour {
         }
     }
 
-    /// <summary>
-    /// 現在のラウンド設定をプレイヤーに適用
-    /// </summary>
+    ///--------------------------------------------------------------
+    ///						 ラウンド設定適用
     private void ApplyRoundSettings() {
         if (currentRoundSettings == null) return;
 
@@ -154,9 +184,8 @@ public class RoundManager : MonoBehaviour {
         }
     }
 
-    /// <summary>
-    /// 個別プレイヤーに設定を適用
-    /// </summary>
+    ///--------------------------------------------------------------
+    ///						 個別プレイヤー設定適用
     private void ApplySettingsToPlayer(Player player) {
         player.enableDoubleJump_ = currentRoundSettings.enableDoubleJump;
         player.enableStomp_ = currentRoundSettings.enableStomp;
@@ -172,9 +201,8 @@ public class RoundManager : MonoBehaviour {
         Debug.Log($"[ROUND MANAGER] : {player.gameObject.name} にラウンド{currentRoundNumber}の設定を適用しました");
     }
 
-    /// <summary>
-    /// ラウンド開始演出
-    /// </summary>
+    ///--------------------------------------------------------------
+    ///						 ラウンド開始演出
     private void StartRoundTransition() {
         isRoundTransition = true;
         roundStartTimer = ROUND_START_DISPLAY_TIME;
@@ -200,9 +228,8 @@ public class RoundManager : MonoBehaviour {
         }
     }
 
-    /// <summary>
-    /// ラウンド開始演出終了
-    /// </summary>
+    ///--------------------------------------------------------------
+    ///						 ラウンド開始演出終了
     private void EndRoundTransition() {
         isRoundTransition = false;
 
@@ -214,9 +241,8 @@ public class RoundManager : MonoBehaviour {
         StartCountdown();
     }
 
-    /// <summary>
-    /// カウントダウン開始
-    /// </summary>
+    ///--------------------------------------------------------------
+    ///						 カウントダウン開始
     private void StartCountdown() {
         isCountingDown = true;
         countdownTimer = COUNTDOWN_DURATION;
@@ -231,9 +257,8 @@ public class RoundManager : MonoBehaviour {
         }
     }
 
-    /// <summary>
-    /// カウントダウン処理
-    /// </summary>
+    ///--------------------------------------------------------------
+    ///						 カウントダウン処理
     private void UpdateCountdown() {
         if (!isCountingDown) return;
 
@@ -253,9 +278,8 @@ public class RoundManager : MonoBehaviour {
         }
     }
 
-    /// <summary>
-    /// カウントダウン終了
-    /// </summary>
+    ///--------------------------------------------------------------
+    ///						 カウントダウン終了
     private void EndCountdown() {
         isCountingDown = false;
 
@@ -271,9 +295,8 @@ public class RoundManager : MonoBehaviour {
         Debug.Log($"[ROUND MANAGER] : ラウンド {currentRoundNumber} 開始！");
     }
 
-    /// <summary>
-    /// 新機能のテキストを生成
-    /// </summary>
+    ///--------------------------------------------------------------
+    ///						 新機能テキスト生成
     private string GetNewFeaturesText() {
         List<string> features = new List<string>();
 
@@ -289,9 +312,8 @@ public class RoundManager : MonoBehaviour {
         return features.Count > 0 ? string.Join(", ", features) : "なし";
     }
 
-    /// <summary>
-    /// プレイヤーが勝利した際に呼ばれる
-    /// </summary>
+    ///--------------------------------------------------------------
+    ///						 プレイヤー勝利処理
     public void OnPlayerWin(GameManager.Winner winner) {
         if (currentRoundSettings == null) return;
 
@@ -322,9 +344,8 @@ public class RoundManager : MonoBehaviour {
         }
     }
 
-    /// <summary>
-    /// 遅延付きで次のラウンドに進む
-    /// </summary>
+    ///--------------------------------------------------------------
+    ///						 遅延次ラウンド
     private System.Collections.IEnumerator DelayedNextRound() {
         // ラウンド終了の表示
         Debug.Log($"[ROUND MANAGER] : ラウンド {currentRoundNumber} 終了。{roundTransitionDelay}秒後に次のラウンドを開始します。");
@@ -334,9 +355,8 @@ public class RoundManager : MonoBehaviour {
         NextRound();
     }
 
-    /// <summary>
-    /// 次のラウンドに進む
-    /// </summary>
+    ///--------------------------------------------------------------
+    ///						 次ラウンド進行
     public void NextRound() {
         currentRoundNumber++;
 
@@ -349,9 +369,8 @@ public class RoundManager : MonoBehaviour {
         }
     }
 
-    /// <summary>
-    /// ゲーム終了処理
-    /// </summary>
+    ///--------------------------------------------------------------
+    ///						 ゲーム終了処理
     private void EndGame() {
         // 最終勝者を決定
         GameManager.Winner finalWinner;
@@ -378,9 +397,8 @@ public class RoundManager : MonoBehaviour {
         }
     }
 
-    /// <summary>
-    /// ゲーム終了演出開始
-    /// </summary>
+    ///--------------------------------------------------------------
+    ///						 ゲーム終了演出開始
     private void StartGameEndTransition(GameManager.Winner winner) {
         isGameEnd = true;
         gameEndTimer = gameEndDisplayTime;
@@ -415,9 +433,8 @@ public class RoundManager : MonoBehaviour {
         }
     }
 
-    /// <summary>
-    /// ゲーム終了演出終了
-    /// </summary>
+    ///--------------------------------------------------------------
+    ///						 ゲーム終了演出終了
     private void EndGameTransition() {
         isGameEnd = false;
 
@@ -431,9 +448,8 @@ public class RoundManager : MonoBehaviour {
         }
     }
 
-    /// <summary>
-    /// UI更新
-    /// </summary>
+    ///--------------------------------------------------------------
+    ///						 UI更新
     private void UpdateUI() {
         if (roundInfoText != null && currentRoundSettings != null) {
             roundInfoText.text = $"ラウンド {currentRoundNumber}/{roundSettingsList.Count}";
@@ -444,16 +460,14 @@ public class RoundManager : MonoBehaviour {
         }
     }
 
-    /// <summary>
-    /// 現在のラウンド設定を取得
-    /// </summary>
+    ///--------------------------------------------------------------
+    ///						 現在ラウンド設定取得
     public RoundSettings GetCurrentRoundSettings() {
         return currentRoundSettings;
     }
 
-    /// <summary>
-    /// ゲーム全体をリセット
-    /// </summary>
+    ///--------------------------------------------------------------
+    ///						 ゲーム全体リセット
     public void ResetGame() {
         currentRoundNumber = 1;
         player1Score = 0;
@@ -470,16 +484,14 @@ public class RoundManager : MonoBehaviour {
         Debug.Log("[ROUND MANAGER] : ゲーム全体がリセットされました");
     }
 
-    /// <summary>
-    /// 現在がラウンド進行中かどうかを判定
-    /// </summary>
+    ///--------------------------------------------------------------
+    ///						 ラウンド進行中判定
     public bool IsRoundInProgress() {
         return !isRoundTransition && !isGameEnd && GameManager.Instance.CurrentGameState == GameManager.GameState.Playing;
     }
 
-    /// <summary>
-    /// 現在のラウンド進捗情報を取得
-    /// </summary>
+    ///--------------------------------------------------------------
+    ///						 ラウンド進捗情報取得
     public string GetRoundProgressInfo() {
         return $"ラウンド {currentRoundNumber}/{roundSettingsList.Count} - スコア P1:{player1Score} P2:{player2Score} (目標:{targetScore})";
     }
