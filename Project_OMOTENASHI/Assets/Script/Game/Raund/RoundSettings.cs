@@ -65,4 +65,7 @@ public class RoundSettings : ScriptableObject {
 
     [Tooltip("踏みつけスタン時間")]
     public float stompStunDuration = 2.0f;
+
+    [Tooltip("無敵アイテム生成有効フラグ")]
+    public bool InvincibleItemFlag = false;
 }

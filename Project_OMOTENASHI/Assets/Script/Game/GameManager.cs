@@ -69,6 +69,11 @@ public class GameManager : MonoBehaviour
     [Tooltip("ゲームオーバーパネル")]
     public GameObject gameOverPanel_;
 
+    //========================================
+    // アイテム生成物
+    [Tooltip("無敵アイテム生成物")]
+    public InvincibleItemGeneration invincibleObje;
+
     ///--------------------------------------------------------------
     ///						 private変数
     //========================================
