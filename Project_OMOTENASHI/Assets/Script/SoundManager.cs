@@ -19,7 +19,7 @@ public class SoundManager : MonoBehaviour
 
     [Header("Audio Mixer")]
     public AudioMixer audioMixer;
-    public AudioMixerGroup masterMixerGroup;
+    //public AudioMixerGroup masterMixerGroup;
     public AudioMixerGroup bgmMixerGroup;
     public AudioMixerGroup seMixerGroup;
 
@@ -46,29 +46,59 @@ public class SoundManager : MonoBehaviour
             Instance = this;
             DontDestroyOnLoad(gameObject);
 
-            InitializeBGMSource();
-            InitializeSEPool();
         }
         else
         {
             Destroy(gameObject);
         }
 
-        float vol;
-        audioMixer.GetFloat("BGM", out vol);
-        Debug.Log("AwakeのBGMミキサー値 (dB): " + vol);
+        InitializeBGMSource();
+        InitializeSEPool();
 
+        float vol;
+        audioMixer.GetFloat("Master", out vol);
+        Debug.Log("Masterミキサー値 (dB): " + vol);
+        audioMixer.GetFloat("BGM", out vol);
+        Debug.Log("BGMミキサー値 (dB): " + vol);
+        audioMixer.GetFloat("SE", out vol);
+        Debug.Log("SEミキサー値 (dB): " + vol);
+
+        
     }
 
-    private void Start()
+    IEnumerator Start()
     {
+        yield return null;
+
         //起動タイミングが早いからAwake()から持ってきた
         LoadVolumeSettings();
 
-        float vol;
-        audioMixer.GetFloat("BGM", out vol);
+        //float vol;
+        //audioMixer.GetFloat("Master", out vol);
+        //Debug.Log("Masterミキサー値 (dB): " + vol);
+        //audioMixer.GetFloat("BGM", out vol);
+        //Debug.Log("BGMミキサー値 (dB): " + vol);
+        //audioMixer.GetFloat("SE", out vol);
+        //Debug.Log("SEミキサー値 (dB): " + vol);
+
+
+        InitializeBGMSource();
+        InitializeSEPool();
 
     }
+
+    //Denug
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.D))
+        {
+            Debug.Log("BGM状態: " + bgmSource.isPlaying);
+            Debug.Log("Clip: " + bgmSource.clip?.name);
+            Debug.Log("Volume: " + bgmSource.volume);
+            Debug.Log("Group: " + bgmSource.outputAudioMixerGroup?.name);
+        }
+    }
+
 
     //BGM関連
     private void InitializeBGMSource()

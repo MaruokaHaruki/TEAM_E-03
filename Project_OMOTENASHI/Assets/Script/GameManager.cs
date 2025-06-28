@@ -53,7 +53,7 @@ public class GameManager : MonoBehaviour
     [Header("UI要素")]
     [Tooltip("プレイヤー1のHPバー")]
     public Slider player1HpBar_;
-    
+
     [Tooltip("プレイヤー2のHPバー")]
     public Slider player2HpBar_;
     

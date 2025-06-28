@@ -6,6 +6,8 @@ public class StartManager : MonoBehaviour
     [HideInInspector]
     [SerializeField] private string sceneToLoad;
 
+    [SerializeField] private AudioClip sound;
+
 
 #if UNITY_EDITOR
     // インスペクタに表示するためのSceneAsset型変数
@@ -14,12 +16,23 @@ public class StartManager : MonoBehaviour
 #endif
     private void Update()
     {
+        if (Input.GetKeyDown(KeyCode.S))
+        {
+            SoundManager.Instance.PlaySE(sound);
+
+            float vol;
+            SoundManager.Instance.audioMixer.GetFloat("SE", out vol);
+            Debug.Log("SE:"+vol);
+        }
+
+
+
         if (Input.GetKeyDown(KeyCode.Space))
         {// 遷移シーンが設定されていたらそのシーンに遷移する
             if (!string.IsNullOrEmpty(sceneToLoad))
             {
 
-
+                SoundManager.Instance.PlaySE(sound);
                 Debug.Log("シーンを切り替え:" + sceneToLoad);
                 SceneManagerScript.Instance.FadeOutScene(sceneToLoad);
             }
