@@ -181,6 +181,13 @@ public class RoundManager : MonoBehaviour {
                 // プレイヤー2の位置を設定
                 player2.transform.position = currentRoundSettings.player2StartPosition;
             }
+
+            // 無敵アイテム有無設定
+            InvincibleItemGeneration invincibleObje = GameManager.Instance.invincibleObje;
+            if (invincibleObje != null)
+            {
+                invincibleObje.SetActiveFlag(currentRoundSettings.InvincibleItemFlag);
+            }
         }
     }
 

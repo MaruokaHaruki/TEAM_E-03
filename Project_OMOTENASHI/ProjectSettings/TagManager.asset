@@ -8,6 +8,7 @@ TagManager:
   - EnemyFront
   - EnemyBuck
   - DataManager
+  - InvincibleItem
   layers:
   - Default
   - TransparentFX

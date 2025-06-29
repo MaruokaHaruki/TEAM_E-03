@@ -730,6 +730,14 @@ public class Player : MonoBehaviour {
                 Debug.Log($"[INFO] {gameObject.name} と {otherPlayer.gameObject.name} が衝突 (判定外のケース)。otherIsAheadOfMe: {otherIsAheadOfMe}, amIAheadOfOther: {amIAheadOfOther}");
             }
         }
+
+
+        if (collision.gameObject.CompareTag("InvincibleItem"))
+        {
+            isInvincible_ = true;
+            invincibilityTimer_ = 2.0f;
+            Destroy(collision.gameObject);
+        }
     }
 
 
