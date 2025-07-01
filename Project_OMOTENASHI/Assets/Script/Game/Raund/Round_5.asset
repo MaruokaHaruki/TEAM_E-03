@@ -10,14 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6541e5f56171b044d9778d5dc8dcc68e, type: 3}
-  m_Name: Round_1
+  m_Name: Round_5
   m_EditorClassIdentifier: 
-  roundNumber: 1
-  roundName: Round 1
-  winPoints: 1
+  roundNumber: 5
+  roundName: Round 5
+  winPoints: 5
   player1StartPosition: {x: -3, y: 0, z: 0}
   player2StartPosition: {x: 3, y: 0, z: 0}
-  enableDoubleJump: 1
+  enableDoubleJump: 0
   enableStomp: 1
   enableReverseJump: 0
   enableSpeedTransfer: 1
@@ -26,7 +26,7 @@ MonoBehaviour:
   jumpForce: 6
   invincibilityDuration: 0
   stompStunDuration: 2
-  tilemapPrefab: {fileID: 3229168071328024921, guid: e062d202314f88f4187303e9209316bf, type: 3}
+  tilemapPrefab: {fileID: 7287989363445644035, guid: 6b3290e112a7c19468c8047c2da5143d, type: 3}
   tilemapPosition: {x: 0, y: 0, z: 0}
   tilemapRotation: {x: 0, y: 0, z: 0}
   InvincibleItemFlag: 0
