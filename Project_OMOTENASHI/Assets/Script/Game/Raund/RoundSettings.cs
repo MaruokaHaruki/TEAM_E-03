@@ -79,4 +79,7 @@ public class RoundSettings : ScriptableObject {
 
     [Tooltip("タイルマップの回転")]
     public Vector3 tilemapRotation = Vector3.zero;
+
+    [Tooltip("無敵アイテム生成有効フラグ")]
+    public bool InvincibleItemFlag = false;
 }
