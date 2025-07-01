@@ -163,6 +163,12 @@ public class RoundManager : MonoBehaviour {
     private void ApplyRoundSettings() {
         if (currentRoundSettings == null) return;
 
+        // タイルマップを変更
+        if (TilemapManager.Instance != null)
+        {
+            TilemapManager.Instance.ChangeTilemap(currentRoundSettings);
+        }
+
         // GameManagerのプレイヤー参照を取得
         if (GameManager.Instance != null) {
             Player player1 = GameManager.Instance.player1_;
@@ -477,6 +483,12 @@ public class RoundManager : MonoBehaviour {
         
         if (gameEndPanel != null) {
             gameEndPanel.SetActive(false);
+        }
+
+        // タイルマップをリセット
+        if (TilemapManager.Instance != null)
+        {
+            TilemapManager.Instance.ResetTilemap();
         }
         
         InitializeRound();

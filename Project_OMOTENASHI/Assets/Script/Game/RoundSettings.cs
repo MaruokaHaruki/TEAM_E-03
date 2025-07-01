@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 //=============================================================================
 /// ラウンド設定
@@ -65,4 +66,17 @@ public class RoundSettings : ScriptableObject {
 
     [Tooltip("踏みつけスタン時間")]
     public float stompStunDuration = 2.0f;
+
+    ///--------------------------------------------------------------
+    ///						 タイルマップ設定
+    //========================================
+    [Header("タイルマップ設定")]
+    [Tooltip("このラウンドで使用するタイルマップのプレハブ")]
+    public GameObject tilemapPrefab;
+
+    [Tooltip("タイルマップの生成位置")]
+    public Vector3 tilemapPosition = Vector3.zero;
+
+    [Tooltip("タイルマップの回転")]
+    public Vector3 tilemapRotation = Vector3.zero;
 }

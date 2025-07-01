@@ -15,6 +15,8 @@ MonoBehaviour:
   roundNumber: 2
   roundName: Round 2
   winPoints: 1
+  player1StartPosition: {x: -3, y: 0, z: 0}
+  player2StartPosition: {x: 3, y: 0, z: 0}
   enableDoubleJump: 0
   enableStomp: 0
   enableReverseJump: 1
@@ -24,3 +26,6 @@ MonoBehaviour:
   jumpForce: 4
   invincibilityDuration: 0
   stompStunDuration: 2
+  tilemapPrefab: {fileID: 7287989363445644035, guid: bd75badb0fda3f743bb0589de97849d9, type: 3}
+  tilemapPosition: {x: 0, y: 0, z: 0}
+  tilemapRotation: {x: 0, y: 0, z: 0}
