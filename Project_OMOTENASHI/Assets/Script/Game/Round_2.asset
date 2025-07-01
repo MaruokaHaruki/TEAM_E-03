@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   roundNumber: 2
   roundName: Round 2
-  winPoints: 1
+  winPoints: 2
   player1StartPosition: {x: -3, y: 0, z: 0}
   player2StartPosition: {x: 3, y: 0, z: 0}
   enableDoubleJump: 0

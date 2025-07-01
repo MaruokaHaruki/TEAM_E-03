@@ -378,6 +378,12 @@ public class Player : MonoBehaviour {
         // ジャンプフラグが立っている場合、瞬間的な上向きの力を加える
         // フラグは即座にリセットして連続ジャンプを防ぐ
         if (isJumping_) {
+            // 2段ジャンプの場合はY軸速度を一度リセット
+            if (hasDoubleJumped_ && !isGround_) {
+                // Y軸速度を0にリセットしてから新しいジャンプ力を適用
+                rigidbody2D_.velocity = new Vector2(rigidbody2D_.velocity.x, 0f);
+            }
+            
             rigidbody2D_.AddForce(Vector2.up * jumpForce_, ForceMode2D.Impulse);
             isJumping_ = false;  // ジャンプ実行後は即座にフラグをリセット
         }
@@ -429,9 +435,6 @@ public class Player : MonoBehaviour {
                     isJumping_ = true;
                     hasDoubleJumped_ = true;
                     Debug.Log($"[DOUBLE JUMP] : {gameObject.name} が2段ジャンプを実行しました");
-                }
-                else {
-                    isJumping_ = false;
                 }
             }
         }
@@ -515,9 +518,6 @@ public class Player : MonoBehaviour {
                 isJumping_ = true;
                 hasDoubleJumped_ = true;
                 Debug.Log($"[DOUBLE JUMP] : {gameObject.name} が2段ジャンプを実行しました");
-            }
-            else if (!isGround_) {
-                isJumping_ = false;
             }
         }
         else {
