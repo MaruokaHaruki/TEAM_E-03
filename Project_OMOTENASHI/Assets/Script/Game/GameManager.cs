@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 
 //=============================================================================
 /// ゲームマネージャー
@@ -16,12 +17,14 @@ public class GameManager : MonoBehaviour
     // ゲームの状態
     public enum GameState
     {
+        RoundStart,  // ラウンド開始処理
         Playing,     // ゲームプレイ中
         Paused,      // 一時停止中
+        RoundEnd,    // ラウンド終了処理
         GameOver     // ゲームオーバー
     }
     // Gameの状態を保持
-    public GameState CurrentGameState = GameState.Playing;
+    public GameState CurrentGameState = GameState.RoundStart;
     
     //========================================
     // どちらが勝ったかを保持
@@ -76,6 +79,10 @@ public class GameManager : MonoBehaviour
     private Dictionary<string, int> playerMaxHp_ = new Dictionary<string, int>();
     private Dictionary<string, int> playerCurrentHp_ = new Dictionary<string, int>();
 
+    // プレイヤー初期位置
+    private Vector3 initialPlayer1Position;
+    private Vector3 initialPlayer2Position;
+
     ///--------------------------------------------------------------
     ///						 初期化前初期化
     private void Awake()
@@ -91,8 +98,8 @@ public class GameManager : MonoBehaviour
             Destroy(gameObject); // 既に存在する場合は新しいインスタンスを破棄
         }
 
-        //シーンの起動はプレイ中
-        CurrentGameState = GameState.Playing;
+        //シーンの起動はラウンド開始処理から
+        CurrentGameState = GameState.RoundStart;
     }
 
     ///--------------------------------------------------------------
@@ -111,13 +118,33 @@ public class GameManager : MonoBehaviour
     ///						 更新
     void Update()
     {
+        switch (CurrentGameState)
+        {
+            case GameState.RoundStart:
+                RoundManager.Instance.InitializeRound();
+                break;
+            case GameState.RoundEnd:
+
+                break;
+
+            case GameState.Playing:
+                break;
+            case GameState.GameOver: // ゲームオーバー状態の処理
+
+                if ( gameOverPanel_ != null)
+                {
+                    gameOverPanel_.SetActive(true);
+                }
+
+                SceneManagerScript.Instance.FadeOutScene("Result");
+                break;
+            default:
+                break;
+        }
         // UIの更新
         UpdateUI();
-        
-        // ゲームオーバー状態の処理
-        if (CurrentGameState == GameState.GameOver && gameOverPanel_ != null) {
-            gameOverPanel_.SetActive(true);
-        }
+
+
     }
 
     ///--------------------------------------------------------------
@@ -128,6 +155,7 @@ public class GameManager : MonoBehaviour
             string player1Id = player1_.playerID_;
             playerMaxHp_[player1Id] = player1_.maxHp_;
             playerCurrentHp_[player1Id] = player1_.currentHp_;
+            initialPlayer1Position = player1_.gameObject.transform.position;    //←プレイヤーの初期座標設定
             Debug.Log($"[GAME MANAGER] : {player1Name_} (ID: {player1Id}) を登録しました。HP: {playerCurrentHp_[player1Id]}/{playerMaxHp_[player1Id]}");
         }
 
@@ -136,6 +164,7 @@ public class GameManager : MonoBehaviour
             string player2Id = player2_.playerID_;
             playerMaxHp_[player2Id] = player2_.maxHp_;
             playerCurrentHp_[player2Id] = player2_.currentHp_;
+            initialPlayer2Position = player2_.gameObject.transform.position;    //←プレイヤーの初期座標設定
             Debug.Log($"[GAME MANAGER] : {player2Name_} (ID: {player2Id}) を登録しました。HP: {playerCurrentHp_[player2Id]}/{playerMaxHp_[player2Id]}");
         }
     }
@@ -413,9 +442,9 @@ public class GameManager : MonoBehaviour
             
             // 反転ジャンプフラグをリセット
             player1_.shouldReverseOnLanding_ = false;
-            
-            // プレイヤーを初期位置に戻す（必要に応じて）
-            // player1_.transform.position = initialPlayer1Position;
+
+            // プレイヤーを初期位置に戻す（必要に応じて）    ←InitializePlayersにて設定
+            player1_.transform.position = initialPlayer1Position;
         }
 
         if (player2_ != null) {
@@ -430,7 +459,29 @@ public class GameManager : MonoBehaviour
             player2_.hasDoubleJumped_ = false;
             player2_.shouldReverseOnLanding_ = false;
             
-            // player2_.transform.position = initialPlayer2Position;
+             player2_.transform.position = initialPlayer2Position;
         }
     }
+
+    ///--------------------------------------------------------------
+    ///						 CurrentGameState変更
+    public void SetGameState(GameState nextGameState)
+    {
+        //現在のGameState
+        switch(CurrentGameState)
+        {
+            case GameState.RoundStart:
+                 break;
+        }
+
+        CurrentGameState = nextGameState;
+        
+        //次のGameState呼び出し
+        switch(CurrentGameState)
+        {
+
+        }
+    }
+
+
 }
