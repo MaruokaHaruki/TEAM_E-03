@@ -1837,8 +1837,8 @@ MonoBehaviour:
   acceleration_: 15
   dragOnStop_: 5
   dragOnMove_: 0
-  gravity_: 20
-  jumpForce_: 8
+  gravity_: 8
+  jumpForce_: 4
   groundCheck_: {fileID: 1129194000}
   wallCheckFront_: {fileID: 1467870218}
   wallCheckBuck_: {fileID: 214818669}
@@ -2432,8 +2432,8 @@ MonoBehaviour:
   acceleration_: 15
   dragOnStop_: 5
   dragOnMove_: 0
-  gravity_: 20
-  jumpForce_: 8
+  gravity_: 8
+  jumpForce_: 4
   groundCheck_: {fileID: 1354623087}
   wallCheckFront_: {fileID: 896691777}
   wallCheckBuck_: {fileID: 1956489830}
