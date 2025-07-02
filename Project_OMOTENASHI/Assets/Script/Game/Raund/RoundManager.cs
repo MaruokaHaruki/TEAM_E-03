@@ -1,5 +1,4 @@
-<<<<<<<< HEAD:Project_OMOTENASHI/Assets/Script/Game/RoundManager.cs
-========
+
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections.Generic;
@@ -169,21 +168,6 @@ public class RoundManager : MonoBehaviour {
                 break;
         }
 
-
-        ////ラウンド開始演出の処理
-        //if (isRoundTransition)
-        //{
-        //    roundStartTimer -= Time.unscaledDeltaTime;
-        //    if (roundStartTimer <= 0f)
-        //    {
-        //        if (roundStartPanel != null)    //スタートタイマーが0になったらラウンド詳細画面を閉じる
-        //        {
-        //            roundStartPanel.SetActive(false);
-        //        }
-        //        EndRoundTransition();
-        //    }
-        //}
-
         // カウントダウン処理
         if (isCountingDown) {
             UpdateCountdown();
@@ -311,7 +295,6 @@ public class RoundManager : MonoBehaviour {
         //    GameManager.Instance.CurrentGameState = GameManager.GameState.Paused;
         //}
     }
-    }
 
     ///--------------------------------------------------------------
     ///						 ラウンド開始演出終了
@@ -342,7 +325,6 @@ public class RoundManager : MonoBehaviour {
         //if (GameManager.Instance != null) {
         //    GameManager.Instance.CurrentGameState = GameManager.GameState.Paused;
         //}
-    }
     }
 
     ///--------------------------------------------------------------
@@ -587,17 +569,4 @@ public class RoundManager : MonoBehaviour {
         
         Debug.Log("[ROUND MANAGER] : ゲーム全体がリセットされました");
     }
-
-    /////--------------------------------------------------------------
-    /////						 ラウンド進行中判定
-    //public bool IsRoundInProgress() {
-    //    return !isRoundTransition && !isGameEnd && GameManager.Instance.CurrentGameState == GameManager.GameState.Playing;
-    //}
-
-    /////--------------------------------------------------------------
-    /////						 ラウンド進捗情報取得
-    //public string GetRoundProgressInfo() {
-    //    return $"ラウンド {currentRoundNumber}/{roundSettingsList.Count} - スコア P1:{player1Score} P2:{player2Score} (目標:{targetScore})";
-    //}
 }
->>>>>>>> Ver02.00.03_Mizuno:Project_OMOTENASHI/Assets/Script/Game/Raund/RoundManager.cs
