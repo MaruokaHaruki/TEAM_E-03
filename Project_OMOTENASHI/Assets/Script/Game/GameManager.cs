@@ -416,6 +416,8 @@ public class GameManager : MonoBehaviour
         switch(CurrentGameState)
         {
             case GameState.RoundStart:
+                // FIXME: ラウンド開始時の処理
+                RoundManager.Instance.SetStartTimer();
                 break;
             case GameState.Playing:
                 break;
