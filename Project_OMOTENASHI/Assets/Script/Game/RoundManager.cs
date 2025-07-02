@@ -132,6 +132,7 @@ public class RoundManager : MonoBehaviour {
     void Update() {
 
         GameManager.GameState currentGameState = GameManager.Instance.GetGameState();
+        Debug.Log($"Update:{currentGameState}");
 
         switch (currentGameState)
         {

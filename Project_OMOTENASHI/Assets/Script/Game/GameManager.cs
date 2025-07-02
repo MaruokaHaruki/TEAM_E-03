@@ -106,6 +106,8 @@ public class GameManager : MonoBehaviour
     ///						 初期化
     void Start()
     {
+        //シーンの起動はラウンド開始処理から
+        CurrentGameState = GameState.RoundStart;
 
         // プレイヤーの初期化
         InitializePlayers();
@@ -354,7 +356,7 @@ public class GameManager : MonoBehaviour
         }
 
         // ゲーム状態をリセット
-        CurrentGameState = GameState.Playing;
+        //CurrentGameState = GameState.Playing;
         CurrentWinner = Winner.None;
 
         // UIをリセット
@@ -417,7 +419,7 @@ public class GameManager : MonoBehaviour
         }
 
         // ゲーム状態をプレイ中に戻す
-        CurrentGameState = GameState.Playing;
+        //CurrentGameState = GameState.Playing;
         CurrentWinner = Winner.None;
 
         // プレイヤーの特殊状態をリセット
