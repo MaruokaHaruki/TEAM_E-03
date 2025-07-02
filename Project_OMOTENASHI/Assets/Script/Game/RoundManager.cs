@@ -123,7 +123,7 @@ public class RoundManager : MonoBehaviour {
     ///						 初期化
     void Start() {
         isRoundTransition = true;
-
+        roundStartTimer = 3.0f;
         InitializeRound();
     }
 
@@ -156,6 +156,10 @@ public class RoundManager : MonoBehaviour {
                 break;
             case GameManager.GameState.RoundEnd:
 
+                break;
+
+            default :
+                Debug.Log($"default:{GameManager.Instance.GetGameState()}");
                 break;
         }
 
