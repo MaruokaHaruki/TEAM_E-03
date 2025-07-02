@@ -912,9 +912,10 @@ public class Player : MonoBehaviour {
     }
 
     /// 現在のゲージ量をパーセンテージで取得
-    private float GetGaugePercentage() {
+    public float GetGaugePercentage() {
         return (currentComboGauge_ / maxComboGauge_) * 100.0f;
     }
+    //→UIで欲しいのでprivateからpublicへ
 
     /// 現在のゲージレベルを取得（5段階）
     private int GetGaugeLevel() {

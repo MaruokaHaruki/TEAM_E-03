@@ -44,6 +44,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4362b4e6a57114c43bedb37b9382086c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  winnerName: 
-  fadePanel: {fileID: 7039236403881965219, guid: c25fe5983d1bb3c40acab8651f7f756a, type: 3}
+  fadePanelPrefab: {fileID: 7646164491845426038, guid: 1f689aa2684131840ba0d62c2877b379, type: 3}
   fadeDuration: 1
+  winnerName: 

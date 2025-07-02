@@ -850,6 +850,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SceneManager
       objectReference: {fileID: 0}
+    - target: {fileID: 8990467253170475426, guid: 8e6438c1e78a24149b0d9d76cfc3701c, type: 3}
+      propertyPath: fadePanelPrefab
+      value: 
+      objectReference: {fileID: 7646164491845426038, guid: 1f689aa2684131840ba0d62c2877b379, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

@@ -31,11 +31,10 @@ public class SoundManager : MonoBehaviour
     public List<SceneBGM> sceneBGMList = new List<SceneBGM>();
 
     private AudioSource bgmSource;
-    private Coroutine bgmFadeCoroutine;
+    private Coroutine BGMFadeCoroutine;
 
     private AudioClip nextBGMClip;//次のシーンのBGMの予約
 
-   
 
 
 
@@ -46,7 +45,8 @@ public class SoundManager : MonoBehaviour
             Instance = this;
             DontDestroyOnLoad(gameObject);
 
-            InitializeBGMSource();
+            LoadVolumeSettings();
+            InitializebgmSource();
             InitializeSEPool();
         }
         else
@@ -54,36 +54,67 @@ public class SoundManager : MonoBehaviour
             Destroy(gameObject);
         }
 
-        float vol;
-        audioMixer.GetFloat("BGM", out vol);
-        Debug.Log("AwakeのBGMミキサー値 (dB): " + vol);
+        float db;
+        if (audioMixer.GetFloat("BGM", out db))
+        {
+            Debug.Log("現在のBGMミキサー値 (dB): " + db);
+        }
+        else
+        {
+            Debug.LogWarning("BGM パラメータがAudioMixerに見つかりません！");
+        }
 
     }
 
     private void Start()
     {
-        //起動タイミングが早いからAwake()から持ってきた
-        LoadVolumeSettings();
-
         float vol;
         audioMixer.GetFloat("BGM", out vol);
-
     }
 
     //BGM関連
-    private void InitializeBGMSource()
+    private void InitializebgmSource()
     {
         bgmSource = gameObject.AddComponent<AudioSource>();
         bgmSource.outputAudioMixerGroup = bgmMixerGroup;
+        bgmSource.volume = 1f;
+
+        bgmSource.mute = false;
+        audioMixer.SetFloat("BGM", 0); // 完全に0dBに固定
+
         bgmSource.loop = true;
     }
 
+    public void PlayBGMDirect(AudioClip clip)   //デバッグ
+    {
+        bgmSource.Stop();
+        bgmSource.clip = clip;
+        bgmSource.volume = 1f;
+        bgmSource.outputAudioMixerGroup = bgmMixerGroup;
+
+        // Mixer BGMボリュームを0dBに固定
+        audioMixer.SetFloat("BGM", 0f);
+
+        bgmSource.Play();
+
+        Debug.Log("PlayBGMDirect: " + clip.name);
+    }
     public void PlayBGM(AudioClip newClip, float fadeDuration = 2.0f)
     {
-        if (bgmFadeCoroutine != null)
-            StopCoroutine(bgmFadeCoroutine);
 
-        bgmFadeCoroutine = StartCoroutine(FadeInNewBGM(newClip, fadeDuration));
+        if (newClip == null)
+        {
+            Debug.LogWarning("PlayBGMにnullのクリップが渡されました");
+            return;
+        }
+
+        if (BGMFadeCoroutine != null)
+            StopCoroutine(BGMFadeCoroutine);
+
+        BGMFadeCoroutine = StartCoroutine(FadeInNewBGM(newClip, fadeDuration));
+        Debug.Log("BGM再生: " + newClip.name);
+
+
     }
 
     private IEnumerator FadeInNewBGM(AudioClip newClip, float duration)
@@ -93,9 +124,9 @@ public class SoundManager : MonoBehaviour
         bgmSource.Play();
 
         float targetVolume = GetBGMVolume();
-        float currentVolume = 0f;
+        float currentVolume = 0.0001f;
 
-        // 音量0で開始
+        // 音量0.0001fで開始
         audioMixer.SetFloat("BGM", Mathf.Log10(0.0001f) * 20);
 
         for (float t = 0; t < duration; t += Time.deltaTime)
@@ -158,7 +189,9 @@ public class SoundManager : MonoBehaviour
     }
     public void SetBGMVolume(float volume)
     {
-        audioMixer.SetFloat("BGM", Mathf.Log10(Mathf.Clamp(volume, 0.0001f, 1f)) * 20);
+        float db = Mathf.Log10(Mathf.Clamp(volume, 0.0001f, 1f)) * 20;
+        Debug.Log($"SetBGMVolume({volume}) → {db} dB");
+        audioMixer.SetFloat("BGM", db);
         PlayerPrefs.SetFloat("BGM", volume);
     }
     public void SetSEVolume(float volume)
@@ -167,13 +200,20 @@ public class SoundManager : MonoBehaviour
         PlayerPrefs.SetFloat("SE", volume);
     }
     public float GetMasterVolume() => PlayerPrefs.GetFloat("Master", 1f);
-    public float GetBGMVolume() => PlayerPrefs.GetFloat("BGM", 1f);
+    public float GetBGMVolume()
+    { float volume = PlayerPrefs.GetFloat("BGM", 1f);
+        return Mathf.Max(volume, 0.0001f); 
+    }
     public float GetSEVolume() => PlayerPrefs.GetFloat("SE", 1f);
 
     private void LoadVolumeSettings()
     {
-        SetMasterVolume(GetMasterVolume());
-        SetBGMVolume(GetBGMVolume());
-        SetSEVolume(GetSEVolume());
+        float master = Mathf.Max(GetMasterVolume(), 0.0001f);
+        float bgm = Mathf.Max(GetBGMVolume(), 0.0001f);
+        float se = Mathf.Max(GetSEVolume(), 0.0001f);
+
+        SetMasterVolume(master);
+        SetBGMVolume(bgm);
+        SetSEVolume(se);
     }
 }
