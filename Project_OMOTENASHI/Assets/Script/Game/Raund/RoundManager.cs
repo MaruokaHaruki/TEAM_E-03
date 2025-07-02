@@ -22,22 +22,6 @@ public class RoundManager : MonoBehaviour {
     public int currentRoundNumber = 1;
 
     ///--------------------------------------------------------------
-    ///						 UI要素
-    //========================================
-    [Header("UI要素")]
-    [Tooltip("ラウンド情報表示テキスト")]
-    public Text roundInfoText;
-
-    [Tooltip("スコア表示テキスト")]
-    public Text scoreText;
-
-    [Tooltip("ラウンド開始パネル")]
-    public GameObject roundStartPanel;
-
-    [Tooltip("ラウンド開始テキスト")]
-    public Text roundStartText;
-
-    ///--------------------------------------------------------------
     ///						 スコア管理
     //========================================
     [Header("スコア管理")]
@@ -51,30 +35,14 @@ public class RoundManager : MonoBehaviour {
     public int targetScore = 5;
 
     ///--------------------------------------------------------------
-    ///						 ゲーム終了演出
-    //========================================
-    [Header("ゲーム終了演出")]
-    [Tooltip("ゲーム終了パネル")]
-    public GameObject gameEndPanel;
-
-    [Tooltip("ゲーム終了テキスト")]
-    public Text gameEndText;
-
-    [Tooltip("最終スコア表示テキスト")]
-    public Text finalScoreText;
-
-    [Tooltip("ゲーム終了演出の表示時間")]
-    public float gameEndDisplayTime = 5.0f;
-
-    ///--------------------------------------------------------------
     ///						 ラウンド演出
     //========================================
     [Header("ラウンド演出")]
     [Tooltip("ラウンド間の待機時間")]
     public float roundTransitionDelay = 2.0f;
 
-    [Tooltip("ラウンド開始カウントダウン表示テキスト")]
-    public Text countdownText;
+    [Tooltip("ゲーム終了演出の表示時間")]
+    public float gameEndDisplayTime = 5.0f;
 
     ///--------------------------------------------------------------
     ///						 private変数
@@ -90,7 +58,7 @@ public class RoundManager : MonoBehaviour {
     
     // 定数
     private const float COUNTDOWN_DURATION = 3f;
-    private const float ROUND_START_DISPLAY_TIME = 2f;
+    private const float ROUND_START_DISPLAY_TIME = 3f;
     private const float ROUND_END_DELAY = 2f;
 
     ///--------------------------------------------------------------
@@ -220,25 +188,18 @@ public class RoundManager : MonoBehaviour {
         isRoundTransition = true;
         roundStartTimer = ROUND_START_DISPLAY_TIME;
 
-        if (roundStartPanel != null) {
-            roundStartPanel.SetActive(true);
-        }
-
-        if (roundStartText != null) {
-            roundStartText.text = $"{currentRoundSettings.roundName}\n" +
-                                  $"新機能: {GetNewFeaturesText()}\n\n" +
-                                  $"プレイヤーの準備をしてください";
-        }
-
-        // カウントダウンテキストを非表示
-        if (countdownText != null) {
-            countdownText.gameObject.SetActive(false);
+        // UIManagerを使用してラウンド開始UIを表示
+        if (UIManager.Instance != null) {
+            string featuresText = GetNewFeaturesText();
+            UIManager.Instance.ShowRoundStart(currentRoundSettings.roundName, featuresText);
         }
 
         // ゲームを一時停止
         if (GameManager.Instance != null) {
             GameManager.Instance.CurrentGameState = GameManager.GameState.Paused;
         }
+
+        Debug.Log($"[ROUND MANAGER] : ラウンド {currentRoundNumber} - {currentRoundSettings.roundName} の準備中...");
     }
 
     ///--------------------------------------------------------------
@@ -246,8 +207,9 @@ public class RoundManager : MonoBehaviour {
     private void EndRoundTransition() {
         isRoundTransition = false;
 
-        if (roundStartPanel != null) {
-            roundStartPanel.SetActive(false);
+        // UIManagerを使用してラウンド開始UIを非表示
+        if (UIManager.Instance != null) {
+            UIManager.Instance.HideRoundStart();
         }
 
         // カウントダウンを開始
@@ -260,14 +222,12 @@ public class RoundManager : MonoBehaviour {
         isCountingDown = true;
         countdownTimer = COUNTDOWN_DURATION;
 
-        if (countdownText != null) {
-            countdownText.gameObject.SetActive(true);
-        }
-
         // ゲームは一時停止のまま
         if (GameManager.Instance != null) {
             GameManager.Instance.CurrentGameState = GameManager.GameState.Paused;
         }
+
+        Debug.Log("[ROUND MANAGER] : カウントダウン開始");
     }
 
     ///--------------------------------------------------------------
@@ -275,14 +235,14 @@ public class RoundManager : MonoBehaviour {
     private void UpdateCountdown() {
         if (!isCountingDown) return;
 
-        countdownTimer -= Time.unscaledDeltaTime; // unscaledDeltaTimeを使用して一時停止の影響を受けない
+        countdownTimer -= Time.unscaledDeltaTime;
 
-        if (countdownText != null) {
+        if (UIManager.Instance != null) {
             if (countdownTimer > 1f) {
-                countdownText.text = Mathf.Ceil(countdownTimer).ToString();
+                UIManager.Instance.ShowCountdown(Mathf.Ceil(countdownTimer).ToString());
             }
             else if (countdownTimer > 0f) {
-                countdownText.text = "START!";
+                UIManager.Instance.ShowCountdown("START!");
             }
             else {
                 // カウントダウン終了
@@ -296,8 +256,8 @@ public class RoundManager : MonoBehaviour {
     private void EndCountdown() {
         isCountingDown = false;
 
-        if (countdownText != null) {
-            countdownText.gameObject.SetActive(false);
+        if (UIManager.Instance != null) {
+            UIManager.Instance.HideCountdown();
         }
 
         // ゲームを再開
@@ -394,7 +354,6 @@ public class RoundManager : MonoBehaviour {
             finalWinner = GameManager.Winner.Player2;
         }
         else {
-            // 同点の場合
             finalWinner = GameManager.Winner.None;
         }
 
@@ -416,11 +375,8 @@ public class RoundManager : MonoBehaviour {
         isGameEnd = true;
         gameEndTimer = gameEndDisplayTime;
 
-        if (gameEndPanel != null) {
-            gameEndPanel.SetActive(true);
-        }
-
-        if (gameEndText != null) {
+        // UIManagerを使用してゲーム終了UIを表示
+        if (UIManager.Instance != null) {
             string winnerText = "";
             switch (winner) {
                 case GameManager.Winner.Player1:
@@ -433,11 +389,7 @@ public class RoundManager : MonoBehaviour {
                     winnerText = "引き分け！";
                     break;
             }
-            gameEndText.text = $"ゲーム終了\n{winnerText}";
-        }
-
-        if (finalScoreText != null) {
-            finalScoreText.text = $"最終スコア\nPlayer 1: {player1Score}\nPlayer 2: {player2Score}";
+            UIManager.Instance.ShowGameEnd(winnerText, player1Score, player2Score);
         }
 
         // ゲームを一時停止
@@ -451,8 +403,8 @@ public class RoundManager : MonoBehaviour {
     private void EndGameTransition() {
         isGameEnd = false;
 
-        if (gameEndPanel != null) {
-            gameEndPanel.SetActive(false);
+        if (UIManager.Instance != null) {
+            UIManager.Instance.HideGameEnd();
         }
 
         // ゲーム状態をゲームオーバーに設定
@@ -464,12 +416,8 @@ public class RoundManager : MonoBehaviour {
     ///--------------------------------------------------------------
     ///						 UI更新
     private void UpdateUI() {
-        if (roundInfoText != null && currentRoundSettings != null) {
-            roundInfoText.text = $"ラウンド {currentRoundNumber}/{roundSettingsList.Count}";
-        }
-
-        if (scoreText != null) {
-            scoreText.text = $"スコア - P1: {player1Score} | P2: {player2Score}";
+        if (UIManager.Instance != null && currentRoundSettings != null) {
+            UIManager.Instance.UpdateRoundInfo(currentRoundNumber, roundSettingsList.Count, player1Score, player2Score);
         }
     }
 
@@ -488,8 +436,8 @@ public class RoundManager : MonoBehaviour {
         isGameEnd = false;
         isRoundTransition = false;
         
-        if (gameEndPanel != null) {
-            gameEndPanel.SetActive(false);
+        if (UIManager.Instance != null) {
+            UIManager.Instance.ResetAllUI();
         }
 
         // タイルマップをリセット
