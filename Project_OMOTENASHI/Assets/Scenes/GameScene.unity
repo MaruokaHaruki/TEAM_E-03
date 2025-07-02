@@ -2917,7 +2917,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   fadePanelPrefab: {fileID: 7646164491845426038, guid: 1f689aa2684131840ba0d62c2877b379, type: 3}
-  fadeDuration: 1
+  fadeDuration: 1.5
   winnerName: 
 --- !u!4 &1300214812
 Transform:
