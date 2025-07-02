@@ -121,6 +121,8 @@ public class GameManager : MonoBehaviour
         switch (CurrentGameState)
         {
             case GameState.RoundStart:
+                Debug.Log("RoundStart");
+                // ラウンド開始時の処理
                 RoundManager.Instance.InitializeRound();
                 break;
             case GameState.RoundEnd:
@@ -472,6 +474,18 @@ public class GameManager : MonoBehaviour
         {
             case GameState.RoundStart:
                  break;
+            case GameState.Playing:
+                break;
+
+            case GameState.RoundEnd:
+                break;
+
+            case GameState.GameOver:
+                break;
+
+            case GameState.Paused:
+                break;
+
         }
 
         CurrentGameState = nextGameState;
@@ -479,9 +493,24 @@ public class GameManager : MonoBehaviour
         //次のGameState呼び出し
         switch(CurrentGameState)
         {
+            case GameState.RoundStart:
+                break;
+            case GameState.Playing:
+                break;
 
+            case GameState.RoundEnd:
+                break;
+
+            case GameState.GameOver:
+                break;
+
+            case GameState.Paused:
+                break;
         }
     }
-
+    public GameState GetGameState()
+    {
+               return CurrentGameState;
+    }
 
 }

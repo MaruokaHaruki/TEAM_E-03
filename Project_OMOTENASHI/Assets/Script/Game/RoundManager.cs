@@ -131,13 +131,20 @@ public class RoundManager : MonoBehaviour {
     ///						 更新
     void Update() {
 
-        switch (GameManager.Instance.CurrentGameState)
+        GameManager.GameState currentGameState = GameManager.Instance.GetGameState();
+
+        switch (currentGameState)
         {
             case GameManager.GameState.RoundStart:
-               
+                Debug.Log($"now gamestate:{GameManager.GameState.RoundStart}");
+
                 roundStartTimer -= Time.unscaledDeltaTime;
                 if (roundStartTimer <= 0f)
                 {
+                    GameManager.Instance.SetGameState(GameManager.GameState.Playing);
+
+                    Debug.Log($"next gamestate:{GameManager.GameState.Playing}");
+                    isRoundTransition = false;
                     if (roundStartPanel != null)    //スタートタイマーが0になったらラウンド詳細画面を閉じる
                     {
                         roundStartPanel.SetActive(false);
@@ -145,9 +152,6 @@ public class RoundManager : MonoBehaviour {
                     EndRoundTransition();
                 }
                
-                GameManager.Instance.SetGameState(GameManager.GameState.Playing);
-                
-                Debug.Log($"setgamestate:{GameManager.GameState.Playing}");
                 
                 break;
             case GameManager.GameState.RoundEnd:
@@ -291,10 +295,10 @@ public class RoundManager : MonoBehaviour {
         isRoundTransition = false;
 
 
-        ///　スタートタイマーが0になったらラウンド詳細画面を閉じるようにするため移動
-        //if (roundStartPanel != null) {
-        //    roundStartPanel.SetActive(false);
-        //}
+        if (roundStartPanel != null)
+        {
+            roundStartPanel.SetActive(false);
+        }
 
         // カウントダウンを開始
         StartCountdown();
@@ -346,10 +350,10 @@ public class RoundManager : MonoBehaviour {
             countdownText.gameObject.SetActive(false);
         }
 
-        // ゲームを再開
-        if (GameManager.Instance != null) {
-            GameManager.Instance.CurrentGameState = GameManager.GameState.Playing;
-        }
+        //// ゲームを再開
+        //if (GameManager.Instance != null) {
+        //    GameManager.Instance.CurrentGameState = GameManager.GameState.Playing;
+        //}
 
         Debug.Log($"[ROUND MANAGER] : ラウンド {currentRoundNumber} 開始！");
     }

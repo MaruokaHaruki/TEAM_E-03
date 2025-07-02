@@ -1,7 +1,7 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-using System.Collections;
 
 public class SceneManagerScript : SingletonMonoBehaviour<SceneManagerScript>
 {
@@ -14,6 +14,7 @@ public class SceneManagerScript : SingletonMonoBehaviour<SceneManagerScript>
     private GameObject canvas;             // 実際に使われるフェード用Canvasのインスタンス
     private string nextScene;
     private bool isFading = false;
+   
 
     // フェードアウトしてシーン遷移
     public void FadeOutScene(string scene)
