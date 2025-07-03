@@ -17,7 +17,7 @@ public class ResultSimpleJump : MonoBehaviour
     private float JumpTime;
     private float Move;
 
-    void Start()
+    void Awake()
     {
         JumpFlag = true;
         GroundFlag = true;
@@ -37,12 +37,16 @@ public class ResultSimpleJump : MonoBehaviour
 
         if (GroundFlag == true)
         {
-            if (JumpFlag)
+            JumpTime -= Time.deltaTime;
+            if (JumpTime <= 0.0f)
             {
-                JumpTime -= Time.deltaTime;
-                if (JumpTime <= 0.0f)
+                if (JumpFlag)
                 {
                     Move = JumpPower;
+                    GroundFlag = false;
+                }
+                else
+                {
                     GroundFlag = false;
                 }
             }
@@ -56,5 +60,10 @@ public class ResultSimpleJump : MonoBehaviour
                 JumpTime = SetJumpTime;
             }
         }
+    }
+
+    internal void SetJumpFlag(bool jumpFlag)
+    {
+        JumpFlag = jumpFlag;
     }
 }

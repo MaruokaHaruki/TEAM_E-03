@@ -70,6 +70,12 @@ public class ScoreDraw : MonoBehaviour
         PlayerBPlate.gravityScale = 0.0f;
     }
 
+    private void Start()
+    {
+        JumpPlayerA.SetJumpFlag(JumpFlag);
+        JumpPlayerB.SetJumpFlag(JumpFlag);
+    }
+
     void FixedUpdate()
     {
         if (SetScoreFlag && (NextMoveTime < Time.time))
