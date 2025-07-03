@@ -72,8 +72,8 @@ public class ScoreDraw : MonoBehaviour
 
     private void Start()
     {
-        JumpPlayerA.SetJumpFlag(JumpFlag);
-        JumpPlayerB.SetJumpFlag(JumpFlag);
+        JumpPlayerA.JumpFlag = JumpFlag;
+        JumpPlayerB.JumpFlag = JumpFlag;
     }
 
     void FixedUpdate()
@@ -148,12 +148,12 @@ public class ScoreDraw : MonoBehaviour
                         {// PlayerB
                             PlayerB.transform.localScale = Vector3.one * NowPlayersSize.y;
                             PlayerB.transform.position = new Vector3(StartPlayerBPos.x - ((NowPlayersSize.y - 1.0f) * SetXMove.x), StartPlayerBPos.y + ((NowPlayersSize.y - 1.0f) * (PlayerBSize * 0.5f)), PlayerB.transform.position.z);
-                            if (JumpFlag) { JumpPlayerB.SetGroundHeight = (NowPlayersSize.y - 1.0f) * 1.0f; }
+                            JumpPlayerB.SetGroundHeight = (NowPlayersSize.y - 1.0f) * 1.0f;
                         }
                         {// PlayerA
                             PlayerA.transform.localScale = Vector3.one * NowPlayersSize.x;
                             PlayerA.transform.position = new Vector3(StartPlayerAPos.x + ((NowPlayersSize.x - 1.0f) * SetXMove.y), StartPlayerAPos.y + ((NowPlayersSize.x - 1.0f) * (PlayerASize * 0.5f)), PlayerA.transform.position.z);
-                            if (JumpFlag) { JumpPlayerA.SetGroundHeight = (NowPlayersSize.x - 1.0f) * 1.0f; }
+                            JumpPlayerA.SetGroundHeight = (NowPlayersSize.x - 1.0f) * 1.0f;
                         }
 
                         if ((SetSize.x == NowPlayersSize.y) && (SetSize.y == NowPlayersSize.x))
@@ -171,12 +171,12 @@ public class ScoreDraw : MonoBehaviour
                         {// PlayerB
                             PlayerB.transform.localScale = Vector3.one * NowPlayersSize.y;
                             PlayerB.transform.position = new Vector3(StartPlayerBPos.x - ((NowPlayersSize.y - 1.0f) * SetXMove.y), StartPlayerBPos.y + ((NowPlayersSize.y - 1.0f) * (PlayerBSize * 0.5f)), PlayerB.transform.position.z);
-                            if (JumpFlag) { JumpPlayerB.SetGroundHeight = (NowPlayersSize.y - 1.0f) * 1.0f; }
+                            JumpPlayerB.SetGroundHeight = (NowPlayersSize.y - 1.0f) * 1.0f;
                         }
                         {// PlayerA
                             PlayerA.transform.localScale = Vector3.one * NowPlayersSize.x;
                             PlayerA.transform.position = new Vector3(StartPlayerAPos.x + ((NowPlayersSize.x - 1.0f) * SetXMove.x), StartPlayerAPos.y + ((NowPlayersSize.x - 1.0f) * (PlayerASize * 0.5f)), PlayerA.transform.position.z);
-                            if (JumpFlag) { JumpPlayerA.SetGroundHeight = (NowPlayersSize.x - 1.0f) * 1.0f; }
+                            JumpPlayerA.SetGroundHeight = (NowPlayersSize.x - 1.0f) * 1.0f;
                         }
 
                         if ((SetSize.x == NowPlayersSize.x) && (SetSize.y == NowPlayersSize.y))

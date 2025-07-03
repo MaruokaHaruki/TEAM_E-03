@@ -61,9 +61,4 @@ public class ResultSimpleJump : MonoBehaviour
             }
         }
     }
-
-    internal void SetJumpFlag(bool jumpFlag)
-    {
-        JumpFlag = jumpFlag;
-    }
 }
