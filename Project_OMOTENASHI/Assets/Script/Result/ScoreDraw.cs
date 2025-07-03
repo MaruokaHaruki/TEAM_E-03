@@ -3,7 +3,7 @@ using UnityEngine;
 public class ScoreDraw : MonoBehaviour
 {
     [Header("プレイヤージャンプ(簡易)")]
-    [SerializeField] private boll JumpFlag;
+    [SerializeField] private bool JumpFlag;
     [SerializeField] private ResultSimpleJump JumpPlayerA;
     [SerializeField] private ResultSimpleJump JumpPlayerB;
 
