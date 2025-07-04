@@ -63,9 +63,9 @@ public class GameManager : MonoBehaviour
     private Dictionary<string, int> playerMaxHp_ = new Dictionary<string, int>();
     private Dictionary<string, int> playerCurrentHp_ = new Dictionary<string, int>();
 
-    // プレイヤー初期位置
-    private Vector3 initialPlayer1Position;
-    private Vector3 initialPlayer2Position;
+    //// プレイヤー初期位置
+    //private Vector3 initialPlayer1Position;
+    //private Vector3 initialPlayer2Position;
 
     ///--------------------------------------------------------------
     ///						 初期化前初期化
@@ -139,7 +139,7 @@ public class GameManager : MonoBehaviour
             string player1Id = player1_.playerID_;
             playerMaxHp_[player1Id] = player1_.maxHp_;
             playerCurrentHp_[player1Id] = player1_.currentHp_;
-            initialPlayer1Position = player1_.gameObject.transform.position;    //←プレイヤーの初期座標設定
+           // initialPlayer1Position = player1_.gameObject.transform.position;    //←プレイヤーの初期座標設定
             Debug.Log($"[GAME MANAGER] : {player1Name_} (ID: {player1Id}) を登録しました。HP: {playerCurrentHp_[player1Id]}/{playerMaxHp_[player1Id]}");
         }
 
@@ -148,7 +148,7 @@ public class GameManager : MonoBehaviour
             string player2Id = player2_.playerID_;
             playerMaxHp_[player2Id] = player2_.maxHp_;
             playerCurrentHp_[player2Id] = player2_.currentHp_;
-            initialPlayer2Position = player2_.gameObject.transform.position;    //←プレイヤーの初期座標設定
+            //initialPlayer2Position = player2_.gameObject.transform.position;    //←プレイヤーの初期座標設定
             Debug.Log($"[GAME MANAGER] : {player2Name_} (ID: {player2Id}) を登録しました。HP: {playerCurrentHp_[player2Id]}/{playerMaxHp_[player2Id]}");
         }
     }
@@ -301,6 +301,7 @@ public class GameManager : MonoBehaviour
         CurrentWinner = winner;
         
         string winnerName = GetWinnerName();
+        SceneManagerScript.Instance.winnerName = winnerName; // 結果シーンに勝者名を渡す
         Debug.Log($"[FINAL GAME OVER] : 全ラウンド終了！最終勝者は {winnerName} です！");
     }
 
@@ -371,8 +372,8 @@ public class GameManager : MonoBehaviour
             // 反転ジャンプフラグをリセット
             player1_.shouldReverseOnLanding_ = false;
 
-            // プレイヤーを初期位置に戻す（必要に応じて）    ←InitializePlayersにて設定
-            player1_.transform.position = initialPlayer1Position;
+            //// プレイヤーを初期位置に戻す（必要に応じて）    ←InitializePlayersにて設定
+            //player1_.transform.position = initialPlayer1Position;
         }
 
         if (player2_ != null) {
@@ -387,7 +388,7 @@ public class GameManager : MonoBehaviour
             player2_.hasDoubleJumped_ = false;
             player2_.shouldReverseOnLanding_ = false;
             
-             player2_.transform.position = initialPlayer2Position;
+             //player2_.transform.position = initialPlayer2Position;
         }
     }
 
@@ -422,15 +423,9 @@ public class GameManager : MonoBehaviour
                 break;
             case GameState.Playing:
                 // UI更新
-                if (UIManager.Instance != null)
-                {
-                    UIManager.Instance.InitializePlayerHPUI(
-                        player1_.playerID_, 
-                        player2_.playerID_, 
-                        playerMaxHp_[player1_.playerID_], 
-                        playerMaxHp_[player2_.playerID_]
-                    );
-                }
+                InitializeUI();
+                InitializePlayers();
+
                 break;
             case GameState.RoundEnd:
                 break;
