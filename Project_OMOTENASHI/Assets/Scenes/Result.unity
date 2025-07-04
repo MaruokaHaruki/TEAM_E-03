@@ -2289,6 +2289,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 345d60b967c89984e865bc39a595a2a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  JumpFlag: 0
   JumpPlayerA: {fileID: 1515826119}
   JumpPlayerB: {fileID: 739112765}
   PlayerA: {fileID: 1312066917}
