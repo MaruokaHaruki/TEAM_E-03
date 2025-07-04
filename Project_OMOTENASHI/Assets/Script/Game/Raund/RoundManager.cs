@@ -87,6 +87,7 @@ public class RoundManager : MonoBehaviour
         isRoundTransition = true;
         roundStartTimer = ROUND_START_DISPLAY_TIME;
         InitializeRound();
+        Debug.Log("Awake RoundManager");
     }
 
     ///--------------------------------------------------------------
@@ -321,6 +322,8 @@ public class RoundManager : MonoBehaviour
         {
             UIManager.Instance.HideCountdownUI();
         }
+
+        // ラウンド開始の処理を行う
 
         Debug.Log($"[ROUND MANAGER] : ラウンド {currentRoundNumber} 開始！");
     }
