@@ -107,9 +107,7 @@ public class GameManager : MonoBehaviour
         switch (CurrentGameState)
         {
             case GameState.RoundStart:
-                Debug.Log("RoundStart");
-                // ラウンド開始時の処理
-                RoundManager.Instance.InitializeRound();
+                // ラウンド開始中の処理
                 break;
             case GameState.RoundEnd:
                 break;
@@ -204,7 +202,8 @@ public class GameManager : MonoBehaviour
 
             // ラウンドマネージャーに勝利を通知（ゲームオーバー状態にはしない）
             RoundManager.Instance.OnPlayerWin(CurrentWinner);
-            
+            SetGameState(GameState.RoundStart);
+
             // 勝者をリセット（次のラウンドのため）
             CurrentWinner = Winner.None;
         }
@@ -418,8 +417,11 @@ public class GameManager : MonoBehaviour
             case GameState.RoundStart:
                 // FIXME: ラウンド開始時の処理
                 RoundManager.Instance.SetStartTimer();
+                RoundManager.Instance.InitializeRound();
+
                 break;
             case GameState.Playing:
+                InitializeUI();
                 break;
 
             case GameState.RoundEnd:
@@ -432,7 +434,9 @@ public class GameManager : MonoBehaviour
                 break;
         }
     }
-    
+
+    ///--------------------------------------------------------------
+    ///						 CurrentGameState取得
     public GameState GetGameState()
     {
         return CurrentGameState;

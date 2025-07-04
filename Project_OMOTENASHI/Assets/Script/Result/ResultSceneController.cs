@@ -5,6 +5,8 @@ public class ResultSceneController : MonoBehaviour
 {
     public TextMeshProUGUI resultText;
 
+    public AudioClip next; // Ÿ‚ÌƒV[ƒ“‚Ö‚ÌŒø‰Ê‰¹
+
     void Start()
     {
         string winner = SceneManagerScript.Instance != null ? SceneManagerScript.Instance.winnerName : "Unknown";
@@ -15,6 +17,7 @@ public class ResultSceneController : MonoBehaviour
         if(Input.GetKeyDown(KeyCode.Space))
         {
             SceneManagerScript.Instance.FadeOutScene("Title");
+            SoundManager.Instance.PlaySE(next); // Œø‰Ê‰¹‚ğÄ¶
         }
     }
 }

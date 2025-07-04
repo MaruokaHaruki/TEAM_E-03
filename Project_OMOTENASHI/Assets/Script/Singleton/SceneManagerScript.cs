@@ -29,6 +29,7 @@ public class SceneManagerScript : SingletonMonoBehaviour<SceneManagerScript>
         {
             if (sceneBGM.sceneName == scene)
             {
+
                 SoundManager.Instance.PreloadNextBGM(sceneBGM.bgmClip);
                 break;
             }

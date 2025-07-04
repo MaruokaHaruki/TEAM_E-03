@@ -55,7 +55,7 @@ public class SoundManager : MonoBehaviour
         }
 
         float db;
-        if (audioMixer.GetFloat("BGM", out db))
+        if (audioMixer.GetFloat("BGMVol", out db))
         {
             Debug.Log("現在のBGMミキサー値 (dB): " + db);
         }
@@ -68,8 +68,11 @@ public class SoundManager : MonoBehaviour
 
     private void Start()
     {
+        LoadVolumeSettings();
+        InitializebgmSource();
+        InitializeSEPool();
         float vol;
-        audioMixer.GetFloat("BGM", out vol);
+        audioMixer.GetFloat("BGMVol", out vol);
     }
 
     //BGM関連
@@ -80,7 +83,7 @@ public class SoundManager : MonoBehaviour
         bgmSource.volume = 1f;
 
         bgmSource.mute = false;
-        audioMixer.SetFloat("BGM", 0); // 完全に0dBに固定
+        audioMixer.SetFloat("BGMVol", 0); // 完全に0dBに固定
 
         bgmSource.loop = true;
     }
@@ -93,7 +96,7 @@ public class SoundManager : MonoBehaviour
         bgmSource.outputAudioMixerGroup = bgmMixerGroup;
 
         // Mixer BGMボリュームを0dBに固定
-        audioMixer.SetFloat("BGM", 0f);
+        audioMixer.SetFloat("BGMVol", 0f);
 
         bgmSource.Play();
 
@@ -127,16 +130,16 @@ public class SoundManager : MonoBehaviour
         float currentVolume = 0.0001f;
 
         // 音量0.0001fで開始
-        audioMixer.SetFloat("BGM", Mathf.Log10(0.0001f) * 20);
+        audioMixer.SetFloat("BGMVol", Mathf.Log10(0.0001f) * 20);
 
         for (float t = 0; t < duration; t += Time.deltaTime)
         {
             currentVolume = Mathf.Lerp(0f, targetVolume, t / duration);
-            audioMixer.SetFloat("BGM", Mathf.Log10(Mathf.Clamp(currentVolume, 0.0001f, 1f)) * 20);
+            audioMixer.SetFloat("BGMVol", Mathf.Log10(Mathf.Clamp(currentVolume, 0.0001f, 1f)) * 20);
             yield return null;
         }
 
-        audioMixer.SetFloat("BGM", Mathf.Log10(Mathf.Clamp(targetVolume, 0.0001f, 1f)) * 20);
+        audioMixer.SetFloat("BGMVol", Mathf.Log10(Mathf.Clamp(targetVolume, 0.0001f, 1f)) * 20);
     }
 
     public void PreloadNextBGM(AudioClip clip)//BGM予約
@@ -184,27 +187,27 @@ public class SoundManager : MonoBehaviour
     //音量設定
     public void SetMasterVolume(float volume)
     {
-        audioMixer.SetFloat("Master", Mathf.Log10(Mathf.Clamp(volume, 0.0001f, 1f)) * 20);
-        PlayerPrefs.SetFloat("Master", volume);
+        audioMixer.SetFloat("MasterVol", Mathf.Log10(Mathf.Clamp(volume, 0.0001f, 1f)) * 20);
+        PlayerPrefs.SetFloat("MasterVol", volume);
     }
     public void SetBGMVolume(float volume)
     {
         float db = Mathf.Log10(Mathf.Clamp(volume, 0.0001f, 1f)) * 20;
         Debug.Log($"SetBGMVolume({volume}) → {db} dB");
-        audioMixer.SetFloat("BGM", db);
-        PlayerPrefs.SetFloat("BGM", volume);
+        audioMixer.SetFloat("BGMVol", db);
+        PlayerPrefs.SetFloat("BGMVol", volume);
     }
     public void SetSEVolume(float volume)
     {
-        audioMixer.SetFloat("SE", Mathf.Log10(Mathf.Clamp(volume, 0.0001f, 1f)) * 20);
-        PlayerPrefs.SetFloat("SE", volume);
+        audioMixer.SetFloat("SEVol", Mathf.Log10(Mathf.Clamp(volume, 0.0001f, 1f)) * 20);
+        PlayerPrefs.SetFloat("SEVol", volume);
     }
-    public float GetMasterVolume() => PlayerPrefs.GetFloat("Master", 1f);
+    public float GetMasterVolume() => PlayerPrefs.GetFloat("MasterVol", 1f);
     public float GetBGMVolume()
-    { float volume = PlayerPrefs.GetFloat("BGM", 1f);
+    { float volume = PlayerPrefs.GetFloat("BGMVol", 1f);
         return Mathf.Max(volume, 0.0001f); 
     }
-    public float GetSEVolume() => PlayerPrefs.GetFloat("SE", 1f);
+    public float GetSEVolume() => PlayerPrefs.GetFloat("SEVol", 1f);
 
     private void LoadVolumeSettings()
     {
