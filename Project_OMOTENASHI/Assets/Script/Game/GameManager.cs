@@ -98,6 +98,12 @@ public class GameManager : MonoBehaviour
         
         // UIの初期化
         InitializeUI();
+
+        // RoundManagerにラウンド開始を通知
+        if (RoundManager.Instance != null)
+        {
+            RoundManager.Instance.StartFirstRound();
+        }
     }
 
     ///--------------------------------------------------------------
@@ -107,7 +113,7 @@ public class GameManager : MonoBehaviour
         switch (CurrentGameState)
         {
             case GameState.RoundStart:
-                // ラウンド開始中の処理
+                // ラウンド開始中の処理はRoundManagerで管理
                 break;
             case GameState.RoundEnd:
                 break;
@@ -200,9 +206,8 @@ public class GameManager : MonoBehaviour
             
             Debug.Log($"[ROUND END] : {defeatedPlayerName} が敗北しました。ラウンド勝者は {winnerName} です！");
 
-            // ラウンドマネージャーに勝利を通知（ゲームオーバー状態にはしない）
+            // ラウンドマネージャーに勝利を通知
             RoundManager.Instance.OnPlayerWin(CurrentWinner);
-            SetGameState(GameState.RoundStart);
 
             // 勝者をリセット（次のラウンドのため）
             CurrentWinner = Winner.None;
@@ -390,6 +395,8 @@ public class GameManager : MonoBehaviour
     ///						 CurrentGameState変更
     public void SetGameState(GameState nextGameState)
     {
+        Debug.Log($"[GAME MANAGER] : GameState変更 {CurrentGameState} -> {nextGameState}");
+
         //現在のGameState
         switch(CurrentGameState)
         {
@@ -397,16 +404,12 @@ public class GameManager : MonoBehaviour
                  break;
             case GameState.Playing:
                 break;
-
             case GameState.RoundEnd:
                 break;
-
             case GameState.GameOver:
                 break;
-
             case GameState.Paused:
                 break;
-
         }
 
         CurrentGameState = nextGameState;
@@ -415,21 +418,24 @@ public class GameManager : MonoBehaviour
         switch(CurrentGameState)
         {
             case GameState.RoundStart:
-                // FIXME: ラウンド開始時の処理
-                RoundManager.Instance.SetStartTimer();
-                RoundManager.Instance.InitializeRound();
-
+                // ラウンド開始処理はRoundManagerで管理
                 break;
             case GameState.Playing:
-                InitializeUI();
+                // UI更新
+                if (UIManager.Instance != null)
+                {
+                    UIManager.Instance.InitializePlayerHPUI(
+                        player1_.playerID_, 
+                        player2_.playerID_, 
+                        playerMaxHp_[player1_.playerID_], 
+                        playerMaxHp_[player2_.playerID_]
+                    );
+                }
                 break;
-
             case GameState.RoundEnd:
                 break;
-
             case GameState.GameOver:
                 break;
-
             case GameState.Paused:
                 break;
         }
