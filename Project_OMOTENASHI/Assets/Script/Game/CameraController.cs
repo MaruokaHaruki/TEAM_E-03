@@ -1,0 +1,151 @@
+using UnityEngine;
+
+public class CameraController : MonoBehaviour
+{
+    /// <summary>設定タイム</summary>
+    [SerializeField] private float SetTime;
+    
+    /// <summary>注視フラグ</summary>
+    [SerializeField] private bool ObservationFlag;
+
+    /// <summary>注視時間</summary>
+    [SerializeField] private float ObservationTime;
+
+    /// <summary>最初のポジション</summary>
+    [SerializeField] private Vector3 StartPos;
+
+    /// <summary>目標ポジション</summary>
+    [SerializeField] private Vector3 TargetPos;
+
+    /// <summary>目標カメラサイズ</summary>
+    [SerializeField] private float TargetCameraSize;
+
+    /// <summary>カメラ</summary>
+    [SerializeField] private Camera MainCamera;
+
+    /// <summary>全UI</summary>
+    [SerializeField] private RectTransform[] AllUiTransform;
+
+    private Vector3[] AllUiStartPos;
+    private Vector3[] AllUiStartSize;
+    public Vector3 UiMoveVolume;
+
+    void Start()
+    {
+        TargetPos = StartPos = this.transform.position;
+
+        ObservationFlag = false;
+        ObservationTime = 0.0f;
+
+        if (MainCamera == null)
+        {
+            MainCamera = this.gameObject.GetComponent<Camera>();
+        }
+
+        TargetCameraSize = 5.0f;
+
+        AllUiStartPos = new Vector3[AllUiTransform.Length];
+        AllUiStartSize= new Vector3[AllUiTransform.Length];
+        for (int i = 0; i < AllUiTransform.Length; i++)
+        {
+            AllUiStartPos[i] = AllUiTransform[i].position;
+            AllUiStartSize[i] = AllUiTransform[i].localScale;
+        }
+    }
+
+    void Update()
+    {
+        if (ObservationFlag)
+        {
+            ObservationTime -= Time.deltaTime;
+            if (ObservationTime <= 0.0f)
+            {
+                ObservationFlag = false;
+                TargetPos = StartPos;
+
+                TargetCameraSize = 5.0f;
+            }
+        }
+        //*
+        if (Input.GetKeyDown(KeyCode.N))
+        {
+            StartObservation(new Vector3(-10, -370, this.transform.position.z));
+        }//*/
+    }
+
+    private void FixedUpdate()
+    {
+        CameraMoveProcess();
+    }
+
+    public void StartObservation(Vector3 targetPos)
+    {
+        TargetPos = targetPos + (Vector3.forward * this.transform.position.z);
+        ObservationFlag = true;
+        ObservationTime = SetTime;
+        TargetCameraSize = 2.0f;
+    }
+
+    private void CameraMoveProcess()
+    {
+        Vector3 uiSetScale;
+
+        Vector3 cameraUiPosition;
+        Vector3 uiSetPos;
+
+        //if (MainCamera.orthographicSize != TargetCameraSize)
+        {
+            float diffSize = TargetCameraSize - MainCamera.orthographicSize;
+
+            SetDiff(ref diffSize, 0.5f);
+            MainCamera.orthographicSize = TargetCameraSize - diffSize;
+
+            uiSetScale = (Vector3.one * (1.0f - (MainCamera.orthographicSize / 5.0f))) * UiMoveVolume.z;
+            for (int i = 0; i < AllUiTransform.Length; i++)
+            {
+                AllUiTransform[i].localScale = new Vector3(AllUiStartSize[i].x + uiSetScale.x, AllUiStartSize[i].y + uiSetScale.y, AllUiStartSize[i].z + uiSetScale.z);
+            }
+        }
+
+        //if (TargetPos != this.transform.position)
+        {
+            Vector3 diffPos = TargetPos - this.transform.position;
+
+            SetDiff(ref diffPos.x, 0.5f);
+            SetDiff(ref diffPos.y, 0.5f);
+            SetDiff(ref diffPos.z, 0.5f);
+
+            this.transform.position = TargetPos - diffPos;
+
+            cameraUiPosition = (StartPos - this.transform.position) * 120.0f;
+            Debug.LogError(cameraUiPosition);
+            for (int i = 0; i < AllUiTransform.Length; i++)
+            {
+                uiSetPos = AllUiStartPos[i] - cameraUiPosition;
+                uiSetPos.x *= uiSetScale.x;
+                uiSetPos.y *= uiSetScale.y;
+                AllUiTransform[i].position = new Vector3(AllUiStartPos[i].x + uiSetPos.x, AllUiStartPos[i].y + uiSetPos.y, AllUiStartPos[i].z);
+            }
+        }
+    }
+
+    private void SetDiff(ref float diff, float speed)
+    {
+        if (diff > 0.0f)
+        {
+            diff -= speed;
+            if (diff < 0.0f)
+            {
+                diff = 0.0f;
+            }
+        }
+        else
+        {
+            diff += speed;
+            if (diff > 0.0f)
+            {
+                diff = 0.0f;
+            }
+        }
+    }
+}
