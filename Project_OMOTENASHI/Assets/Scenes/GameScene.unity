@@ -532,7 +532,7 @@ Transform:
   m_GameObject: {fileID: 536285269}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -800, y: 300, z: 0}
+  m_LocalPosition: {x: -315, y: -41, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -2267,7 +2267,7 @@ Transform:
   m_GameObject: {fileID: 1338083415}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 800, y: 300, z: 0}
+  m_LocalPosition: {x: 282, y: -41, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -2846,13 +2846,13 @@ MonoBehaviour:
   wallCheckFront_: {fileID: 1467870218}
   wallCheckBuck_: {fileID: 214818669}
   isAutoMode_: 1
-  autoMoveSpeed_: 1
+  autoMoveSpeed_: 4
   speedBoostMultiplier_: 2.5
   speedBoostDuration_: 0.5
   maxComboGauge_: 100
-  comboGaugePerHit_: 3
-  gaugeDrainRate_: 15
-  maxGaugeSpeedMultiplier_: 12
+  comboGaugePerHit_: 16
+  gaugeDrainRate_: 116
+  maxGaugeSpeedMultiplier_: 2
   minEffectiveGauge_: 1
   invincibilityDuration_: 1
   rainbowSpeed_: 1
@@ -3594,13 +3594,13 @@ MonoBehaviour:
   wallCheckFront_: {fileID: 896691777}
   wallCheckBuck_: {fileID: 1956489830}
   isAutoMode_: 1
-  autoMoveSpeed_: 1
+  autoMoveSpeed_: 4
   speedBoostMultiplier_: 2.5
   speedBoostDuration_: 0.5
   maxComboGauge_: 100
-  comboGaugePerHit_: 3
-  gaugeDrainRate_: 15
-  maxGaugeSpeedMultiplier_: 12
+  comboGaugePerHit_: 16
+  gaugeDrainRate_: 116
+  maxGaugeSpeedMultiplier_: 2
   minEffectiveGauge_: 1
   invincibilityDuration_: 1
   rainbowSpeed_: 1

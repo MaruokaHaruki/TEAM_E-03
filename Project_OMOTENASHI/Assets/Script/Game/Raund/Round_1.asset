@@ -22,7 +22,7 @@ MonoBehaviour:
   enableReverseJump: 0
   enableSpeedTransfer: 1
   playerMaxHp: 10
-  baseSpeed: 5
+  baseSpeed: 1
   jumpForce: 8
   invincibilityDuration: 0
   stompStunDuration: 2
