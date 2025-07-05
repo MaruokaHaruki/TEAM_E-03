@@ -82,4 +82,11 @@ public class RoundSettings : ScriptableObject {
 
     [Tooltip("無敵アイテム生成有効フラグ")]
     public bool InvincibleItemFlag = false;
+
+    ///--------------------------------------------------------------
+    ///						 プレイヤー動作制御設定
+    //========================================
+    [Header("プレイヤー動作制御")]
+    [Tooltip("プレイヤーの移動を許可するか")]
+    public bool allowPlayerMovement = true;
 }

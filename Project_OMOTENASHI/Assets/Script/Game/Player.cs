@@ -114,6 +114,9 @@ public class Player : MonoBehaviour {
     [Tooltip("キー設定変更モード")]
     public bool isKeySettingMode_ = false;
 
+    [Tooltip("プレイヤーの移動を許可するか（ゲーム制御用）")]
+    public bool allowMovement_ = false;
+
     //========================================
     // 【キー設定】
     [Header("キー設定")]
@@ -232,6 +235,10 @@ public class Player : MonoBehaviour {
     ///                      メインループ処理
     private void Update() {
         //========================================
+        // 【ゲーム状態による移動制御チェック】
+        UpdateMovementPermission();
+
+        //========================================
         // 【スタン状態タイマーの更新】
         if (isStunned_) {
             stunTimer_ -= Time.deltaTime;
@@ -300,11 +307,24 @@ public class Player : MonoBehaviour {
 
         //========================================
         // 【移動処理の振り分け】
-        if (isAutoMode_) {
-            AutoMove();
+        if (allowMovement_) {
+            if (isAutoMode_) {
+                AutoMove();
+            }
+            else {
+                Move();
+            }
         }
         else {
-            Move();
+            // 移動が許可されていない場合は入力をリセット
+            inputHorizontal_ = Vector2.zero;
+            isJumping_ = false;
+            
+            // アニメーションを停止状態に
+            if (animator_ != null) {
+                animator_.SetBool("Run", false);
+                animator_.SetBool("Jump", !isGround_);
+            }
         }
 
         //========================================
@@ -985,5 +1005,72 @@ public class Player : MonoBehaviour {
         isStunned_ = true;
         stunTimer_ = stunDuration;
         Debug.Log($"[STUN] : {gameObject.name} が {stunDuration}秒間スタンしました");
+    }
+
+    ///--------------------------------------------------------------
+    ///                      移動許可状態更新
+    /// GameManagerの状態に基づいてプレイヤーの移動許可を更新
+    private void UpdateMovementPermission() {
+        if (GameManager.Instance != null) {
+            GameManager.GameState currentState = GameManager.Instance.GetGameState();
+            
+            switch (currentState) {
+                case GameManager.GameState.Playing:
+                    allowMovement_ = true;
+                    break;
+                case GameManager.GameState.RoundStart:
+                case GameManager.GameState.RoundEnd:
+                case GameManager.GameState.GameOver:
+                case GameManager.GameState.Paused:
+                default:
+                    allowMovement_ = false;
+                    break;
+            }
+        }
+        else {
+            allowMovement_ = false;
+        }
+    }
+
+    ///--------------------------------------------------------------
+    ///                      プレイヤー状態リセット
+    /// ラウンド開始時にプレイヤーの状態を初期化
+    public void ResetPlayerState() {
+        // 物理状態をリセット
+        if (rigidbody2D_ != null) {
+            rigidbody2D_.velocity = Vector2.zero;
+            rigidbody2D_.angularVelocity = 0f;
+        }
+
+        // 移動関連の状態をリセット
+        inputHorizontal_ = Vector2.zero;
+        isJumping_ = false;
+        currentDirection_ = 1.0f;
+
+        // 連打ゲージをリセット
+        currentComboGauge_ = 0.0f;
+        isSpeedBoosted_ = false;
+        speedBoostTimer_ = 0.0f;
+
+        // 特殊状態をリセット
+        isStunned_ = false;
+        stunTimer_ = 0.0f;
+        hasDoubleJumped_ = false;
+        shouldReverseOnLanding_ = false;
+
+        // 無敵状態をリセット
+        isInvincible_ = false;
+        invincibilityTimer_ = 0.0f;
+        if (spriteRenderer_ != null) {
+            spriteRenderer_.color = originalColor_;
+        }
+
+        // アニメーション状態をリセット
+        if (animator_ != null) {
+            animator_.SetBool("Run", false);
+            animator_.SetBool("Jump", false);
+        }
+
+        Debug.Log($"[PLAYER RESET] : {gameObject.name} の状態がリセットされました");
     }
 }

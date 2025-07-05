@@ -349,7 +349,11 @@ public class RoundManager : MonoBehaviour
             UIManager.Instance.HideCountdownUI();
         }
 
-        // ラウンド開始の処理を行う
+        // ゲーム状態をPlayingに変更してプレイヤーの移動を許可
+        if (GameManager.Instance != null)
+        {
+            GameManager.Instance.SetGameState(GameManager.GameState.Playing);
+        }
 
         Debug.Log($"[ROUND MANAGER] : ラウンド {currentRoundNumber} 開始！");
     }
@@ -377,6 +381,12 @@ public class RoundManager : MonoBehaviour
     public void OnPlayerWin(GameManager.Winner winner)
     {
         if (currentRoundSettings == null) return;
+
+        // ゲーム状態をラウンド終了に変更（プレイヤーの移動を停止）
+        if (GameManager.Instance != null)
+        {
+            GameManager.Instance.SetGameState(GameManager.GameState.RoundEnd);
+        }
 
         // スコアを加算
         switch (winner)

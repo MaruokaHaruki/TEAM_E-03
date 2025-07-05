@@ -324,6 +324,9 @@ public class GameManager : MonoBehaviour
                 playerCurrentHp_[player1_.playerID_] = playerMaxHp_[player1_.playerID_];
                 player1_.currentHp_ = playerMaxHp_[player1_.playerID_];
             }
+            
+            // プレイヤーの状態をリセット
+            player1_.ResetPlayerState();
         }
 
         if (player2_ != null) {
@@ -341,6 +344,9 @@ public class GameManager : MonoBehaviour
                 playerCurrentHp_[player2_.playerID_] = playerMaxHp_[player2_.playerID_];
                 player2_.currentHp_ = playerMaxHp_[player2_.playerID_];
             }
+            
+            // プレイヤーの状態をリセット
+            player2_.ResetPlayerState();
         }
 
         // ゲーム状態をプレイ中に戻す
@@ -420,18 +426,33 @@ public class GameManager : MonoBehaviour
         {
             case GameState.RoundStart:
                 // ラウンド開始処理はRoundManagerで管理
+                // プレイヤーの移動を停止状態に
+                if (player1_ != null) player1_.allowMovement_ = false;
+                if (player2_ != null) player2_.allowMovement_ = false;
                 break;
             case GameState.Playing:
                 // UI更新
                 InitializeUI();
                 InitializePlayers();
-
+                
+                // プレイヤーの移動を許可
+                if (player1_ != null) player1_.allowMovement_ = true;
+                if (player2_ != null) player2_.allowMovement_ = true;
                 break;
             case GameState.RoundEnd:
+                // プレイヤーの移動を停止
+                if (player1_ != null) player1_.allowMovement_ = false;
+                if (player2_ != null) player2_.allowMovement_ = false;
                 break;
             case GameState.GameOver:
+                // プレイヤーの移動を停止
+                if (player1_ != null) player1_.allowMovement_ = false;
+                if (player2_ != null) player2_.allowMovement_ = false;
                 break;
             case GameState.Paused:
+                // プレイヤーの移動を停止
+                if (player1_ != null) player1_.allowMovement_ = false;
+                if (player2_ != null) player2_.allowMovement_ = false;
                 break;
         }
     }
