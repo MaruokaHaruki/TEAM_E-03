@@ -7,7 +7,7 @@ public class CameraTest : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.N))
         {
-            //TestCamera.StartObservation(this.transform.position);
+            TestCamera.StartObservation(this.transform.position);
         }
     }
 }
