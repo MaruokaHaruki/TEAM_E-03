@@ -605,28 +605,15 @@ public class Player : MonoBehaviour {
 
                 // 速度差が十分にある場合のみ速度交換を実行
                 if (Mathf.Abs(mySpeed - otherSpeed) > 0.5f) {
-                    Player fasterPlayer = null;
-                    Player slowerPlayer = null;
-                    float fasterSpeed = 0;
+                    // お互いの速度を一時保存
+                    float tempMySpeed = mySpeed;
+                    float tempOtherSpeed = otherSpeed;
 
-                    if (mySpeed > otherSpeed) {
-                        fasterPlayer = this;
-                        slowerPlayer = otherPlayer;
-                        fasterSpeed = mySpeed;
-                    } else {
-                        fasterPlayer = otherPlayer;
-                        slowerPlayer = this;
-                        fasterSpeed = otherSpeed;
-                    }
+                    // お互いの速度を入れ替え
+                    AdjustGaugeToAchieveSpeed(tempOtherSpeed);
+                    otherPlayer.AdjustGaugeToAchieveSpeed(tempMySpeed);
 
-                    // 遅い方のプレイヤーが速い方の速度を受け継ぐ
-                    slowerPlayer.AdjustGaugeToAchieveSpeed(fasterSpeed);
-
-                    // 速い方のプレイヤーは最低速度に戻る
-                    fasterPlayer.currentComboGauge_ = 0.0f;
-                    fasterPlayer.isSpeedBoosted_ = false;
-
-                    Debug.Log($"[SPEED TRANSFER] : {fasterPlayer.gameObject.name}(速度:{fasterSpeed:F2}) -> {slowerPlayer.gameObject.name} へ速度移譲");
+                    Debug.Log($"[SPEED TRANSFER] : {gameObject.name}(速度:{tempMySpeed:F2}) <-> {otherPlayer.gameObject.name}(速度:{tempOtherSpeed:F2}) 速度を交換しました");
                 }
             }
 
