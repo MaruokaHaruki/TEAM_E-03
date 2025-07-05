@@ -91,7 +91,7 @@ public class RoundManager : MonoBehaviour
     ///						 初期化
     void Start()
     {
-        // Start時点では何もしない（GameManagerのStartから呼び出される）
+
     }
 
     ///--------------------------------------------------------------
