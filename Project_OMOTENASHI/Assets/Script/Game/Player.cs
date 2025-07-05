@@ -158,7 +158,7 @@ public class Player : MonoBehaviour {
     //========================================
     // 【入力データ】
     private Vector2 inputHorizontal_ = Vector2.zero;
-    private Vector2 inputVertical_ = Vector2.zero;
+    //private Vector2 inputVertical_ = Vector2.zero;
 
     //========================================
     // 【壁接触状態】
@@ -175,7 +175,7 @@ public class Player : MonoBehaviour {
     //========================================
     // 【連打ゲージ関連】
     private float currentComboGauge_ = 0.0f;
-    private float lastInputTime_ = 0.0f;
+    //private float lastInputTime_ = 0.0f;
 
     //========================================
     // 【無敵状態関連】
@@ -414,7 +414,7 @@ public class Player : MonoBehaviour {
         //========================================
         // 【入力データの保存】
         inputHorizontal_ = new Vector2(horizontal, 0.0f);
-        inputVertical_ = Vector2.zero;
+        //inputVertical_ = Vector2.zero;
 
         //========================================
         // 【ジャンプ入力の処理】
@@ -485,7 +485,7 @@ public class Player : MonoBehaviour {
             // 連打ゲージを増加
             currentComboGauge_ += comboGaugePerHit_;
             currentComboGauge_ = Mathf.Min(maxComboGauge_, currentComboGauge_);
-            lastInputTime_ = Time.time;
+            //lastInputTime_ = Time.time;
             
             Debug.Log($"[COMBO GAUGE] : Player {playerID_} - ゲージ: {currentComboGauge_:F1}/{maxComboGauge_} ({GetGaugePercentage():F1}%)");
         }
@@ -545,7 +545,7 @@ public class Player : MonoBehaviour {
         }
 
         inputHorizontal_ = new Vector2(currentDirection_ * currentSpeed / maxSpeed_, 0.0f);
-        inputVertical_ = Vector2.zero;
+        //inputVertical_ = Vector2.zero;
 
         //========================================
         // 【アニメーション状態の更新】
