@@ -2,31 +2,31 @@ using UnityEngine;
 
 public class CameraController : MonoBehaviour
 {
-    /// <summary>’†‰›ƒ|ƒWƒVƒ‡ƒ“</summary>
+    /// <summary>ï¿½ï¿½ï¿½ï¿½ï¿½|ï¿½Wï¿½Vï¿½ï¿½ï¿½ï¿½</summary>
     [SerializeField] private RectTransform MiddlePos;
 
-    /// <summary>İ’èƒ^ƒCƒ€</summary>
+    /// <summary>ï¿½İ’ï¿½^ï¿½Cï¿½ï¿½</summary>
     [SerializeField] private float SetTime = 2.0f;
     
-    /// <summary>’‹ƒtƒ‰ƒO</summary>
+    /// <summary>ï¿½ï¿½ï¿½ï¿½ï¿½tï¿½ï¿½ï¿½O</summary>
     [SerializeField] private bool ObservationFlag;
 
-    /// <summary>’‹ŠÔ</summary>
+    /// <summary>ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½</summary>
     [SerializeField] private float ObservationTime;
 
-    /// <summary>Å‰‚Ìƒ|ƒWƒVƒ‡ƒ“</summary>
+    /// <summary>ï¿½Åï¿½ï¿½Ìƒ|ï¿½Wï¿½Vï¿½ï¿½ï¿½ï¿½</summary>
     [SerializeField] private Vector3 StartPos;
 
-    /// <summary>–Ú•Wƒ|ƒWƒVƒ‡ƒ“</summary>
+    /// <summary>ï¿½Ú•Wï¿½|ï¿½Wï¿½Vï¿½ï¿½ï¿½ï¿½</summary>
     [SerializeField] private Vector3 TargetPos;
 
-    /// <summary>–Ú•WƒJƒƒ‰ƒTƒCƒY</summary>
+    /// <summary>ï¿½Ú•Wï¿½Jï¿½ï¿½ï¿½ï¿½ï¿½Tï¿½Cï¿½Y</summary>
     [SerializeField] private float TargetCameraSize;
 
-    /// <summary>ƒJƒƒ‰</summary>
+    /// <summary>ï¿½Jï¿½ï¿½ï¿½ï¿½</summary>
     [SerializeField] private Camera MainCamera;
 
-    /// <summary>‘SUI</summary>
+    /// <summary>ï¿½SUI</summary>
     [SerializeField] private RectTransform[] AllUiTransform;
 
     private Vector3[] AllUiStartPos;
@@ -86,12 +86,12 @@ public class CameraController : MonoBehaviour
 
     private void CameraMoveProcess()
     {
-        Vector3 uiSetScale;
+        Vector3 uiSetScale = Vector3.zero;
 
         Vector3 cameraUiPosition;
         Vector3 uiSetPos;
 
-        //if (MainCamera.orthographicSize != TargetCameraSize)
+        if (MainCamera.orthographicSize != TargetCameraSize)
         {
             float diffSize = TargetCameraSize - MainCamera.orthographicSize;
 
@@ -105,7 +105,7 @@ public class CameraController : MonoBehaviour
             }
         }
 
-        //if (TargetPos != this.transform.position)
+        if (TargetPos != this.transform.position)
         {
             Vector3 diffPos = TargetPos - this.transform.position;
 
@@ -120,7 +120,6 @@ public class CameraController : MonoBehaviour
             for (int i = 0; i < AllUiTransform.Length; i++)
             {
                 uiSetPos = (AllUiStartPos[i] - MiddlePos.position) - cameraUiPosition;
-                Debug.LogError(AllUiStartPos[i] + " : " + i + " = " + uiSetPos);
                 uiSetPos.x *= (uiSetScale.x + 1.0f);
                 uiSetPos.y *= (uiSetScale.y + 1.0f);
                 AllUiTransform[i].position = new Vector3(MiddlePos.position.x + uiSetPos.x, MiddlePos.position.y + uiSetPos.y, AllUiStartPos[i].z);
