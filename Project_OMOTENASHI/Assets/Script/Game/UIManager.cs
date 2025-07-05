@@ -217,7 +217,12 @@ public class UIManager : MonoBehaviour
 
         if (scoreText != null)
         {
-            scoreText.text = $"スコア - P1: {player1Score} | P2: {player2Score}";
+            if (RoundManager.Instance != null && RoundManager.Instance.GetCurrentRoundSettings() != null)
+            {
+                int winP = RoundManager.Instance.GetCurrentRoundSettings().winPoints;
+                scoreText.text = $"{winP}";
+                //scoreText.text = $"スコア - P1: {player1Score} | P2: {player2Score}";
+            }
         }
 
         if (currentRoundText != null)

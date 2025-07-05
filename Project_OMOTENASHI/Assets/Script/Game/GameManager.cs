@@ -84,18 +84,10 @@ public class GameManager : MonoBehaviour
 
         //シーンの起動はラウンド開始処理から
         CurrentGameState = GameState.RoundStart;
-    }
-
-    ///--------------------------------------------------------------
-    ///						 初期化
-    void Start()
-    {
-        //シーンの起動はラウンド開始処理から
-        CurrentGameState = GameState.RoundStart;
 
         // プレイヤーの初期化
         InitializePlayers();
-        
+
         // UIの初期化
         InitializeUI();
 
@@ -104,6 +96,26 @@ public class GameManager : MonoBehaviour
         {
             RoundManager.Instance.StartFirstRound();
         }
+    }
+
+    ///--------------------------------------------------------------
+    ///						 初期化
+    void Start()
+    {
+        ////シーンの起動はラウンド開始処理から
+        //CurrentGameState = GameState.RoundStart;
+
+        //// プレイヤーの初期化
+        //InitializePlayers();
+        
+        //// UIの初期化
+        //InitializeUI();
+
+        //// RoundManagerにラウンド開始を通知
+        //if (RoundManager.Instance != null)
+        //{
+        //    RoundManager.Instance.StartFirstRound();
+        //}
     }
 
     ///--------------------------------------------------------------
