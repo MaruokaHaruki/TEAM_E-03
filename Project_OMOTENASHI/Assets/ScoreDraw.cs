@@ -2,30 +2,30 @@ using UnityEngine;
 
 public class ScoreDraw : MonoBehaviour
 {
-    [Header("ƒvƒŒƒCƒ„[ƒWƒƒƒ“ƒv(ŠÈˆÕ)")]
+    [Header("ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½[ï¿½Wï¿½ï¿½ï¿½ï¿½ï¿½v(ï¿½Èˆï¿½)")]
     [SerializeField] private bool JumpFlag;
     [SerializeField] private ResultSimpleJump JumpPlayerA;
     [SerializeField] private ResultSimpleJump JumpPlayerB;
 
-    [Header("ƒXƒRƒA•\¦—pƒvƒŒƒCƒ„[")]
+    [Header("ï¿½Xï¿½Rï¿½Aï¿½ï¿½ï¿½ï¿½pï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½[")]
     [SerializeField] private GameObject PlayerA;
     [SerializeField] private GameObject PlayerB;
 
-    [Header("ƒvƒŒƒCƒ„[‚Ì‚‚³")]
+    [Header("ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½[ï¿½Ìï¿½ï¿½ï¿½")]
     [SerializeField] private float PlayerASize;
     [SerializeField] private float PlayerBSize;
 
-    [Header("‹›")]
+    [Header("ï¿½ï¿½")]
     [SerializeField] private GameObject Fish;
 
-    [Header("M")]
+    [Header("ï¿½M")]
     [SerializeField] private Rigidbody2D PlayerAPlate;
     [SerializeField] private Rigidbody2D PlayerBPlate;
 
-    [Header("”sÒ(x)AŸÒƒTƒCƒY(y)@ƒTƒCƒY")]
+    [Header("ï¿½sï¿½ï¿½(x)ï¿½Aï¿½ï¿½ï¿½ÒƒTï¿½Cï¿½Y(y)ï¿½@ï¿½Tï¿½Cï¿½Y")]
     [SerializeField] private Vector2 SetSize = new Vector2(0.5f, 2.0f);
 
-    [Header("”sÒ(x)AŸÒƒTƒCƒY(y) ˆÚ“®—Ê”{—¦")]
+    [Header("ï¿½sï¿½ï¿½(x)ï¿½Aï¿½ï¿½ï¿½ÒƒTï¿½Cï¿½Y(y) ï¿½Ú“ï¿½ï¿½Ê”{ï¿½ï¿½")]
     [SerializeField] private Vector2 SetXMove = new Vector2(2.0f, 2.0f);
 
     private int PlayerAScore;
@@ -34,23 +34,23 @@ public class ScoreDraw : MonoBehaviour
     private Vector2 StartPlayerAPos;
     private Vector2 StartPlayerBPos;
 
-    /// <summary>•`‰æÏ‚İƒXƒRƒAA</summary>
+    /// <summary>ï¿½`ï¿½ï¿½Ï‚İƒXï¿½Rï¿½AA</summary>
     private int DrawDoneAScore;
-    /// <summary>•`‰æÏ‚İƒXƒRƒAB</summary>
+    /// <summary>ï¿½`ï¿½ï¿½Ï‚İƒXï¿½Rï¿½AB</summary>
     private int DrawDoneBScore;
 
-    /// <summary>ƒXƒRƒAİ’èÏ‚İƒtƒ‰ƒO</summary>
+    /// <summary>ï¿½Xï¿½Rï¿½Aï¿½İ’ï¿½Ï‚İƒtï¿½ï¿½ï¿½O</summary>
     private bool SetScoreFlag = false;
 
     private ResultController Result;
 
-    /// <summary>Ÿ—˜ƒf[ƒ^</summary>
+    /// <summary>ï¿½ï¿½ï¿½ï¿½ï¿½fï¿½[ï¿½^</summary>
     private int PlayerWinData;
 
-    /// <summary>Œ»İƒvƒŒƒCƒ„[ƒTƒCƒY</summary>
+    /// <summary>ï¿½ï¿½ï¿½İƒvï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½[ï¿½Tï¿½Cï¿½Y</summary>
     private Vector2 NowPlayersSize;
 
-    /// <summary>Ÿ‚Ìs“®‚Ü‚Å‚ÌŠÔ</summary>
+    /// <summary>ï¿½ï¿½ï¿½Ìsï¿½ï¿½ï¿½Ü‚Å‚Ìï¿½ï¿½ï¿½</summary>
     private float NextMoveTime;
 
     private void Awake()
@@ -82,13 +82,13 @@ public class ScoreDraw : MonoBehaviour
         {
             bool drawEndFlag = true;
 
-            // ƒXƒRƒA”•`‰æ
+            // ï¿½Xï¿½Rï¿½Aï¿½ï¿½ï¿½`ï¿½ï¿½
             if ((DrawDoneAScore != PlayerAScore) || (DrawDoneBScore != PlayerBScore))
             {
                 drawEndFlag = false;
                 NextMoveTime = Time.time + 2.0f;
 
-                // ƒvƒŒƒCƒ„[AƒXƒRƒA•`‰æ
+                // ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½[Aï¿½Xï¿½Rï¿½Aï¿½`ï¿½ï¿½
                 if (DrawDoneAScore < PlayerAScore)
                 {
                     Instantiate(Fish, PlayerA.transform.position, Quaternion.Euler(0.0f, 0.0f, Random.Range(-0.0f, 360.0f))).transform.parent = PlayerA.transform;
@@ -96,7 +96,7 @@ public class ScoreDraw : MonoBehaviour
                     DrawDoneAScore++;
                 }
 
-                // ƒvƒŒƒCƒ„[BƒXƒRƒA•`‰æ
+                // ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½[Bï¿½Xï¿½Rï¿½Aï¿½`ï¿½ï¿½
                 if (DrawDoneBScore < PlayerBScore)
                 {
                     Instantiate(Fish, PlayerB.transform.position, Quaternion.Euler(0.0f, 0.0f, Random.Range(0.0f, 360.0f))).transform.parent = PlayerB.transform;
@@ -132,7 +132,7 @@ public class ScoreDraw : MonoBehaviour
                 drawEndFlag = false;
                 Vector2 diff = Vector2.zero;
 
-                // Ÿ”s‚É‚æ‚Á‚ÄƒLƒƒƒ‰ƒNƒ^[‚Ì‘å‚«‚³‚âƒ|ƒWƒVƒ‡ƒ“‚ğ•Ï‚¦‚é
+                // ï¿½ï¿½ï¿½sï¿½É‚ï¿½ï¿½ï¿½ÄƒLï¿½ï¿½ï¿½ï¿½ï¿½Nï¿½^ï¿½[ï¿½Ì‘å‚«ï¿½ï¿½ï¿½ï¿½|ï¿½Wï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï‚ï¿½ï¿½ï¿½
                 switch (PlayerWinData)
                 {
                     case 0:
@@ -187,7 +187,7 @@ public class ScoreDraw : MonoBehaviour
                 }
             }
 
-            // ƒXƒRƒA•`‰æI—¹
+            // ï¿½Xï¿½Rï¿½Aï¿½`ï¿½ï¿½Iï¿½ï¿½
             if (drawEndFlag)
             {
                 if (PlayerAScore <= 3)
@@ -208,7 +208,7 @@ public class ScoreDraw : MonoBehaviour
         }
     }
 
-    /// <summary>­‚µ‚¸‚Â•Ï“®‚³‚¹‚é</summary>
+    /// <summary>ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Â•Ï“ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½</summary>
     private void SetDiffPos(ref float diff)
     {
         if (diff > 0.0f)
@@ -229,14 +229,14 @@ public class ScoreDraw : MonoBehaviour
         }
     }
 
-    /// <summary>ƒXƒRƒAİ’è</summary>
+    /// <summary>ï¿½Xï¿½Rï¿½Aï¿½İ’ï¿½</summary>
     internal void SetScore(int playerAScore, int playerBScore, ResultController result)
     {
-        // ƒXƒRƒA
+        // ï¿½Xï¿½Rï¿½A
         PlayerAScore = playerAScore;
         PlayerBScore = playerBScore;
 
-        // Ÿ”s
+        // ï¿½ï¿½ï¿½s
         if (playerAScore == playerBScore)
         {
             PlayerWinData = 0;
@@ -250,10 +250,10 @@ public class ScoreDraw : MonoBehaviour
             PlayerWinData = 2;
         }
 
-        // ƒŠƒUƒ‹ƒg
+        // ï¿½ï¿½ï¿½Uï¿½ï¿½ï¿½g
         Result = result;
 
-        // ƒXƒRƒAƒf[ƒ^İ’è‚µ‚½‚Ì‚Å—LŒø‰»
+        // ï¿½Xï¿½Rï¿½Aï¿½fï¿½[ï¿½^ï¿½İ’è‚µï¿½ï¿½ï¿½Ì‚Å—Lï¿½ï¿½ï¿½ï¿½
         SetScoreFlag = true;
     }
 }
