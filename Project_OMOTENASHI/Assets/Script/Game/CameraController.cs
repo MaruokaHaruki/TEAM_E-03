@@ -2,8 +2,11 @@ using UnityEngine;
 
 public class CameraController : MonoBehaviour
 {
+    /// <summary>中央ポジション</summary>
+    [SerializeField] private RectTransform MiddlePos;
+
     /// <summary>設定タイム</summary>
-    [SerializeField] private float SetTime;
+    [SerializeField] private float SetTime = 2.0f;
     
     /// <summary>注視フラグ</summary>
     [SerializeField] private bool ObservationFlag;
@@ -28,7 +31,7 @@ public class CameraController : MonoBehaviour
 
     private Vector3[] AllUiStartPos;
     private Vector3[] AllUiStartSize;
-    public Vector3 UiMoveVolume;
+    public Vector3 UiMoveVolume = new Vector3(1.0f, 1.0f, 1.5f);
 
     void Start()
     {
@@ -66,11 +69,6 @@ public class CameraController : MonoBehaviour
                 TargetCameraSize = 5.0f;
             }
         }
-        //*
-        if (Input.GetKeyDown(KeyCode.N))
-        {
-            StartObservation(new Vector3(-10, -370, this.transform.position.z));
-        }//*/
     }
 
     private void FixedUpdate()
@@ -117,14 +115,15 @@ public class CameraController : MonoBehaviour
 
             this.transform.position = TargetPos - diffPos;
 
-            cameraUiPosition = (StartPos - this.transform.position) * 120.0f;
-            Debug.LogError(cameraUiPosition);
+            cameraUiPosition = (this.transform.position - StartPos) * 100.0f;
+
             for (int i = 0; i < AllUiTransform.Length; i++)
             {
-                uiSetPos = AllUiStartPos[i] - cameraUiPosition;
-                uiSetPos.x *= uiSetScale.x;
-                uiSetPos.y *= uiSetScale.y;
-                AllUiTransform[i].position = new Vector3(AllUiStartPos[i].x + uiSetPos.x, AllUiStartPos[i].y + uiSetPos.y, AllUiStartPos[i].z);
+                uiSetPos = (AllUiStartPos[i] - MiddlePos.position) - cameraUiPosition;
+                Debug.LogError(AllUiStartPos[i] + " : " + i + " = " + uiSetPos);
+                uiSetPos.x *= (uiSetScale.x + 1.0f);
+                uiSetPos.y *= (uiSetScale.y + 1.0f);
+                AllUiTransform[i].position = new Vector3(MiddlePos.position.x + uiSetPos.x, MiddlePos.position.y + uiSetPos.y, AllUiStartPos[i].z);
             }
         }
     }
