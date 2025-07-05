@@ -2836,7 +2836,7 @@ MonoBehaviour:
   playerID_: B
   maxHp_: 100
   currentHp_: 100
-  maxSpeed_: 5
+  maxSpeed_: 4
   acceleration_: 15
   dragOnStop_: 5
   dragOnMove_: 0
@@ -2850,10 +2850,10 @@ MonoBehaviour:
   speedBoostMultiplier_: 2.5
   speedBoostDuration_: 0.5
   maxComboGauge_: 100
-  comboGaugePerHit_: 20
+  comboGaugePerHit_: 3
   gaugeDrainRate_: 15
-  maxGaugeSpeedMultiplier_: 8
-  minEffectiveGauge_: 5
+  maxGaugeSpeedMultiplier_: 12
+  minEffectiveGauge_: 1
   invincibilityDuration_: 1
   rainbowSpeed_: 1
   invincibilitySpeedMultiplier_: 1
@@ -3584,7 +3584,7 @@ MonoBehaviour:
   playerID_: A
   maxHp_: 100
   currentHp_: 100
-  maxSpeed_: 5
+  maxSpeed_: 4
   acceleration_: 15
   dragOnStop_: 5
   dragOnMove_: 0
@@ -3598,10 +3598,10 @@ MonoBehaviour:
   speedBoostMultiplier_: 2.5
   speedBoostDuration_: 0.5
   maxComboGauge_: 100
-  comboGaugePerHit_: 20
+  comboGaugePerHit_: 3
   gaugeDrainRate_: 15
-  maxGaugeSpeedMultiplier_: 8
-  minEffectiveGauge_: 5
+  maxGaugeSpeedMultiplier_: 12
+  minEffectiveGauge_: 1
   invincibilityDuration_: 1
   rainbowSpeed_: 1
   invincibilitySpeedMultiplier_: 1

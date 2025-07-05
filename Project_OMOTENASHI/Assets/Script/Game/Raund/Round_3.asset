@@ -23,7 +23,7 @@ MonoBehaviour:
   enableSpeedTransfer: 1
   playerMaxHp: 10
   baseSpeed: 5
-  jumpForce: 6
+  jumpForce: 8
   invincibilityDuration: 0
   stompStunDuration: 2
   tilemapPrefab: {fileID: 7287989363445644035, guid: bd75badb0fda3f743bb0589de97849d9, type: 3}
