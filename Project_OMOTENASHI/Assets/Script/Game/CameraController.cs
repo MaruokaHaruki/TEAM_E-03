@@ -31,7 +31,9 @@ public class CameraController : MonoBehaviour
 
     private Vector3[] AllUiStartPos;
     private Vector3[] AllUiStartSize;
-    public Vector3 UiMoveVolume = new Vector3(1.0f, 1.0f, 1.5f);
+
+    /// <summary>移動割合</summary>
+    [SerializeField] private float MoveRatio = 10.0f;
 
     void Start()
     {
@@ -86,19 +88,23 @@ public class CameraController : MonoBehaviour
 
     private void CameraMoveProcess()
     {
-        Vector3 uiSetScale = Vector3.zero;
+        Vector3 uiSetScale;
+        bool SetScaleFlag = false;
 
         Vector3 cameraUiPosition;
         Vector3 uiSetPos;
 
         if (MainCamera.orthographicSize != TargetCameraSize)
         {
+            SetScaleFlag = true;
             float diffSize = TargetCameraSize - MainCamera.orthographicSize;
 
             SetDiff(ref diffSize, 0.5f);
             MainCamera.orthographicSize = TargetCameraSize - diffSize;
-
-            uiSetScale = (Vector3.one * (1.0f - (MainCamera.orthographicSize / 5.0f))) * UiMoveVolume.z;
+        }
+        uiSetScale = (Vector3.one * (1.0f - (MainCamera.orthographicSize / 5.0f))) * 1.5f;
+        if (SetScaleFlag)
+        {
             for (int i = 0; i < AllUiTransform.Length; i++)
             {
                 AllUiTransform[i].localScale = new Vector3(AllUiStartSize[i].x + uiSetScale.x, AllUiStartSize[i].y + uiSetScale.y, AllUiStartSize[i].z + uiSetScale.z);
@@ -109,8 +115,19 @@ public class CameraController : MonoBehaviour
         {
             Vector3 diffPos = TargetPos - this.transform.position;
 
-            SetDiff(ref diffPos.x, 0.5f);
-            SetDiff(ref diffPos.y, 0.5f);
+            float moveSpeed = (Mathf.Abs(TargetPos.x - StartPos.x) + Mathf.Abs(TargetPos.y - StartPos.y)) / MoveRatio;
+            if (moveSpeed == 0.0f)
+            {
+                moveSpeed = 1.0f;
+            }
+
+            float moveDenominator = Mathf.Abs(diffPos.x) + Mathf.Abs(diffPos.y);
+            if (moveDenominator == 0.0f)
+            {
+                moveDenominator = 0.1f;
+            }
+            SetDiff(ref diffPos.x, moveSpeed * (Mathf.Abs(diffPos.x) / moveDenominator));
+            SetDiff(ref diffPos.y, moveSpeed * (Mathf.Abs(diffPos.y) / moveDenominator));
             SetDiff(ref diffPos.z, 0.5f);
 
             this.transform.position = TargetPos - diffPos;
