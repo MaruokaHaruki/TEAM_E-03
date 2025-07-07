@@ -26,7 +26,7 @@ MonoBehaviour:
   jumpForce: 8
   invincibilityDuration: 0
   stompStunDuration: 2
-  tilemapPrefab: {fileID: 7287989363445644035, guid: a5d20d2818b85914289d34487743937d, type: 3}
+  tilemapPrefab: {fileID: 3229168071328024921, guid: e062d202314f88f4187303e9209316bf, type: 3}
   tilemapPosition: {x: 0, y: 0, z: 0}
   tilemapRotation: {x: 0, y: 0, z: 0}
   InvincibleItemFlag: 0

@@ -106,6 +106,21 @@ public class Player : MonoBehaviour {
     public float invincibilitySpeedMultiplier_ = 2.0f;
 
     //========================================
+    // 【スプライト回転設定】
+    [Header("スプライト回転設定")]
+    [Tooltip("スプライトの回転を有効にするか")]
+    public bool enableSpriteRotation_ = true;
+
+    [Tooltip("回転の最大角度（度）")]
+    public float maxRotationAngle_ = 45.0f;
+
+    [Tooltip("回転の感度（高いほど敏感）")]
+    public float rotationSensitivity_ = 1.0f;
+
+    [Tooltip("回転の滑らかさ（高いほど滑らか）")]
+    public float rotationSmoothness_ = 5.0f;
+
+    //========================================
     // 【機能有効化設定】
     [Header("機能設定")]
     [Tooltip("プレイヤー衝突時の速度交換機能を有効にするか")]
@@ -152,6 +167,7 @@ public class Player : MonoBehaviour {
     private Animator animator_ = null;
     private Rigidbody2D rigidbody2D_ = null;
     private SpriteRenderer spriteRenderer_ = null;
+    private Transform spriteTransform_ = null;
 
     //========================================
     // 【状態フラグ】
@@ -198,6 +214,11 @@ public class Player : MonoBehaviour {
     public float stunTimer_ = 0.0f;
     public bool shouldReverseOnLanding_ = false;
 
+    //========================================
+    // 【スプライト回転関連】
+    private float targetRotation_ = 0.0f;
+    private float currentRotation_ = 0.0f;
+
 
     ///--------------------------------------------------------------
     ///                      初期化処理
@@ -208,6 +229,7 @@ public class Player : MonoBehaviour {
         // 子オブジェクト「Sprite」からアニメーター取得と存在確認
         Transform spriteChild = transform.Find("Sprite");
         if (spriteChild != null) {
+            spriteTransform_ = spriteChild;
             animator_ = spriteChild.GetComponent<Animator>();
             if (animator_ == null) {
                 Debug.LogError("[ERROR] : Animator component not found on Sprite child object. アニメーション制御ができません。");
@@ -336,6 +358,12 @@ public class Player : MonoBehaviour {
         }
 
         //========================================
+        // 【スプライト回転の更新】
+        if (enableSpriteRotation_) {
+            UpdateSpriteRotation();
+        }
+
+        //========================================
         // 【連打ゲージの自然減少】
         if (currentComboGauge_ > 0.0f) {
             currentComboGauge_ -= gaugeDrainRate_ * Time.deltaTime;
@@ -421,6 +449,38 @@ public class Player : MonoBehaviour {
         // Unityの標準重力に加えて、ゲーム専用の重力を追加適用
         // より細かい落下制御を可能にする
         rigidbody2D_.AddForce(Vector2.down * gravity_, ForceMode2D.Force);
+    }
+
+    ///--------------------------------------------------------------
+    ///                      スプライト回転制御
+    /// 速度ベクトルに基づいてスプライトの向きを更新
+    private void UpdateSpriteRotation() {
+        if (spriteTransform_ == null || rigidbody2D_ == null) return;
+
+        // 現在の速度ベクトルを取得
+        Vector2 velocity = rigidbody2D_.velocity;
+
+        // 速度が十分にある場合のみ回転を適用
+        if (velocity.magnitude > 0.5f) {
+            // 速度ベクトルから角度を計算（ラジアンから度に変換）
+            float velocityAngle = Mathf.Atan2(velocity.y, Mathf.Abs(velocity.x)) * Mathf.Rad2Deg;
+            
+            // 角度を制限範囲内にクランプ
+            velocityAngle = Mathf.Clamp(velocityAngle, -maxRotationAngle_, maxRotationAngle_);
+            
+            // 感度を適用
+            targetRotation_ = velocityAngle * rotationSensitivity_;
+        }
+        else {
+            // 速度が小さい場合は水平に戻す
+            targetRotation_ = 0.0f;
+        }
+
+        // 滑らかに回転を補間
+        currentRotation_ = Mathf.Lerp(currentRotation_, targetRotation_, rotationSmoothness_ * Time.deltaTime);
+
+        // スプライトに回転を適用（Z軸回転のみ）
+        spriteTransform_.localRotation = Quaternion.Euler(0, 0, -currentRotation_);
     }
 
     ///--------------------------------------------------------------
@@ -1077,6 +1137,13 @@ public class Player : MonoBehaviour {
         if (animator_ != null) {
             animator_.SetBool("Run", false);
             animator_.SetBool("Jump", false);
+        }
+
+        // スプライト回転をリセット
+        targetRotation_ = 0.0f;
+        currentRotation_ = 0.0f;
+        if (spriteTransform_ != null) {
+            spriteTransform_.localRotation = Quaternion.identity;
         }
 
         Debug.Log($"[PLAYER RESET] : {gameObject.name} の状態がリセットされました");

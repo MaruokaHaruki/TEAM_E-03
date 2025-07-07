@@ -2965,6 +2965,10 @@ MonoBehaviour:
   invincibilityDuration_: 1
   rainbowSpeed_: 1
   invincibilitySpeedMultiplier_: 1
+  enableSpriteRotation_: 1
+  maxRotationAngle_: 45
+  rotationSensitivity_: 1
+  rotationSmoothness_: 5
   enableSpeedTransfer_: 1
   isKeySettingMode_: 0
   allowMovement_: 0
@@ -2990,7 +2994,7 @@ Transform:
   m_GameObject: {fileID: 1507770433}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2.889, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -3567,7 +3571,7 @@ Transform:
   m_GameObject: {fileID: 1696022406}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.96, y: -3.2, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3725,6 +3729,10 @@ MonoBehaviour:
   invincibilityDuration_: 1
   rainbowSpeed_: 1
   invincibilitySpeedMultiplier_: 1
+  enableSpriteRotation_: 1
+  maxRotationAngle_: 45
+  rotationSensitivity_: 1
+  rotationSmoothness_: 5
   enableSpeedTransfer_: 1
   isKeySettingMode_: 0
   allowMovement_: 0
