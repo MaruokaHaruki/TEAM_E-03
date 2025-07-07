@@ -205,26 +205,34 @@ public class Player : MonoBehaviour {
     /// 必要なコンポーネントの取得と初期状態の設定を行う
     private void Start() {
         //========================================
-        // アニメーター取得と存在確認
-        animator_ = GetComponent<Animator>();
-        if (animator_ == null) {
-            Debug.LogError("[ERROR] : Animator component not found on Player object. アニメーション制御ができません。");
+        // 子オブジェクト「Sprite」からアニメーター取得と存在確認
+        Transform spriteChild = transform.Find("Sprite");
+        if (spriteChild != null) {
+            animator_ = spriteChild.GetComponent<Animator>();
+            if (animator_ == null) {
+                Debug.LogError("[ERROR] : Animator component not found on Sprite child object. アニメーション制御ができません。");
+            }
+            
+            //========================================
+            // 子オブジェクト「Sprite」からスプライトレンダラー取得と存在確認
+            spriteRenderer_ = spriteChild.GetComponent<SpriteRenderer>();
+            if (spriteRenderer_ == null) {
+                Debug.LogError("[ERROR] : SpriteRenderer component not found on Sprite child object. 色変更エフェクトができません。");
+            }
+            else {
+                // 元の色を保存
+                originalColor_ = spriteRenderer_.color; 
+            }
         }
+        else {
+            Debug.LogError("[ERROR] : 'Sprite' child object not found. 描画系コンポーネントを取得できません。");
+        }
+
         //========================================
         // リジッドボディ取得と存在確認
         rigidbody2D_ = GetComponent<Rigidbody2D>();
         if (rigidbody2D_ == null) {
             Debug.LogError("[ERROR] : Rigidbody2D component not found on Player object. 物理演算制御ができません。");
-        }
-        //========================================
-        // スプライトレンダラー取得と存在確認
-        spriteRenderer_ = GetComponent<SpriteRenderer>();
-        if (spriteRenderer_ == null) {
-            Debug.LogError("[ERROR] : SpriteRenderer component not found on Player object. 色変更エフェクトができません。");
-        }
-        else {
-            // 元の色を保存
-            originalColor_ = spriteRenderer_.color;
         }
 
         //========================================
