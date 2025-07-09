@@ -21,7 +21,7 @@ public class Fire_UI : MonoBehaviour
         Player1,Player2
     }
 
-    private void Start()
+    private void Awake()
     {
         value = 0;
 
@@ -38,12 +38,17 @@ public class Fire_UI : MonoBehaviour
     private void Update()
     {
         fire_image_.DOFillAmount(GetValue(), 0.1f);
+
+        //ゲージが0になったら赤くする
+        fire_image_.DOColor(Color.red, 0.1f);
     }
 
     private float GetValue()
     {
+        //0-100%の値を取得
         float spd = instplayer.GetGaugePercentage() * 0.01f;
 
+        //ゲージの値を0-1に変換
         value = Mathf.Clamp(spd,0.0f,1.0f);
 
         return value; 

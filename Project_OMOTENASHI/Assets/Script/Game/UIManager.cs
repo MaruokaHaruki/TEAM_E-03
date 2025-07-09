@@ -61,6 +61,7 @@ public class UIManager : MonoBehaviour
     [Tooltip("ラウンド開始カウントダウン表示テキスト")]
     public Text countdownText;
 
+
     //========================================
     // ゲーム終了演出UI
     [Header("ゲーム終了演出UI")]
@@ -72,6 +73,11 @@ public class UIManager : MonoBehaviour
 
     [Tooltip("最終スコア表示テキスト")]
     public Text finalScoreText;
+
+    //========================================
+    // RoundDirectionController
+    public RoundDirectionController roundDirectionController;
+
 
     private void Awake()
     {
@@ -251,6 +257,11 @@ public class UIManager : MonoBehaviour
         {
             roundFeatureImage.overrideSprite = roundImage;
         }
+
+        if(roundDirectionController!=null)
+        {
+            roundDirectionController.RoundDirectonStart();
+        }
     }
 
     //========================================
@@ -260,6 +271,11 @@ public class UIManager : MonoBehaviour
         if (roundStartPanel != null)
         {
             roundStartPanel.SetActive(false);
+        }
+
+        if (roundDirectionController != null)
+        {
+            roundDirectionController.RoundDirectonEnd();
         }
     }
 
