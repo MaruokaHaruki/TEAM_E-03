@@ -111,6 +111,7 @@ public class SoundManager : MonoBehaviour
             bgmSource.loop = true;
             bgmSource.playOnAwake = false;
             bgmSource.volume = 1f; // AudioSource自体のボリュームは最大に
+            bgmSource.pitch = 1f; // ピッチを通常に設定
             
             Debug.Log($"BGM AudioSource初期化完了 - MixerGroup: {(bgmMixerGroup != null ? bgmMixerGroup.name : "None")}");
         }
@@ -145,6 +146,7 @@ public class SoundManager : MonoBehaviour
         bgmSource.Stop();
         bgmSource.clip = clip;
         bgmSource.volume = 1f;
+        bgmSource.pitch = 1f; // ピッチを通常に設定
         
         // 保存されたBGMボリューム設定をAudioMixerに適用
         float savedVolume = GetBGMVolume();
@@ -152,7 +154,7 @@ public class SoundManager : MonoBehaviour
         
         bgmSource.Play();
         
-        Debug.Log($"PlayBGMDirect: {clip.name} - Volume: {savedVolume} - Playing: {bgmSource.isPlaying}");
+        Debug.Log($"PlayBGMDirect: {clip.name} - Volume: {savedVolume} - Pitch: {bgmSource.pitch} - Playing: {bgmSource.isPlaying}");
     }
 
     /// <summary>
@@ -198,7 +200,7 @@ public class SoundManager : MonoBehaviour
             float currentVol = targetVolume;
             for (float t = 0; t < duration * 0.5f; t += Time.deltaTime)
             {
-                float vol = Mathf.Lerp(currentVol, 0.0001f, (t / (duration * 0.5f)));
+                float vol = Mathf.Lerp(currentVol, 0f, (t / (duration * 0.5f)));
                 SetBGMVolumeToMixer(vol);
                 yield return null;
             }
@@ -207,12 +209,13 @@ public class SoundManager : MonoBehaviour
         // 新しいBGMを設定して再生開始
         bgmSource.clip = newClip;
         bgmSource.volume = 1f;
+        bgmSource.pitch = 1f; // ピッチを通常に設定
         bgmSource.Play();
 
         // フェードイン
         for (float t = 0; t < duration * 0.5f; t += Time.deltaTime)
         {
-            float vol = Mathf.Lerp(0.0001f, targetVolume, (t / (duration * 0.5f)));
+            float vol = Mathf.Lerp(0f, targetVolume, (t / (duration * 0.5f)));
             SetBGMVolumeToMixer(vol);
             yield return null;
         }
@@ -246,7 +249,7 @@ public class SoundManager : MonoBehaviour
         
         for (float t = 0; t < duration; t += Time.deltaTime)
         {
-            float vol = Mathf.Lerp(currentVolume, 0.0001f, t / duration);
+            float vol = Mathf.Lerp(currentVolume, 0f, t / duration);
             SetBGMVolumeToMixer(vol);
             yield return null;
         }
@@ -315,6 +318,7 @@ public class SoundManager : MonoBehaviour
             source.playOnAwake = false;
             source.loop = false;
             source.volume = 1f; // AudioSource自体のボリュームは最大に
+            source.pitch = 1f; // ピッチを通常に設定
             seObj.SetActive(false);
             sePool.Enqueue(source);
         }
@@ -343,6 +347,7 @@ public class SoundManager : MonoBehaviour
         source.gameObject.SetActive(true);
         source.clip = clip;
         source.volume = 1f;
+        source.pitch = 1f; // 再生時にピッチを通常にリセット
         source.Play();
 
         Debug.Log($"SE再生: {clip.name} - Playing: {source.isPlaying}");
@@ -372,7 +377,7 @@ public class SoundManager : MonoBehaviour
     /// <param name="volume">音量（0.0～1.0）</param>
     public void SetMasterVolume(float volume)
     {
-        float clampedVolume = Mathf.Clamp(volume, 0.0001f, 1f);
+        float clampedVolume = Mathf.Clamp(volume, 0f, 1f);
         float db = ConvertVolumeToDecibel(clampedVolume);
         
         if (audioMixer != null)
@@ -389,7 +394,7 @@ public class SoundManager : MonoBehaviour
     /// <param name="volume">音量（0.0～1.0）</param>
     public void SetBGMVolume(float volume)
     {
-        float clampedVolume = Mathf.Clamp(volume, 0.0001f, 1f);
+        float clampedVolume = Mathf.Clamp(volume, 0f, 1f);
         SetBGMVolumeToMixer(clampedVolume);
         PlayerPrefs.SetFloat("BGMVol", volume);
         Debug.Log($"BGM音量設定保存: {volume}");
@@ -413,7 +418,7 @@ public class SoundManager : MonoBehaviour
     /// <param name="volume">音量（0.0～1.0）</param>
     public void SetSEVolume(float volume)
     {
-        float clampedVolume = Mathf.Clamp(volume, 0.0001f, 1f);
+        float clampedVolume = Mathf.Clamp(volume, 0f, 1f);
         float db = ConvertVolumeToDecibel(clampedVolume);
         
         if (audioMixer != null)
@@ -427,11 +432,16 @@ public class SoundManager : MonoBehaviour
     /// <summary>
     /// 音量値をデシベルに変換
     /// </summary>
-    /// <param name="volume">音量（0.0001～1.0）</param>
+    /// <param name="volume">音量（0.0～1.0）</param>
     /// <returns>デシベル値</returns>
     private float ConvertVolumeToDecibel(float volume)
     {
-        return Mathf.Log10(Mathf.Clamp(volume, 0.0001f, 1f)) * 20f;
+        // volumeが0の場合、-80dB（ほぼ無音）を返す
+        if (volume <= 0)
+        {
+            return -80f;
+        }
+        return Mathf.Log10(volume) * 20f;
     }
 
     /// <summary>マスター音量を取得</summary>
@@ -441,7 +451,7 @@ public class SoundManager : MonoBehaviour
     public float GetBGMVolume()
     { 
         float volume = PlayerPrefs.GetFloat("BGMVol", 1f);
-        return Mathf.Clamp(volume, 0.0001f, 1f); 
+        return Mathf.Clamp(volume, 0f, 1f); 
     }
 
     /// <summary>SE音量を取得</summary>
