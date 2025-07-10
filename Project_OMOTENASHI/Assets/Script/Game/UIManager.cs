@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -34,8 +35,12 @@ public class UIManager : MonoBehaviour
     //========================================
     // ラウンド情報UI
     [Header("ラウンド情報UI")]
-    [Tooltip("ラウンド情報表示テキスト")]
-    public Text roundInfoText;
+    [Tooltip("キーコンフィグ用画像")]
+    public Image keyConfig1;
+    public Image keyConfig2;
+
+    [Tooltip("設定用スプライトリスト")]
+    public Sprite[] spriteList;
 
     [Tooltip("スコア表示テキスト")]
     public Text scoreText;
@@ -216,15 +221,31 @@ public class UIManager : MonoBehaviour
     // ラウンド情報UI更新
     public void UpdateRoundInfoUI(int currentRound, int totalRounds, int player1Score, int player2Score)
     {
-        if (roundInfoText != null)
+        if(keyConfig1!=null)
         {
-            roundInfoText.text = $"ラウンド {currentRound}/{totalRounds}";
+           int roundcount= RoundManager.Instance.GetCurrentRoundSettings().roundNumber;
+            keyConfig1.sprite = spriteList[roundcount*2-2];
+            keyConfig2.sprite = spriteList[roundcount*2-1];
         }
+
+
+        //　↓アイコンですでに表示しているので不要
+        //if (roundInfoText != null)
+        //{
+        //    roundInfoText.text = $"ラウンド {currentRound}/{totalRounds}";
+        //}
 
         if (scoreText != null)
         {
-            scoreText.text = $"スコア - P1: {player1Score} | P2: {player2Score}";
+            scoreText.text = $"{RoundManager.Instance.GetCurrentRoundSettings().winPoints}";
         }
+
+
+        // ↓Old
+        //if (scoreText != null)
+        //{
+        //    scoreText.text = $"スコア - P1: {player1Score} | P2: {player2Score}";
+        //}
 
         if (currentRoundText != null)
         {
