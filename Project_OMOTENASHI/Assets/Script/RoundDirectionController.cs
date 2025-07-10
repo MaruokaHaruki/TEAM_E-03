@@ -13,7 +13,7 @@ public class RoundDirectionController: MonoBehaviour
     public UIElement[] elements;
     public float fadeDuration = 1f;
 
-    void Awake()
+    void Start()
     {
         // ‰Šúó‘Ô‚Å‚Í‘S‚Ä”ñ•\¦
         foreach (var element in elements)
