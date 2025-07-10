@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 
 //=============================================================================
 /// ゲームマネージャー
@@ -16,12 +17,14 @@ public class GameManager : MonoBehaviour
     // ゲームの状態
     public enum GameState
     {
+        RoundStart,  // ラウンド開始処理
         Playing,     // ゲームプレイ中
         Paused,      // 一時停止中
+        RoundEnd,    // ラウンド終了処理
         GameOver     // ゲームオーバー
     }
     // Gameの状態を保持
-    public GameState CurrentGameState = GameState.Playing;
+    public GameState CurrentGameState = GameState.RoundStart;
     
     //========================================
     // どちらが勝ったかを保持
@@ -49,25 +52,9 @@ public class GameManager : MonoBehaviour
     public string player2Name_ = "Player 2";
 
     //========================================
-    // UI要素
-    [Header("UI要素")]
-    [Tooltip("プレイヤー1のHPバー")]
-    public Slider player1HpBar_;
-    
-    [Tooltip("プレイヤー2のHPバー")]
-    public Slider player2HpBar_;
-    
-    [Tooltip("プレイヤー1のHP数値テキスト")]
-    public Text player1HpText_;
-    
-    [Tooltip("プレイヤー2のHP数値テキスト")]
-    public Text player2HpText_;
-    
-    [Tooltip("勝者表示テキスト")]
-    public Text winnerText_;
-    
-    [Tooltip("ゲームオーバーパネル")]
-    public GameObject gameOverPanel_;
+    // アイテム生成物
+    [Tooltip("無敵アイテム生成物")]
+    public InvincibleItemGeneration invincibleObje;
 
     ///--------------------------------------------------------------
     ///						 private変数
@@ -75,6 +62,10 @@ public class GameManager : MonoBehaviour
     // プレイヤーHP管理
     private Dictionary<string, int> playerMaxHp_ = new Dictionary<string, int>();
     private Dictionary<string, int> playerCurrentHp_ = new Dictionary<string, int>();
+
+    //// プレイヤー初期位置
+    //private Vector3 initialPlayer1Position;
+    //private Vector3 initialPlayer2Position;
 
     ///--------------------------------------------------------------
     ///						 初期化前初期化
@@ -91,32 +82,52 @@ public class GameManager : MonoBehaviour
             Destroy(gameObject); // 既に存在する場合は新しいインスタンスを破棄
         }
 
-        //シーンの起動はプレイ中
-        CurrentGameState = GameState.Playing;
+        //シーンの起動はラウンド開始処理から
+        CurrentGameState = GameState.RoundStart;
     }
 
     ///--------------------------------------------------------------
     ///						 初期化
     void Start()
     {
+        //シーンの起動はラウンド開始処理から
+        CurrentGameState = GameState.RoundStart;
 
         // プレイヤーの初期化
         InitializePlayers();
         
         // UIの初期化
         InitializeUI();
+
+        // RoundManagerにラウンド開始を通知
+        if (RoundManager.Instance != null)
+        {
+            RoundManager.Instance.StartFirstRound();
+        }
     }
 
     ///--------------------------------------------------------------
     ///						 更新
     void Update()
     {
-        // UIの更新
-        UpdateUI();
-        
-        // ゲームオーバー状態の処理
-        if (CurrentGameState == GameState.GameOver && gameOverPanel_ != null) {
-            gameOverPanel_.SetActive(true);
+        switch (CurrentGameState)
+        {
+            case GameState.RoundStart:
+                // ラウンド開始中の処理はRoundManagerで管理
+                break;
+            case GameState.RoundEnd:
+                break;
+            case GameState.Playing:
+                break;
+            case GameState.GameOver: // ゲームオーバー状態の処理
+                if (UIManager.Instance != null)
+                {
+                    UIManager.Instance.ShowGameOverUI();
+                }
+                SceneManagerScript.Instance.FadeOutScene("Result");
+                break;
+            default:
+                break;
         }
     }
 
@@ -128,6 +139,7 @@ public class GameManager : MonoBehaviour
             string player1Id = player1_.playerID_;
             playerMaxHp_[player1Id] = player1_.maxHp_;
             playerCurrentHp_[player1Id] = player1_.currentHp_;
+           // initialPlayer1Position = player1_.gameObject.transform.position;    //←プレイヤーの初期座標設定
             Debug.Log($"[GAME MANAGER] : {player1Name_} (ID: {player1Id}) を登録しました。HP: {playerCurrentHp_[player1Id]}/{playerMaxHp_[player1Id]}");
         }
 
@@ -136,6 +148,7 @@ public class GameManager : MonoBehaviour
             string player2Id = player2_.playerID_;
             playerMaxHp_[player2Id] = player2_.maxHp_;
             playerCurrentHp_[player2Id] = player2_.currentHp_;
+            //initialPlayer2Position = player2_.gameObject.transform.position;    //←プレイヤーの初期座標設定
             Debug.Log($"[GAME MANAGER] : {player2Name_} (ID: {player2Id}) を登録しました。HP: {playerCurrentHp_[player2Id]}/{playerMaxHp_[player2Id]}");
         }
     }
@@ -143,62 +156,14 @@ public class GameManager : MonoBehaviour
     ///--------------------------------------------------------------
     ///						 UI初期化
     private void InitializeUI() {
-        // HPバーの初期化
-        if (player1HpBar_ != null && player1_ != null) {
-            player1HpBar_.maxValue = playerMaxHp_[player1_.playerID_];
-            player1HpBar_.value = playerCurrentHp_[player1_.playerID_];
-        }
-
-        if (player2HpBar_ != null && player2_ != null) {
-            player2HpBar_.maxValue = playerMaxHp_[player2_.playerID_];
-            player2HpBar_.value = playerCurrentHp_[player2_.playerID_];
-        }
-
-        // ゲームオーバーパネルを非表示
-        if (gameOverPanel_ != null) {
-            gameOverPanel_.SetActive(false);
-        }
-
-        // 勝者テキストを非表示
-        if (winnerText_ != null) {
-            winnerText_.gameObject.SetActive(false);
-        }
-    }
-
-    ///--------------------------------------------------------------
-    ///						 UI更新
-    private void UpdateUI() {
-        // プレイヤー1のHP表示更新
-        if (player1_ != null) {
-            string player1Id = player1_.playerID_;
-            if (playerCurrentHp_.ContainsKey(player1Id)) {
-                if (player1HpBar_ != null) {
-                    player1HpBar_.value = playerCurrentHp_[player1Id];
-                }
-                if (player1HpText_ != null) {
-                    player1HpText_.text = $"{player1Name_}: {playerCurrentHp_[player1Id]}/{playerMaxHp_[player1Id]}";
-                }
-            }
-        }
-
-        // プレイヤー2のHP表示更新
-        if (player2_ != null) {
-            string player2Id = player2_.playerID_;
-            if (playerCurrentHp_.ContainsKey(player2Id)) {
-                if (player2HpBar_ != null) {
-                    player2HpBar_.value = playerCurrentHp_[player2Id];
-                }
-                if (player2HpText_ != null) {
-                    player2HpText_.text = $"{player2Name_}: {playerCurrentHp_[player2Id]}/{playerMaxHp_[player2Id]}";
-                }
-            }
-        }
-
-        // 勝者表示の更新
-        if (CurrentGameState == GameState.GameOver && winnerText_ != null) {
-            winnerText_.gameObject.SetActive(true);
-            string winnerName = GetWinnerName();
-            winnerText_.text = $"勝者: {winnerName}";
+        if (UIManager.Instance != null && player1_ != null && player2_ != null)
+        {
+            UIManager.Instance.InitializePlayerHPUI(
+                player1_.playerID_, 
+                player2_.playerID_, 
+                playerMaxHp_[player1_.playerID_], 
+                playerMaxHp_[player2_.playerID_]
+            );
         }
     }
 
@@ -241,9 +206,9 @@ public class GameManager : MonoBehaviour
             
             Debug.Log($"[ROUND END] : {defeatedPlayerName} が敗北しました。ラウンド勝者は {winnerName} です！");
 
-            // ラウンドマネージャーに勝利を通知（ゲームオーバー状態にはしない）
+            // ラウンドマネージャーに勝利を通知
             RoundManager.Instance.OnPlayerWin(CurrentWinner);
-            
+
             // 勝者をリセット（次のラウンドのため）
             CurrentWinner = Winner.None;
         }
@@ -323,16 +288,8 @@ public class GameManager : MonoBehaviour
         }
 
         // ゲーム状態をリセット
-        CurrentGameState = GameState.Playing;
+        //CurrentGameState = GameState.Playing;
         CurrentWinner = Winner.None;
-
-        // UIをリセット
-        if (gameOverPanel_ != null) {
-            gameOverPanel_.SetActive(false);
-        }
-        if (winnerText_ != null) {
-            winnerText_.gameObject.SetActive(false);
-        }
 
         Debug.Log("[GAME MANAGER] : ゲームがリスタートされました。");
     }
@@ -344,6 +301,7 @@ public class GameManager : MonoBehaviour
         CurrentWinner = winner;
         
         string winnerName = GetWinnerName();
+        SceneManagerScript.Instance.winnerName = winnerName; // 結果シーンに勝者名を渡す
         Debug.Log($"[FINAL GAME OVER] : 全ラウンド終了！最終勝者は {winnerName} です！");
     }
 
@@ -366,6 +324,9 @@ public class GameManager : MonoBehaviour
                 playerCurrentHp_[player1_.playerID_] = playerMaxHp_[player1_.playerID_];
                 player1_.currentHp_ = playerMaxHp_[player1_.playerID_];
             }
+            
+            // プレイヤーの状態をリセット
+            player1_.ResetPlayerState();
         }
 
         if (player2_ != null) {
@@ -383,10 +344,13 @@ public class GameManager : MonoBehaviour
                 playerCurrentHp_[player2_.playerID_] = playerMaxHp_[player2_.playerID_];
                 player2_.currentHp_ = playerMaxHp_[player2_.playerID_];
             }
+            
+            // プレイヤーの状態をリセット
+            player2_.ResetPlayerState();
         }
 
         // ゲーム状態をプレイ中に戻す
-        CurrentGameState = GameState.Playing;
+        //CurrentGameState = GameState.Playing;
         CurrentWinner = Winner.None;
 
         // プレイヤーの特殊状態をリセット
@@ -413,9 +377,9 @@ public class GameManager : MonoBehaviour
             
             // 反転ジャンプフラグをリセット
             player1_.shouldReverseOnLanding_ = false;
-            
-            // プレイヤーを初期位置に戻す（必要に応じて）
-            // player1_.transform.position = initialPlayer1Position;
+
+            //// プレイヤーを初期位置に戻す（必要に応じて）    ←InitializePlayersにて設定
+            //player1_.transform.position = initialPlayer1Position;
         }
 
         if (player2_ != null) {
@@ -430,7 +394,74 @@ public class GameManager : MonoBehaviour
             player2_.hasDoubleJumped_ = false;
             player2_.shouldReverseOnLanding_ = false;
             
-            // player2_.transform.position = initialPlayer2Position;
+             //player2_.transform.position = initialPlayer2Position;
         }
     }
+
+    ///--------------------------------------------------------------
+    ///						 CurrentGameState変更
+    public void SetGameState(GameState nextGameState)
+    {
+        Debug.Log($"[GAME MANAGER] : GameState変更 {CurrentGameState} -> {nextGameState}");
+
+        //現在のGameState
+        switch(CurrentGameState)
+        {
+            case GameState.RoundStart:
+                 break;
+            case GameState.Playing:
+                break;
+            case GameState.RoundEnd:
+                break;
+            case GameState.GameOver:
+                break;
+            case GameState.Paused:
+                break;
+        }
+
+        CurrentGameState = nextGameState;
+        
+        //次のGameState呼び出し
+        switch(CurrentGameState)
+        {
+            case GameState.RoundStart:
+                // ラウンド開始処理はRoundManagerで管理
+                // プレイヤーの移動を停止状態に
+                if (player1_ != null) player1_.allowMovement_ = false;
+                if (player2_ != null) player2_.allowMovement_ = false;
+                break;
+            case GameState.Playing:
+                // UI更新
+                InitializeUI();
+                InitializePlayers();
+                
+                // プレイヤーの移動を許可
+                if (player1_ != null) player1_.allowMovement_ = true;
+                if (player2_ != null) player2_.allowMovement_ = true;
+                break;
+            case GameState.RoundEnd:
+                // プレイヤーの移動を停止
+                if (player1_ != null) player1_.allowMovement_ = false;
+                if (player2_ != null) player2_.allowMovement_ = false;
+                break;
+            case GameState.GameOver:
+                // プレイヤーの移動を停止
+                if (player1_ != null) player1_.allowMovement_ = false;
+                if (player2_ != null) player2_.allowMovement_ = false;
+                break;
+            case GameState.Paused:
+                // プレイヤーの移動を停止
+                if (player1_ != null) player1_.allowMovement_ = false;
+                if (player2_ != null) player2_.allowMovement_ = false;
+                break;
+        }
+    }
+
+    ///--------------------------------------------------------------
+    ///						 CurrentGameState取得
+    public GameState GetGameState()
+    {
+        return CurrentGameState;
+    }
+
 }

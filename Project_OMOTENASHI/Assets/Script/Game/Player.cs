@@ -11,7 +11,6 @@ using UnityEngine;
 public class Player : MonoBehaviour {   
     ///--------------------------------------------------------------
     ///                      【パブリック変数】
-    
     //========================================
     // 【プレイヤー識別・基本設定】
     [Header("プレイヤー設定")]
@@ -106,6 +105,21 @@ public class Player : MonoBehaviour {
     public float invincibilitySpeedMultiplier_ = 2.0f;
 
     //========================================
+    // 【スプライト回転設定】
+    [Header("スプライト回転設定")]
+    [Tooltip("スプライトの回転を有効にするか")]
+    public bool enableSpriteRotation_ = true;
+
+    [Tooltip("回転の最大角度（度）")]
+    public float maxRotationAngle_ = 45.0f;
+
+    [Tooltip("回転の感度（高いほど敏感）")]
+    public float rotationSensitivity_ = 1.0f;
+
+    [Tooltip("回転の滑らかさ（高いほど滑らか）")]
+    public float rotationSmoothness_ = 5.0f;
+
+    //========================================
     // 【機能有効化設定】
     [Header("機能設定")]
     [Tooltip("プレイヤー衝突時の速度交換機能を有効にするか")]
@@ -113,6 +127,9 @@ public class Player : MonoBehaviour {
 
     [Tooltip("キー設定変更モード")]
     public bool isKeySettingMode_ = false;
+
+    [Tooltip("プレイヤーの移動を許可するか（ゲーム制御用）")]
+    public bool allowMovement_ = false;
 
     //========================================
     // 【キー設定】
@@ -149,6 +166,7 @@ public class Player : MonoBehaviour {
     private Animator animator_ = null;
     private Rigidbody2D rigidbody2D_ = null;
     private SpriteRenderer spriteRenderer_ = null;
+    private Transform spriteTransform_ = null;
 
     //========================================
     // 【状態フラグ】
@@ -158,7 +176,7 @@ public class Player : MonoBehaviour {
     //========================================
     // 【入力データ】
     private Vector2 inputHorizontal_ = Vector2.zero;
-    private Vector2 inputVertical_ = Vector2.zero;
+    //private Vector2 inputVertical_ = Vector2.zero;
 
     //========================================
     // 【壁接触状態】
@@ -175,7 +193,7 @@ public class Player : MonoBehaviour {
     //========================================
     // 【連打ゲージ関連】
     private float currentComboGauge_ = 0.0f;
-    private float lastInputTime_ = 0.0f;
+    //private float lastInputTime_ = 0.0f;
 
     //========================================
     // 【無敵状態関連】
@@ -195,6 +213,11 @@ public class Player : MonoBehaviour {
     public float stunTimer_ = 0.0f;
     public bool shouldReverseOnLanding_ = false;
 
+    //========================================
+    // 【スプライト回転関連】
+    private float targetRotation_ = 0.0f;
+    private float currentRotation_ = 0.0f;
+
 
     ///--------------------------------------------------------------
     ///                      初期化処理
@@ -202,26 +225,35 @@ public class Player : MonoBehaviour {
     /// 必要なコンポーネントの取得と初期状態の設定を行う
     private void Start() {
         //========================================
-        // アニメーター取得と存在確認
-        animator_ = GetComponent<Animator>();
-        if (animator_ == null) {
-            Debug.LogError("[ERROR] : Animator component not found on Player object. アニメーション制御ができません。");
+        // 子オブジェクト「Sprite」からアニメーター取得と存在確認
+        Transform spriteChild = transform.Find("Sprite");
+        if (spriteChild != null) {
+            spriteTransform_ = spriteChild;
+            animator_ = spriteChild.GetComponent<Animator>();
+            if (animator_ == null) {
+                Debug.LogError("[ERROR] : Animator component not found on Sprite child object. アニメーション制御ができません。");
+            }
+            
+            //========================================
+            // 子オブジェクト「Sprite」からスプライトレンダラー取得と存在確認
+            spriteRenderer_ = spriteChild.GetComponent<SpriteRenderer>();
+            if (spriteRenderer_ == null) {
+                Debug.LogError("[ERROR] : SpriteRenderer component not found on Sprite child object. 色変更エフェクトができません。");
+            }
+            else {
+                // 元の色を保存
+                originalColor_ = spriteRenderer_.color; 
+            }
         }
+        else {
+            Debug.LogError("[ERROR] : 'Sprite' child object not found. 描画系コンポーネントを取得できません。");
+        }
+
         //========================================
         // リジッドボディ取得と存在確認
         rigidbody2D_ = GetComponent<Rigidbody2D>();
         if (rigidbody2D_ == null) {
             Debug.LogError("[ERROR] : Rigidbody2D component not found on Player object. 物理演算制御ができません。");
-        }
-        //========================================
-        // スプライトレンダラー取得と存在確認
-        spriteRenderer_ = GetComponent<SpriteRenderer>();
-        if (spriteRenderer_ == null) {
-            Debug.LogError("[ERROR] : SpriteRenderer component not found on Player object. 色変更エフェクトができません。");
-        }
-        else {
-            // 元の色を保存
-            originalColor_ = spriteRenderer_.color;
         }
 
         //========================================
@@ -231,6 +263,10 @@ public class Player : MonoBehaviour {
     ///--------------------------------------------------------------
     ///                      メインループ処理
     private void Update() {
+        //========================================
+        // 【ゲーム状態による移動制御チェック】
+        UpdateMovementPermission();
+
         //========================================
         // 【スタン状態タイマーの更新】
         if (isStunned_) {
@@ -300,11 +336,30 @@ public class Player : MonoBehaviour {
 
         //========================================
         // 【移動処理の振り分け】
-        if (isAutoMode_) {
-            AutoMove();
+        if (allowMovement_) {
+            if (isAutoMode_) {
+                AutoMove();
+            }
+            else {
+                Move();
+            }
         }
         else {
-            Move();
+            // 移動が許可されていない場合は入力をリセット
+            inputHorizontal_ = Vector2.zero;
+            isJumping_ = false;
+            
+            // アニメーションを停止状態に
+            if (animator_ != null) {
+                animator_.SetBool("Run", false);
+                animator_.SetBool("Jump", !isGround_);
+            }
+        }
+
+        //========================================
+        // 【スプライト回転の更新】
+        if (enableSpriteRotation_) {
+            UpdateSpriteRotation();
         }
 
         //========================================
@@ -324,6 +379,15 @@ public class Player : MonoBehaviour {
         isGround_ = groundCheck_.IsGround();
         isHitWallFront_ = wallCheckFront_.IsHitWallFront();
         isHitWallBuck_ = wallCheckBuck_.IsHitWallBuck();
+
+        //========================================
+        // 【着地音の再生】
+        // 空中から地面に着地した瞬間に着地音を再生
+        if (!wasGrounded && isGround_) {
+            if (AudioManager.Instance != null) {
+                AudioManager.Instance.PlaySE("Landing");
+            }
+        }
 
         //========================================
         // 【反転ジャンプの処理】
@@ -378,6 +442,17 @@ public class Player : MonoBehaviour {
         // ジャンプフラグが立っている場合、瞬間的な上向きの力を加える
         // フラグは即座にリセットして連続ジャンプを防ぐ
         if (isJumping_) {
+            // ジャンプ音を再生
+            if (AudioManager.Instance != null) {
+                AudioManager.Instance.PlaySE("Jump");
+            }
+            
+            // 2段ジャンプの場合はY軸速度を一度リセット
+            if (hasDoubleJumped_ && !isGround_) {
+                // Y軸速度を0にリセットしてから新しいジャンプ力を適用
+                rigidbody2D_.velocity = new Vector2(rigidbody2D_.velocity.x, 0f);
+            }
+            
             rigidbody2D_.AddForce(Vector2.up * jumpForce_, ForceMode2D.Impulse);
             isJumping_ = false;  // ジャンプ実行後は即座にフラグをリセット
         }
@@ -387,6 +462,38 @@ public class Player : MonoBehaviour {
         // Unityの標準重力に加えて、ゲーム専用の重力を追加適用
         // より細かい落下制御を可能にする
         rigidbody2D_.AddForce(Vector2.down * gravity_, ForceMode2D.Force);
+    }
+
+    ///--------------------------------------------------------------
+    ///                      スプライト回転制御
+    /// 速度ベクトルに基づいてスプライトの向きを更新
+    private void UpdateSpriteRotation() {
+        if (spriteTransform_ == null || rigidbody2D_ == null) return;
+
+        // 現在の速度ベクトルを取得
+        Vector2 velocity = rigidbody2D_.velocity;
+
+        // 速度が十分にある場合のみ回転を適用
+        if (velocity.magnitude > 0.5f) {
+            // 速度ベクトルから角度を計算（ラジアンから度に変換）
+            float velocityAngle = Mathf.Atan2(velocity.y, Mathf.Abs(velocity.x)) * Mathf.Rad2Deg;
+            
+            // 角度を制限範囲内にクランプ
+            velocityAngle = Mathf.Clamp(velocityAngle, -maxRotationAngle_, maxRotationAngle_);
+            
+            // 感度を適用
+            targetRotation_ = velocityAngle * rotationSensitivity_;
+        }
+        else {
+            // 速度が小さい場合は水平に戻す
+            targetRotation_ = 0.0f;
+        }
+
+        // 滑らかに回転を補間
+        currentRotation_ = Mathf.Lerp(currentRotation_, targetRotation_, rotationSmoothness_ * Time.deltaTime);
+
+        // スプライトに回転を適用（Z軸回転のみ）
+        spriteTransform_.localRotation = Quaternion.Euler(0, 0, -currentRotation_);
     }
 
     ///--------------------------------------------------------------
@@ -408,7 +515,7 @@ public class Player : MonoBehaviour {
         //========================================
         // 【入力データの保存】
         inputHorizontal_ = new Vector2(horizontal, 0.0f);
-        inputVertical_ = Vector2.zero;
+        //inputVertical_ = Vector2.zero;
 
         //========================================
         // 【ジャンプ入力の処理】
@@ -429,9 +536,6 @@ public class Player : MonoBehaviour {
                     isJumping_ = true;
                     hasDoubleJumped_ = true;
                     Debug.Log($"[DOUBLE JUMP] : {gameObject.name} が2段ジャンプを実行しました");
-                }
-                else {
-                    isJumping_ = false;
                 }
             }
         }
@@ -465,6 +569,11 @@ public class Player : MonoBehaviour {
         if (isHitWallFront_ && !wasHittingWall_) {
             currentDirection_ *= -1.0f;  // 移動方向を反転
             
+            // プレイヤーと壁の衝突音を再生
+            if (AudioManager.Instance != null) {
+                AudioManager.Instance.PlaySE("Penguin2Wall");
+            }
+            
             // 壁反射時に無敵状態を付与
             isInvincible_ = true;
             invincibilityTimer_ = invincibilityDuration_;
@@ -479,10 +588,15 @@ public class Player : MonoBehaviour {
 
         // 無敵状態中は連打ゲージ蓄積を無効化
         if (moveInputPressed && !isInvincible_) {
+            // 連打音を再生
+            if (AudioManager.Instance != null) {
+                AudioManager.Instance.PlaySE("Barrage");
+            }
+            
             // 連打ゲージを増加
             currentComboGauge_ += comboGaugePerHit_;
             currentComboGauge_ = Mathf.Min(maxComboGauge_, currentComboGauge_);
-            lastInputTime_ = Time.time;
+            //lastInputTime_ = Time.time;
             
             Debug.Log($"[COMBO GAUGE] : Player {playerID_} - ゲージ: {currentComboGauge_:F1}/{maxComboGauge_} ({GetGaugePercentage():F1}%)");
         }
@@ -516,9 +630,6 @@ public class Player : MonoBehaviour {
                 hasDoubleJumped_ = true;
                 Debug.Log($"[DOUBLE JUMP] : {gameObject.name} が2段ジャンプを実行しました");
             }
-            else if (!isGround_) {
-                isJumping_ = false;
-            }
         }
         else {
             isJumping_ = false; // スタン中はジャンプ不可
@@ -545,7 +656,7 @@ public class Player : MonoBehaviour {
         }
 
         inputHorizontal_ = new Vector2(currentDirection_ * currentSpeed / maxSpeed_, 0.0f);
-        inputVertical_ = Vector2.zero;
+        //inputVertical_ = Vector2.zero;
 
         //========================================
         // 【アニメーション状態の更新】
@@ -583,6 +694,11 @@ public class Player : MonoBehaviour {
                 // 踏みつけた側は跳ね返る
                 rigidbody2D_.velocity = new Vector2(rigidbody2D_.velocity.x, jumpForce_ * 0.7f);
                 
+                // 踏みつけ音を再生
+                if (AudioManager.Instance != null) {
+                    AudioManager.Instance.PlaySE("Step");
+                }
+                
                 Debug.Log($"[STOMP] : {gameObject.name} が {otherPlayer.gameObject.name} を踏みつけました");
                 return; // 踏みつけ成功時は通常の衝突処理をスキップ
             }
@@ -598,6 +714,11 @@ public class Player : MonoBehaviour {
                 return;
             }
 
+            // プレイヤー同士の衝突音を再生
+            if (AudioManager.Instance != null) {
+                AudioManager.Instance.PlaySE("Peguin2Penguin");
+            }
+
             // 速度交換ロジック
             if (isAutoMode_ && otherPlayer.isAutoMode_ && enableSpeedTransfer_ && otherPlayer.enableSpeedTransfer_) {
                 float mySpeed = GetCurrentEffectiveSpeed();
@@ -605,28 +726,15 @@ public class Player : MonoBehaviour {
 
                 // 速度差が十分にある場合のみ速度交換を実行
                 if (Mathf.Abs(mySpeed - otherSpeed) > 0.5f) {
-                    Player fasterPlayer = null;
-                    Player slowerPlayer = null;
-                    float fasterSpeed = 0;
+                    // お互いの速度を一時保存
+                    float tempMySpeed = mySpeed;
+                    float tempOtherSpeed = otherSpeed;
 
-                    if (mySpeed > otherSpeed) {
-                        fasterPlayer = this;
-                        slowerPlayer = otherPlayer;
-                        fasterSpeed = mySpeed;
-                    } else {
-                        fasterPlayer = otherPlayer;
-                        slowerPlayer = this;
-                        fasterSpeed = otherSpeed;
-                    }
+                    // お互いの速度を入れ替え
+                    AdjustGaugeToAchieveSpeed(tempOtherSpeed);
+                    otherPlayer.AdjustGaugeToAchieveSpeed(tempMySpeed);
 
-                    // 遅い方のプレイヤーが速い方の速度を受け継ぐ
-                    slowerPlayer.AdjustGaugeToAchieveSpeed(fasterSpeed);
-
-                    // 速い方のプレイヤーは最低速度に戻る
-                    fasterPlayer.currentComboGauge_ = 0.0f;
-                    fasterPlayer.isSpeedBoosted_ = false;
-
-                    Debug.Log($"[SPEED TRANSFER] : {fasterPlayer.gameObject.name}(速度:{fasterSpeed:F2}) -> {slowerPlayer.gameObject.name} へ速度移譲");
+                    Debug.Log($"[SPEED TRANSFER] : {gameObject.name}(速度:{tempMySpeed:F2}) <-> {otherPlayer.gameObject.name}(速度:{tempOtherSpeed:F2}) 速度を交換しました");
                 }
             }
 
@@ -729,6 +837,18 @@ public class Player : MonoBehaviour {
             else {
                 Debug.Log($"[INFO] {gameObject.name} と {otherPlayer.gameObject.name} が衝突 (判定外のケース)。otherIsAheadOfMe: {otherIsAheadOfMe}, amIAheadOfOther: {amIAheadOfOther}");
             }
+        }
+
+        if (collision.gameObject.CompareTag("InvincibleItem"))
+        {
+            // アイテム取得SEを再生
+            if (AudioManager.Instance != null) {
+                AudioManager.Instance.PlaySE("collision");
+            }
+            
+            isInvincible_ = true;
+            invincibilityTimer_ = 2.0f;
+            Destroy(collision.gameObject);
         }
     }
 
@@ -904,9 +1024,10 @@ public class Player : MonoBehaviour {
     }
 
     /// 現在のゲージ量をパーセンテージで取得
-    private float GetGaugePercentage() {
+    public float GetGaugePercentage() {
         return (currentComboGauge_ / maxComboGauge_) * 100.0f;
     }
+    //→UIで欲しいのでprivateからpublicへ
 
     /// 現在のゲージレベルを取得（5段階）
     private int GetGaugeLevel() {
@@ -989,5 +1110,79 @@ public class Player : MonoBehaviour {
         isStunned_ = true;
         stunTimer_ = stunDuration;
         Debug.Log($"[STUN] : {gameObject.name} が {stunDuration}秒間スタンしました");
+    }
+
+    ///--------------------------------------------------------------
+    ///                      移動許可状態更新
+    /// GameManagerの状態に基づいてプレイヤーの移動許可を更新
+    private void UpdateMovementPermission() {
+        if (GameManager.Instance != null) {
+            GameManager.GameState currentState = GameManager.Instance.GetGameState();
+            
+            switch (currentState) {
+                case GameManager.GameState.Playing:
+                    allowMovement_ = true;
+                    break;
+                case GameManager.GameState.RoundStart:
+                case GameManager.GameState.RoundEnd:
+                case GameManager.GameState.GameOver:
+                case GameManager.GameState.Paused:
+                default:
+                    allowMovement_ = false;
+                    break;
+            }
+        }
+        else {
+            allowMovement_ = false;
+        }
+    }
+
+    ///--------------------------------------------------------------
+    ///                      プレイヤー状態リセット
+    /// ラウンド開始時にプレイヤーの状態を初期化
+    public void ResetPlayerState() {
+        // 物理状態をリセット
+        if (rigidbody2D_ != null) {
+            rigidbody2D_.velocity = Vector2.zero;
+            rigidbody2D_.angularVelocity = 0f;
+        }
+
+        // 移動関連の状態をリセット
+        inputHorizontal_ = Vector2.zero;
+        isJumping_ = false;
+        currentDirection_ = 1.0f;
+
+        // 連打ゲージをリセット
+        currentComboGauge_ = 0.0f;
+        isSpeedBoosted_ = false;
+        speedBoostTimer_ = 0.0f;
+
+        // 特殊状態をリセット
+        isStunned_ = false;
+        stunTimer_ = 0.0f;
+        hasDoubleJumped_ = false;
+        shouldReverseOnLanding_ = false;
+
+        // 無敵状態をリセット
+        isInvincible_ = false;
+        invincibilityTimer_ = 0.0f;
+        if (spriteRenderer_ != null) {
+            spriteRenderer_.color = originalColor_;
+        }
+
+        // アニメーション状態をリセット
+        if (animator_ != null) {
+            animator_.SetBool("Run", false);
+            animator_.SetBool("Jump", false);
+        }
+
+        // スプライト回転をリセット
+        targetRotation_ = 0.0f;
+        currentRotation_ = 0.0f;
+        if (spriteTransform_ != null) {
+            spriteTransform_.localRotation = Quaternion.identity;
+        }
+
+        Debug.Log($"[PLAYER RESET] : {gameObject.name} の状態がリセットされました");
     }
 }
