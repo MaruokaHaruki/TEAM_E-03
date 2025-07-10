@@ -28,6 +28,8 @@ public class ScoreDraw : MonoBehaviour
     [Header("�s��(x)�A���҃T�C�Y(y) �ړ��ʔ{��")]
     [SerializeField] private Vector2 SetXMove = new Vector2(2.0f, 2.0f);
 
+    [SerializeField] private int BlownAwayScore = 3;
+
     private int PlayerAScore;
     private int PlayerBScore;
 
@@ -212,13 +214,13 @@ public class ScoreDraw : MonoBehaviour
             // �X�R�A�`��I��
             if (DrawEndFlag && NextMoveTime < Time.time)
             {
-                if (PlayerAScore <= 3)
+                if (PlayerAScore <= BlownAwayScore)
                 {
                     PlayerAPlate.constraints = RigidbodyConstraints2D.None;
                     PlayerAPlate.AddForceY(PlateUpPower, ForceMode2D.Impulse);
                 }
 
-                if (PlayerBScore <= 3)
+                if (PlayerBScore <= BlownAwayScore)
                 {
                     PlayerBPlate.constraints = RigidbodyConstraints2D.None;
                     PlayerBPlate.AddForceY(PlateUpPower, ForceMode2D.Impulse);
