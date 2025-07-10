@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Audio;
 using System.Collections;
 using System.Collections.Generic;
 using System;
@@ -15,6 +16,7 @@ public class AudioClipData {
 /// <summary>
 /// ゲーム全体のサウンドを管理するシングルトンクラス
 /// BGMとSEを分離して管理し、複数SE同時再生に対応
+/// AudioMixerによるエフェクト制御機能付き
 /// </summary>
 public class AudioManager : MonoBehaviour {
     public static AudioManager Instance { get; private set; }
@@ -27,6 +29,16 @@ public class AudioManager : MonoBehaviour {
 
     [Header("SEプール数")]
     [SerializeField] private int sePoolCount_ = 10;
+
+    [Header("AudioMixer設定")]
+    [Tooltip("メインのAudioMixer")]
+    [SerializeField] private AudioMixer audioMixer_;
+    
+    [Tooltip("BGM用のMixerGroup")]
+    [SerializeField] private AudioMixerGroup bgmMixerGroup_;
+    
+    [Tooltip("SE用のMixerGroup")]
+    [SerializeField] private AudioMixerGroup seMixerGroup_;
 
     [Header("音量設定")]
     [Range(0f, 1f)]
@@ -81,6 +93,12 @@ public class AudioManager : MonoBehaviour {
             bgmSource_.loop = true;
             bgmSource_.playOnAwake = false;
             bgmSource_.volume = bgmVolume_;
+            
+            // BGMにMixerGroupを適用
+            if (bgmMixerGroup_ != null) {
+                bgmSource_.outputAudioMixerGroup = bgmMixerGroup_;
+                Debug.Log("BGM AudioSourceにMixerGroupを適用しました");
+            }
 
             // SE用プレハブがない場合は作成
             if (sePrefab_ == null) {
@@ -90,10 +108,21 @@ public class AudioManager : MonoBehaviour {
                 sePrefab_.playOnAwake = false;
             }
 
+            // SE用プレハブにMixerGroupを適用
+            if (seMixerGroup_ != null) {
+                sePrefab_.outputAudioMixerGroup = seMixerGroup_;
+            }
+
             // SEプール構築
             for (int i = 0; i < sePoolCount_; i++) {
                 AudioSource se = Instantiate(sePrefab_, transform);
                 se.volume = seVolume_;
+                
+                // 各SE AudioSourceにMixerGroupを適用
+                if (seMixerGroup_ != null) {
+                    se.outputAudioMixerGroup = seMixerGroup_;
+                }
+                
                 se.gameObject.SetActive(false);
                 sePool_.Enqueue(se);
             }
@@ -101,7 +130,7 @@ public class AudioManager : MonoBehaviour {
             // プリセット音源の辞書作成
             SetupAudioDictionaries();
 
-            Debug.Log("AudioManager 初期化完了");
+            Debug.Log("AudioManager 初期化完了（AudioMixer対応）");
         }
         catch (Exception e) {
             Debug.LogError($"AudioManager初期化エラー: {e.Message}");
@@ -240,5 +269,137 @@ public class AudioManager : MonoBehaviour {
         source.Stop();
         source.gameObject.SetActive(false);
         sePool_.Enqueue(source);
+    }
+
+    /// <summary>
+    /// AudioMixerのパラメータを設定
+    /// </summary>
+    /// <param name="parameterName">パラメータ名（例: "BGMVolume", "SEVolume", "BGMPitch"など）</param>
+    /// <param name="value">設定値</param>
+    public void SetMixerParameter(string parameterName, float value) {
+        if (audioMixer_ != null) {
+            audioMixer_.SetFloat(parameterName, value);
+            Debug.Log($"[MIXER] パラメータ '{parameterName}' を {value} に設定");
+        }
+        else {
+            Debug.LogWarning("AudioMixerが設定されていません");
+        }
+    }
+
+    /// <summary>
+    /// AudioMixerのパラメータを取得
+    /// </summary>
+    /// <param name="parameterName">パラメータ名</param>
+    /// <returns>パラメータの値</returns>
+    public float GetMixerParameter(string parameterName) {
+        if (audioMixer_ != null) {
+            audioMixer_.GetFloat(parameterName, out float value);
+            return value;
+        }
+        Debug.LogWarning("AudioMixerが設定されていません");
+        return 0f;
+    }
+
+    /// <summary>
+    /// BGMの音量をMixer経由で設定（デシベル値）
+    /// </summary>
+    /// <param name="volumeDb">音量（デシベル、-80〜0）</param>
+    public void SetBGMVolumeDb(float volumeDb) {
+        SetMixerParameter("BGMVolume", Mathf.Clamp(volumeDb, -80f, 0f));
+    }
+
+    /// <summary>
+    /// SEの音量をMixer経由で設定（デシベル値）
+    /// </summary>
+    /// <param name="volumeDb">音量（デシベル、-80〜0）</param>
+    public void SetSEVolumeDb(float volumeDb) {
+        SetMixerParameter("SEVolume", Mathf.Clamp(volumeDb, -80f, 0f));
+    }
+
+    /// <summary>
+    /// BGMのピッチを設定
+    /// </summary>
+    /// <param name="pitch">ピッチ値（0.5〜2.0程度が推奨）</param>
+    public void SetBGMPitch(float pitch) {
+        SetMixerParameter("BGMPitch", Mathf.Clamp(pitch, 0.1f, 3.0f));
+    }
+
+    /// <summary>
+    /// SEのピッチを設定
+    /// </summary>
+    /// <param name="pitch">ピッチ値（0.5〜2.0程度が推奨）</param>
+    public void SetSEPitch(float pitch) {
+        SetMixerParameter("SEPitch", Mathf.Clamp(pitch, 0.1f, 3.0f));
+    }
+
+    /// <summary>
+    /// BGMにローパスフィルターを適用
+    /// </summary>
+    /// <param name="cutoffFreq">カットオフ周波数（Hz、10〜22000）</param>
+    public void SetBGMLowpassFilter(float cutoffFreq) {
+        SetMixerParameter("BGMLowpass", Mathf.Clamp(cutoffFreq, 10f, 22000f));
+    }
+
+    /// <summary>
+    /// BGMにハイパスフィルターを適用
+    /// </summary>
+    /// <param name="cutoffFreq">カットオフ周波数（Hz、10〜22000）</param>
+    public void SetBGMHighpassFilter(float cutoffFreq) {
+        SetMixerParameter("BGMHighpass", Mathf.Clamp(cutoffFreq, 10f, 22000f));
+    }
+
+    /// <summary>
+    /// BGMにリバーブエフェクトを適用
+    /// </summary>
+    /// <param name="reverbLevel">リバーブレベル（0〜1）</param>
+    public void SetBGMReverb(float reverbLevel) {
+        SetMixerParameter("BGMReverb", Mathf.Clamp01(reverbLevel));
+    }
+
+    /// <summary>
+    /// SEにディストーションエフェクトを適用
+    /// </summary>
+    /// <param name="distortionLevel">ディストーションレベル（0〜1）</param>
+    public void SetSEDistortion(float distortionLevel) {
+        SetMixerParameter("SEDistortion", Mathf.Clamp01(distortionLevel));
+    }
+
+    /// <summary>
+    /// すべてのエフェクトをリセット
+    /// </summary>
+    public void ResetAllEffects() {
+        if (audioMixer_ == null) return;
+
+        SetBGMVolumeDb(0f);
+        SetSEVolumeDb(0f);
+        SetBGMPitch(1f);
+        SetSEPitch(1f);
+        SetBGMLowpassFilter(22000f);
+        SetBGMHighpassFilter(10f);
+        SetBGMReverb(0f);
+        SetSEDistortion(0f);
+
+        Debug.Log("[MIXER] すべてのエフェクトをリセットしました");
+    }
+
+    /// <summary>
+    /// スナップショットを適用
+    /// </summary>
+    /// <param name="snapshotName">スナップショット名</param>
+    /// <param name="timeToReach">遷移時間（秒）</param>
+    public void ApplySnapshot(string snapshotName, float timeToReach = 1f) {
+        if (audioMixer_ == null) {
+            Debug.LogWarning("AudioMixerが設定されていません");
+            return;
+        }
+
+        AudioMixerSnapshot snapshot = audioMixer_.FindSnapshot(snapshotName);
+        if (snapshot != null) {
+            snapshot.TransitionTo(timeToReach);
+            Debug.Log($"[MIXER] スナップショット '{snapshotName}' を適用（遷移時間: {timeToReach}秒）");
+        }
+        else {
+            Debug.LogWarning($"スナップショット '{snapshotName}' が見つかりません");
+        }
     }
 }

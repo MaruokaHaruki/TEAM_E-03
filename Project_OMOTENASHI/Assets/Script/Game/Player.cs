@@ -11,7 +11,6 @@ using UnityEngine;
 public class Player : MonoBehaviour {   
     ///--------------------------------------------------------------
     ///                      【パブリック変数】
-    
     //========================================
     // 【プレイヤー識別・基本設定】
     [Header("プレイヤー設定")]
@@ -382,6 +381,15 @@ public class Player : MonoBehaviour {
         isHitWallBuck_ = wallCheckBuck_.IsHitWallBuck();
 
         //========================================
+        // 【着地音の再生】
+        // 空中から地面に着地した瞬間に着地音を再生
+        if (!wasGrounded && isGround_) {
+            if (AudioManager.Instance != null) {
+                AudioManager.Instance.PlaySE("Landing");
+            }
+        }
+
+        //========================================
         // 【反転ジャンプの処理】
         // 空中から着地した瞬間に反転ジャンプが有効なら方向転換
         if (enableReverseJump_ && !wasGrounded && isGround_ && shouldReverseOnLanding_) {
@@ -434,6 +442,11 @@ public class Player : MonoBehaviour {
         // ジャンプフラグが立っている場合、瞬間的な上向きの力を加える
         // フラグは即座にリセットして連続ジャンプを防ぐ
         if (isJumping_) {
+            // ジャンプ音を再生
+            if (AudioManager.Instance != null) {
+                AudioManager.Instance.PlaySE("Jump");
+            }
+            
             // 2段ジャンプの場合はY軸速度を一度リセット
             if (hasDoubleJumped_ && !isGround_) {
                 // Y軸速度を0にリセットしてから新しいジャンプ力を適用
@@ -556,6 +569,11 @@ public class Player : MonoBehaviour {
         if (isHitWallFront_ && !wasHittingWall_) {
             currentDirection_ *= -1.0f;  // 移動方向を反転
             
+            // プレイヤーと壁の衝突音を再生
+            if (AudioManager.Instance != null) {
+                AudioManager.Instance.PlaySE("Penguin2Wall");
+            }
+            
             // 壁反射時に無敵状態を付与
             isInvincible_ = true;
             invincibilityTimer_ = invincibilityDuration_;
@@ -570,6 +588,11 @@ public class Player : MonoBehaviour {
 
         // 無敵状態中は連打ゲージ蓄積を無効化
         if (moveInputPressed && !isInvincible_) {
+            // 連打音を再生
+            if (AudioManager.Instance != null) {
+                AudioManager.Instance.PlaySE("Barrage");
+            }
+            
             // 連打ゲージを増加
             currentComboGauge_ += comboGaugePerHit_;
             currentComboGauge_ = Mathf.Min(maxComboGauge_, currentComboGauge_);
@@ -671,6 +694,11 @@ public class Player : MonoBehaviour {
                 // 踏みつけた側は跳ね返る
                 rigidbody2D_.velocity = new Vector2(rigidbody2D_.velocity.x, jumpForce_ * 0.7f);
                 
+                // 踏みつけ音を再生
+                if (AudioManager.Instance != null) {
+                    AudioManager.Instance.PlaySE("Step");
+                }
+                
                 Debug.Log($"[STOMP] : {gameObject.name} が {otherPlayer.gameObject.name} を踏みつけました");
                 return; // 踏みつけ成功時は通常の衝突処理をスキップ
             }
@@ -684,6 +712,11 @@ public class Player : MonoBehaviour {
             // これにより、衝突ペアに対して一度だけ判定ロジックが実行されるようになります。
             if (gameObject.GetInstanceID() < otherPlayer.gameObject.GetInstanceID()) {
                 return;
+            }
+
+            // プレイヤー同士の衝突音を再生
+            if (AudioManager.Instance != null) {
+                AudioManager.Instance.PlaySE("Peguin2Penguin");
             }
 
             // 速度交換ロジック
@@ -806,9 +839,13 @@ public class Player : MonoBehaviour {
             }
         }
 
-
         if (collision.gameObject.CompareTag("InvincibleItem"))
         {
+            // アイテム取得SEを再生
+            if (AudioManager.Instance != null) {
+                AudioManager.Instance.PlaySE("collision");
+            }
+            
             isInvincible_ = true;
             invincibilityTimer_ = 2.0f;
             Destroy(collision.gameObject);

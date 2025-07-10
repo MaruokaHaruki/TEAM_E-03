@@ -200,17 +200,55 @@ public class SceneManagerScript : SingletonMonoBehaviour<SceneManagerScript>
     /// <param name="sceneName">シーン名</param>
     private void PlayBGMForLoadedScene(string sceneName)
     {
-        if (SoundManager.Instance != null)
+        if (AudioManager.Instance != null)
         {
-            bool bgmFound = SoundManager.Instance.PlayBGMForScene(sceneName, 1.0f);
-            if (!bgmFound)
+            // シーン名に基づいてBGMを再生
+            string bgmName = GetBGMNameForScene(sceneName);
+            if (!string.IsNullOrEmpty(bgmName))
+            {
+                AudioManager.Instance.PlayBGM(bgmName, 1.0f);
+                Debug.Log($"シーン '{sceneName}' でBGM '{bgmName}' を再生開始");
+            }
+            else
             {
                 Debug.Log($"シーン '{sceneName}' にはBGM設定がありません");
             }
         }
         else
         {
-            Debug.LogWarning("SoundManagerが見つかりません");
+            Debug.LogWarning("AudioManagerが見つかりません");
+        }
+    }
+
+    /// <summary>
+    /// シーン名に対応するBGM名を取得
+    /// </summary>
+    /// <param name="sceneName">シーン名</param>
+    /// <returns>BGM名（見つからない場合はnull）</returns>
+    private string GetBGMNameForScene(string sceneName)
+    {
+        // シーン名とBGM名のマッピング
+        switch (sceneName.ToLower())
+        {
+            case "title":
+            case "titlescene":
+                return "TitleBGM";
+            
+            case "game":
+            case "gamescene":
+            case "main":
+                return "GameBGM";
+            
+            case "result":
+            case "resultscene":
+                return "ResultBGM";
+            
+            case "menu":
+            case "menuscene":
+                return "MenuBGM";
+            
+            default:
+                return null; // BGMなし
         }
     }
 
