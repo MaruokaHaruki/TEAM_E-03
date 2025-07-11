@@ -382,11 +382,16 @@ public class RoundManager : MonoBehaviour
     {
         if (currentRoundSettings == null) return;
 
+        Debug.Log($"[ROUND MANAGER] : プレイヤー勝利処理開始 - Winner: {winner}");
+
         // ゲーム状態をラウンド終了に変更（プレイヤーの移動を停止）
         if (GameManager.Instance != null)
         {
             GameManager.Instance.SetGameState(GameManager.GameState.RoundEnd);
         }
+
+        // 勝利演出を確実に開始
+        StartCoroutine(StartVictoryZoomCoroutine(winner));
 
         // スコアを加算
         switch (winner)
@@ -416,6 +421,42 @@ public class RoundManager : MonoBehaviour
         {
             // 次のラウンドに進む
             StartCoroutine(DelayedNextRound());
+        }
+    }
+
+    ///--------------------------------------------------------------
+    ///						 勝利演出開始コルーチン
+    private System.Collections.IEnumerator StartVictoryZoomCoroutine(GameManager.Winner winner)
+    {
+        // 少し待ってから勝利演出を開始
+        yield return new UnityEngine.WaitForSeconds(0.5f);
+
+        if (GameManager.Instance != null && GameManager.Instance.cameraController != null)
+        {
+            Transform winnerTransform = null;
+            switch (winner)
+            {
+                case GameManager.Winner.Player1:
+                    winnerTransform = GameManager.Instance.player1_?.transform;
+                    break;
+                case GameManager.Winner.Player2:
+                    winnerTransform = GameManager.Instance.player2_?.transform;
+                    break;
+            }
+
+            if (winnerTransform != null)
+            {
+                Debug.Log($"[ROUND MANAGER] : 勝利演出を開始 - {winnerTransform.name} at {winnerTransform.position}");
+                GameManager.Instance.cameraController.StartVictoryZoom(winnerTransform);
+            }
+            else
+            {
+                Debug.LogError($"[ROUND MANAGER] : 勝者のTransformが見つかりません - Winner: {winner}");
+            }
+        }
+        else
+        {
+            Debug.LogError("[ROUND MANAGER] : GameManagerまたはCameraControllerが見つかりません");
         }
     }
 
