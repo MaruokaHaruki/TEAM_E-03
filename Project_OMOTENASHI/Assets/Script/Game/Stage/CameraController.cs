@@ -44,6 +44,8 @@ public class CameraController : MonoBehaviour
     [SerializeField] private float victoryVignetteIntensity = 0.8f;
     [SerializeField] private float victoryMoveSpeed = 0.5f; // 勝利演出時の移動速度（より遅く）
     [SerializeField] private float victoryZoomSpeed = 0.1f; // 勝利演出時のズーム速度
+    [SerializeField] private float vignetteChangeSpeed = 1.0f; // ビネット変化速度（強くなる時）
+    [SerializeField] private float vignetteReturnSpeed = 0.3f; // ビネット戻り速度（元に戻る時）
     
     private bool isVictoryZoom = false;
     private float victoryZoomTimer = 0f;
@@ -97,9 +99,6 @@ public class CameraController : MonoBehaviour
         {
             victoryZoomTimer -= Time.deltaTime;
             
-            // ビネット効果を滑らかに適用
-            UpdateVignetteSmooth();
-            
             // デバッグ情報を定期的に出力
             if (Time.frameCount % 30 == 0) // 30フレームごと
             {
@@ -111,6 +110,9 @@ public class CameraController : MonoBehaviour
                 EndVictoryZoom();
             }
         }
+        
+        // ビネット効果を常に更新（勝利演出中も演出終了後も）
+        UpdateVignetteSmooth();
     }
 
     private void FixedUpdate()
@@ -202,7 +204,8 @@ public class CameraController : MonoBehaviour
         // ビネット効果を元に戻す
         targetVignetteIntensity = originalVignetteIntensity;
         
-        Debug.Log($"[CAMERA] : 元の設定に戻しました - Pos: {StartPos}, Size: 5.0f");
+        Debug.Log($"[CAMERA] : 元の設定に戻しました - Pos: {StartPos}, Size: 5.0f, VignetteTarget: {targetVignetteIntensity}");
+        Debug.Log($"[CAMERA] : 現在のビネット強度: {currentVignetteIntensity:F3}, 目標: {targetVignetteIntensity:F3}");
     }
 
     // ビネット効果を滑らかに更新
@@ -210,15 +213,40 @@ public class CameraController : MonoBehaviour
     {
         if (vignette != null)
         {
-            // 滑らかにビネット強度を変更
-            float previousIntensity = currentVignetteIntensity;
-            currentVignetteIntensity = Mathf.Lerp(currentVignetteIntensity, targetVignetteIntensity, Time.deltaTime * 2.0f);
-            vignette.intensity.value = currentVignetteIntensity;
-            
-            // 大きく変化した場合のみログ出力
-            if (Mathf.Abs(currentVignetteIntensity - previousIntensity) > 0.01f)
+            // 目標値と現在値が異なる場合のみ更新
+            if (Mathf.Abs(currentVignetteIntensity - targetVignetteIntensity) > 0.001f)
             {
-                Debug.Log($"[CAMERA] : ビネット強度更新: {currentVignetteIntensity:F3} (目標: {targetVignetteIntensity:F3})");
+                float previousIntensity = currentVignetteIntensity;
+                
+                // 勝利演出中か戻り中かで変化速度を変える
+                float changeSpeed = isVictoryZoom ? vignetteChangeSpeed : vignetteReturnSpeed;
+                currentVignetteIntensity = Mathf.Lerp(currentVignetteIntensity, targetVignetteIntensity, Time.deltaTime * changeSpeed);
+                vignette.intensity.value = currentVignetteIntensity;
+                
+                // 変化をログ出力
+                if (Mathf.Abs(currentVignetteIntensity - previousIntensity) > 0.005f)
+                {
+                    string mode = isVictoryZoom ? "勝利演出中" : "戻り中";
+                    Debug.Log($"[CAMERA] : ビネット強度更新({mode}): {currentVignetteIntensity:F3} → 目標: {targetVignetteIntensity:F3}, 速度: {changeSpeed}");
+                }
+            }
+            else
+            {
+                // 目標値に十分近づいた場合、完全に同じ値にする
+                if (Mathf.Abs(currentVignetteIntensity - targetVignetteIntensity) > 0.0001f)
+                {
+                    currentVignetteIntensity = targetVignetteIntensity;
+                    vignette.intensity.value = currentVignetteIntensity;
+                    Debug.Log($"[CAMERA] : ビネット強度調整完了: {currentVignetteIntensity:F3}");
+                }
+            }
+        }
+        else
+        {
+            // ビネットが見つからない場合の警告（初回のみ）
+            if (Time.frameCount % 300 == 0) // 5秒に1回
+            {
+                Debug.LogWarning("[CAMERA] : Vignetteが見つかりません。ポストプロセス設定を確認してください。");
             }
         }
     }
@@ -249,6 +277,14 @@ public class CameraController : MonoBehaviour
         ObservationFlag = true;
         ObservationTime = SetTime;
         TargetCameraSize = 2.0f;
+        
+        // 観察開始時に勝利演出をリセット
+        if (isVictoryZoom)
+        {
+            isVictoryZoom = false;
+            targetVignetteIntensity = originalVignetteIntensity;
+            Debug.Log("[CAMERA] : 観察開始により勝利演出をリセット、ビネットを元に戻します");
+        }
     }
 
     private void CameraMoveProcess()
