@@ -46,6 +46,7 @@ public class CameraController : MonoBehaviour
     [SerializeField] private float victoryZoomSpeed = 0.1f; // 勝利演出時のズーム速度
     [SerializeField] private float vignetteChangeSpeed = 1.0f; // ビネット変化速度（強くなる時）
     [SerializeField] private float vignetteReturnSpeed = 0.3f; // ビネット戻り速度（元に戻る時）
+    [SerializeField] private bool disableUIAdjustmentDuringVictory = true; // 勝利演出中のUI調整を無効化
     
     private bool isVictoryZoom = false;
     private float victoryZoomTimer = 0f;
@@ -54,6 +55,15 @@ public class CameraController : MonoBehaviour
     private float originalVignetteIntensity = 0f;
     private float targetVignetteIntensity = 0f; // 目標ビネット強度
     private float currentVignetteIntensity = 0f; // 現在のビネット強度
+    
+    // ズーム用の追加変数
+    private float initialCameraSize = 5.0f; // ズーム開始時のカメラサイズ
+    private float zoomStartTime = 0f; // ズーム開始時間
+    
+    // UI位置保存用
+    private bool uiPositionsSaved = false;
+    private Vector3[] savedUIPositions;
+    private Vector3[] savedUIScales;
 
     void Start()
     {
@@ -71,6 +81,9 @@ public class CameraController : MonoBehaviour
 
         AllUiStartPos = new Vector3[AllUiTransform.Length];
         AllUiStartSize= new Vector3[AllUiTransform.Length];
+        savedUIPositions = new Vector3[AllUiTransform.Length];
+        savedUIScales = new Vector3[AllUiTransform.Length];
+        
         for (int i = 0; i < AllUiTransform.Length; i++)
         {
             AllUiStartPos[i] = AllUiTransform[i].position;
@@ -166,9 +179,9 @@ public class CameraController : MonoBehaviour
         }
 
         Debug.Log($"[CAMERA] : 勝利演出開始 - {winnerTransform.name}");
-        Debug.Log($"[CAMERA] : 勝者位置: {winnerTransform.position}");
-        Debug.Log($"[CAMERA] : 現在カメラ位置: {transform.position}");
-        Debug.Log($"[CAMERA] : 現在カメラサイズ: {MainCamera.orthographicSize}");
+        
+        // UI位置を保存
+        SaveUIPositions();
         
         // 勝者の位置にカメラを向ける
         Vector3 winnerPosition = winnerTransform.position;
@@ -177,8 +190,13 @@ public class CameraController : MonoBehaviour
         TargetPos = winnerPosition;
         TargetCameraSize = victoryZoomSize;
         
+        // ズーム用の初期値を記録
+        initialCameraSize = MainCamera.orthographicSize;
+        zoomStartTime = Time.time;
+        
         Debug.Log($"[CAMERA] : 目標位置: {TargetPos}");
         Debug.Log($"[CAMERA] : 目標サイズ: {TargetCameraSize}");
+        Debug.Log($"[CAMERA] : 初期サイズ: {initialCameraSize}");
         
         // 勝利演出フラグを設定
         isVictoryZoom = true;
@@ -201,11 +219,51 @@ public class CameraController : MonoBehaviour
         TargetPos = StartPos;
         TargetCameraSize = 5.0f;
         
+        // ズーム戻りの初期値を記録
+        initialCameraSize = MainCamera.orthographicSize;
+        zoomStartTime = Time.time;
+        
         // ビネット効果を元に戻す
         targetVignetteIntensity = originalVignetteIntensity;
         
+        // UI位置を復元
+        RestoreUIPositions();
+        
         Debug.Log($"[CAMERA] : 元の設定に戻しました - Pos: {StartPos}, Size: 5.0f, VignetteTarget: {targetVignetteIntensity}");
-        Debug.Log($"[CAMERA] : 現在のビネット強度: {currentVignetteIntensity:F3}, 目標: {targetVignetteIntensity:F3}");
+    }
+
+    // UI位置を保存
+    private void SaveUIPositions()
+    {
+        if (AllUiTransform == null) return;
+        
+        for (int i = 0; i < AllUiTransform.Length; i++)
+        {
+            if (AllUiTransform[i] != null)
+            {
+                savedUIPositions[i] = AllUiTransform[i].position;
+                savedUIScales[i] = AllUiTransform[i].localScale;
+            }
+        }
+        uiPositionsSaved = true;
+        Debug.Log("[CAMERA] : UI位置を保存しました");
+    }
+
+    // UI位置を復元
+    private void RestoreUIPositions()
+    {
+        if (!uiPositionsSaved || AllUiTransform == null) return;
+        
+        for (int i = 0; i < AllUiTransform.Length; i++)
+        {
+            if (AllUiTransform[i] != null)
+            {
+                AllUiTransform[i].position = AllUiStartPos[i];
+                AllUiTransform[i].localScale = AllUiStartSize[i];
+            }
+        }
+        uiPositionsSaved = false;
+        Debug.Log("[CAMERA] : UI位置を復元しました");
     }
 
     // ビネット効果を滑らかに更新
@@ -283,8 +341,45 @@ public class CameraController : MonoBehaviour
         {
             isVictoryZoom = false;
             targetVignetteIntensity = originalVignetteIntensity;
+            
+            // UI位置を復元
+            RestoreUIPositions();
+            
             Debug.Log("[CAMERA] : 観察開始により勝利演出をリセット、ビネットを元に戻します");
         }
+    }
+
+    // ========================================
+    // イージング関数群
+    // ========================================
+    /// <summary>イーズイン・アウト（二次関数）- ゆっくり始まってゆっくり終わる</summary>
+    private float EaseInOutQuad(float t)
+    {
+        return t < 0.5f ? 2f * t * t : 1f - Mathf.Pow(-2f * t + 2f, 2f) / 2f;
+    }
+
+    /// <summary>イーズアウト（三次関数）- 早く始まってゆっくり終わる</summary>
+    private float EaseOutCubic(float t)
+    {
+        return 1f - Mathf.Pow(1f - t, 3f);
+    }
+
+    /// <summary>イーズイン・アウト（三次関数）- 滑らかな加速減速</summary>
+    private float EaseInOutCubic(float t)
+    {
+        return t < 0.5f ? 4f * t * t * t : 1f - Mathf.Pow(-2f * t + 2f, 3f) / 2f;
+    }
+
+    /// <summary>イーズアウト（指数関数）- 非常に滑らかな減速</summary>
+    private float EaseOutExpo(float t)
+    {
+        return t == 1f ? 1f : 1f - Mathf.Pow(2f, -10f * t);
+    }
+
+    /// <summary>イーズイン・アウト（Sine）- 最も滑らかな加速減速</summary>
+    private float EaseInOutSine(float t)
+    {
+        return -(Mathf.Cos(Mathf.PI * t) - 1f) / 2f;
     }
 
     private void CameraMoveProcess()
@@ -295,31 +390,84 @@ public class CameraController : MonoBehaviour
         Vector3 cameraUiPosition;
         Vector3 uiSetPos;
 
+        // ========================================
+        // イージングを使用したズーム処理
+        // ========================================
         if (MainCamera.orthographicSize != TargetCameraSize)
         {
             SetScaleFlag = true;
-            float diffSize = TargetCameraSize - MainCamera.orthographicSize;
 
-            // 勝利演出時はよりゆっくりとズーム
-            float zoomSpeed = isVictoryZoom ? victoryZoomSpeed : 0.5f;
-            SetDiff(ref diffSize, zoomSpeed);
-            MainCamera.orthographicSize = TargetCameraSize - diffSize;
-            
-            // 勝利演出中のズーム進行をログ出力
-            if (isVictoryZoom && Time.frameCount % 30 == 0)
+            if (isVictoryZoom)
             {
-                Debug.Log($"[CAMERA] : ズーム進行中 - Current: {MainCamera.orthographicSize:F2}, Target: {TargetCameraSize:F2}, Diff: {diffSize:F2}");
+                // 勝利演出時のイージングズーム
+                float elapsedTime = Time.time - zoomStartTime;
+                float zoomDuration = victoryZoomDuration * 0.7f; // ズームは演出時間の70%で完了
+                float progress = Mathf.Clamp01(elapsedTime / zoomDuration);
+                
+                // イーズイン・アウト（Sine）で最も滑らかなズーム
+                float easedProgress = EaseInOutSine(progress);
+                
+                // 現在のカメラサイズを計算
+                float newSize = Mathf.Lerp(initialCameraSize, TargetCameraSize, easedProgress);
+                MainCamera.orthographicSize = newSize;
+                
+                // 進行状況をログ出力
+                if (Time.frameCount % 30 == 0)
+                {
+                    Debug.Log($"[CAMERA] : イージングズーム進行中 - Progress: {progress:F2}, EasedProgress: {easedProgress:F2}, Size: {newSize:F2} → Target: {TargetCameraSize:F2}");
+                }
+            }
+            else
+            {
+                // 通常時のズーム（元の処理を少し改良）
+                float diffSize = TargetCameraSize - MainCamera.orthographicSize;
+                
+                // ズーム戻りの場合もイージングを適用
+                if (Mathf.Abs(diffSize) > 0.1f)
+                {
+                    float elapsedTime = Time.time - zoomStartTime;
+                    float zoomDuration = 2.0f; // 戻り時間
+                    float progress = Mathf.Clamp01(elapsedTime / zoomDuration);
+                    
+                    // イーズアウト（指数関数）で自然な減速
+                    float easedProgress = EaseOutExpo(progress);
+                    
+                    float newSize = Mathf.Lerp(initialCameraSize, TargetCameraSize, easedProgress);
+                    MainCamera.orthographicSize = newSize;
+                }
+                else
+                {
+                    // 目標値に近い場合は直接設定
+                    MainCamera.orthographicSize = TargetCameraSize;
+                }
             }
         }
-        uiSetScale = (Vector3.one * (1.0f - (MainCamera.orthographicSize / 5.0f))) * 1.5f;
-        if (SetScaleFlag)
+
+        // ========================================
+        // UI要素のスケール調整（勝利演出中は無効化可能）
+        // ========================================
+        if (!isVictoryZoom || !disableUIAdjustmentDuringVictory)
         {
-            for (int i = 0; i < AllUiTransform.Length; i++)
+            uiSetScale = (Vector3.one * (1.0f - (MainCamera.orthographicSize / 5.0f))) * 1.5f;
+            if (SetScaleFlag)
             {
-                AllUiTransform[i].localScale = new Vector3(AllUiStartSize[i].x + uiSetScale.x, AllUiStartSize[i].y + uiSetScale.y, AllUiStartSize[i].z + uiSetScale.z);
+                for (int i = 0; i < AllUiTransform.Length; i++)
+                {
+                    if (AllUiTransform[i] != null)
+                    {
+                        AllUiTransform[i].localScale = new Vector3(
+                            AllUiStartSize[i].x + uiSetScale.x, 
+                            AllUiStartSize[i].y + uiSetScale.y, 
+                            AllUiStartSize[i].z + uiSetScale.z
+                        );
+                    }
+                }
             }
         }
 
+        // ========================================
+        // カメラ位置移動処理（イージング適用）
+        // ========================================
         if (TargetPos != this.transform.position)
         {
             Vector3 diffPos = TargetPos - this.transform.position;
@@ -328,8 +476,20 @@ public class CameraController : MonoBehaviour
             
             if (isVictoryZoom)
             {
-                // 勝利演出時は固定の遅い速度を使用
-                moveSpeed = victoryMoveSpeed;
+                // 勝利演出時のイージング移動
+                float elapsedTime = Time.time - zoomStartTime;
+                float moveDuration = victoryZoomDuration * 0.8f; // 移動は演出時間の80%で完了
+                float progress = Mathf.Clamp01(elapsedTime / moveDuration);
+                
+                // イーズアウト（三次関数）で自然な減速移動
+                float easedProgress = EaseOutCubic(progress);
+                moveSpeed = victoryMoveSpeed * (0.3f + easedProgress * 2.0f);
+                
+                // 進行状況をログ出力
+                if (Time.frameCount % 30 == 0)
+                {
+                    Debug.Log($"[CAMERA] : イージング移動進行中 - Progress: {progress:F2}, EasedProgress: {easedProgress:F2}, Speed: {moveSpeed:F2}");
+                }
             }
             else
             {
@@ -341,31 +501,42 @@ public class CameraController : MonoBehaviour
                 }
             }
 
+            // 移動方向の正規化
             float moveDenominator = Mathf.Abs(diffPos.x) + Mathf.Abs(diffPos.y);
             if (moveDenominator == 0.0f)
             {
                 moveDenominator = 0.1f;
             }
+            
+            // 各軸の移動量を計算
             SetDiff(ref diffPos.x, moveSpeed * (Mathf.Abs(diffPos.x) / moveDenominator));
             SetDiff(ref diffPos.y, moveSpeed * (Mathf.Abs(diffPos.y) / moveDenominator));
             SetDiff(ref diffPos.z, 0.5f);
 
+            // カメラ位置を更新
             this.transform.position = TargetPos - diffPos;
 
-            // 勝利演出中の移動進行をログ出力
-            if (isVictoryZoom && Time.frameCount % 30 == 0)
+            // ========================================
+            // UI要素の位置調整（勝利演出中は無効化可能）
+            // ========================================
+            if (!isVictoryZoom || !disableUIAdjustmentDuringVictory)
             {
-                Debug.Log($"[CAMERA] : 移動進行中 - Current: {transform.position}, Target: {TargetPos}, Diff: {diffPos}, Speed: {moveSpeed}");
-            }
+                cameraUiPosition = (this.transform.position - StartPos) * 100.0f;
 
-            cameraUiPosition = (this.transform.position - StartPos) * 100.0f;
-
-            for (int i = 0; i < AllUiTransform.Length; i++)
-            {
-                uiSetPos = (AllUiStartPos[i] - MiddlePos.position) - cameraUiPosition;
-                uiSetPos.x *= (uiSetScale.x + 1.0f);
-                uiSetPos.y *= (uiSetScale.y + 1.0f);
-                AllUiTransform[i].position = new Vector3(MiddlePos.position.x + uiSetPos.x, MiddlePos.position.y + uiSetPos.y, AllUiStartPos[i].z);
+                for (int i = 0; i < AllUiTransform.Length; i++)
+                {
+                    if (AllUiTransform[i] != null)
+                    {
+                        uiSetPos = (AllUiStartPos[i] - MiddlePos.position) - cameraUiPosition;
+                        //uiSetPos.x *= (uiSetScale.x + 1.0f);
+                        //uiSetPos.y *= (uiSetScale.y + 1.0f);
+                        AllUiTransform[i].position = new Vector3(
+                            MiddlePos.position.x + uiSetPos.x, 
+                            MiddlePos.position.y + uiSetPos.y, 
+                            AllUiStartPos[i].z
+                        );
+                    }
+                }
             }
         }
     }
