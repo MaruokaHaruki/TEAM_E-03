@@ -37,5 +37,12 @@ public class CameraTest : MonoBehaviour
                 TestCamera.StartVictoryZoom(GameManager.Instance.player2_.transform);
             }
         }
+        
+        // 強制的にビネットリセット（テスト用）
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            Debug.Log("[CAMERA TEST] : ビネット強制リセット");
+            TestCamera.StartObservation(this.transform.position);
+        }
     }
 }
