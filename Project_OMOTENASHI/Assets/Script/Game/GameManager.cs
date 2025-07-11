@@ -56,6 +56,12 @@ public class GameManager : MonoBehaviour
     [Tooltip("無敵アイテム生成物")]
     public InvincibleItemGeneration invincibleObje;
 
+    //========================================
+    // カメラコントローラー参照
+    [Header("カメラ管理")]
+    [Tooltip("カメラコントローラー")]
+    public CameraController cameraController;
+
     ///--------------------------------------------------------------
     ///						 private変数
     //========================================
@@ -191,14 +197,30 @@ public class GameManager : MonoBehaviour
     ///--------------------------------------------------------------
     ///						 プレイヤー敗北処理
     private void OnPlayerDefeated(string defeatedPlayerId) {
+        Debug.Log($"[GAME MANAGER] : プレイヤー敗北処理開始 - DefeatedID: {defeatedPlayerId}");
+
         // ラウンドシステムが有効な場合はゲームオーバーにしない
         if (RoundManager.Instance != null) {
             // 勝者を決定
+            Transform winnerTransform = null;
             if (player1_ != null && player1_.playerID_ == defeatedPlayerId) {
                 CurrentWinner = Winner.Player2;
+                winnerTransform = player2_.transform;
+                Debug.Log($"[GAME MANAGER] : Player2が勝利 - Transform: {winnerTransform?.name}");
             }
             else if (player2_ != null && player2_.playerID_ == defeatedPlayerId) {
                 CurrentWinner = Winner.Player1;
+                winnerTransform = player1_.transform;
+                Debug.Log($"[GAME MANAGER] : Player1が勝利 - Transform: {winnerTransform?.name}");
+            }
+
+            // 即座に勝利演出を開始
+            if (cameraController != null && winnerTransform != null) {
+                Debug.Log($"[GAME MANAGER] : 勝利演出を即座に開始 - {winnerTransform.name} at {winnerTransform.position}");
+                cameraController.StartVictoryZoom(winnerTransform);
+            }
+            else {
+                Debug.LogWarning($"[GAME MANAGER] : 勝利演出開始失敗 - CameraController: {cameraController?.name}, WinnerTransform: {winnerTransform?.name}");
             }
 
             string defeatedPlayerName = GetPlayerName(defeatedPlayerId);
@@ -217,11 +239,20 @@ public class GameManager : MonoBehaviour
             CurrentGameState = GameState.GameOver;
 
             // 勝者を決定
+            Transform winnerTransform = null;
             if (player1_ != null && player1_.playerID_ == defeatedPlayerId) {
                 CurrentWinner = Winner.Player2;
+                winnerTransform = player2_.transform;
             }
             else if (player2_ != null && player2_.playerID_ == defeatedPlayerId) {
                 CurrentWinner = Winner.Player1;
+                winnerTransform = player1_.transform;
+            }
+
+            // 勝利演出を開始
+            if (cameraController != null && winnerTransform != null) {
+                Debug.Log($"[GAME MANAGER] : 最終勝利演出開始 - {winnerTransform.name}");
+                cameraController.StartVictoryZoom(winnerTransform);
             }
 
             string defeatedPlayerName = GetPlayerName(defeatedPlayerId);
