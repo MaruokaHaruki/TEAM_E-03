@@ -26,7 +26,7 @@ public class ScoreDraw : MonoBehaviour
     [SerializeField] private Vector2 SetSize = new Vector2(0.5f, 2.0f);
 
     [Header("�s��(x)�A���҃T�C�Y(y) �ړ��ʔ{��")]
-    [SerializeField] private Vector2 SetXMove = new Vector2(2.0f, 2.0f);
+    [SerializeField] private Vector2 SetXMove = new Vector2(2.0f, 1.0f);
 
     [SerializeField] private int BlownAwayScore = 3;
 
@@ -212,7 +212,7 @@ public class ScoreDraw : MonoBehaviour
             }
 
             // �X�R�A�`��I��
-            if (DrawEndFlag && NextMoveTime < Time.time)
+            if (DrawEndFlag && (NextMoveTime < Time.time) && (JumpPlayerA.GroundFlag && JumpPlayerB.GroundFlag))
             {
                 if (PlayerAScore <= BlownAwayScore)
                 {
@@ -227,7 +227,7 @@ public class ScoreDraw : MonoBehaviour
                 }
 
                 Result.DrawEndFlag = true;
-                Destroy(this);
+                //Destroy(this);
             }
         }
     }

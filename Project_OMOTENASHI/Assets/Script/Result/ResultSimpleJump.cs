@@ -2,10 +2,10 @@ using UnityEngine;
 
 public class ResultSimpleJump : MonoBehaviour
 {
-    [SerializeField] private float StartJumpTime;
-    [SerializeField] private float SetJumpTime;
-    [SerializeField] private float GravityPower;
-    [SerializeField] private float JumpPower;
+    [SerializeField] private float StartJumpTime = 2.0f;
+    [SerializeField] private float SetJumpTime = 0.5f;
+    [SerializeField] private float GravityPower = 200.0f;
+    [SerializeField] private float JumpPower = 50.0f;
     private float GroundHeight;
     internal float SetGroundHeight
     {
@@ -13,7 +13,7 @@ public class ResultSimpleJump : MonoBehaviour
     }
     internal bool JumpFlag;
     private float StartGroundHeight;
-    private bool GroundFlag;
+    internal bool GroundFlag;
     private float JumpTime;
     private float Move;
 
