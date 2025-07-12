@@ -801,6 +801,18 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 998862548729051179, guid: 17927be392b191b4bb81d01bc8ebdc16, type: 3}
+      propertyPath: JumpPower
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 998862548729051179, guid: 17927be392b191b4bb81d01bc8ebdc16, type: 3}
+      propertyPath: SetJumpTime
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 998862548729051179, guid: 17927be392b191b4bb81d01bc8ebdc16, type: 3}
+      propertyPath: GravityPower
+      value: 200
+      objectReference: {fileID: 0}
     - target: {fileID: 1147938354505059285, guid: 17927be392b191b4bb81d01bc8ebdc16, type: 3}
       propertyPath: m_Size.x
       value: 0.3
@@ -817,6 +829,18 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1859207937352842036, guid: 17927be392b191b4bb81d01bc8ebdc16, type: 3}
+      propertyPath: JumpPower
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 1859207937352842036, guid: 17927be392b191b4bb81d01bc8ebdc16, type: 3}
+      propertyPath: SetJumpTime
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1859207937352842036, guid: 17927be392b191b4bb81d01bc8ebdc16, type: 3}
+      propertyPath: GravityPower
+      value: 200
+      objectReference: {fileID: 0}
     - target: {fileID: 2119178188531989749, guid: 17927be392b191b4bb81d01bc8ebdc16, type: 3}
       propertyPath: m_Enabled
       value: 0
@@ -832,6 +856,14 @@ PrefabInstance:
     - target: {fileID: 3828388610263903964, guid: 17927be392b191b4bb81d01bc8ebdc16, type: 3}
       propertyPath: m_Enabled
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4362020511326463227, guid: 17927be392b191b4bb81d01bc8ebdc16, type: 3}
+      propertyPath: SetXMove.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4362020511326463227, guid: 17927be392b191b4bb81d01bc8ebdc16, type: 3}
+      propertyPath: NextFishTime
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6283024744151837655, guid: 17927be392b191b4bb81d01bc8ebdc16, type: 3}
       propertyPath: m_Enabled
@@ -2564,58 +2596,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!1 &1873592432
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1873592434}
-  - component: {fileID: 1873592433}
-  m_Layer: 0
-  m_Name: RoundManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1873592433
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1873592432}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d6ec02d39e439de4684e45f7bf056d52, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  roundSettingsList: []
-  currentRoundNumber: 1
-  roundFeatureImages: []
-  player1Score: 4
-  player2Score: 5
-  targetScore: 5
-  gameEndDisplayTime: 5
-  roundTransitionDelay: 3
---- !u!4 &1873592434
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1873592432}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2.13, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2145076779
 GameObject:
   m_ObjectHideFlags: 0
@@ -2764,4 +2744,3 @@ SceneRoots:
   - {fileID: 1350128025}
   - {fileID: 1136686188}
   - {fileID: 487800952}
-  - {fileID: 1873592434}
