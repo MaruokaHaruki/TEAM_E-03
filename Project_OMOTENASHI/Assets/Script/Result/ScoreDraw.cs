@@ -212,7 +212,7 @@ public class ScoreDraw : MonoBehaviour
             }
 
             // �X�R�A�`��I��
-            if (DrawEndFlag && (NextMoveTime < Time.time) && (!JumpPlayerA.JumpFlag && !JumpPlayerB.JumpFlag))
+            if (DrawEndFlag && (NextMoveTime < Time.time) && (JumpPlayerA.GroundFlag && JumpPlayerB.GroundFlag))
             {
                 if (PlayerAScore <= BlownAwayScore)
                 {

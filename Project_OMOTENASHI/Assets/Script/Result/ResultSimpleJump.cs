@@ -13,7 +13,7 @@ public class ResultSimpleJump : MonoBehaviour
     }
     internal bool JumpFlag;
     private float StartGroundHeight;
-    private bool GroundFlag;
+    internal bool GroundFlag;
     private float JumpTime;
     private float Move;
 
