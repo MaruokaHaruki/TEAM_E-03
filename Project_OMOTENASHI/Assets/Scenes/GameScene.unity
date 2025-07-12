@@ -3874,7 +3874,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1851220988239140345, guid: 86be4eefeb35d23498dc9efcca509af7, type: 3}
       propertyPath: seClips_.Array.size
-      value: 8
+      value: 16
       objectReference: {fileID: 0}
     - target: {fileID: 1851220988239140345, guid: 86be4eefeb35d23498dc9efcca509af7, type: 3}
       propertyPath: seClips_.Array.data[1].clip
@@ -3903,7 +3903,7 @@ PrefabInstance:
     - target: {fileID: 1851220988239140345, guid: 86be4eefeb35d23498dc9efcca509af7, type: 3}
       propertyPath: seClips_.Array.data[4].clip
       value: 
-      objectReference: {fileID: 8300000, guid: fd38927dba64bf94195f44a73a31d135, type: 3}
+      objectReference: {fileID: 8300000, guid: f2a5f8188e1c97f4283848c42683713e, type: 3}
     - target: {fileID: 1851220988239140345, guid: 86be4eefeb35d23498dc9efcca509af7, type: 3}
       propertyPath: seClips_.Array.data[4].name
       value: Step
@@ -3911,26 +3911,94 @@ PrefabInstance:
     - target: {fileID: 1851220988239140345, guid: 86be4eefeb35d23498dc9efcca509af7, type: 3}
       propertyPath: seClips_.Array.data[5].clip
       value: 
-      objectReference: {fileID: 8300000, guid: fd38927dba64bf94195f44a73a31d135, type: 3}
+      objectReference: {fileID: 8300000, guid: 4b3c8dfea23f4e94dbbf5d97a85628a5, type: 3}
     - target: {fileID: 1851220988239140345, guid: 86be4eefeb35d23498dc9efcca509af7, type: 3}
       propertyPath: seClips_.Array.data[5].name
-      value: Penguin2Penguin
+      value: Penguin2Hip
       objectReference: {fileID: 0}
     - target: {fileID: 1851220988239140345, guid: 86be4eefeb35d23498dc9efcca509af7, type: 3}
       propertyPath: seClips_.Array.data[6].clip
       value: 
-      objectReference: {fileID: 8300000, guid: ebb276f92c76b054c8d457ef4feb1209, type: 3}
+      objectReference: {fileID: 8300000, guid: fd38927dba64bf94195f44a73a31d135, type: 3}
     - target: {fileID: 1851220988239140345, guid: 86be4eefeb35d23498dc9efcca509af7, type: 3}
       propertyPath: seClips_.Array.data[6].name
-      value: Penguin2Wall
+      value: Penguin2Penguin
       objectReference: {fileID: 0}
     - target: {fileID: 1851220988239140345, guid: 86be4eefeb35d23498dc9efcca509af7, type: 3}
       propertyPath: seClips_.Array.data[7].clip
       value: 
-      objectReference: {fileID: 8300000, guid: 463e9aff50781b540993c90b1fb38094, type: 3}
+      objectReference: {fileID: 8300000, guid: ebb276f92c76b054c8d457ef4feb1209, type: 3}
     - target: {fileID: 1851220988239140345, guid: 86be4eefeb35d23498dc9efcca509af7, type: 3}
       propertyPath: seClips_.Array.data[7].name
+      value: Penguin2Wall
+      objectReference: {fileID: 0}
+    - target: {fileID: 1851220988239140345, guid: 86be4eefeb35d23498dc9efcca509af7, type: 3}
+      propertyPath: seClips_.Array.data[8].clip
+      value: 
+      objectReference: {fileID: 8300000, guid: a906709bc0175d54f9e2691b2180b0cf, type: 3}
+    - target: {fileID: 1851220988239140345, guid: 86be4eefeb35d23498dc9efcca509af7, type: 3}
+      propertyPath: seClips_.Array.data[8].name
       value: KO
+      objectReference: {fileID: 0}
+    - target: {fileID: 1851220988239140345, guid: 86be4eefeb35d23498dc9efcca509af7, type: 3}
+      propertyPath: seClips_.Array.data[9].clip
+      value: 
+      objectReference: {fileID: 8300000, guid: b505f9d318472b54ea7773c91aa1a129, type: 3}
+    - target: {fileID: 1851220988239140345, guid: 86be4eefeb35d23498dc9efcca509af7, type: 3}
+      propertyPath: seClips_.Array.data[9].name
+      value: StarrButton
+      objectReference: {fileID: 0}
+    - target: {fileID: 1851220988239140345, guid: 86be4eefeb35d23498dc9efcca509af7, type: 3}
+      propertyPath: bgmClips_.Array.data[0].clip
+      value: 
+      objectReference: {fileID: 8300000, guid: 910f949b7e10cd341a991f2d8d6d4f8e, type: 3}
+    - target: {fileID: 1851220988239140345, guid: 86be4eefeb35d23498dc9efcca509af7, type: 3}
+      propertyPath: seClips_.Array.data[10].clip
+      value: 
+      objectReference: {fileID: 8300000, guid: b505f9d318472b54ea7773c91aa1a129, type: 3}
+    - target: {fileID: 1851220988239140345, guid: 86be4eefeb35d23498dc9efcca509af7, type: 3}
+      propertyPath: seClips_.Array.data[10].name
+      value: StarrButton
+      objectReference: {fileID: 0}
+    - target: {fileID: 1851220988239140345, guid: 86be4eefeb35d23498dc9efcca509af7, type: 3}
+      propertyPath: seClips_.Array.data[11].clip
+      value: 
+      objectReference: {fileID: 8300000, guid: 6d9d6b5b9f67ba3498593e3586ff6483, type: 3}
+    - target: {fileID: 1851220988239140345, guid: 86be4eefeb35d23498dc9efcca509af7, type: 3}
+      propertyPath: seClips_.Array.data[11].name
+      value: RoundStart_1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1851220988239140345, guid: 86be4eefeb35d23498dc9efcca509af7, type: 3}
+      propertyPath: seClips_.Array.data[12].clip
+      value: 
+      objectReference: {fileID: 8300000, guid: 5a2827de5c596ac4a87f7b9c0de8dc63, type: 3}
+    - target: {fileID: 1851220988239140345, guid: 86be4eefeb35d23498dc9efcca509af7, type: 3}
+      propertyPath: seClips_.Array.data[12].name
+      value: RoundStart_2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1851220988239140345, guid: 86be4eefeb35d23498dc9efcca509af7, type: 3}
+      propertyPath: seClips_.Array.data[13].clip
+      value: 
+      objectReference: {fileID: 8300000, guid: 5a2827de5c596ac4a87f7b9c0de8dc63, type: 3}
+    - target: {fileID: 1851220988239140345, guid: 86be4eefeb35d23498dc9efcca509af7, type: 3}
+      propertyPath: seClips_.Array.data[13].name
+      value: RoundStart_3
+      objectReference: {fileID: 0}
+    - target: {fileID: 1851220988239140345, guid: 86be4eefeb35d23498dc9efcca509af7, type: 3}
+      propertyPath: seClips_.Array.data[14].clip
+      value: 
+      objectReference: {fileID: 8300000, guid: 5a2827de5c596ac4a87f7b9c0de8dc63, type: 3}
+    - target: {fileID: 1851220988239140345, guid: 86be4eefeb35d23498dc9efcca509af7, type: 3}
+      propertyPath: seClips_.Array.data[14].name
+      value: RoundKO_1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1851220988239140345, guid: 86be4eefeb35d23498dc9efcca509af7, type: 3}
+      propertyPath: seClips_.Array.data[15].clip
+      value: 
+      objectReference: {fileID: 8300000, guid: 5a2827de5c596ac4a87f7b9c0de8dc63, type: 3}
+    - target: {fileID: 1851220988239140345, guid: 86be4eefeb35d23498dc9efcca509af7, type: 3}
+      propertyPath: seClips_.Array.data[15].name
+      value: RoundKO_2
       objectReference: {fileID: 0}
     - target: {fileID: 4974692803899297538, guid: 86be4eefeb35d23498dc9efcca509af7, type: 3}
       propertyPath: m_LocalPosition.x
