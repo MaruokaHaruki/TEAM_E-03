@@ -48,22 +48,54 @@ public class CameraController : MonoBehaviour
     [SerializeField, Tooltip("勝利演出時のビネット強度（0-1、大きいほど画面端が暗くなる）")]
     private float victoryVignetteIntensity = 0.8f;
     
-    [SerializeField, Tooltip("勝利演出時のカメラ移動速度（小さいほどゆっくり移動）")]
+    [Header("勝利演出スムーズネス設定")]
+    [SerializeField, Tooltip("勝利演出時のカメラ移動速度（0.1-2.0、小さいほどゆっくり移動）")]
+    [Range(0.1f, 2.0f)]
     private float victoryMoveSpeed = 0.5f;
     
-    [SerializeField, Tooltip("勝利演出時のズーム速度（小さいほどゆっくりズーム）")]
+    [SerializeField, Tooltip("勝利演出時のズーム速度（0.05-1.0、小さいほどゆっくりズーム）")]
+    [Range(0.05f, 1.0f)]
     private float victoryZoomSpeed = 0.1f;
+    
+    [SerializeField, Tooltip("勝利演出時のカメラ移動スムーズネス（1.0-10.0、大きいほど滑らか）")]
+    [Range(1.0f, 10.0f)]
+    private float victoryMoveSmoothness = 5.0f;
+    
+    [SerializeField, Tooltip("勝利演出時のズームスムーズネス（1.0-10.0、大きいほど滑らか）")]
+    [Range(1.0f, 10.0f)]
+    private float victoryZoomSmoothness = 3.0f;
     
     [Header("ビネット効果設定")]
     [SerializeField, Tooltip("ビネット効果が強くなる速度（勝利演出開始時）")]
+    [Range(0.5f, 10.0f)]
     private float vignetteIntensifySpeed = 3.0f;
     
     [SerializeField, Tooltip("ビネット効果が戻る速度（勝利演出終了時）")]
+    [Range(0.5f, 10.0f)]
     private float vignetteReturnSpeed = 2.0f;
+    
+    [SerializeField, Tooltip("ビネット効果のスムーズネス（1.0-10.0、大きいほど滑らか）")]
+    [Range(0.0f, 10.0f)]
+    private float vignetteSmoothness = 5.0f;
     
     [SerializeField, Tooltip("ビネット効果をスムージングするか（チェックを外すと即座に変化）")]
     private bool enableVignetteSmoothing = true;
     
+    [SerializeField, Tooltip("勝利演出のEasing Type")]
+    private EasingType victoryEasingType = EasingType.EaseInOutQuad;
+    
+    // イージングタイプの列挙型
+    public enum EasingType
+    {
+        Linear,
+        EaseInQuad,
+        EaseOutQuad,
+        EaseInOutQuad,
+        EaseInCubic,
+        EaseOutCubic,
+        EaseInOutCubic
+    }
+
     private bool isVictoryZoom = false;
     private float victoryZoomTimer = 0f;
     private Volume postProcessVolume;
@@ -258,7 +290,7 @@ public class CameraController : MonoBehaviour
             // 即座に戻すフラグが立っている場合は高速で戻す
             if (shouldReturnVignetteImmediately)
             {
-                float fastReturnSpeed = vignetteReturnSpeed * 3.0f; // 3倍速で戻す
+                float fastReturnSpeed = vignetteReturnSpeed * vignetteSmoothness;
                 currentVignetteIntensity = Mathf.Lerp(currentVignetteIntensity, targetVignetteIntensity, Time.deltaTime * fastReturnSpeed);
                 
                 // 目標値に十分近づいたら即座に戻すフラグを解除
@@ -271,8 +303,10 @@ public class CameraController : MonoBehaviour
             }
             else
             {
-                // 通常のスムージング処理
-                float changeSpeed = isVictoryZoom ? vignetteIntensifySpeed : vignetteReturnSpeed;
+                // 通常のスムージング処理（スムーズネスを適用）
+                float changeSpeed = isVictoryZoom ? 
+                    vignetteIntensifySpeed * vignetteSmoothness : 
+                    vignetteReturnSpeed * vignetteSmoothness;
                 currentVignetteIntensity = Mathf.Lerp(currentVignetteIntensity, targetVignetteIntensity, Time.deltaTime * changeSpeed);
             }
             
@@ -329,9 +363,24 @@ public class CameraController : MonoBehaviour
             SetScaleFlag = true;
             float diffSize = TargetCameraSize - MainCamera.orthographicSize;
 
-            // 勝利演出時はよりゆっくりとズーム
-            float zoomSpeed = isVictoryZoom ? victoryZoomSpeed : 0.5f;
-            SetDiff(ref diffSize, zoomSpeed);
+            // 勝利演出時はスムーズネスを適用したズーム
+            float zoomSpeed = isVictoryZoom ? 
+                victoryZoomSpeed * victoryZoomSmoothness : 
+                0.5f;
+            
+            // イージングを適用
+            if (isVictoryZoom)
+            {
+                float t = 1.0f - (victoryZoomTimer / victoryZoomDuration);
+                t = ApplyEasing(t, victoryEasingType);
+                float easedSpeed = zoomSpeed * (1.0f + t * 2.0f); // Easing効果を速度に反映
+                SetDiff(ref diffSize, easedSpeed);
+            }
+            else
+            {
+                SetDiff(ref diffSize, zoomSpeed);
+            }
+            
             MainCamera.orthographicSize = TargetCameraSize - diffSize;
             
             // 勝利演出中のズーム進行をログ出力
@@ -357,8 +406,13 @@ public class CameraController : MonoBehaviour
             
             if (isVictoryZoom)
             {
-                // 勝利演出時は固定の遅い速度を使用
-                moveSpeed = victoryMoveSpeed;
+                // 勝利演出時はスムーズネスを適用した移動速度
+                moveSpeed = victoryMoveSpeed * victoryMoveSmoothness;
+                
+                // イージングを適用
+                float t = 1.0f - (victoryZoomTimer / victoryZoomDuration);
+                t = ApplyEasing(t, victoryEasingType);
+                moveSpeed *= (1.0f + t); // Easing効果を速度に反映
             }
             else
             {
@@ -396,6 +450,30 @@ public class CameraController : MonoBehaviour
                 uiSetPos.y *= (uiSetScale.y + 1.0f);
                 AllUiTransform[i].position = new Vector3(MiddlePos.position.x + uiSetPos.x, MiddlePos.position.y + uiSetPos.y, AllUiStartPos[i].z);
             }
+        }
+    }
+
+    // イージング関数
+    private float ApplyEasing(float t, EasingType easingType)
+    {
+        switch (easingType)
+        {
+            case EasingType.Linear:
+                return t;
+            case EasingType.EaseInQuad:
+                return t * t;
+            case EasingType.EaseOutQuad:
+                return 1f - (1f - t) * (1f - t);
+            case EasingType.EaseInOutQuad:
+                return t < 0.5f ? 2f * t * t : 1f - Mathf.Pow(-2f * t + 2f, 2f) / 2f;
+            case EasingType.EaseInCubic:
+                return t * t * t;
+            case EasingType.EaseOutCubic:
+                return 1f - Mathf.Pow(1f - t, 3f);
+            case EasingType.EaseInOutCubic:
+                return t < 0.5f ? 4f * t * t * t : 1f - Mathf.Pow(-2f * t + 2f, 3f) / 2f;
+            default:
+                return t;
         }
     }
 
