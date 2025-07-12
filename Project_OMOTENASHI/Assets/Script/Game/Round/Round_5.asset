@@ -17,7 +17,7 @@ MonoBehaviour:
   winPoints: 5
   player1StartPosition: {x: -3, y: 0, z: 0}
   player2StartPosition: {x: 3, y: 0, z: 0}
-  enableDoubleJump: 0
+  enableDoubleJump: 1
   enableStomp: 1
   enableReverseJump: 0
   enableSpeedTransfer: 1
@@ -30,3 +30,4 @@ MonoBehaviour:
   tilemapPosition: {x: 0, y: 0, z: 0}
   tilemapRotation: {x: 0, y: 0, z: 0}
   InvincibleItemFlag: 0
+  allowPlayerMovement: 1
