@@ -272,6 +272,12 @@ public class RoundManager : MonoBehaviour
     {
         Debug.Log("[ROUND MANAGER] : ラウンド開始演出開始");
 
+        // ラウンドパネル表示時のSEを再生
+        if (AudioManager.Instance != null)
+        {
+            AudioManager.Instance.PlaySE("Round_Start_1");
+        }
+
         if (UIManager.Instance != null && currentRoundSettings != null)
         {
             string featuresText = GetNewFeaturesText();
@@ -383,6 +389,12 @@ public class RoundManager : MonoBehaviour
         if (currentRoundSettings == null) return;
 
         Debug.Log($"[ROUND MANAGER] : プレイヤー勝利処理開始 - Winner: {winner}");
+
+        // ラウンド決着時のSEを再生
+        if (AudioManager.Instance != null)
+        {
+            AudioManager.Instance.PlaySE("Round_KO_2");
+        }
 
         // ゲーム状態をラウンド終了に変更（プレイヤーの移動を停止）
         if (GameManager.Instance != null)
