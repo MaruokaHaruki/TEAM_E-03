@@ -3870,7 +3870,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1851220988239140345, guid: 86be4eefeb35d23498dc9efcca509af7, type: 3}
       propertyPath: sePoolCount_
-      value: 32
+      value: 16
       objectReference: {fileID: 0}
     - target: {fileID: 1851220988239140345, guid: 86be4eefeb35d23498dc9efcca509af7, type: 3}
       propertyPath: seClips_.Array.size
@@ -3911,7 +3911,7 @@ PrefabInstance:
     - target: {fileID: 1851220988239140345, guid: 86be4eefeb35d23498dc9efcca509af7, type: 3}
       propertyPath: seClips_.Array.data[5].clip
       value: 
-      objectReference: {fileID: 8300000, guid: 4b3c8dfea23f4e94dbbf5d97a85628a5, type: 3}
+      objectReference: {fileID: 8300000, guid: 5804955fc0de876478a5de17b70bca14, type: 3}
     - target: {fileID: 1851220988239140345, guid: 86be4eefeb35d23498dc9efcca509af7, type: 3}
       propertyPath: seClips_.Array.data[5].name
       value: Player_Penguin2Hip
