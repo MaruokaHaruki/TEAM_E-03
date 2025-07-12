@@ -1286,7 +1286,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: -10
   m_Sprite: {fileID: 6971248107481662348, guid: 645187be747eeee43a09eb6bbc4d8e1f, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -3874,7 +3874,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1851220988239140345, guid: 86be4eefeb35d23498dc9efcca509af7, type: 3}
       propertyPath: seClips_.Array.size
-      value: 15
+      value: 14
       objectReference: {fileID: 0}
     - target: {fileID: 1851220988239140345, guid: 86be4eefeb35d23498dc9efcca509af7, type: 3}
       propertyPath: seClips_.Array.data[1].clip
@@ -3935,18 +3935,18 @@ PrefabInstance:
     - target: {fileID: 1851220988239140345, guid: 86be4eefeb35d23498dc9efcca509af7, type: 3}
       propertyPath: seClips_.Array.data[8].clip
       value: 
-      objectReference: {fileID: 8300000, guid: a906709bc0175d54f9e2691b2180b0cf, type: 3}
+      objectReference: {fileID: 8300000, guid: b505f9d318472b54ea7773c91aa1a129, type: 3}
     - target: {fileID: 1851220988239140345, guid: 86be4eefeb35d23498dc9efcca509af7, type: 3}
       propertyPath: seClips_.Array.data[8].name
-      value: Round_KO
+      value: Title_StartButton
       objectReference: {fileID: 0}
     - target: {fileID: 1851220988239140345, guid: 86be4eefeb35d23498dc9efcca509af7, type: 3}
       propertyPath: seClips_.Array.data[9].clip
       value: 
-      objectReference: {fileID: 8300000, guid: b505f9d318472b54ea7773c91aa1a129, type: 3}
+      objectReference: {fileID: 8300000, guid: 2f9713f4df77e13499f088a383b0c827, type: 3}
     - target: {fileID: 1851220988239140345, guid: 86be4eefeb35d23498dc9efcca509af7, type: 3}
       propertyPath: seClips_.Array.data[9].name
-      value: Title_StartButton
+      value: Round_KO_1
       objectReference: {fileID: 0}
     - target: {fileID: 1851220988239140345, guid: 86be4eefeb35d23498dc9efcca509af7, type: 3}
       propertyPath: bgmClips_.Array.data[0].clip
@@ -3955,18 +3955,18 @@ PrefabInstance:
     - target: {fileID: 1851220988239140345, guid: 86be4eefeb35d23498dc9efcca509af7, type: 3}
       propertyPath: seClips_.Array.data[10].clip
       value: 
-      objectReference: {fileID: 8300000, guid: 6d9d6b5b9f67ba3498593e3586ff6483, type: 3}
+      objectReference: {fileID: 8300000, guid: a906709bc0175d54f9e2691b2180b0cf, type: 3}
     - target: {fileID: 1851220988239140345, guid: 86be4eefeb35d23498dc9efcca509af7, type: 3}
       propertyPath: seClips_.Array.data[10].name
-      value: Round_Start_1
+      value: Round_KO_2
       objectReference: {fileID: 0}
     - target: {fileID: 1851220988239140345, guid: 86be4eefeb35d23498dc9efcca509af7, type: 3}
       propertyPath: seClips_.Array.data[11].clip
       value: 
-      objectReference: {fileID: 8300000, guid: 5a2827de5c596ac4a87f7b9c0de8dc63, type: 3}
+      objectReference: {fileID: 8300000, guid: 6d9d6b5b9f67ba3498593e3586ff6483, type: 3}
     - target: {fileID: 1851220988239140345, guid: 86be4eefeb35d23498dc9efcca509af7, type: 3}
       propertyPath: seClips_.Array.data[11].name
-      value: Round_Start_2
+      value: Round_Start_1
       objectReference: {fileID: 0}
     - target: {fileID: 1851220988239140345, guid: 86be4eefeb35d23498dc9efcca509af7, type: 3}
       propertyPath: seClips_.Array.data[12].clip
@@ -3974,23 +3974,23 @@ PrefabInstance:
       objectReference: {fileID: 8300000, guid: 5a2827de5c596ac4a87f7b9c0de8dc63, type: 3}
     - target: {fileID: 1851220988239140345, guid: 86be4eefeb35d23498dc9efcca509af7, type: 3}
       propertyPath: seClips_.Array.data[12].name
-      value: Round_Start_3
+      value: Round_Start_2
       objectReference: {fileID: 0}
     - target: {fileID: 1851220988239140345, guid: 86be4eefeb35d23498dc9efcca509af7, type: 3}
       propertyPath: seClips_.Array.data[13].clip
       value: 
-      objectReference: {fileID: 8300000, guid: 5a2827de5c596ac4a87f7b9c0de8dc63, type: 3}
+      objectReference: {fileID: 8300000, guid: 2f9713f4df77e13499f088a383b0c827, type: 3}
     - target: {fileID: 1851220988239140345, guid: 86be4eefeb35d23498dc9efcca509af7, type: 3}
       propertyPath: seClips_.Array.data[13].name
-      value: Round_KO_1
+      value: Round_Start_3
       objectReference: {fileID: 0}
     - target: {fileID: 1851220988239140345, guid: 86be4eefeb35d23498dc9efcca509af7, type: 3}
       propertyPath: seClips_.Array.data[14].clip
       value: 
-      objectReference: {fileID: 8300000, guid: 5a2827de5c596ac4a87f7b9c0de8dc63, type: 3}
+      objectReference: {fileID: 8300000, guid: 2f9713f4df77e13499f088a383b0c827, type: 3}
     - target: {fileID: 1851220988239140345, guid: 86be4eefeb35d23498dc9efcca509af7, type: 3}
       propertyPath: seClips_.Array.data[14].name
-      value: Round_KO_2
+      value: Round_Start_3
       objectReference: {fileID: 0}
     - target: {fileID: 4974692803899297538, guid: 86be4eefeb35d23498dc9efcca509af7, type: 3}
       propertyPath: m_LocalPosition.x
@@ -4430,7 +4430,7 @@ Transform:
   m_GameObject: {fileID: 1507770433}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 5.41, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -5292,7 +5292,7 @@ Transform:
   m_GameObject: {fileID: 1716098616}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -4.191, y: -3.29, z: 0}
+  m_LocalPosition: {x: -4.191, y: -0.09, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
