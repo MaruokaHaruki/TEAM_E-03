@@ -385,7 +385,7 @@ public class Player : MonoBehaviour {
         // 空中から地面に着地した瞬間に着地音を再生
         if (!wasGrounded && isGround_) {
             if (AudioManager.Instance != null) {
-                AudioManager.Instance.PlaySE("Landing");
+                AudioManager.Instance.PlaySE("Player_Landing");
             }
         }
 
@@ -444,7 +444,7 @@ public class Player : MonoBehaviour {
         if (isJumping_) {
             // ジャンプ音を再生
             if (AudioManager.Instance != null) {
-                AudioManager.Instance.PlaySE("Jump");
+                AudioManager.Instance.PlaySE("Player_Jump");
             }
             
             // 2段ジャンプの場合はY軸速度を一度リセット
@@ -571,7 +571,7 @@ public class Player : MonoBehaviour {
             
             // プレイヤーと壁の衝突音を再生
             if (AudioManager.Instance != null) {
-                AudioManager.Instance.PlaySE("Penguin2Wall");
+                AudioManager.Instance.PlaySE("Player_Penguin2Wall");
             }
             
             // 壁反射時に無敵状態を付与
@@ -590,7 +590,7 @@ public class Player : MonoBehaviour {
         if (moveInputPressed && !isInvincible_) {
             // 連打音を再生
             if (AudioManager.Instance != null) {
-                AudioManager.Instance.PlaySE("Barrage");
+                AudioManager.Instance.PlaySE("Player_Barrage");
             }
             
             // 連打ゲージを増加
@@ -686,19 +686,19 @@ public class Player : MonoBehaviour {
             // 自分が相手より上にいて、下向きの速度を持っている場合は踏みつけ
             bool isAbove = transform.position.y > otherPlayer.transform.position.y + 0.5f;
             bool isMovingDown = rigidbody2D_.velocity.y < -1.0f;
-            
+
             if (isAbove && isMovingDown && !otherPlayer.isStunned_) {
                 // 踏みつけ成功
                 otherPlayer.ApplyStun(stompStunDuration_);
-                
+
                 // 踏みつけた側は跳ね返る
                 rigidbody2D_.velocity = new Vector2(rigidbody2D_.velocity.x, jumpForce_ * 0.7f);
-                
+
                 // 踏みつけ音を再生
                 if (AudioManager.Instance != null) {
-                    AudioManager.Instance.PlaySE("Step");
+                    AudioManager.Instance.PlaySE("Player_Step");
                 }
-                
+
                 Debug.Log($"[STOMP] : {gameObject.name} が {otherPlayer.gameObject.name} を踏みつけました");
                 return; // 踏みつけ成功時は通常の衝突処理をスキップ
             }
@@ -714,141 +714,195 @@ public class Player : MonoBehaviour {
                 return;
             }
 
-            // プレイヤー同士の衝突音を再生
-            if (AudioManager.Instance != null) {
-                AudioManager.Instance.PlaySE("Peguin2Penguin");
-            }
+            // プレイヤー同士の衝突音を再生部分を削除（個別に処理するため）
+            if (collision.gameObject.CompareTag("Player")) {
+                //Player otherPlayer = collision.gameObject.GetComponent<Player>();
+                if (otherPlayer == null || otherPlayer == this) return;
 
-            // 速度交換ロジック
-            if (isAutoMode_ && otherPlayer.isAutoMode_ && enableSpeedTransfer_ && otherPlayer.enableSpeedTransfer_) {
-                float mySpeed = GetCurrentEffectiveSpeed();
-                float otherSpeed = otherPlayer.GetCurrentEffectiveSpeed();
-
-                // 速度差が十分にある場合のみ速度交換を実行
-                if (Mathf.Abs(mySpeed - otherSpeed) > 0.5f) {
-                    // お互いの速度を一時保存
-                    float tempMySpeed = mySpeed;
-                    float tempOtherSpeed = otherSpeed;
-
-                    // お互いの速度を入れ替え
-                    AdjustGaugeToAchieveSpeed(tempOtherSpeed);
-                    otherPlayer.AdjustGaugeToAchieveSpeed(tempMySpeed);
-
-                    Debug.Log($"[SPEED TRANSFER] : {gameObject.name}(速度:{tempMySpeed:F2}) <-> {otherPlayer.gameObject.name}(速度:{tempOtherSpeed:F2}) 速度を交換しました");
+                // 衝突処理の重複を防ぐため、GetInstanceIDが小さい方のオブジェクトは処理をスキップします。
+                // これにより、衝突ペアに対して一度だけ判定ロジックが実行されるようになります。
+                if (gameObject.GetInstanceID() < otherPlayer.gameObject.GetInstanceID()) {
+                    return;
                 }
-            }
 
-            // 無敵状態の判定
-            bool thisIsInvincible = isInvincible_;
-            bool otherIsInvincible = otherPlayer.isInvincible_;
+                // 速度交換ロジック
+                if (isAutoMode_ && otherPlayer.isAutoMode_ && enableSpeedTransfer_ && otherPlayer.enableSpeedTransfer_) {
+                    float mySpeed = GetCurrentEffectiveSpeed();
+                    float otherSpeed = otherPlayer.GetCurrentEffectiveSpeed();
 
-            // 自分(this)から見た相手(otherPlayer)の相対X位置
-            float relativeXToOther = otherPlayer.transform.position.x - transform.position.x;
-            // 自分の進行方向の符号 (+1 or -1)
-            float myDirSign = Mathf.Sign(currentDirection_);
-            // 相手が自分の進行方向の正面にいるか
-            bool otherIsAheadOfMe = Mathf.Sign(relativeXToOther) == myDirSign;
+                    // 速度差が十分にある場合のみ速度交換を実行
+                    if (Mathf.Abs(mySpeed - otherSpeed) > 0.5f) {
+                        // お互いの速度を一時保存
+                        float tempMySpeed = mySpeed;
+                        float tempOtherSpeed = otherSpeed;
 
-            // 相手(otherPlayer)から見た自分(this)の相対X位置
-            float relativeXToMe = transform.position.x - otherPlayer.transform.position.x; // = -relativeXToOther
-            // 相手の進行方向の符号 (+1 or -1)
-            float otherDirSign = Mathf.Sign(otherPlayer.currentDirection_);
-            // 自分が相手の進行方向の正面にいるか
-            bool amIAheadOfOther = Mathf.Sign(relativeXToMe) == otherDirSign;
+                        // お互いの速度を入れ替え
+                        AdjustGaugeToAchieveSpeed(tempOtherSpeed);
+                        otherPlayer.AdjustGaugeToAchieveSpeed(tempMySpeed);
 
-            if (otherIsAheadOfMe && amIAheadOfOther) {
-                // ケース1: 正面衝突の各パターン
-                if (thisIsInvincible && otherIsInvincible) {
-                    // 無敵正面 VS 無敵正面：お互いノーダメージでノックバック+反射
-                    Debug.Log($"[INFO] {gameObject.name}(無敵) と {otherPlayer.gameObject.name}(無敵) が正面衝突。両者無敵のためノーダメージ、ノックバック+反転。");
-                    ReverseDirection();
-                    otherPlayer.ReverseDirection();
-                    
-                    // 両者にノックバックを適用
-                    Vector2 knockBackDirToMe = (transform.position - otherPlayer.transform.position).normalized;
-                    if (knockBackDirToMe == Vector2.zero) knockBackDirToMe = (Random.insideUnitCircle).normalized;
-                    rigidbody2D_.AddForce(knockBackDirToMe * 5f, ForceMode2D.Impulse);
-
-                    Vector2 knockBackDirToOther = (otherPlayer.transform.position - transform.position).normalized;
-                    if (knockBackDirToOther == Vector2.zero) knockBackDirToOther = (Random.insideUnitCircle).normalized;
-                    otherPlayer.rigidbody2D_.AddForce(knockBackDirToOther * 5f, ForceMode2D.Impulse);
+                        Debug.Log($"[SPEED TRANSFER] : {gameObject.name}(速度:{tempMySpeed:F2}) <-> {otherPlayer.gameObject.name}(速度:{tempOtherSpeed:F2}) 速度を交換しました");
+                    }
                 }
-                else if (thisIsInvincible && !otherIsInvincible) {
-                    // 無敵正面 VS 通常正面：通常正面がダメージ+ノックバック+どちらも反転
-                    Debug.Log($"[INFO] {gameObject.name}(無敵) と {otherPlayer.gameObject.name}(通常) が正面衝突。{otherPlayer.gameObject.name}にダメージ。");
-                    otherPlayer.TakeDamage(20);
-                    KnockBack(otherPlayer);
-                    ReverseDirection();
-                    otherPlayer.ReverseDirection();
+
+                // 無敵状態の判定
+                bool thisIsInvincible = isInvincible_;
+                bool otherIsInvincible = otherPlayer.isInvincible_;
+
+                // 自分(this)から見た相手(otherPlayer)の相対X位置
+                float relativeXToOther = otherPlayer.transform.position.x - transform.position.x;
+                // 自分の進行方向の符号 (+1 or -1)
+                float myDirSign = Mathf.Sign(currentDirection_);
+                // 相手が自分の進行方向の正面にいるか
+                bool otherIsAheadOfMe = Mathf.Sign(relativeXToOther) == myDirSign;
+
+                // 相手(otherPlayer)から見た自分(this)の相対X位置
+                float relativeXToMe = transform.position.x - otherPlayer.transform.position.x; // = -relativeXToOther
+                                                                                               // 相手の進行方向の符号 (+1 or -1)
+                float otherDirSign = Mathf.Sign(otherPlayer.currentDirection_);
+                // 自分が相手の進行方向の正面にいるか
+                bool amIAheadOfOther = Mathf.Sign(relativeXToMe) == otherDirSign;
+
+                if (otherIsAheadOfMe && amIAheadOfOther) {
+                    // ケース1: 正面衝突の各パターン
+                    if (thisIsInvincible && otherIsInvincible) {
+                        // 無敵正面 VS 無敵正面：お互いノーダメージでノックバック+反射
+                        Debug.Log($"[INFO] {gameObject.name}(無敵) と {otherPlayer.gameObject.name}(無敵) が正面衝突。両者無敵のためノーダメージ、ノックバック+反転。");
+
+                        // 正面衝突音を再生
+                        if (AudioManager.Instance != null) {
+                            AudioManager.Instance.PlaySE("Player_Penguin2Penguin");
+                        }
+
+                        ReverseDirection();
+                        otherPlayer.ReverseDirection();
+
+                        // 両者にノックバックを適用
+                        Vector2 knockBackDirToMe = (transform.position - otherPlayer.transform.position).normalized;
+                        if (knockBackDirToMe == Vector2.zero) knockBackDirToMe = (Random.insideUnitCircle).normalized;
+                        rigidbody2D_.AddForce(knockBackDirToMe * 5f, ForceMode2D.Impulse);
+
+                        Vector2 knockBackDirToOther = (otherPlayer.transform.position - transform.position).normalized;
+                        if (knockBackDirToOther == Vector2.zero) knockBackDirToOther = (Random.insideUnitCircle).normalized;
+                        otherPlayer.rigidbody2D_.AddForce(knockBackDirToOther * 5f, ForceMode2D.Impulse);
+                    }
+                    else if (thisIsInvincible && !otherIsInvincible) {
+                        // 無敵正面 VS 通常正面：通常正面がダメージ+ノックバック+どちらも反転
+                        Debug.Log($"[INFO] {gameObject.name}(無敵) と {otherPlayer.gameObject.name}(通常) が正面衝突。{otherPlayer.gameObject.name}にダメージ。");
+
+                        // 正面衝突音を再生
+                        if (AudioManager.Instance != null) {
+                            AudioManager.Instance.PlaySE("Player_Penguin2Penguin");
+                        }
+
+                        otherPlayer.TakeDamage(20);
+                        KnockBack(otherPlayer);
+                        ReverseDirection();
+                        otherPlayer.ReverseDirection();
+                    }
+                    else if (!thisIsInvincible && otherIsInvincible) {
+                        // 通常正面 VS 無敵正面：通常正面がダメージ+ノックバック+どちらも反転
+                        Debug.Log($"[INFO] {gameObject.name}(通常) と {otherPlayer.gameObject.name}(無敵) が正面衝突。{gameObject.name}にダメージ。");
+
+                        // 正面衝突音を再生
+                        if (AudioManager.Instance != null) {
+                            AudioManager.Instance.PlaySE("Player_Penguin2Penguin");
+                        }
+
+                        TakeDamage(20);
+                        Vector2 knockBackDirToThis = (transform.position - otherPlayer.transform.position).normalized;
+                        if (knockBackDirToThis == Vector2.zero) knockBackDirToThis = (Random.insideUnitCircle).normalized;
+                        rigidbody2D_.AddForce(knockBackDirToThis * 10f, ForceMode2D.Impulse);
+                        ReverseDirection();
+                        otherPlayer.ReverseDirection();
+                    }
+                    else {
+                        // 通常状態同士の正面衝突：今まで通り
+                        Debug.Log($"[INFO] {gameObject.name} と {otherPlayer.gameObject.name} が正面衝突。両者反転、ノックバック。");
+
+                        // 正面衝突音を再生
+                        if (AudioManager.Instance != null) {
+                            AudioManager.Instance.PlaySE("Player_Penguin2Penguin");
+                        }
+
+                        ReverseDirection();
+                        otherPlayer.ReverseDirection();
+
+                        Vector2 knockBackDirToMe = (transform.position - otherPlayer.transform.position).normalized;
+                        if (knockBackDirToMe == Vector2.zero) knockBackDirToMe = (Random.insideUnitCircle).normalized;
+                        rigidbody2D_.AddForce(knockBackDirToMe * 5f, ForceMode2D.Impulse);
+
+                        Vector2 knockBackDirToOther = (otherPlayer.transform.position - transform.position).normalized;
+                        if (knockBackDirToOther == Vector2.zero) knockBackDirToOther = (Random.insideUnitCircle).normalized;
+                        otherPlayer.rigidbody2D_.AddForce(knockBackDirToOther * 5f, ForceMode2D.Impulse);
+                    }
                 }
-                else if (!thisIsInvincible && otherIsInvincible) {
-                    // 通常正面 VS 無敵正面：通常正面がダメージ+ノックバック+どちらも反転
-                    Debug.Log($"[INFO] {gameObject.name}(通常) と {otherPlayer.gameObject.name}(無敵) が正面衝突。{gameObject.name}にダメージ。");
-                    TakeDamage(20);
-                    Vector2 knockBackDirToThis = (transform.position - otherPlayer.transform.position).normalized;
-                    if (knockBackDirToThis == Vector2.zero) knockBackDirToThis = (Random.insideUnitCircle).normalized;
-                    rigidbody2D_.AddForce(knockBackDirToThis * 10f, ForceMode2D.Impulse);
-                    ReverseDirection();
-                    otherPlayer.ReverseDirection();
+                else if (otherIsAheadOfMe && !amIAheadOfOther) {
+                    // ケース2: 自分 (this) が相手 (otherPlayer) の背後から攻撃
+                    if (!otherIsInvincible) {
+                        // 相手が通常状態の場合のみダメージを与える
+                        Debug.Log($"[INFO] {gameObject.name} が {otherPlayer.gameObject.name} の背後から攻撃。{otherPlayer.gameObject.name} にダメージ。");
+
+                        // 背後衝突音を再生
+                        if (AudioManager.Instance != null) {
+                            AudioManager.Instance.PlaySE("Player_Penguin2Hip");
+                        }
+
+                        otherPlayer.TakeDamage(20);
+                        KnockBack(otherPlayer);
+                    }
+                    else {
+                        // 相手が無敵状態の場合はダメージなし
+                        Debug.Log($"[INFO] {gameObject.name} が {otherPlayer.gameObject.name}(無敵) の背後から攻撃したが、ダメージなし。");
+
+                        // 背後衝突音を再生
+                        if (AudioManager.Instance != null) {
+                            AudioManager.Instance.PlaySE("Player_Penguin2Hip");
+                        }
+                    }
+                    // 背後攻撃時は反転しない（追突の自然な見た目を保持）
+                }
+                else if (!otherIsAheadOfMe && amIAheadOfOther) {
+                    // ケース3: 相手 (otherPlayer) が自分 (this) の背後から攻撃
+                    if (!thisIsInvincible) {
+                        // 自分が通常状態の場合のみダメージを受ける
+                        Debug.Log($"[INFO] {otherPlayer.gameObject.name} が {gameObject.name} の背後から攻撃。{gameObject.name} にダメージ。");
+
+                        // 背後衝突音を再生
+                        if (AudioManager.Instance != null) {
+                            AudioManager.Instance.PlaySE("Player_Penguin2Hip");
+                        }
+
+                        TakeDamage(20);
+                        Vector2 knockBackDirToThis = (transform.position - otherPlayer.transform.position).normalized;
+                        if (knockBackDirToThis == Vector2.zero) knockBackDirToThis = (Random.insideUnitCircle).normalized;
+                        rigidbody2D_.AddForce(knockBackDirToThis * 10f, ForceMode2D.Impulse);
+                    }
+                    else {
+                        // 自分が無敵状態の場合はダメージなし
+                        Debug.Log($"[INFO] {otherPlayer.gameObject.name} が {gameObject.name}(無敵) の背後から攻撃したが、ダメージなし。");
+
+                        // 背後衝突音を再生
+                        if (AudioManager.Instance != null) {
+                            AudioManager.Instance.PlaySE("Player_Penguin2Hip");
+                        }
+                    }
+                    // 背後攻撃時は反転しない（追突の自然な見た目を保持）
                 }
                 else {
-                    // 通常状態同士の正面衝突：今まで通り
-                    Debug.Log($"[INFO] {gameObject.name} と {otherPlayer.gameObject.name} が正面衝突。両者反転、ノックバック。");
-                    ReverseDirection();
-                    otherPlayer.ReverseDirection();
-
-                    Vector2 knockBackDirToMe = (transform.position - otherPlayer.transform.position).normalized;
-                    if (knockBackDirToMe == Vector2.zero) knockBackDirToMe = (Random.insideUnitCircle).normalized;
-                    rigidbody2D_.AddForce(knockBackDirToMe * 5f, ForceMode2D.Impulse);
-
-                    Vector2 knockBackDirToOther = (otherPlayer.transform.position - transform.position).normalized;
-                    if (knockBackDirToOther == Vector2.zero) knockBackDirToOther = (Random.insideUnitCircle).normalized;
-                    otherPlayer.rigidbody2D_.AddForce(knockBackDirToOther * 5f, ForceMode2D.Impulse);
+                    Debug.Log($"[INFO] {gameObject.name} と {otherPlayer.gameObject.name} が衝突 (判定外のケース)。otherIsAheadOfMe: {otherIsAheadOfMe}, amIAheadOfOther: {amIAheadOfOther}");
                 }
             }
-            else if (otherIsAheadOfMe && !amIAheadOfOther) {
-                // ケース2: 自分 (this) が相手 (otherPlayer) の背後から攻撃
-                if (!otherIsInvincible) {
-                    // 相手が通常状態の場合のみダメージを与える
-                    Debug.Log($"[INFO] {gameObject.name} が {otherPlayer.gameObject.name} の背後から攻撃。{otherPlayer.gameObject.name} にダメージ。");
-                    otherPlayer.TakeDamage(20);
-                    KnockBack(otherPlayer);
-                } else {
-                    // 相手が無敵状態の場合はダメージなし
-                    Debug.Log($"[INFO] {gameObject.name} が {otherPlayer.gameObject.name}(無敵) の背後から攻撃したが、ダメージなし。");
-                }
-                // 背後攻撃時は反転しない（追突の自然な見た目を保持）
-            }
-            else if (!otherIsAheadOfMe && amIAheadOfOther) {
-                // ケース3: 相手 (otherPlayer) が自分 (this) の背後から攻撃
-                if (!thisIsInvincible) {
-                    // 自分が通常状態の場合のみダメージを受ける
-                    Debug.Log($"[INFO] {otherPlayer.gameObject.name} が {gameObject.name} の背後から攻撃。{gameObject.name} にダメージ。");
-                    TakeDamage(20);
-                    Vector2 knockBackDirToThis = (transform.position - otherPlayer.transform.position).normalized;
-                    if (knockBackDirToThis == Vector2.zero) knockBackDirToThis = (Random.insideUnitCircle).normalized;
-                    rigidbody2D_.AddForce(knockBackDirToThis * 10f, ForceMode2D.Impulse);
-                } else {
-                    // 自分が無敵状態の場合はダメージなし
-                    Debug.Log($"[INFO] {otherPlayer.gameObject.name} が {gameObject.name}(無敵) の背後から攻撃したが、ダメージなし。");
-                }
-                // 背後攻撃時は反転しない（追突の自然な見た目を保持）
-            }
-            else {
-                Debug.Log($"[INFO] {gameObject.name} と {otherPlayer.gameObject.name} が衝突 (判定外のケース)。otherIsAheadOfMe: {otherIsAheadOfMe}, amIAheadOfOther: {amIAheadOfOther}");
-            }
-        }
 
-        if (collision.gameObject.CompareTag("InvincibleItem"))
-        {
-            // アイテム取得SEを再生
-            if (AudioManager.Instance != null) {
-                AudioManager.Instance.PlaySE("collision");
+            if (collision.gameObject.CompareTag("InvincibleItem")) {
+                // アイテム取得SEを再生
+                if (AudioManager.Instance != null) {
+                    AudioManager.Instance.PlaySE("collision");
+                }
+
+                isInvincible_ = true;
+                invincibilityTimer_ = 2.0f;
+                Destroy(collision.gameObject);
             }
-            
-            isInvincible_ = true;
-            invincibilityTimer_ = 2.0f;
-            Destroy(collision.gameObject);
         }
     }
 

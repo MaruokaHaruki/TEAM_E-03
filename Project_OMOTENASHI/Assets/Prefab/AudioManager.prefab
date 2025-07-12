@@ -46,15 +46,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bgmSource_: {fileID: 0}
   sePrefab_: {fileID: 0}
-  sePoolCount_: 10
+  sePoolCount_: 32
   audioMixer_: {fileID: 24100000, guid: 3783f43838c3f9b4d8eda27e84fc0248, type: 2}
   bgmMixerGroup_: {fileID: -6943947162455876486, guid: 3783f43838c3f9b4d8eda27e84fc0248, type: 2}
   seMixerGroup_: {fileID: -5356817680362156935, guid: 3783f43838c3f9b4d8eda27e84fc0248, type: 2}
-  bgmVolume_: 1
+  bgmVolume_: 0.34
   seVolume_: 1
   bgmClips_:
   - name: TitleBGM
-    clip: {fileID: 8300000, guid: 7435084eef7ea02428af6514a9b71ef2, type: 3}
+    clip: {fileID: 8300000, guid: 910f949b7e10cd341a991f2d8d6d4f8e, type: 3}
   - name: GameBGM
     clip: {fileID: 8300000, guid: 5dd125862f245f247b10d2dc46025df9, type: 3}
   - name: ResultBGM
@@ -64,3 +64,31 @@ MonoBehaviour:
   seClips_:
   - name: collision
     clip: {fileID: 8300000, guid: 463e9aff50781b540993c90b1fb38094, type: 3}
+  - name: Player_Barrage
+    clip: {fileID: 8300000, guid: 99ed4d2f74263654fb07c0d8d9d63c01, type: 3}
+  - name: Player_Jump
+    clip: {fileID: 8300000, guid: 35ea167c2152fbb4c8a1a49703fc0a47, type: 3}
+  - name: Player_Landing
+    clip: {fileID: 8300000, guid: 5c43f4be72d0d6b4bb83d87fc90dca44, type: 3}
+  - name: Player_Step
+    clip: {fileID: 8300000, guid: f2a5f8188e1c97f4283848c42683713e, type: 3}
+  - name: Player_Penguin2Hip
+    clip: {fileID: 8300000, guid: 4b3c8dfea23f4e94dbbf5d97a85628a5, type: 3}
+  - name: Player_Penguin2Penguin
+    clip: {fileID: 8300000, guid: fd38927dba64bf94195f44a73a31d135, type: 3}
+  - name: Player_Penguin2Wall
+    clip: {fileID: 8300000, guid: ebb276f92c76b054c8d457ef4feb1209, type: 3}
+  - name: Round_KO
+    clip: {fileID: 8300000, guid: a906709bc0175d54f9e2691b2180b0cf, type: 3}
+  - name: Title_StartButton
+    clip: {fileID: 8300000, guid: b505f9d318472b54ea7773c91aa1a129, type: 3}
+  - name: Round_Start_1
+    clip: {fileID: 8300000, guid: 6d9d6b5b9f67ba3498593e3586ff6483, type: 3}
+  - name: Round_Start_2
+    clip: {fileID: 8300000, guid: 5a2827de5c596ac4a87f7b9c0de8dc63, type: 3}
+  - name: Round_Start_3
+    clip: {fileID: 8300000, guid: 5a2827de5c596ac4a87f7b9c0de8dc63, type: 3}
+  - name: Round_KO_1
+    clip: {fileID: 8300000, guid: 5a2827de5c596ac4a87f7b9c0de8dc63, type: 3}
+  - name: Round_KO_2
+    clip: {fileID: 8300000, guid: 5a2827de5c596ac4a87f7b9c0de8dc63, type: 3}
