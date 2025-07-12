@@ -52,7 +52,7 @@ MonoBehaviour:
     m_Value: 0.1
   smoothness:
     m_OverrideState: 1
-    m_Value: 1
+    m_Value: 0.01
   rounded:
     m_OverrideState: 1
     m_Value: 1
