@@ -44,5 +44,13 @@ public class CameraTest : MonoBehaviour
             Debug.Log("[CAMERA TEST] : ビネット強制リセット");
             TestCamera.StartObservation(this.transform.position);
         }
+        
+        // スムーズネステスト用（デバッグ情報出力）
+        if (Input.GetKeyDown(KeyCode.T))
+        {
+            Debug.Log("[CAMERA TEST] : 現在のスムーズネス設定をログ出力");
+            Debug.Log($"[CAMERA TEST] : 移動速度: {TestCamera.GetType().GetField("victoryMoveSpeed", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)?.GetValue(TestCamera)}");
+            Debug.Log($"[CAMERA TEST] : ズーム速度: {TestCamera.GetType().GetField("victoryZoomSpeed", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)?.GetValue(TestCamera)}");
+        }
     }
 }

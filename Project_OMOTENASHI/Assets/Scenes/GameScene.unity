@@ -4663,9 +4663,13 @@ MonoBehaviour:
   victoryVignetteIntensity: 0.8
   victoryMoveSpeed: 0.5
   victoryZoomSpeed: 0.1
+  victoryMoveSmoothness: 5
+  victoryZoomSmoothness: 3
   vignetteIntensifySpeed: 3
-  vignetteReturnSpeed: 0.3
+  vignetteReturnSpeed: 0.5
+  vignetteSmoothness: 2
   enableVignetteSmoothing: 1
+  victoryEasingType: 3
 --- !u!1 &1578504217
 GameObject:
   m_ObjectHideFlags: 0
