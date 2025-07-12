@@ -7,6 +7,7 @@ enum DOTWEEN_MOVE_TYPE
 {
     SIZE = 0,
     POSITION,
+    UP_DOWN_POSITION,
     TEXT_COLOR_TRANSPARENCY,
     PENGUIN,
 }
@@ -17,12 +18,17 @@ public class TitleLogController : MonoBehaviour
 
     [SerializeField] private float EndTime;
 
+    [SerializeField] private float DelayTime;
+    private float ReSetDelayTime;
+
     [SerializeField] private Ease SetDotMoveType = Ease.OutBounce;
 
     [SerializeField] private DOTWEEN_MOVE_TYPE MoveType;
 
     [Header("if (StartVolume == (0,0,0))  StartVolume = this;")]
     [SerializeField] private Vector3 StartVolume;
+    [SerializeField] private Vector3 StartPlusVolume;
+
     [Header("if (TargetVolume == (0,0,0))  TargetVolume = Vector3.one;")]
     [SerializeField] private Vector3 TargetVolume;
 
@@ -37,6 +43,7 @@ public class TitleLogController : MonoBehaviour
     private TextMeshProUGUI MyText;
 
     private Rigidbody2D MyRigidBody;
+    private Animator MyAnimator;
 
     void Start()
     {
@@ -52,16 +59,32 @@ public class TitleLogController : MonoBehaviour
                     StartVolume = this.transform.position;
                     break;
 
+                case DOTWEEN_MOVE_TYPE.UP_DOWN_POSITION:
+                    StartVolume = this.transform.position;
+                    break;
+
                 case DOTWEEN_MOVE_TYPE.TEXT_COLOR_TRANSPARENCY:
-                    MyText = this.gameObject.GetComponent<TextMeshProUGUI>();
                     StartVolume = Vector3.zero;
                     break;
 
                 case DOTWEEN_MOVE_TYPE.PENGUIN:
-                    MyRigidBody = this.gameObject.GetComponent<Rigidbody2D>();
                     StartVolume = this.transform.position;
                     break;
             }
+        }
+
+        switch (MoveType)
+        {
+
+            case DOTWEEN_MOVE_TYPE.TEXT_COLOR_TRANSPARENCY:
+                MyText = this.gameObject.GetComponent<TextMeshProUGUI>();
+                break;
+
+            case DOTWEEN_MOVE_TYPE.PENGUIN:
+                MyRigidBody = this.gameObject.GetComponent<Rigidbody2D>();
+                MyAnimator = this.gameObject.GetComponent<Animator>();
+                MyAnimator.SetBool("Jump", true);
+                break;
         }
 
         if (TargetVolume == Vector3.zero)
@@ -69,13 +92,16 @@ public class TitleLogController : MonoBehaviour
             TargetVolume = Vector3.one;
         }
 
+        ReSetDelayTime = DelayTime;
+
         Init();
     }
 
     void FixedUpdate()
     {
-        if (LogMoveStartTime < (Time.time - StartTime))
+        if ((LogMoveStartTime + DelayTime) < (Time.time - StartTime))
         {
+            DelayTime = 0.0f;
             if (!AnimatorStartFlag)
             {
                 AnimatorStartFlag = true;
@@ -90,9 +116,15 @@ public class TitleLogController : MonoBehaviour
                         this.transform.DOMove(TargetVolume, EndTime).SetEase(SetDotMoveType);
                         break;
 
+                    case DOTWEEN_MOVE_TYPE.UP_DOWN_POSITION:
+                        AnimatorStartFlag = false;
+                        StartTime = Time.time;
+                        TargetVolume = -TargetVolume;
+                        break;
+
                     case DOTWEEN_MOVE_TYPE.TEXT_COLOR_TRANSPARENCY:
                         AnimatorStartFlag = false;
-                        NowNumber += TargetVolume.x;
+                        NowNumber += TargetVolume.x * Time.deltaTime;
                         if (NowNumber > 1.0f)
                         {
                             NowNumber = 1.0f;
@@ -119,8 +151,12 @@ public class TitleLogController : MonoBehaviour
 
         switch (MoveType)
         {
+            case DOTWEEN_MOVE_TYPE.UP_DOWN_POSITION:
+                this.transform.position += TargetVolume * Time.deltaTime;
+                break;
+
             case DOTWEEN_MOVE_TYPE.PENGUIN:
-                this.transform.position -= new Vector3(TargetVolume.x, 0.0f, 0.0f);
+                this.transform.position -= new Vector3(TargetVolume.x, 0.0f, 0.0f) * Time.deltaTime;
                 if (this.transform.position.x < TargetVolume.z)
                 {
                     this.transform.position = StartVolume;
@@ -138,6 +174,7 @@ public class TitleLogController : MonoBehaviour
     {
         StartTime = Time.time;
         AnimatorStartFlag = false;
+        DelayTime = ReSetDelayTime;
 
         switch (MoveType)
         {
@@ -149,13 +186,18 @@ public class TitleLogController : MonoBehaviour
                 this.transform.position = StartVolume;
                 break;
 
+            case DOTWEEN_MOVE_TYPE.UP_DOWN_POSITION:
+                this.transform.position = StartVolume;
+                break;
+
             case DOTWEEN_MOVE_TYPE.TEXT_COLOR_TRANSPARENCY:
                 NowNumber = StartVolume.x;
                 MyText.color = new Color(MyText.color.r, MyText.color.g, MyText.color.b, NowNumber);
+                TargetVolume.x = Mathf.Abs(TargetVolume.x);
                 break;
 
             case DOTWEEN_MOVE_TYPE.PENGUIN:
-                this.transform.position = StartVolume;
+                this.transform.position = (StartVolume + StartPlusVolume);
                 break;
         }
     }
