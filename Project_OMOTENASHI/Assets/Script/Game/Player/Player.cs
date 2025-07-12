@@ -810,29 +810,29 @@ public class Player : MonoBehaviour {
                 // ケース2: 自分 (this) が相手 (otherPlayer) の背後から攻撃
                 if (!otherIsInvincible) {
                     // 相手が通常状態の場合のみダメージを与える
-                    Debug.Log($"[INFO] {gameObject.name} が {otherPlayer.gameObject.name} の背後から攻撃。{otherPlayer.gameObject.name} にダメージ。{gameObject.name} は反転。");
+                    Debug.Log($"[INFO] {gameObject.name} が {otherPlayer.gameObject.name} の背後から攻撃。{otherPlayer.gameObject.name} にダメージ。");
                     otherPlayer.TakeDamage(20);
                     KnockBack(otherPlayer);
                 } else {
                     // 相手が無敵状態の場合はダメージなし
-                    Debug.Log($"[INFO] {gameObject.name} が {otherPlayer.gameObject.name}(無敵) の背後から攻撃したが、ダメージなし。{gameObject.name} は反転。");
+                    Debug.Log($"[INFO] {gameObject.name} が {otherPlayer.gameObject.name}(無敵) の背後から攻撃したが、ダメージなし。");
                 }
-                ReverseDirection();
+                // 背後攻撃時は反転しない（追突の自然な見た目を保持）
             }
             else if (!otherIsAheadOfMe && amIAheadOfOther) {
-                // ケース3: 相相手 (otherPlayer) が自分 (this) の背後から攻撃
+                // ケース3: 相手 (otherPlayer) が自分 (this) の背後から攻撃
                 if (!thisIsInvincible) {
                     // 自分が通常状態の場合のみダメージを受ける
-                    Debug.Log($"[INFO] {otherPlayer.gameObject.name} が {gameObject.name} の背後から攻撃。{gameObject.name} にダメージ。{otherPlayer.gameObject.name} は反転。");
+                    Debug.Log($"[INFO] {otherPlayer.gameObject.name} が {gameObject.name} の背後から攻撃。{gameObject.name} にダメージ。");
                     TakeDamage(20);
                     Vector2 knockBackDirToThis = (transform.position - otherPlayer.transform.position).normalized;
                     if (knockBackDirToThis == Vector2.zero) knockBackDirToThis = (Random.insideUnitCircle).normalized;
                     rigidbody2D_.AddForce(knockBackDirToThis * 10f, ForceMode2D.Impulse);
                 } else {
                     // 自分が無敵状態の場合はダメージなし
-                    Debug.Log($"[INFO] {otherPlayer.gameObject.name} が {gameObject.name}(無敵) の背後から攻撃したが、ダメージなし。{otherPlayer.gameObject.name} は反転。");
+                    Debug.Log($"[INFO] {otherPlayer.gameObject.name} が {gameObject.name}(無敵) の背後から攻撃したが、ダメージなし。");
                 }
-                otherPlayer.ReverseDirection();
+                // 背後攻撃時は反転しない（追突の自然な見た目を保持）
             }
             else {
                 Debug.Log($"[INFO] {gameObject.name} と {otherPlayer.gameObject.name} が衝突 (判定外のケース)。otherIsAheadOfMe: {otherIsAheadOfMe}, amIAheadOfOther: {amIAheadOfOther}");
