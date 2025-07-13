@@ -218,41 +218,56 @@ public class Player : MonoBehaviour {
     private float targetRotation_ = 0.0f;
     private float currentRotation_ = 0.0f;
 
+    //NOTE: カメラの揺れを制御するためのコンポーネント
+    private CameraShake cameraShake_;
+
 
     ///--------------------------------------------------------------
     ///                      初期化処理
     /// ゲーム開始時の初期化処理
     /// 必要なコンポーネントの取得と初期状態の設定を行う
-    private void Start() {
+    private void Start()
+    {
+
+        // NOTE: ここではCameraShakeコンポーネントを取得している
+        // CameraShakeコンポーネントを取得
+        cameraShake_ = FindObjectOfType<CameraShake>();
+
         //========================================
         // 子オブジェクト「Sprite」からアニメーター取得と存在確認
         Transform spriteChild = transform.Find("Sprite");
-        if (spriteChild != null) {
+        if (spriteChild != null)
+        {
             spriteTransform_ = spriteChild;
             animator_ = spriteChild.GetComponent<Animator>();
-            if (animator_ == null) {
+            if (animator_ == null)
+            {
                 Debug.LogError("[ERROR] : Animator component not found on Sprite child object. アニメーション制御ができません。");
             }
-            
+
             //========================================
             // 子オブジェクト「Sprite」からスプライトレンダラー取得と存在確認
             spriteRenderer_ = spriteChild.GetComponent<SpriteRenderer>();
-            if (spriteRenderer_ == null) {
+            if (spriteRenderer_ == null)
+            {
                 Debug.LogError("[ERROR] : SpriteRenderer component not found on Sprite child object. 色変更エフェクトができません。");
             }
-            else {
+            else
+            {
                 // 元の色を保存
-                originalColor_ = spriteRenderer_.color; 
+                originalColor_ = spriteRenderer_.color;
             }
         }
-        else {
+        else
+        {
             Debug.LogError("[ERROR] : 'Sprite' child object not found. 描画系コンポーネントを取得できません。");
         }
 
         //========================================
         // リジッドボディ取得と存在確認
         rigidbody2D_ = GetComponent<Rigidbody2D>();
-        if (rigidbody2D_ == null) {
+        if (rigidbody2D_ == null)
+        {
             Debug.LogError("[ERROR] : Rigidbody2D component not found on Player object. 物理演算制御ができません。");
         }
 
@@ -678,8 +693,16 @@ public class Player : MonoBehaviour {
     //---------------------------------------------------------------
     //                      衝突判定処理
     private void OnCollisionEnter2D(Collision2D collision) {
+
+        // NOTE外部からカメラシェイクを実行
+        if (cameraShake_ != null)
+        {
+            cameraShake_.ShakeCamera(CameraShake.ShakeType.Heavy);
+        }
+        
         // 踏みつけ判定
-        if (enableStomp_ && collision.gameObject.CompareTag("Player")) {
+        if (enableStomp_ && collision.gameObject.CompareTag("Player"))
+        {
             Player otherPlayer = collision.gameObject.GetComponent<Player>();
             if (otherPlayer == null || otherPlayer == this) return;
 
@@ -687,7 +710,8 @@ public class Player : MonoBehaviour {
             bool isAbove = transform.position.y > otherPlayer.transform.position.y + 0.5f;
             bool isMovingDown = rigidbody2D_.velocity.y < -1.0f;
 
-            if (isAbove && isMovingDown && !otherPlayer.isStunned_) {
+            if (isAbove && isMovingDown && !otherPlayer.isStunned_)
+            {
                 // 踏みつけ成功
                 otherPlayer.ApplyStun(stompStunDuration_);
 
@@ -695,7 +719,8 @@ public class Player : MonoBehaviour {
                 rigidbody2D_.velocity = new Vector2(rigidbody2D_.velocity.x, jumpForce_ * 0.7f);
 
                 // 踏みつけ音を再生
-                if (AudioManager.Instance != null) {
+                if (AudioManager.Instance != null)
+                {
                     AudioManager.Instance.PlaySE("Player_Step");
                 }
 
