@@ -1173,6 +1173,8 @@ public class Player : MonoBehaviour {
         if (GameManager.Instance != null) {
             GameManager.GameState currentState = GameManager.Instance.GetGameState();
             
+            bool previousAllowMovement = allowMovement_;
+            
             switch (currentState) {
                 case GameManager.GameState.Playing:
                     allowMovement_ = true;
@@ -1184,6 +1186,11 @@ public class Player : MonoBehaviour {
                 default:
                     allowMovement_ = false;
                     break;
+            }
+            
+            // 移動許可状態が変更された場合のログ出力
+            if (previousAllowMovement != allowMovement_) {
+                Debug.Log($"[MOVEMENT PERMISSION] : {gameObject.name} の移動許可が {previousAllowMovement} -> {allowMovement_} に変更されました (GameState: {currentState})");
             }
         }
         else {
@@ -1199,6 +1206,7 @@ public class Player : MonoBehaviour {
         if (rigidbody2D_ != null) {
             rigidbody2D_.velocity = Vector2.zero;
             rigidbody2D_.angularVelocity = 0f;
+            rigidbody2D_.drag = dragOnStop_; // ドラッグ値も初期化
         }
 
         // 移動関連の状態をリセット
@@ -1237,6 +1245,34 @@ public class Player : MonoBehaviour {
             spriteTransform_.localRotation = Quaternion.identity;
         }
 
+        // 壁衝突状態をリセット
+        wasHittingWall_ = false;
+        
+        // 移動許可状態を一時的にリセット（GameManagerの状態に応じて後で更新される）
+        allowMovement_ = false;
+
         Debug.Log($"[PLAYER RESET] : {gameObject.name} の状態がリセットされました");
+    }
+    
+    ///--------------------------------------------------------------
+    ///                      緊急回復処理
+    /// プレイヤーが完全に動かなくなった場合の緊急回復処理
+    public void ForceReactivate() {
+        // 物理状態を強制的にリセット
+        if (rigidbody2D_ != null) {
+            rigidbody2D_.velocity = Vector2.zero;
+            rigidbody2D_.angularVelocity = 0f;
+            rigidbody2D_.drag = dragOnMove_;
+            rigidbody2D_.WakeUp(); // Rigidbody2Dを強制的に起動
+        }
+        
+        // 全ての阻害要因をリセット
+        isStunned_ = false;
+        stunTimer_ = 0.0f;
+        
+        // 移動許可を強制的に有効化
+        allowMovement_ = true;
+        
+        Debug.Log($"[FORCE REACTIVATE] : {gameObject.name} が緊急回復処理を実行しました");
     }
 }
