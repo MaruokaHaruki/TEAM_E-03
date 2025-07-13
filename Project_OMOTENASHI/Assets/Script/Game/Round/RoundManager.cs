@@ -252,6 +252,10 @@ public class RoundManager : MonoBehaviour
     ///						 個別プレイヤー設定適用
     private void ApplySettingsToPlayer(Player player)
     {
+        // まずプレイヤーの状態を完全にリセット
+        player.ResetPlayerState();
+        
+        // ラウンド設定を適用
         player.enableDoubleJump_ = currentRoundSettings.enableDoubleJump;
         player.enableStomp_ = currentRoundSettings.enableStomp;
         player.enableReverseJump_ = currentRoundSettings.enableReverseJump;
@@ -263,7 +267,10 @@ public class RoundManager : MonoBehaviour
         player.invincibilityDuration_ = currentRoundSettings.invincibilityDuration;
         player.stompStunDuration_ = currentRoundSettings.stompStunDuration;
 
-        Debug.Log($"[ROUND MANAGER] : {player.gameObject.name} にラウンド{currentRoundNumber}の設定を適用しました");
+        // 移動許可を明示的に有効化（ゲーム開始準備）
+        player.allowMovement_ = false; // カウントダウン終了まで待機
+        
+        Debug.Log($"[ROUND MANAGER] : {player.gameObject.name} にラウンド{currentRoundNumber}の設定を適用し、状態をリセットしました");
     }
 
     ///--------------------------------------------------------------
