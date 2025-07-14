@@ -17,7 +17,7 @@ public class ResultSceneController : MonoBehaviour
         if(Input.GetKeyDown(KeyCode.Space))
         {
             SceneManagerScript.Instance.FadeOutScene("Title");
-            SoundManager.Instance.PlaySE(next); // Œø‰Ê‰¹‚ğÄ¶
+            AudioManager.Instance.PlaySE(next); // Œø‰Ê‰¹‚ğÄ¶
         }
     }
 }
