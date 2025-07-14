@@ -362,10 +362,28 @@ public class RoundManager : MonoBehaviour
             UIManager.Instance.HideCountdownUI();
         }
 
-        // ゲーム状態をPlayingに変更してプレイヤーの移動を許可
+        // ゲーム状態をPlayingに変更
         if (GameManager.Instance != null)
         {
             GameManager.Instance.SetGameState(GameManager.GameState.Playing);
+        }
+
+        // プレイヤーの移動許可を確実に有効化
+        if (GameManager.Instance != null)
+        {
+            if (GameManager.Instance.player1_ != null)
+            {
+                GameManager.Instance.player1_.allowMovement_ = true;
+                GameManager.Instance.player1_.ForceReactivate();
+                Debug.Log($"[ROUND MANAGER] : Player1の移動許可を有効化しました");
+            }
+            
+            if (GameManager.Instance.player2_ != null)
+            {
+                GameManager.Instance.player2_.allowMovement_ = true;
+                GameManager.Instance.player2_.ForceReactivate();
+                Debug.Log($"[ROUND MANAGER] : Player2の移動許可を有効化しました");
+            }
         }
 
         Debug.Log($"[ROUND MANAGER] : ラウンド {currentRoundNumber} 開始！");

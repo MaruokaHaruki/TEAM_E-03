@@ -1206,9 +1206,14 @@ public class Player : MonoBehaviour {
                     break;
             }
             
-            // 移動許可状態が変更された場合のログ出力
+            // 移動許可状態が変更された場合のログ出力とリアクティベーション
             if (previousAllowMovement != allowMovement_) {
                 Debug.Log($"[MOVEMENT PERMISSION] : {gameObject.name} の移動許可が {previousAllowMovement} -> {allowMovement_} に変更されました (GameState: {currentState})");
+                
+                // Playing状態になった時は緊急回復処理を実行
+                if (allowMovement_ && currentState == GameManager.GameState.Playing) {
+                    ForceReactivate();
+                }
             }
         }
         else {
@@ -1225,6 +1230,7 @@ public class Player : MonoBehaviour {
             rigidbody2D_.velocity = Vector2.zero;
             rigidbody2D_.angularVelocity = 0f;
             rigidbody2D_.drag = dragOnStop_; // ドラッグ値も初期化
+            rigidbody2D_.WakeUp(); // Rigidbody2Dを強制的に起動
         }
 
         // 移動関連の状態をリセット
@@ -1266,7 +1272,7 @@ public class Player : MonoBehaviour {
         // 壁衝突状態をリセット
         wasHittingWall_ = false;
         
-        // 移動許可状態を一時的にリセット（GameManagerの状態に応じて後で更新される）
+        // 移動許可状態を一時的にリセット（カウントダウン終了後に有効化される）
         allowMovement_ = false;
 
         Debug.Log($"[PLAYER RESET] : {gameObject.name} の状態がリセットされました");
@@ -1282,15 +1288,31 @@ public class Player : MonoBehaviour {
             rigidbody2D_.angularVelocity = 0f;
             rigidbody2D_.drag = dragOnMove_;
             rigidbody2D_.WakeUp(); // Rigidbody2Dを強制的に起動
+            
+            // 物理マテリアルも確認
+            if (rigidbody2D_.sharedMaterial != null) {
+                rigidbody2D_.sharedMaterial = null; // 一時的にマテリアルを削除
+            }
         }
         
         // 全ての阻害要因をリセット
         isStunned_ = false;
         stunTimer_ = 0.0f;
         
-        // 移動許可を強制的に有効化
+        // 入力状態をクリア
+        inputHorizontal_ = Vector2.zero;
+        isJumping_ = false;
+        
+        // 移動許可を強制的に有効化（既に有効でも確実に設定）
         allowMovement_ = true;
         
-        Debug.Log($"[FORCE REACTIVATE] : {gameObject.name} が緊急回復処理を実行しました");
+        // 自動移動モードの場合、方向を確実に設定
+        if (isAutoMode_) {
+            if (currentDirection_ == 0.0f) {
+                currentDirection_ = 1.0f; // デフォルトで右方向
+            }
+        }
+        
+        Debug.Log($"[FORCE REACTIVATE] : {gameObject.name} が緊急回復処理を実行しました (allowMovement_: {allowMovement_}, currentDirection_: {currentDirection_})");
     }
 }
