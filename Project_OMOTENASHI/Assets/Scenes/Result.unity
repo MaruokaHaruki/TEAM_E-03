@@ -2213,7 +2213,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   resultText: {fileID: 656240315}
-  next: {fileID: 0}
+  next: {fileID: 8300000, guid: f2a5f8188e1c97f4283848c42683713e, type: 3}
 --- !u!4 &1521117714
 Transform:
   m_ObjectHideFlags: 0
@@ -2744,4 +2744,3 @@ SceneRoots:
   - {fileID: 1350128025}
   - {fileID: 1136686188}
   - {fileID: 487800952}
-  - {fileID: 332095523}
