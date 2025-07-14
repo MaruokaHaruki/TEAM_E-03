@@ -693,13 +693,6 @@ public class Player : MonoBehaviour {
     //---------------------------------------------------------------
     //                      衝突判定処理
     private void OnCollisionEnter2D(Collision2D collision) {
-
-        // NOTE外部からカメラシェイクを実行
-        if (cameraShake_ != null)
-        {
-            cameraShake_.ShakeCamera(CameraShake.ShakeType.Heavy);
-        }
-        
         // 踏みつけ判定
         if (enableStomp_ && collision.gameObject.CompareTag("Player"))
         {

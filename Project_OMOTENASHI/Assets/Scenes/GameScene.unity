@@ -417,6 +417,53 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 202995519}
   m_CullTransparentMesh: 1
+--- !u!1 &207994609
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 207994611}
+  - component: {fileID: 207994610}
+  m_Layer: 0
+  m_Name: ParticleManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &207994610
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 207994609}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ac5200b87251b0f4dbd039e62f1deba1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerCollisionEffect: {fileID: 0}
+  wallCollisionEffect: {fileID: 0}
+  movementTrailEffect: {fileID: 0}
+--- !u!4 &207994611
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 207994609}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.68447113, y: -0.5431384, z: -0.043552537}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &214818668
 GameObject:
   m_ObjectHideFlags: 0
@@ -2290,7 +2337,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 1
-  m_Sprite: {fileID: 7470592384248089816, guid: 57c157194f4faea45b798473c96dc8cf, type: 3}
+  m_Sprite: {fileID: 6957661739307133582, guid: 62078f3844ac2df4f8af6685e30e1525, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -5217,7 +5264,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 1
-  m_Sprite: {fileID: 21300000, guid: b137973e9dbfeab45ab669c8163ba521, type: 3}
+  m_Sprite: {fileID: -1635100403076682076, guid: 4b0b8bac75e737e469a20a4676524979, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -6599,6 +6646,7 @@ SceneRoots:
   - {fileID: 1594832889}
   - {fileID: 7930411116545687488}
   - {fileID: 2066187141870782565}
+  - {fileID: 207994611}
   - {fileID: 907655916}
   - {fileID: 1805055023}
   - {fileID: 493781462}
