@@ -131,6 +131,7 @@ public class GameManager : MonoBehaviour
                     UIManager.Instance.ShowGameOverUI();
                 }
                 SceneManagerScript.Instance.FadeOutScene("Result");
+                SetGameState(GameState.RoundStart); // ゲームオーバー後はラウンド開始状態に戻す
                 break;
             default:
                 break;
