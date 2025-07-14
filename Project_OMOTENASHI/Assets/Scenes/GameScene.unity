@@ -446,9 +446,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac5200b87251b0f4dbd039e62f1deba1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerCollisionEffect: {fileID: 0}
+  playerCollisionEffect: {fileID: 8688367705707158640, guid: ab4097f159888564282782f941b47808, type: 3}
   wallCollisionEffect: {fileID: 0}
   movementTrailEffect: {fileID: 0}
+  explosionEffect: {fileID: 0}
+  pickupEffect: {fileID: 0}
+  damageEffect: {fileID: 0}
+  poolSize: 10
 --- !u!4 &207994611
 Transform:
   m_ObjectHideFlags: 0
