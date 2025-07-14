@@ -81,7 +81,8 @@ public class GameManager : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
-            DontDestroyOnLoad(gameObject); // シーンを跨いでオブジェクトを保持
+            // NOTE 許さん､許さんぞお前は↓
+            // DontDestroyOnLoad(gameObject); // シーンを跨いでオブジェクトを保持
         }
         else
         {
