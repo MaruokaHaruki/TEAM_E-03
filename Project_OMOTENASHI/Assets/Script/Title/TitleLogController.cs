@@ -1,6 +1,5 @@
 using DG.Tweening;
 using TMPro;
-using UnityEditor.Animations;
 using UnityEngine;
 
 enum DOTWEEN_MOVE_TYPE

@@ -1,8 +1,5 @@
 using System.Collections.Generic;
-using UnityEditor.SearchService;
 using UnityEngine;
-using UnityEngine.SceneManagement;
-using UnityEngine.UI;
 // エディタ専用機能を使う場合
 #if UNITY_EDITOR
 using UnityEditor;
