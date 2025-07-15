@@ -413,6 +413,12 @@ public class RoundManager : MonoBehaviour
     {
         if (currentRoundSettings == null) return;
 
+        // 既にラウンド終了処理中の場合は重複実行を防ぐ
+        if (GameManager.Instance != null && GameManager.Instance.GetGameState() == GameManager.GameState.RoundEnd) {
+            Debug.Log($"[ROUND MANAGER] : 既にラウンド終了処理中のため、重複実行をスキップ");
+            return;
+        }
+
         Debug.Log($"[ROUND MANAGER] : プレイヤー勝利処理開始 - Winner: {winner}");
 
         // ラウンド決着時のSEを再生
@@ -427,8 +433,21 @@ public class RoundManager : MonoBehaviour
             GameManager.Instance.SetGameState(GameManager.GameState.RoundEnd);
         }
 
-        // 勝利演出を確実に開始
-        StartCoroutine(StartVictoryZoomCoroutine(winner));
+        // プレイヤーの移動を即座に停止
+        if (GameManager.Instance != null)
+        {
+            if (GameManager.Instance.player1_ != null)
+            {
+                GameManager.Instance.player1_.allowMovement_ = false;
+                Debug.Log($"[ROUND MANAGER] : Player1の移動を停止しました");
+            }
+            
+            if (GameManager.Instance.player2_ != null)
+            {
+                GameManager.Instance.player2_.allowMovement_ = false;
+                Debug.Log($"[ROUND MANAGER] : Player2の移動を停止しました");
+            }
+        }
 
         // スコアを加算
         switch (winner)
