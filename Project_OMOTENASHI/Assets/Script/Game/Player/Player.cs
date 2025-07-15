@@ -948,17 +948,19 @@ public class Player : MonoBehaviour {
                     Debug.Log($"[INFO] {gameObject.name} と {otherPlayer.gameObject.name} が衝突 (判定外のケース)。otherIsAheadOfMe: {otherIsAheadOfMe}, amIAheadOfOther: {amIAheadOfOther}");
                 }
             }
+        }
 
-            if (collision.gameObject.CompareTag("InvincibleItem")) {
-                // アイテム取得SEを再生
-                if (AudioManager.Instance != null) {
-                    AudioManager.Instance.PlaySE("collision");
-                }
-
-                isInvincible_ = true;
-                invincibilityTimer_ = 2.0f;
-                Destroy(collision.gameObject);
+        if (collision.gameObject.CompareTag("InvincibleItem"))
+        {
+            // アイテム取得SEを再生
+            if (AudioManager.Instance != null)
+            {
+                AudioManager.Instance.PlaySE("collision");
             }
+
+            isInvincible_ = true;
+            invincibilityTimer_ = 2.0f;
+            Destroy(collision.gameObject);
         }
     }
 
