@@ -4323,7 +4323,7 @@ MonoBehaviour:
   minEffectiveGauge_: 1
   invincibilityDuration_: 1
   rainbowSpeed_: 1
-  invincibilitySpeedMultiplier_: 1
+  invincibilitySpeedMultiplier_: 1.5
   enableSpriteRotation_: 1
   maxRotationAngle_: 45
   rotationSensitivity_: 1
@@ -5263,7 +5263,7 @@ MonoBehaviour:
   minEffectiveGauge_: 1
   invincibilityDuration_: 1
   rainbowSpeed_: 1
-  invincibilitySpeedMultiplier_: 1
+  invincibilitySpeedMultiplier_: 1.5
   enableSpriteRotation_: 1
   maxRotationAngle_: 45
   rotationSensitivity_: 1
