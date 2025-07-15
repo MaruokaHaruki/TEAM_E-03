@@ -514,6 +514,20 @@ public class Player : MonoBehaviour {
     ///--------------------------------------------------------------
     ///                      入力処理・移動制御
     private void Move() {
+        // ゲーム状態チェック
+        if (GameManager.Instance != null && GameManager.Instance.GetGameState() != GameManager.GameState.Playing) {
+            inputHorizontal_ = Vector2.zero;
+            isJumping_ = false;
+            return;
+        }
+
+        // 移動許可チェック
+        if (!allowMovement_) {
+            inputHorizontal_ = Vector2.zero;
+            isJumping_ = false;
+            return;
+        }
+
         //========================================
         // 【入力データの取得】
         // プレイヤー別のキー設定を使用
@@ -578,6 +592,20 @@ public class Player : MonoBehaviour {
     }    //---------------------------------------------------------------
     //                      自動移動制御
     private void AutoMove() {
+        // ゲーム状態チェック
+        if (GameManager.Instance != null && GameManager.Instance.GetGameState() != GameManager.GameState.Playing) {
+            inputHorizontal_ = Vector2.zero;
+            isJumping_ = false;
+            return;
+        }
+
+        // 移動許可チェック
+        if (!allowMovement_) {
+            inputHorizontal_ = Vector2.zero;
+            isJumping_ = false;
+            return;
+        }
+
         //========================================
         // 【壁衝突判定と方向転換】
         // 前方の壁に衝突した場合、移動方向を反転
@@ -693,6 +721,16 @@ public class Player : MonoBehaviour {
     //---------------------------------------------------------------
     //                      衝突判定処理
     private void OnCollisionEnter2D(Collision2D collision) {
+        // ゲーム状態チェック - Playing状態でない場合は衝突処理をスキップ
+        if (GameManager.Instance != null && GameManager.Instance.GetGameState() != GameManager.GameState.Playing) {
+            return;
+        }
+
+        // 移動が許可されていない場合も衝突処理をスキップ
+        if (!allowMovement_) {
+            return;
+        }
+
         // 踏みつけ判定
         if (enableStomp_ && collision.gameObject.CompareTag("Player"))
         {
@@ -928,6 +966,18 @@ public class Player : MonoBehaviour {
     //---------------------------------------------------------------
     //                      ダメージ処理
     public void TakeDamage(int amount) {
+        // ゲーム状態チェック - Playing状態でない場合はダメージ処理をスキップ
+        if (GameManager.Instance != null && GameManager.Instance.GetGameState() != GameManager.GameState.Playing) {
+            Debug.Log($"[DAMAGE BLOCKED] : {gameObject.name} - ゲーム状態が Playing でないためダメージ処理をスキップ");
+            return;
+        }
+
+        // 移動が許可されていない場合もダメージ処理をスキップ
+        if (!allowMovement_) {
+            Debug.Log($"[DAMAGE BLOCKED] : {gameObject.name} - 移動が許可されていないためダメージ処理をスキップ");
+            return;
+        }
+
         // GameManagerに処理を委譲
         if (GameManager.Instance != null) {
             GameManager.Instance.TakeDamage(playerID_, amount);
