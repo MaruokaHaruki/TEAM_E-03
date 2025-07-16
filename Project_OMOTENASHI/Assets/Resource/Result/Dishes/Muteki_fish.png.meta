@@ -134,7 +134,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Muteki_fish_0: -4745016318922110556
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
