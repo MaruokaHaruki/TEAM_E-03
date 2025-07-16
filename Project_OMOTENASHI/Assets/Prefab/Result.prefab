@@ -161,7 +161,7 @@ Transform:
   m_GameObject: {fileID: 1029444768158913891}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 3.5, y: -4, z: 1}
+  m_LocalPosition: {x: 2.5, y: -4, z: 1}
   m_LocalScale: {x: 1, y: 2, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -170,7 +170,7 @@ Transform:
   - {fileID: 8747111973381386958}
   - {fileID: 8847827586638251470}
   - {fileID: 4272875338099049376}
-  m_Father: {fileID: 3592915967927898873}
+  m_Father: {fileID: 5281074451928960340}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &244757788812690667
 SpriteRenderer:
@@ -984,12 +984,12 @@ MonoBehaviour:
   SetSize: {x: 0.5, y: 2}
   SetXMove: {x: 2, y: 1}
   BlownAwayScore: 3
-  PlayerAStartSprite: {fileID: 2500282025058275774}
-  PlayerBStartSprite: {fileID: 6321045594199783446}
-  PlayerALoserSprite: {fileID: 4141411929955628795}
-  PlayerBLoserSprite: {fileID: 9147313070811655433}
-  PlayerAWinnerSprite: {fileID: 7802788823084056351}
-  PlayerBWinnerSprite: {fileID: 8185225000524148428}
+  PlayerAStartSprite: {fileID: 6321045594199783446}
+  PlayerBStartSprite: {fileID: 2500282025058275774}
+  PlayerALoserSprite: {fileID: 9147313070811655433}
+  PlayerBLoserSprite: {fileID: 4141411929955628795}
+  PlayerAWinnerSprite: {fileID: 8185225000524148428}
+  PlayerBWinnerSprite: {fileID: 7802788823084056351}
   StartTime: 2
   NextFishTime: 1
   SizeChangeSpeed: 0.1
@@ -1914,7 +1914,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3531742751520989058}
-  - {fileID: 1428346702970218285}
+  - {fileID: 6280702751709885091}
   m_Father: {fileID: 8007501712596860138}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &2617341620428953832
@@ -2090,7 +2090,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8961758904428636722}
-  - {fileID: 6280702751709885091}
+  - {fileID: 1428346702970218285}
   m_Father: {fileID: 8007501712596860138}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &6283024744151837655
@@ -2733,7 +2733,7 @@ Transform:
   m_GameObject: {fileID: 8541272678879706063}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -3.5, y: -4, z: 1}
+  m_LocalPosition: {x: -2.5, y: -4, z: 1}
   m_LocalScale: {x: 1, y: 2, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -2742,7 +2742,7 @@ Transform:
   - {fileID: 7384575247711371283}
   - {fileID: 6603178993030127036}
   - {fileID: 4895584929722184518}
-  m_Father: {fileID: 5281074451928960340}
+  m_Father: {fileID: 3592915967927898873}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &399046358688329777
 SpriteRenderer:
