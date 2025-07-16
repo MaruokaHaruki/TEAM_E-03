@@ -227,13 +227,31 @@ public class Player : MonoBehaviour {
     private void FixedUpdate() {
         bool wasGrounded = isGround_;
         isGround_ = groundCheck_.IsGround();
+        
+        bool wasHittingWallFront = isHitWallFront_;
         isHitWallFront_ = wallCheckFront_.IsHitWallFront();
         isHitWallBuck_ = wallCheckBuck_.IsHitWallBuck();
 
-        // 着地音の再生
+        // 着地音の再生と震え効果
         if (!wasGrounded && isGround_) {
             if (AudioManager.Instance != null) {
                 AudioManager.Instance.PlaySE("Player_Landing");
+            }
+            // 着地時の震え効果
+            if (spriteTransform_ != null) {
+                spriteTransform_.DOShakeScale(0.2f, 1.0f, 5).OnComplete(() => {
+                    spriteTransform_.localScale = Vector3.one;
+                });
+            }
+        }
+
+        // ジャンプ中の壁衝突判定
+        if (!isGround_ && isHitWallFront_ && !wasHittingWallFront) {
+            // ジャンプ中の壁衝突時の震え効果
+            if (spriteTransform_ != null) {
+                spriteTransform_.DOShakeScale(0.2f, 1.0f, 5).OnComplete(() => {
+                    spriteTransform_.localScale = Vector3.one;
+                });
             }
         }
 
@@ -387,6 +405,13 @@ public class Player : MonoBehaviour {
                 AudioManager.Instance.PlaySE("Player_Penguin2Wall");
             }
             
+            // 壁衝突時の震え効果
+            if (spriteTransform_ != null) {
+                spriteTransform_.DOShakeScale(0.2f, 1.0f, 5).OnComplete(() => {
+                    spriteTransform_.localScale = Vector3.one;
+                });
+            }
+            
             isInvincible_ = true;
             invincibilityTimer_ = invincibilityDuration_;
         }
@@ -492,6 +517,18 @@ public class Player : MonoBehaviour {
             Player otherPlayer = collision.gameObject.GetComponent<Player>();
             if (otherPlayer == null || otherPlayer == this) return;
 
+            // プレイヤー衝突時の震え効果
+            if (spriteTransform_ != null) {
+                spriteTransform_.DOShakeScale(0.2f, 1.0f, 5).OnComplete(() => {
+                    spriteTransform_.localScale = Vector3.one;
+                });
+            }
+            if (otherPlayer.spriteTransform_ != null) {
+                otherPlayer.spriteTransform_.DOShakeScale(0.2f, 1.0f, 5).OnComplete(() => {
+                    otherPlayer.spriteTransform_.localScale = Vector3.one;
+                });
+            }
+
             if (gameObject.GetInstanceID() < otherPlayer.gameObject.GetInstanceID()) {
                 return;
             }
@@ -593,7 +630,9 @@ public class Player : MonoBehaviour {
             }
         }
 
-        if (collision.gameObject.CompareTag("Punching")) {
+        // NOTE:修正予定
+        if (collision.gameObject.CompareTag("Punching"))
+        {
             var push = collision.gameObject.GetComponentInParent<Push>();
             float punchPower = (push != null) ? push.CurrentPunchPower : 0f;
             float backDirX = -Mathf.Sign(currentDirection_);
