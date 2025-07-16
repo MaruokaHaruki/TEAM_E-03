@@ -157,14 +157,6 @@ public class Player : MonoBehaviour {
     [Tooltip("踏みつけスタン時間（秒）")]
     public float stompStunDuration_ = 2.0f;
 
-    //========================================
-    // 【ノックバック設定】
-    [Header("ノックバック設定")]
-    [Tooltip("パンチングヒット時に移動を無効化する秒数")]
-    [SerializeField] private float knockbackDisableTime_ = 0.3f;
-    private bool isKnockedBack_ = false;
-    private float knockbackTimer_ = 0f;
-
 
     ///--------------------------------------------------------------
     ///                      【プライベート変数】
@@ -287,16 +279,6 @@ public class Player : MonoBehaviour {
         //========================================
         // 【ゲーム状態による移動制御チェック】
         UpdateMovementPermission();
-
-        //========================================
-        // 【ノックバック中は移動／入力を無効化】
-        if (isKnockedBack_) {
-            knockbackTimer_ -= Time.deltaTime;
-            if (knockbackTimer_ <= 0f) {
-                isKnockedBack_ = false;
-            }
-            return; // ノックバック中は以降の処理をスキップ
-        }
 
         //========================================
         // 【スタン状態タイマーの更新】
@@ -911,18 +893,16 @@ public class Player : MonoBehaviour {
             }
         }
 
-        // ★ Punchingタグヒット時のチャージ率依存ノックバック ★
-        if (collision.gameObject.CompareTag("Punching")) {
-        
+        // Punchingタグヒット時のチャージ率依存ノックバック
+        // NOTE: 後で修正
+        if (collision.gameObject.CompareTag("Punching"))
+        {
             var push = collision.gameObject.GetComponentInParent<Push>();
             float punchPower = (push != null) ? push.CurrentPunchPower : 0f;
+            // 進行方向を変えず、背後（−currentDirection_）にのみノックバック
             float backDirX = -Mathf.Sign(currentDirection_);
-            Vector2 knockDir = new Vector2(backDirX, 1f).normalized;
+            Vector2 knockDir = new Vector2(backDirX, 0f);
             rigidbody2D_.AddForce(knockDir * punchPower, ForceMode2D.Impulse);
-
-            // ノックバック状態に移行
-            isKnockedBack_ = true;
-            knockbackTimer_ = knockbackDisableTime_;
             return;
         }
 
