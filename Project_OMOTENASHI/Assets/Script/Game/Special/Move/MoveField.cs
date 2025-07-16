@@ -10,10 +10,12 @@ public class MoveField : MonoBehaviour
     /// <summary>プレイヤー</summary>
     [SerializeField, Header("プレイヤー")] private Rigidbody2D[] PlayerRigidBody;
 
+    // 開始キー
+    public KeyCode StartKey = KeyCode.B;
+
     private void Update()
     {
-        // test
-        if (Input.GetKeyDown(KeyCode.B))
+        if (Input.GetKeyDown(StartKey))
         {
             RightMoveFlag = !RightMoveFlag;
             this.transform.localScale = new Vector3(-this.transform.localScale.x, this.transform.localScale.y, this.transform.localScale.z);
