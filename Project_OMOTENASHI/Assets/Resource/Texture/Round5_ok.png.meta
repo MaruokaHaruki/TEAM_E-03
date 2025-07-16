@@ -1,0 +1,663 @@
+fileFormatVersion: 2
+guid: 19cb4a6d9f199854d82250fb2ba2483b
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 3103036882272609132
+    second: Round5_ok_0
+  - first:
+      213: 8436271597182850788
+    second: Round5_ok_1
+  - first:
+      213: 4076552578632515056
+    second: Round5_ok_2
+  - first:
+      213: 1053693570146225816
+    second: Round5_ok_3
+  - first:
+      213: -8698313883045178854
+    second: Round5_ok_4
+  - first:
+      213: -7841465058109932152
+    second: Round5_ok_5
+  - first:
+      213: 4909768205875623586
+    second: Round5_ok_6
+  - first:
+      213: 112718871163235284
+    second: Round5_ok_7
+  - first:
+      213: 4523734471338799098
+    second: Round5_ok_8
+  - first:
+      213: 4200528412675925935
+    second: Round5_ok_9
+  - first:
+      213: -1969973873303795218
+    second: Round5_ok_10
+  - first:
+      213: -5152317059837612323
+    second: Round5_ok_11
+  - first:
+      213: -5630587113874569280
+    second: Round5_ok_12
+  - first:
+      213: -1489264775338995925
+    second: Round5_ok_13
+  - first:
+      213: -1859710342861759104
+    second: Round5_ok_14
+  - first:
+      213: -6276823362076877516
+    second: Round5_ok_15
+  - first:
+      213: 1274745332197273239
+    second: Round5_ok_16
+  - first:
+      213: -366457050329720310
+    second: Round5_ok_17
+  - first:
+      213: 3417218939169836542
+    second: Round5_ok_18
+  - first:
+      213: 9017470992005766261
+    second: Round5_ok_19
+  - first:
+      213: -2937356469645294087
+    second: Round5_ok_20
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 1
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 512
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Round5_ok_0
+      rect:
+        serializedVersion: 2
+        x: 3
+        y: 364
+        width: 275
+        height: 73
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c636bc49a93301b20800000000000000
+      internalID: 3103036882272609132
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Round5_ok_1
+      rect:
+        serializedVersion: 2
+        x: 92
+        y: 421
+        width: 59
+        height: 57
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4e61dc20258a31570800000000000000
+      internalID: 8436271597182850788
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Round5_ok_2
+      rect:
+        serializedVersion: 2
+        x: 286
+        y: 375
+        width: 86
+        height: 121
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0fdf795c8f2d29830800000000000000
+      internalID: 4076552578632515056
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Round5_ok_3
+      rect:
+        serializedVersion: 2
+        x: 703
+        y: 358
+        width: 124
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 89ecda628b87f9e00800000000000000
+      internalID: 1053693570146225816
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Round5_ok_4
+      rect:
+        serializedVersion: 2
+        x: 881
+        y: 353
+        width: 133
+        height: 75
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a125e38eb91694780800000000000000
+      internalID: -8698313883045178854
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Round5_ok_5
+      rect:
+        serializedVersion: 2
+        x: 304
+        y: 312
+        width: 140
+        height: 102
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 88d38b453158d2390800000000000000
+      internalID: -7841465058109932152
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Round5_ok_6
+      rect:
+        serializedVersion: 2
+        x: 583
+        y: 375
+        width: 71
+        height: 31
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2a639b09b20032440800000000000000
+      internalID: 4909768205875623586
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Round5_ok_7
+      rect:
+        serializedVersion: 2
+        x: 660
+        y: 371
+        width: 37
+        height: 39
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4dbea235735709100800000000000000
+      internalID: 112718871163235284
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Round5_ok_8
+      rect:
+        serializedVersion: 2
+        x: 839
+        y: 391
+        width: 43
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: affa65ea88887ce30800000000000000
+      internalID: 4523734471338799098
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Round5_ok_9
+      rect:
+        serializedVersion: 2
+        x: 839
+        y: 381
+        width: 43
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fa7eb7206564b4a30800000000000000
+      internalID: 4200528412675925935
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Round5_ok_10
+      rect:
+        serializedVersion: 2
+        x: 284
+        y: 119
+        width: 103
+        height: 107
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ee94de8133f39a4e0800000000000000
+      internalID: -1969973873303795218
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Round5_ok_11
+      rect:
+        serializedVersion: 2
+        x: 427
+        y: 198
+        width: 65
+        height: 83
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ddea136aeea4f78b0800000000000000
+      internalID: -5152317059837612323
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Round5_ok_12
+      rect:
+        serializedVersion: 2
+        x: 496
+        y: 198
+        width: 54
+        height: 83
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0c74d902ad22cd1b0800000000000000
+      internalID: -5630587113874569280
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Round5_ok_13
+      rect:
+        serializedVersion: 2
+        x: 553
+        y: 198
+        width: 55
+        height: 83
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b2fca69c391155be0800000000000000
+      internalID: -1489264775338995925
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Round5_ok_14
+      rect:
+        serializedVersion: 2
+        x: 155
+        y: 134
+        width: 50
+        height: 63
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 08dda9cdb4bf036e0800000000000000
+      internalID: -1859710342861759104
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Round5_ok_15
+      rect:
+        serializedVersion: 2
+        x: 60
+        y: 2
+        width: 235
+        height: 120
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 43dd881886e34e8a0800000000000000
+      internalID: -6276823362076877516
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Round5_ok_16
+      rect:
+        serializedVersion: 2
+        x: 616
+        y: 38
+        width: 122
+        height: 91
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 79ea4b0302ec0b110800000000000000
+      internalID: 1274745332197273239
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Round5_ok_17
+      rect:
+        serializedVersion: 2
+        x: 745
+        y: 86
+        width: 45
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a0ad8a911451aeaf0800000000000000
+      internalID: -366457050329720310
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Round5_ok_18
+      rect:
+        serializedVersion: 2
+        x: 750
+        y: 79
+        width: 41
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: efd84fc15866c6f20800000000000000
+      internalID: 3417218939169836542
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Round5_ok_19
+      rect:
+        serializedVersion: 2
+        x: 802
+        y: 46
+        width: 180
+        height: 83
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 57c94e2371e742d70800000000000000
+      internalID: 9017470992005766261
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Round5_ok_20
+      rect:
+        serializedVersion: 2
+        x: 745
+        y: 75
+        width: 45
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9f5c8188ad96c37d0800000000000000
+      internalID: -2937356469645294087
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      Round5_ok_0: 3103036882272609132
+      Round5_ok_1: 8436271597182850788
+      Round5_ok_10: -1969973873303795218
+      Round5_ok_11: -5152317059837612323
+      Round5_ok_12: -5630587113874569280
+      Round5_ok_13: -1489264775338995925
+      Round5_ok_14: -1859710342861759104
+      Round5_ok_15: -6276823362076877516
+      Round5_ok_16: 1274745332197273239
+      Round5_ok_17: -366457050329720310
+      Round5_ok_18: 3417218939169836542
+      Round5_ok_19: 9017470992005766261
+      Round5_ok_2: 4076552578632515056
+      Round5_ok_20: -2937356469645294087
+      Round5_ok_3: 1053693570146225816
+      Round5_ok_4: -8698313883045178854
+      Round5_ok_5: -7841465058109932152
+      Round5_ok_6: 4909768205875623586
+      Round5_ok_7: 112718871163235284
+      Round5_ok_8: 4523734471338799098
+      Round5_ok_9: 4200528412675925935
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

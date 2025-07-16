@@ -25,7 +25,7 @@ MonoBehaviour:
   baseSpeed: 5
   jumpForce: 8
   enableGaugeDrainBoost: 1
-  gaugeDrainBoostMultiplier: 4
+  gaugeDrainBoostMultiplier: 100
   invincibilityDuration: 0
   stompStunDuration: 2
   tilemapPrefab: {fileID: 3229168071328024921, guid: d71c8764f84bc684aaf7e43386a6764b, type: 3}

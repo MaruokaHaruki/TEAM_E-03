@@ -1916,7 +1916,7 @@ MonoBehaviour:
   maxRoundText: {fileID: 2270219948477523456}
   roundStartPanel: {fileID: 0}
   roundStartText: {fileID: 0}
-  roundFeatureImage: {fileID: 0}
+  roundFeatureImage: {fileID: 1146448636}
   countdownText: {fileID: 0}
   gameEndPanel: {fileID: 0}
   gameEndText: {fileID: 0}
@@ -2529,6 +2529,17 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1507770439}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1146448636 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7252588231437146242, guid: 1db0392ffcdc0e9489b41d4844323d41, type: 3}
+  m_PrefabInstance: {fileID: 241448608}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1175548940
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5279,6 +5290,30 @@ PrefabInstance:
       propertyPath: m_Name
       value: RoundManager
       objectReference: {fileID: 0}
+    - target: {fileID: 2707897612911867515, guid: 48c2e5760d71b5848979fb00536cc673, type: 3}
+      propertyPath: roundFeatureImages.Array.size
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2707897612911867515, guid: 48c2e5760d71b5848979fb00536cc673, type: 3}
+      propertyPath: 'roundFeatureImages.Array.data[0]'
+      value: 
+      objectReference: {fileID: 21300000, guid: 703b5f93271e50d4ea26ae8ee40c5f48, type: 3}
+    - target: {fileID: 2707897612911867515, guid: 48c2e5760d71b5848979fb00536cc673, type: 3}
+      propertyPath: 'roundFeatureImages.Array.data[1]'
+      value: 
+      objectReference: {fileID: 21300000, guid: ddd9093f0b6780f4daec45151c5d2dc7, type: 3}
+    - target: {fileID: 2707897612911867515, guid: 48c2e5760d71b5848979fb00536cc673, type: 3}
+      propertyPath: 'roundFeatureImages.Array.data[2]'
+      value: 
+      objectReference: {fileID: 21300000, guid: cbb62852dba435a4d8bc2c5cde46d9d2, type: 3}
+    - target: {fileID: 2707897612911867515, guid: 48c2e5760d71b5848979fb00536cc673, type: 3}
+      propertyPath: 'roundFeatureImages.Array.data[3]'
+      value: 
+      objectReference: {fileID: 21300000, guid: 1d555a006ab2f25499b22cc50b10577b, type: 3}
+    - target: {fileID: 2707897612911867515, guid: 48c2e5760d71b5848979fb00536cc673, type: 3}
+      propertyPath: 'roundFeatureImages.Array.data[4]'
+      value: 
+      objectReference: {fileID: 21300000, guid: 19cb4a6d9f199854d82250fb2ba2483b, type: 3}
     - target: {fileID: 4993961246582294429, guid: 48c2e5760d71b5848979fb00536cc673, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.1185013
