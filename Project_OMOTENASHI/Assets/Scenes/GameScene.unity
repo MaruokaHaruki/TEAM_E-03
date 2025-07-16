@@ -416,7 +416,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerCollisionEffect: {fileID: 8688367705707158640, guid: ab4097f159888564282782f941b47808, type: 3}
-  wallCollisionEffect: {fileID: 0}
+  wallCollisionEffect: {fileID: 5298798129209051631, guid: 25c9f513c35de524fb39f84bfe787baa, type: 3}
   movementTrailEffect: {fileID: 0}
   explosionEffect: {fileID: 0}
   pickupEffect: {fileID: 0}
@@ -4338,7 +4338,6 @@ MonoBehaviour:
   enableStomp_: 0
   enableReverseJump_: 0
   stompStunDuration_: 2
-  knockbackDisableTime_: 2
   isGround_: 0
   isJumping_: 0
   hasDoubleJumped_: 0
@@ -5279,7 +5278,6 @@ MonoBehaviour:
   enableStomp_: 0
   enableReverseJump_: 0
   stompStunDuration_: 2
-  knockbackDisableTime_: 2
   isGround_: 0
   isJumping_: 0
   hasDoubleJumped_: 0
