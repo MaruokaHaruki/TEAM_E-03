@@ -11,6 +11,8 @@ public class ResultSceneController : MonoBehaviour
     {
         string winner = SceneManagerScript.Instance != null ? SceneManagerScript.Instance.winnerName : "Unknown";
         resultText.text = winner;
+
+        Debug.Log($"{SceneManagerScript.Instance.Player1_Score},{SceneManagerScript.Instance.Player2_Score}");
     }
     private void Update()
     {

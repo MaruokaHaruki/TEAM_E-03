@@ -1,0 +1,71 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &4095632837480529808
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6673669680255169158}
+  - component: {fileID: 2584845540864131975}
+  m_Layer: 0
+  m_Name: KeyViewController
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6673669680255169158
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4095632837480529808}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -4.1303725, y: 2.7072916, z: -0.08010994}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2584845540864131975
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4095632837480529808}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8417387e86404984e9e43b494136b1c1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  keyImageEntries:
+  - key: 97
+    targetImage: {fileID: 0}
+    normalSprite: {fileID: -1843950569, guid: b13fb3e27b829c846b7a738bfa92f95b, type: 3}
+    pressedSprite: {fileID: -1766892700, guid: 9d4bbd280cb9b2f4d8824df551d04ade, type: 3}
+  - key: 100
+    targetImage: {fileID: 0}
+    normalSprite: {fileID: -1502105448, guid: b13fb3e27b829c846b7a738bfa92f95b, type: 3}
+    pressedSprite: {fileID: -1714015859, guid: 9d4bbd280cb9b2f4d8824df551d04ade, type: 3}
+  - key: 119
+    targetImage: {fileID: 0}
+    normalSprite: {fileID: 732610509, guid: b13fb3e27b829c846b7a738bfa92f95b, type: 3}
+    pressedSprite: {fileID: 950821325, guid: 9d4bbd280cb9b2f4d8824df551d04ade, type: 3}
+  - key: 106
+    targetImage: {fileID: 0}
+    normalSprite: {fileID: 1058465807, guid: b13fb3e27b829c846b7a738bfa92f95b, type: 3}
+    pressedSprite: {fileID: -1937791129, guid: 9d4bbd280cb9b2f4d8824df551d04ade, type: 3}
+  - key: 108
+    targetImage: {fileID: 0}
+    normalSprite: {fileID: 1759948490, guid: b13fb3e27b829c846b7a738bfa92f95b, type: 3}
+    pressedSprite: {fileID: -1123289165, guid: 9d4bbd280cb9b2f4d8824df551d04ade, type: 3}
+  - key: 105
+    targetImage: {fileID: 0}
+    normalSprite: {fileID: -1118348789, guid: b13fb3e27b829c846b7a738bfa92f95b, type: 3}
+    pressedSprite: {fileID: 1041859665, guid: 9d4bbd280cb9b2f4d8824df551d04ade, type: 3}

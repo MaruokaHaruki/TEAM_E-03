@@ -9,7 +9,9 @@ public class SceneManagerScript : SingletonMonoBehaviour<SceneManagerScript>
     public GameObject fadePanelPrefab;     // フェード用のパネル（Image付きCanvas）
     public float fadeDuration = 1.0f;      // フェード時間
 
-    [HideInInspector] public string winnerName;  
+    [HideInInspector] public string winnerName;
+    [HideInInspector] public int Player1_Score;
+    [HideInInspector] public int Player2_Score;
 
     // 内部変数
     private GameObject fadeCanvas;         // 実際に使われるフェード用Canvasのインスタンス
