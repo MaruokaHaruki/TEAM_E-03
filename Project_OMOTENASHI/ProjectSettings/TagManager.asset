@@ -9,6 +9,7 @@ TagManager:
   - EnemyBuck
   - DataManager
   - InvincibleItem
+  - Punching
   layers:
   - Default
   - TransparentFX
