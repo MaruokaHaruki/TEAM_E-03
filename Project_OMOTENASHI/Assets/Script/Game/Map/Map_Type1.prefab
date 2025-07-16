@@ -1392,6 +1392,10 @@ PrefabInstance:
       propertyPath: triggerKey_
       value: 57
       objectReference: {fileID: 0}
+    - target: {fileID: 677070955773612685, guid: ca41a9ac467b8c746930d2768e86991b, type: 3}
+      propertyPath: maxPunchPower_
+      value: 32
+      objectReference: {fileID: 0}
     - target: {fileID: 3454831835191419915, guid: ca41a9ac467b8c746930d2768e86991b, type: 3}
       propertyPath: m_TagString
       value: Punching
@@ -1462,6 +1466,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 5277176611754733958}
     m_Modifications:
+    - target: {fileID: 677070955773612685, guid: ca41a9ac467b8c746930d2768e86991b, type: 3}
+      propertyPath: maxPunchPower_
+      value: 32
+      objectReference: {fileID: 0}
     - target: {fileID: 3454831835191419915, guid: ca41a9ac467b8c746930d2768e86991b, type: 3}
       propertyPath: m_TagString
       value: Punching

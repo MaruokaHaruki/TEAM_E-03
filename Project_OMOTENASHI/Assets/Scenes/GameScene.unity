@@ -4338,6 +4338,7 @@ MonoBehaviour:
   enableStomp_: 0
   enableReverseJump_: 0
   stompStunDuration_: 2
+  knockbackDisableTime_: 2
   isGround_: 0
   isJumping_: 0
   hasDoubleJumped_: 0
@@ -5278,6 +5279,7 @@ MonoBehaviour:
   enableStomp_: 0
   enableReverseJump_: 0
   stompStunDuration_: 2
+  knockbackDisableTime_: 2
   isGround_: 0
   isJumping_: 0
   hasDoubleJumped_: 0
