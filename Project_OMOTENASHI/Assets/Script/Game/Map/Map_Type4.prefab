@@ -1329,6 +1329,10 @@ PrefabInstance:
       propertyPath: maxPunchPower_
       value: 25
       objectReference: {fileID: 0}
+    - target: {fileID: 3454831835191419915, guid: ca41a9ac467b8c746930d2768e86991b, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     - target: {fileID: 3713413450637463420, guid: ca41a9ac467b8c746930d2768e86991b, type: 3}
       propertyPath: m_Name
       value: PunchingMachine
@@ -1398,6 +1402,10 @@ PrefabInstance:
     - target: {fileID: 677070955773612685, guid: ca41a9ac467b8c746930d2768e86991b, type: 3}
       propertyPath: maxPunchPower_
       value: 25
+      objectReference: {fileID: 0}
+    - target: {fileID: 3454831835191419915, guid: ca41a9ac467b8c746930d2768e86991b, type: 3}
+      propertyPath: m_TagString
+      value: Ground
       objectReference: {fileID: 0}
     - target: {fileID: 3713413450637463420, guid: ca41a9ac467b8c746930d2768e86991b, type: 3}
       propertyPath: m_Name

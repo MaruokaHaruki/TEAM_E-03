@@ -1726,6 +1726,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 5277176611754733958}
     m_Modifications:
+    - target: {fileID: 3454831835191419915, guid: ca41a9ac467b8c746930d2768e86991b, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     - target: {fileID: 3713413450637463420, guid: ca41a9ac467b8c746930d2768e86991b, type: 3}
       propertyPath: m_Name
       value: PunchingMachine
@@ -1788,6 +1792,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 5277176611754733958}
     m_Modifications:
+    - target: {fileID: 3454831835191419915, guid: ca41a9ac467b8c746930d2768e86991b, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     - target: {fileID: 3713413450637463420, guid: ca41a9ac467b8c746930d2768e86991b, type: 3}
       propertyPath: m_Name
       value: PunchingMachine (1)
