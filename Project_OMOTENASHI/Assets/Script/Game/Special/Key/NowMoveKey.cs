@@ -13,6 +13,23 @@ public class NowMoveKey : MonoBehaviour
     public KeyCode JumpPlayerBKey;
     public KeyCode AccelerationPlayerBKey;
 
+    // キー変更オブジェクト  KeyChangeObjects
+    [SerializeField] private GameObject []KeyObjects;
+
+    public KeyCode JumpKey(string playerType)
+    {
+        if (playerType == "A")
+        {
+            return JumpPlayerAKey;
+        }
+        else if (playerType == "B")
+        {
+            return JumpPlayerBKey;
+        }
+
+        return KeyCode.None;
+    }
+
     private void Awake()
     {
         // シングルトンの設定
@@ -24,5 +41,18 @@ public class NowMoveKey : MonoBehaviour
         {
             Destroy(this.gameObject);
         }
+    }
+
+    public void SetKeyObjects(bool activeFlag, KeyCode jumpPlayerAKey, KeyCode accelerationPlayerAKey, KeyCode jumpPlayerBKey, KeyCode accelerationPlayerBKey)
+    {
+        for (int i = 0; i < KeyObjects.Length; i++)
+        {
+            KeyObjects[i].SetActive(activeFlag);
+        }
+
+        JumpPlayerAKey = jumpPlayerAKey;
+        AccelerationPlayerAKey = accelerationPlayerAKey;
+        JumpPlayerBKey = jumpPlayerBKey;
+        AccelerationPlayerBKey = accelerationPlayerBKey;
     }
 }
