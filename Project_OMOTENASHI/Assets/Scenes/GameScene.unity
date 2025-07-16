@@ -202,6 +202,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 653656975}
     m_Modifications:
+    - target: {fileID: 166520659201241122, guid: 19de06675ad8e064e89603436a8a3701, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 200
+      objectReference: {fileID: 0}
     - target: {fileID: 338511254587259859, guid: 19de06675ad8e064e89603436a8a3701, type: 3}
       propertyPath: m_Color.b
       value: 1
@@ -322,6 +326,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: RoundScore_Dire
       objectReference: {fileID: 0}
+    - target: {fileID: 6702060286214754032, guid: 19de06675ad8e064e89603436a8a3701, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 6231c4253678fcb448ef0deb4daef4a3, type: 3}
     - target: {fileID: 6702060286214754032, guid: 19de06675ad8e064e89603436a8a3701, type: 3}
       propertyPath: m_PreserveAspect
       value: 0
@@ -921,7 +929,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: d079fd8c8b23b014bae853a4f40afd1e, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 6231c4253678fcb448ef0deb4daef4a3, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1329,7 +1337,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: d079fd8c8b23b014bae853a4f40afd1e, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 6231c4253678fcb448ef0deb4daef4a3, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
