@@ -77,6 +77,9 @@ public class Player : MonoBehaviour {
     public bool enableStomp_ = false;
     public bool enableReverseJump_ = false;
     public float stompStunDuration_ = 2.0f;
+    
+    // ノックバック設定
+    public float knockBackDuration_ = 0.4f;
 
     // コンポーネント参照
     private Animator animator_ = null;
@@ -117,6 +120,10 @@ public class Player : MonoBehaviour {
     public bool isStunned_ = false;
     public float stunTimer_ = 0.0f;
     public bool shouldReverseOnLanding_ = false;
+    
+    // ノックバック状態関連
+    private bool isKnockedBack_ = false;
+    private float knockBackTimer_ = 0.0f;
 
     // スプライト回転関連
     private float targetRotation_ = 0.0f;
@@ -149,6 +156,13 @@ public class Player : MonoBehaviour {
             stunTimer_ -= Time.deltaTime;
             if (stunTimer_ <= 0.0f) {
                 isStunned_ = false;
+            }
+        }
+
+        if (isKnockedBack_) {
+            knockBackTimer_ -= Time.deltaTime;
+            if (knockBackTimer_ <= 0f) {
+                isKnockedBack_ = false;
             }
         }
 
@@ -263,6 +277,13 @@ public class Player : MonoBehaviour {
 
         if (isGround_ && !wasGrounded) {
             hasDoubleJumped_ = false;
+        }
+
+        // ノックバック中は物理的な移動処理のみスキップ
+        if (isKnockedBack_) {
+            // 独自重力システムは継続
+            rigidbody2D_.AddForce(Vector2.down * gravity_, ForceMode2D.Force);
+            return;
         }
 
         // 水平移動の物理計算
@@ -397,6 +418,13 @@ public class Player : MonoBehaviour {
             return;
         }
 
+        // ノックバック中は自動移動を停止
+        if (isKnockedBack_) {
+            inputHorizontal_ = Vector2.zero;
+            isJumping_ = false;
+            return;
+        }
+
         // 壁衝突判定と方向転換
         if (isHitWallFront_ && !wasHittingWall_) {
             currentDirection_ *= -1.0f;
@@ -498,14 +526,20 @@ public class Player : MonoBehaviour {
         {
             var push = collision.gameObject.GetComponentInParent<Push>();
             float punchPower = (push != null) ? push.CurrentPunchPower : 0f;
+
+            // 向きをプレイヤー同士の相対位置で決める
+            Vector2 punchOrigin = collision.transform.position;
+            Vector2 myPosition = transform.position;
             
-            // 方向転換を実行しない（コメントアウト）
-            //ReverseDirection();
-            
-            float backDirX = -Mathf.Sign(currentDirection_);
-            Vector2 knockDir = new Vector2(backDirX, 1f).normalized; // 斜め後ろ上方向に変更
-            rigidbody2D_.velocity = Vector2.zero; // プレイヤーのフォースをリセット
+            Vector2 punchDir = (myPosition - punchOrigin).normalized; // パンチ元 → 自分へのベクトル（≒攻撃方向）
+            Vector2 knockDir = (punchDir + Vector2.up * 0.5f).normalized; // 上方向を加えて「斜め後ろ上」に
+
+            rigidbody2D_.velocity = Vector2.zero; // 現在の速度をリセット
             rigidbody2D_.AddForce(knockDir * punchPower, ForceMode2D.Impulse);
+
+            // ノックバック状態にする
+            isKnockedBack_ = true;
+            knockBackTimer_ = knockBackDuration_;
             return;
         }
 
@@ -892,6 +926,10 @@ public class Player : MonoBehaviour {
         if (spriteRenderer_ != null) {
             spriteRenderer_.color = originalColor_;
         }
+
+        // ノックバック状態をリセット
+        isKnockedBack_ = false;
+        knockBackTimer_ = 0.0f;
 
         if (animator_ != null) {
             animator_.SetBool("Run", false);
