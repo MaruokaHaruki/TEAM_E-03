@@ -173,7 +173,7 @@ GameObject:
   - component: {fileID: 6376916084575244338}
   - component: {fileID: 677070955773612685}
   m_Layer: 0
-  m_Name: Punchng
+  m_Name: PunchingMachine
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
