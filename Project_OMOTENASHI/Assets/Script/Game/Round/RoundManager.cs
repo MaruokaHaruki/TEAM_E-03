@@ -204,10 +204,10 @@ public class RoundManager : MonoBehaviour
 
         Debug.Log($"[ROUND MANAGER] : ラウンド{currentRoundNumber}設定適用開始");
 
-        // タイルマップを変更（最初に実行）
+        // タイルマップを変更（プレハブ内のギミックも自動的に含まれる）
         if (TilemapManager.Instance != null)
         {
-            Debug.Log($"[ROUND MANAGER] : タイルマップ変更開始 - {currentRoundSettings.roundName}");
+            Debug.Log($"[ROUND MANAGER] : タイルマップ変更開始 - {currentRoundSettings.roundName}（プレハブ内ギミック含む）");
             TilemapManager.Instance.ChangeTilemap(currentRoundSettings);
         }
         else
@@ -637,7 +637,7 @@ public class RoundManager : MonoBehaviour
         isGameEnd = false;
         isRoundTransition = false;
 
-        // タイルマップをリセット
+        // タイルマップをリセット（プレハブ内のギミックも含む）
         if (TilemapManager.Instance != null)
         {
             TilemapManager.Instance.ResetTilemap();
@@ -645,6 +645,6 @@ public class RoundManager : MonoBehaviour
 
         InitializeRound();
 
-        Debug.Log("[ROUND MANAGER] : ゲーム全体がリセットされました");
+        Debug.Log("[ROUND MANAGER] : ゲーム全体（タイルマップ・プレハブ内ギミック含む）がリセットされました");
     }
 }

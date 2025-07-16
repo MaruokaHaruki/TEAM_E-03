@@ -71,7 +71,7 @@ public class RoundSettings : ScriptableObject {
     ///						 タイルマップ設定
     //========================================
     [Header("タイルマップ設定")]
-    [Tooltip("このラウンドで使用するタイルマップのプレハブ")]
+    [Tooltip("このラウンドで使用するタイルマップのプレハブ（ギミックも含む）")]
     public GameObject tilemapPrefab;
 
     [Tooltip("タイルマップの生成位置")]
