@@ -921,11 +921,14 @@ public class Player : MonoBehaviour {
     }
 
     public void ResetPlayerState() {
+        Debug.Log($"[PLAYER] : {playerID_} の状態をリセット開始");
+        
         if (rigidbody2D_ != null) {
             rigidbody2D_.velocity = Vector2.zero;
             rigidbody2D_.angularVelocity = 0f;
             rigidbody2D_.drag = dragOnStop_;
             rigidbody2D_.WakeUp();
+            rigidbody2D_.isKinematic = false;
         }
 
         inputHorizontal_ = Vector2.zero;
@@ -935,6 +938,7 @@ public class Player : MonoBehaviour {
         currentComboGauge_ = 0.0f;
         isSpeedBoosted_ = false;
         speedBoostTimer_ = 0.0f;
+        isGaugeDrainBoosted_ = false;
 
         isStunned_ = false;
         stunTimer_ = 0.0f;
@@ -960,26 +964,44 @@ public class Player : MonoBehaviour {
         currentRotation_ = 0.0f;
         if (spriteTransform_ != null) {
             spriteTransform_.localRotation = Quaternion.identity;
+            spriteTransform_.localScale = Vector3.one;
         }
 
         wasHittingWall_ = false;
         allowMovement_ = false;
+        
+        // 向きを正しく設定
+        if (currentDirection_ > 0) {
+            transform.localScale = new Vector3(-1, 1, 1);
+        }
+        else {
+            transform.localScale = new Vector3(1, 1, 1);
+        }
+        
+        Debug.Log($"[PLAYER] : {playerID_} の状態リセット完了");
     }
     
     public void ForceReactivate() {
+        Debug.Log($"[PLAYER] : {playerID_} の強制再有効化開始");
+        
         if (rigidbody2D_ != null) {
             rigidbody2D_.velocity = Vector2.zero;
             rigidbody2D_.angularVelocity = 0f;
             rigidbody2D_.drag = dragOnMove_;
             rigidbody2D_.WakeUp();
+            rigidbody2D_.isKinematic = false;
             
             if (rigidbody2D_.sharedMaterial != null) {
                 rigidbody2D_.sharedMaterial = null;
             }
         }
         
+        // 全ての状態フラグをクリア
         isStunned_ = false;
         stunTimer_ = 0.0f;
+        isKnockedBack_ = false;
+        knockBackTimer_ = 0.0f;
+        isGaugeDrainBoosted_ = false;
         
         inputHorizontal_ = Vector2.zero;
         isJumping_ = false;
@@ -991,5 +1013,7 @@ public class Player : MonoBehaviour {
                 currentDirection_ = 1.0f;
             }
         }
+        
+        Debug.Log($"[PLAYER] : {playerID_} の強制再有効化完了 - allowMovement_: {allowMovement_}");
     }
 }
