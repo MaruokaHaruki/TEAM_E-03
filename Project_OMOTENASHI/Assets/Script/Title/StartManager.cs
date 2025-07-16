@@ -12,6 +12,13 @@ public class StartManager : MonoBehaviour
     [Header("遷移先シーン選択")] // インスペクタに見出しを表示
     [SerializeField] private SceneAsset sceneAsset; // ここにシーンファイルをD&Dする
 #endif
+
+
+
+    private void Awake()
+    {
+        Application.targetFrameRate = 60;
+    }
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.Space))

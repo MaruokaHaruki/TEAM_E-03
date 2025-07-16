@@ -1437,6 +1437,7 @@ MonoBehaviour:
   PlayerRigidBody:
   - {fileID: 1716098621}
   - {fileID: 1507770434}
+  StartKey: 98
 --- !u!212 &678689598
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -1558,7 +1559,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.8207547, g: 0.4968613, b: 0.46844962, a: 1}
+  m_Color: {r: 0.8584906, g: 0.68600786, b: 0.66816485, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -5555,3 +5556,4 @@ SceneRoots:
   - {fileID: 361640537}
   - {fileID: 1300214812}
   - {fileID: 1751516238}
+  - {fileID: 678689599}
