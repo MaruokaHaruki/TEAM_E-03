@@ -9,19 +9,13 @@ public class UIManager : MonoBehaviour
     public static UIManager Instance { get; private set; }
 
     //========================================
-    // プレイヤーHP UI
-    [Header("プレイヤーHP UI")]
-    [Tooltip("プレイヤー1のHPバー")]
-    public Slider player1HpBar;
+    // プレイヤースコア UI
+    [Header("プレイヤースコア UI")]
+    [Tooltip("プレイヤー1のスコアテキスト")]
+    public Text player1_Score;
     
-    [Tooltip("プレイヤー2のHPバー")]
-    public Slider player2HpBar;
-    
-    [Tooltip("プレイヤー1のHP数値テキスト")]
-    public Text player1HpText;
-    
-    [Tooltip("プレイヤー2のHP数値テキスト")]
-    public Text player2HpText;
+    [Tooltip("プレイヤー2のスコアテキスト")]
+    public Text player2_Score;
 
     //========================================
     // ゲーム状態UI
@@ -147,18 +141,18 @@ public class UIManager : MonoBehaviour
     // プレイヤーHP UI初期化
     public void InitializePlayerHPUI(string player1Id, string player2Id, int player1MaxHp, int player2MaxHp)
     {
-        // HPバーの初期化
-        if (player1HpBar != null)
-        {
-            player1HpBar.maxValue = player1MaxHp;
-            player1HpBar.value = player1MaxHp;
-        }
+        //// HPバーの初期化
+        //if (player1HpBar != null)
+        //{
+        //    player1HpBar.maxValue = player1MaxHp;
+        //    player1HpBar.value = player1MaxHp;
+        //}
 
-        if (player2HpBar != null)
-        {
-            player2HpBar.maxValue = player2MaxHp;
-            player2HpBar.value = player2MaxHp;
-        }
+        //if (player2HpBar != null)
+        //{
+        //    player2HpBar.maxValue = player2MaxHp;
+        //    player2HpBar.value = player2MaxHp;
+        //}
     }
 
     //========================================
@@ -174,14 +168,14 @@ public class UIManager : MonoBehaviour
             int currentHp = GameManager.Instance.GetPlayerCurrentHp(player1Id);
             int maxHp = GameManager.Instance.GetPlayerMaxHp(player1Id);
 
-            if (player1HpBar != null)
-            {
-                player1HpBar.value = currentHp;
-            }
-            if (player1HpText != null)
-            {
-                player1HpText.text = $"{GameManager.Instance.player1Name_}: {currentHp}/{maxHp}";
-            }
+            //if (player1HpBar != null)
+            //{
+            //    player1HpBar.value = currentHp;
+            //}
+            //if (player1HpText != null)
+            //{
+            //    player1HpText.text = $"{GameManager.Instance.player1Name_}: {currentHp}/{maxHp}";
+            //}
         }
 
         // プレイヤー2のHP表示更新
@@ -191,14 +185,14 @@ public class UIManager : MonoBehaviour
             int currentHp = GameManager.Instance.GetPlayerCurrentHp(player2Id);
             int maxHp = GameManager.Instance.GetPlayerMaxHp(player2Id);
 
-            if (player2HpBar != null)
-            {
-                player2HpBar.value = currentHp;
-            }
-            if (player2HpText != null)
-            {
-                player2HpText.text = $"{GameManager.Instance.player2Name_}: {currentHp}/{maxHp}";
-            }
+            //if (player2HpBar != null)
+            //{
+            //    player2HpBar.value = currentHp;
+            //}
+            //if (player2HpText != null)
+            //{
+            //    player2HpText.text = $"{GameManager.Instance.player2Name_}: {currentHp}/{maxHp}";
+            //}
         }
     }
 
@@ -240,6 +234,15 @@ public class UIManager : MonoBehaviour
             scoreText.text = $"{RoundManager.Instance.GetCurrentRoundSettings().winPoints}";
         }
 
+        if(player1_Score!=null)
+        {
+            player1_Score.text = $"{player1Score}";
+        }
+
+        if (player2_Score != null)
+        {
+            player2_Score.text = $"{player2Score}";
+        }
 
         // ↓Old
         //if (scoreText != null)

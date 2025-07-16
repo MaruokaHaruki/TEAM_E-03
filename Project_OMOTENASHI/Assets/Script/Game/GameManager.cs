@@ -335,6 +335,8 @@ public class GameManager : MonoBehaviour
         
         string winnerName = GetWinnerName();
         SceneManagerScript.Instance.winnerName = winnerName; // 結果シーンに勝者名を渡す
+        SceneManagerScript.Instance.Player1_Score = RoundManager.Instance.player1Score;
+        SceneManagerScript.Instance.Player2_Score = RoundManager.Instance.player2Score;
         Debug.Log($"[FINAL GAME OVER] : 全ラウンド終了！最終勝者は {winnerName} です！");
     }
 
