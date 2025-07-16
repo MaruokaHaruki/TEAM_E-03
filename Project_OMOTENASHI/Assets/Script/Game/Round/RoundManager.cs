@@ -288,6 +288,9 @@ public class RoundManager : MonoBehaviour
         // 移動許可を明示的に無効化（カウントダウン終了まで待機）
         player.allowMovement_ = false;
         
+        // プレイヤー状態の完全リセット
+        player.ForceCompleteReset();
+        
         Debug.Log($"[ROUND MANAGER] : {player.gameObject.name} の遅延設定適用完了");
     }
     
@@ -421,18 +424,44 @@ public class RoundManager : MonoBehaviour
         
         if (GameManager.Instance != null)
         {
+            if (GameManager.Instance.player1_ != null)
+            {
+                GameManager.Instance.player1_.allowMovement_ = true;
+                GameManager.Instance.player1_.ForceReactivate();
+                // 追加：物理コンポーネントの強制リセット
+                GameManager.Instance.player1_.ForcePhysicsReset();
+                Debug.Log($"[ROUND MANAGER] : Player1の移動許可を再有効化しました");
+            }
+            
+            if (GameManager.Instance.player2_ != null)
+            {
+                GameManager.Instance.player2_.allowMovement_ = true;
+                GameManager.Instance.player2_.ForceReactivate();
+                // 追加：物理コンポーネントの強制リセット
+                GameManager.Instance.player2_.ForcePhysicsReset();
+                Debug.Log($"[ROUND MANAGER] : Player2の移動許可を再有効化しました");
+            }
+        }
+        
+        // 最終確認（さらに0.5秒後）
+        yield return new UnityEngine.WaitForSeconds(0.5f);
+        
+        if (GameManager.Instance != null)
+        {
             if (GameManager.Instance.player1_ != null && !GameManager.Instance.player1_.allowMovement_)
             {
                 GameManager.Instance.player1_.allowMovement_ = true;
                 GameManager.Instance.player1_.ForceReactivate();
-                Debug.LogWarning($"[ROUND MANAGER] : Player1の移動許可を再有効化しました");
+                GameManager.Instance.player1_.ForcePhysicsReset();
+                Debug.LogWarning($"[ROUND MANAGER] : Player1の移動許可を最終確認で再有効化しました");
             }
             
             if (GameManager.Instance.player2_ != null && !GameManager.Instance.player2_.allowMovement_)
             {
                 GameManager.Instance.player2_.allowMovement_ = true;
                 GameManager.Instance.player2_.ForceReactivate();
-                Debug.LogWarning($"[ROUND MANAGER] : Player2の移動許可を再有効化しました");
+                GameManager.Instance.player2_.ForcePhysicsReset();
+                Debug.LogWarning($"[ROUND MANAGER] : Player2の移動許可を最終確認で再有効化しました");
             }
         }
     }
