@@ -5,9 +5,6 @@ public class ResultController : MonoBehaviour
     /// <summary>スコア描画用</summary>
     [SerializeField, Header("スコア描画用")] private ScoreDraw SetScore;
 
-    /// <summary>スコア描画用</summary>
-    private RoundManager GameScore;
-
     /// <summary>描画終了フラグ</summary>
     internal bool DrawEndFlag;
 
@@ -15,11 +12,8 @@ public class ResultController : MonoBehaviour
     {
         DrawEndFlag = false;
 
-        // ゲームシーンから来たデータを取得
-        GameScore = GameObject.Find("RoundManager").GetComponent<RoundManager>();
-
         // スコア描画開始
-        SetScore.SetScore(GameScore.player1Score, GameScore.player2Score, this);
+        SetScore.SetScore(SceneManagerScript.Instance.Player1_Score, SceneManagerScript.Instance.Player2_Score, this);
     }
 
     void Update()
