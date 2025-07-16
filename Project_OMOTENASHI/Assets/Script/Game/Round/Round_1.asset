@@ -17,13 +17,15 @@ MonoBehaviour:
   winPoints: 1
   player1StartPosition: {x: -3, y: 0, z: 0}
   player2StartPosition: {x: 3, y: 0, z: 0}
-  enableDoubleJump: 0
+  enableDoubleJump: 1
   enableStomp: 0
   enableReverseJump: 0
   enableSpeedTransfer: 1
   playerMaxHp: 10
   baseSpeed: 1
   jumpForce: 8
+  enableGaugeDrainBoost: 1
+  gaugeDrainBoostMultiplier: 0
   invincibilityDuration: 0
   stompStunDuration: 2
   tilemapPrefab: {fileID: 3229168071328024921, guid: 995a62c1bc7182f46a97a90db9e46488, type: 3}

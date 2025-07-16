@@ -2733,6 +2733,8 @@ MonoBehaviour:
   fadePanelPrefab: {fileID: 7646164491845426038, guid: 1f689aa2684131840ba0d62c2877b379, type: 3}
   fadeDuration: 1.5
   winnerName: 
+  Player1_Score: 0
+  Player2_Score: 0
 --- !u!4 &1300214812
 Transform:
   m_ObjectHideFlags: 0
@@ -3462,6 +3464,8 @@ MonoBehaviour:
   gaugeDrainRate_: 116
   maxGaugeSpeedMultiplier_: 2
   minEffectiveGauge_: 1
+  enableGaugeDrainBoost_: 1
+  gaugeDrainBoostMultiplier_: 2
   invincibilityDuration_: 1
   rainbowSpeed_: 1
   invincibilitySpeedMultiplier_: 1.5
@@ -3479,6 +3483,7 @@ MonoBehaviour:
   enableStomp_: 0
   enableReverseJump_: 0
   stompStunDuration_: 2
+  knockBackDuration_: 0.4
   isGround_: 0
   isJumping_: 0
   hasDoubleJumped_: 0
@@ -3773,14 +3778,6 @@ MonoBehaviour:
   TargetCameraSize: 0
   MainCamera: {fileID: 0}
   AllUiTransform:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
   - {fileID: 6748056603516564731}
   MoveRatio: 10
   victoryZoomSize: 2.5
@@ -4113,6 +4110,8 @@ MonoBehaviour:
   gaugeDrainRate_: 116
   maxGaugeSpeedMultiplier_: 2
   minEffectiveGauge_: 1
+  enableGaugeDrainBoost_: 1
+  gaugeDrainBoostMultiplier_: 2
   invincibilityDuration_: 1
   rainbowSpeed_: 1
   invincibilitySpeedMultiplier_: 1.5
@@ -4130,6 +4129,7 @@ MonoBehaviour:
   enableStomp_: 0
   enableReverseJump_: 0
   stompStunDuration_: 2
+  knockBackDuration_: 0.4
   isGround_: 0
   isJumping_: 0
   hasDoubleJumped_: 0

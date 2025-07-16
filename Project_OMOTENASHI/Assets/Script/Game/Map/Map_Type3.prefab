@@ -31,6 +31,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1013665198198386813}
+  - {fileID: 2683179302278655741}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!156049354 &2208754609105027217
@@ -1315,3 +1316,65 @@ TilemapCollider2D:
   m_MaximumTileChangeCount: 1000
   m_ExtrusionFactor: 0
   m_UseDelaunayMesh: 0
+--- !u!1001 &3229817357948015945
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 5277176611754733958}
+    m_Modifications:
+    - target: {fileID: 715523262085217204, guid: f224e305ff8a70544beda51b2cf0236d, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.03959602
+      objectReference: {fileID: 0}
+    - target: {fileID: 715523262085217204, guid: f224e305ff8a70544beda51b2cf0236d, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1.9982554
+      objectReference: {fileID: 0}
+    - target: {fileID: 715523262085217204, guid: f224e305ff8a70544beda51b2cf0236d, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 715523262085217204, guid: f224e305ff8a70544beda51b2cf0236d, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 715523262085217204, guid: f224e305ff8a70544beda51b2cf0236d, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 715523262085217204, guid: f224e305ff8a70544beda51b2cf0236d, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 715523262085217204, guid: f224e305ff8a70544beda51b2cf0236d, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 715523262085217204, guid: f224e305ff8a70544beda51b2cf0236d, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 715523262085217204, guid: f224e305ff8a70544beda51b2cf0236d, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 715523262085217204, guid: f224e305ff8a70544beda51b2cf0236d, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3947804352177653915, guid: f224e305ff8a70544beda51b2cf0236d, type: 3}
+      propertyPath: m_Name
+      value: InvincibleItemGenerationObject
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: f224e305ff8a70544beda51b2cf0236d, type: 3}
+--- !u!4 &2683179302278655741 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 715523262085217204, guid: f224e305ff8a70544beda51b2cf0236d, type: 3}
+  m_PrefabInstance: {fileID: 3229817357948015945}
+  m_PrefabAsset: {fileID: 0}

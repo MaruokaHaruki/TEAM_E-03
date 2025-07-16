@@ -45,6 +45,11 @@ public class Player : MonoBehaviour {
     public float gaugeDrainRate_ = 20.0f;
     public float maxGaugeSpeedMultiplier_ = 5.0f;
     public float minEffectiveGauge_ = 10.0f;
+    
+    // 連打ゲージ減り速度加速設定
+    [Header("連打ゲージ減り速度加速設定")]
+    public bool enableGaugeDrainBoost_ = true;
+    public float gaugeDrainBoostMultiplier_ = 2.0f;
 
     // 特殊状態設定
     [Header("無敵状態設定")]
@@ -106,6 +111,7 @@ public class Player : MonoBehaviour {
 
     // 連打ゲージ関連
     private float currentComboGauge_ = 0.0f;
+    private bool isGaugeDrainBoosted_ = false;
 
     // 無敵状態関連
     private bool isInvincible_ = false;
@@ -231,9 +237,23 @@ public class Player : MonoBehaviour {
             UpdateSpriteRotation();
         }
 
+        // Gキーによる連打ゲージ減り速度加速
+        if (enableGaugeDrainBoost_ && Input.GetKey(KeyCode.G)) {
+            isGaugeDrainBoosted_ = true;
+        } else {
+            isGaugeDrainBoosted_ = false;
+        }
+
         // 連打ゲージの自然減少
         if (currentComboGauge_ > 0.0f) {
-            currentComboGauge_ -= gaugeDrainRate_ * Time.deltaTime;
+            float drainRate = gaugeDrainRate_;
+            
+            // Gキーが押されている場合は減り速度を加速
+            if (isGaugeDrainBoosted_) {
+                drainRate *= gaugeDrainBoostMultiplier_;
+            }
+            
+            currentComboGauge_ -= drainRate * Time.deltaTime;
             currentComboGauge_ = Mathf.Max(0.0f, currentComboGauge_);
         }
     }

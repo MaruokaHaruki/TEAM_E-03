@@ -266,6 +266,10 @@ public class RoundManager : MonoBehaviour
         player.jumpForce_ = currentRoundSettings.jumpForce;
         player.invincibilityDuration_ = currentRoundSettings.invincibilityDuration;
         player.stompStunDuration_ = currentRoundSettings.stompStunDuration;
+        
+        // 連打ゲージ減り速度加速設定を適用
+        player.enableGaugeDrainBoost_ = currentRoundSettings.enableGaugeDrainBoost;
+        player.gaugeDrainBoostMultiplier_ = currentRoundSettings.gaugeDrainBoostMultiplier;
 
         // 移動許可を明示的に有効化（ゲーム開始準備）
         player.allowMovement_ = false; // カウントダウン終了まで待機

@@ -57,6 +57,12 @@ public class RoundSettings : ScriptableObject {
     [Tooltip("ジャンプ力")]
     public float jumpForce = 4.0f;
 
+    [Tooltip("Gキーによる連打ゲージ減り速度加速機能を有効にするか")]
+    public bool enableGaugeDrainBoost = true;
+
+    [Tooltip("Gキーによる連打ゲージ減り速度の倍率")]
+    public float gaugeDrainBoostMultiplier = 2.0f;
+
     ///--------------------------------------------------------------
     ///						 特殊ルール設定
     //========================================
