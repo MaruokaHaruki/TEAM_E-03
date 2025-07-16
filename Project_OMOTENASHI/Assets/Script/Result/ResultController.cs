@@ -5,6 +5,8 @@ public class ResultController : MonoBehaviour
     /// <summary>スコア描画用</summary>
     [SerializeField, Header("スコア描画用")] private ScoreDraw SetScore;
 
+    public AudioClip next; // 次のシーンへの効果音
+
     /// <summary>描画終了フラグ</summary>
     internal bool DrawEndFlag;
 
@@ -22,7 +24,8 @@ public class ResultController : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.Space))
             {
-                Debug.Log("シーン移動");
+                SceneManagerScript.Instance.FadeOutScene("Title");
+                AudioManager.Instance.PlaySE(next); // 効果音を再生
             }
         }
     }
