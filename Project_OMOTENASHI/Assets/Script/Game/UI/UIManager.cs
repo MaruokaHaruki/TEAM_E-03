@@ -221,12 +221,12 @@ public class UIManager : MonoBehaviour
     // ラウンド情報UI更新
     public void UpdateRoundInfoUI(int currentRound, int totalRounds, int player1Score, int player2Score)
     {
-        if(keyConfig1!=null)
-        {
-           int roundcount= RoundManager.Instance.GetCurrentRoundSettings().roundNumber;
-            keyConfig1.sprite = spriteList[roundcount*2-2];
-            keyConfig2.sprite = spriteList[roundcount*2-1];
-        }
+        //if(keyConfig1!=null)
+        //{
+        //   int roundcount= RoundManager.Instance.GetCurrentRoundSettings().roundNumber;
+        //    keyConfig1.sprite = spriteList[roundcount*2-2];
+        //    keyConfig2.sprite = spriteList[roundcount*2-1];
+        //}
 
 
         //　↓アイコンですでに表示しているので不要
