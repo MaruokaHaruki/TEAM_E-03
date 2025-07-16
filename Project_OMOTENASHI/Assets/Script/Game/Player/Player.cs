@@ -193,7 +193,6 @@ public class Player : MonoBehaviour {
     //========================================
     // 【連打ゲージ関連】
     private float currentComboGauge_ = 0.0f;
-    //private float lastInputTime_ = 0.0f;
 
     //========================================
     // 【無敵状態関連】
@@ -203,7 +202,6 @@ public class Player : MonoBehaviour {
 
     //========================================
     // 【キー設定関連】
-    private KeyCode pendingKey_ = KeyCode.None;
     private string settingTarget_ = "";
 
     //========================================
@@ -288,7 +286,6 @@ public class Player : MonoBehaviour {
             stunTimer_ -= Time.deltaTime;
             if (stunTimer_ <= 0.0f) {
                 isStunned_ = false;
-                Debug.Log($"[STUN] : {gameObject.name} のスタンが回復しました");
             }
         }
 
@@ -296,17 +293,13 @@ public class Player : MonoBehaviour {
         // 【無敵状態タイマーの更新】
         if (isInvincible_) {
             invincibilityTimer_ -= Time.deltaTime;
-            
-            // 虹色エフェクトの更新
             UpdateRainbowEffect();
             
             if (invincibilityTimer_ <= 0.0f) {
                 isInvincible_ = false;
-                // 元の色に戻す
                 if (spriteRenderer_ != null) {
                     spriteRenderer_.color = originalColor_;
                 }
-                Debug.Log($"[INVINCIBILITY] : {gameObject.name} の無敵状態が終了しました");
             }
         }
 
@@ -315,13 +308,11 @@ public class Player : MonoBehaviour {
         // Tabキーで通常操作と自動移動を切り替え
         if (Input.GetKeyDown(KeyCode.Tab)) {
             isAutoMode_ = !isAutoMode_;
-            Debug.Log($"[MODE CHANGE] : {(isAutoMode_ ? "自動移動モード" : "通常操作モード")}に切り替わりました");
         }
 
         // F3キーで速度交換機能のON/OFFを切り替え
         if (Input.GetKeyDown(KeyCode.F3)) {
             enableSpeedTransfer_ = !enableSpeedTransfer_;
-            Debug.Log($"[SPEED TRANSFER TOGGLE] : 速度交換機能が {(enableSpeedTransfer_ ? "有効" : "無効")} になりました");
         }
 
         // 6キーで全員の連打ゲージを0にする
@@ -331,7 +322,6 @@ public class Player : MonoBehaviour {
                 player.currentComboGauge_ = 0.0f;
                 player.isSpeedBoosted_ = false;
             }
-            Debug.Log("[RESET SPEED] : 全プレイヤーの速度がリセットされました");
         }
 
         //========================================
@@ -410,7 +400,6 @@ public class Player : MonoBehaviour {
         if (enableReverseJump_ && !wasGrounded && isGround_ && shouldReverseOnLanding_) {
             ReverseDirection();
             shouldReverseOnLanding_ = false;
-            Debug.Log($"[REVERSE JUMP] : {gameObject.name} が着地時に方向反転しました");
         }
 
         // 地面に接触したら2段ジャンプフラグをリセット
@@ -564,7 +553,6 @@ public class Player : MonoBehaviour {
                 if (enableDoubleJump_ && jumpPressed && !hasDoubleJumped_) {
                     isJumping_ = true;
                     hasDoubleJumped_ = true;
-                    Debug.Log($"[DOUBLE JUMP] : {gameObject.name} が2段ジャンプを実行しました");
                 }
             }
         }
@@ -620,7 +608,6 @@ public class Player : MonoBehaviour {
             // 壁反射時に無敵状態を付与
             isInvincible_ = true;
             invincibilityTimer_ = invincibilityDuration_;
-            Debug.Log($"[AUTO MOVE] : {gameObject.name} が壁に衝突しました。方向を反転し、無敵状態になりました。新しい方向: {(currentDirection_ > 0 ? "右" : "左")}");
         }
         wasHittingWall_ = isHitWallFront_;  // 前フレームの壁衝突状態を保存
 
@@ -640,11 +627,8 @@ public class Player : MonoBehaviour {
             currentComboGauge_ += comboGaugePerHit_;
             currentComboGauge_ = Mathf.Min(maxComboGauge_, currentComboGauge_);
             //lastInputTime_ = Time.time;
-            
-            Debug.Log($"[COMBO GAUGE] : Player {playerID_} - ゲージ: {currentComboGauge_:F1}/{maxComboGauge_} ({GetGaugePercentage():F1}%)");
         }
         else if (moveInputPressed && isInvincible_) {
-            Debug.Log($"[COMBO GAUGE] : Player {playerID_} - 無敵状態中のため連打ゲージ蓄積が無効化されました");
         }
 
         // スピードブーストタイマーの更新（従来の一時的なブースト）
@@ -671,7 +655,6 @@ public class Player : MonoBehaviour {
             else if (!isGround_ && enableDoubleJump_ && jumpPressed && !hasDoubleJumped_) {
                 isJumping_ = true;
                 hasDoubleJumped_ = true;
-                Debug.Log($"[DOUBLE JUMP] : {gameObject.name} が2段ジャンプを実行しました");
             }
         }
         else {
@@ -755,7 +738,6 @@ public class Player : MonoBehaviour {
                     AudioManager.Instance.PlaySE("Player_Step");
                 }
 
-                Debug.Log($"[STOMP] : {gameObject.name} が {otherPlayer.gameObject.name} を踏みつけました");
                 return; // 踏みつけ成功時は通常の衝突処理をスキップ
             }
         }
@@ -795,8 +777,6 @@ public class Player : MonoBehaviour {
                         // お互いの速度を入れ替え
                         AdjustGaugeToAchieveSpeed(tempOtherSpeed);
                         otherPlayer.AdjustGaugeToAchieveSpeed(tempMySpeed);
-
-                        Debug.Log($"[SPEED TRANSFER] : {gameObject.name}(速度:{tempMySpeed:F2}) <-> {otherPlayer.gameObject.name}(速度:{tempOtherSpeed:F2}) 速度を交換しました");
                     }
                 }
 
@@ -822,8 +802,6 @@ public class Player : MonoBehaviour {
                     // ケース1: 正面衝突の各パターン
                     if (thisIsInvincible && otherIsInvincible) {
                         // 無敵正面 VS 無敵正面：お互いノーダメージでノックバック+反射
-                        Debug.Log($"[INFO] {gameObject.name}(無敵) と {otherPlayer.gameObject.name}(無敵) が正面衝突。両者無敵のためノーダメージ、ノックバック+反転。");
-
                         // 正面衝突音を再生
                         if (AudioManager.Instance != null) {
                             AudioManager.Instance.PlaySE("Player_Penguin2Penguin");
@@ -843,8 +821,6 @@ public class Player : MonoBehaviour {
                     }
                     else if (thisIsInvincible && !otherIsInvincible) {
                         // 無敵正面 VS 通常正面：通常正面がダメージ+ノックバック+どちらも反転
-                        Debug.Log($"[INFO] {gameObject.name}(無敵) と {otherPlayer.gameObject.name}(通常) が正面衝突。{otherPlayer.gameObject.name}にダメージ。");
-
                         // 正面衝突音を再生
                         if (AudioManager.Instance != null) {
                             AudioManager.Instance.PlaySE("Player_Penguin2Penguin");
@@ -857,8 +833,6 @@ public class Player : MonoBehaviour {
                     }
                     else if (!thisIsInvincible && otherIsInvincible) {
                         // 通常正面 VS 無敵正面：通常正面がダメージ+ノックバック+どちらも反転
-                        Debug.Log($"[INFO] {gameObject.name}(通常) と {otherPlayer.gameObject.name}(無敵) が正面衝突。{gameObject.name}にダメージ。");
-
                         // 正面衝突音を再生
                         if (AudioManager.Instance != null) {
                             AudioManager.Instance.PlaySE("Player_Penguin2Penguin");
@@ -873,8 +847,6 @@ public class Player : MonoBehaviour {
                     }
                     else {
                         // 通常状態同士の正面衝突：今まで通り
-                        Debug.Log($"[INFO] {gameObject.name} と {otherPlayer.gameObject.name} が正面衝突。両者反転、ノックバック。");
-
                         // 正面衝突音を再生
                         if (AudioManager.Instance != null) {
                             AudioManager.Instance.PlaySE("Player_Penguin2Penguin");
@@ -896,24 +868,11 @@ public class Player : MonoBehaviour {
                     // ケース2: 自分 (this) が相手 (otherPlayer) の背後から攻撃
                     if (!otherIsInvincible) {
                         // 相手が通常状態の場合のみダメージを与える
-                        Debug.Log($"[INFO] {gameObject.name} が {otherPlayer.gameObject.name} の背後から攻撃。{otherPlayer.gameObject.name} にダメージ。");
-
-                        // 背後衝突音を再生
-                        if (AudioManager.Instance != null) {
-                            AudioManager.Instance.PlaySE("Player_Penguin2Hip");
-                        }
-
                         otherPlayer.TakeDamage(20);
                         KnockBack(otherPlayer);
                     }
                     else {
                         // 相手が無敵状態の場合はダメージなし
-                        Debug.Log($"[INFO] {gameObject.name} が {otherPlayer.gameObject.name}(無敵) の背後から攻撃したが、ダメージなし。");
-
-                        // 背後衝突音を再生
-                        if (AudioManager.Instance != null) {
-                            AudioManager.Instance.PlaySE("Player_Penguin2Hip");
-                        }
                     }
                     // 背後攻撃時は反転しない（追突の自然な見た目を保持）
                 }
@@ -921,13 +880,6 @@ public class Player : MonoBehaviour {
                     // ケース3: 相手 (otherPlayer) が自分 (this) の背後から攻撃
                     if (!thisIsInvincible) {
                         // 自分が通常状態の場合のみダメージを受ける
-                        Debug.Log($"[INFO] {otherPlayer.gameObject.name} が {gameObject.name} の背後から攻撃。{gameObject.name} にダメージ。");
-
-                        // 背後衝突音を再生
-                        if (AudioManager.Instance != null) {
-                            AudioManager.Instance.PlaySE("Player_Penguin2Hip");
-                        }
-
                         TakeDamage(20);
                         Vector2 knockBackDirToThis = (transform.position - otherPlayer.transform.position).normalized;
                         if (knockBackDirToThis == Vector2.zero) knockBackDirToThis = (Random.insideUnitCircle).normalized;
@@ -935,17 +887,8 @@ public class Player : MonoBehaviour {
                     }
                     else {
                         // 自分が無敵状態の場合はダメージなし
-                        Debug.Log($"[INFO] {otherPlayer.gameObject.name} が {gameObject.name}(無敵) の背後から攻撃したが、ダメージなし。");
-
-                        // 背後衝突音を再生
-                        if (AudioManager.Instance != null) {
-                            AudioManager.Instance.PlaySE("Player_Penguin2Hip");
-                        }
                     }
                     // 背後攻撃時は反転しない（追突の自然な見た目を保持）
-                }
-                else {
-                    Debug.Log($"[INFO] {gameObject.name} と {otherPlayer.gameObject.name} が衝突 (判定外のケース)。otherIsAheadOfMe: {otherIsAheadOfMe}, amIAheadOfOther: {amIAheadOfOther}");
                 }
             }
         }
@@ -970,13 +913,11 @@ public class Player : MonoBehaviour {
     public void TakeDamage(int amount) {
         // ゲーム状態チェック - Playing状態でない場合はダメージ処理をスキップ
         if (GameManager.Instance != null && GameManager.Instance.GetGameState() != GameManager.GameState.Playing) {
-            Debug.Log($"[DAMAGE BLOCKED] : {gameObject.name} - ゲーム状態が Playing でないためダメージ処理をスキップ");
             return;
         }
 
         // 移動が許可されていない場合もダメージ処理をスキップ
         if (!allowMovement_) {
-            Debug.Log($"[DAMAGE BLOCKED] : {gameObject.name} - 移動が許可されていないためダメージ処理をスキップ");
             return;
         }
 
@@ -990,11 +931,9 @@ public class Player : MonoBehaviour {
         else {
             // GameManagerが存在しない場合の従来処理
             currentHp_ -= amount;
-            Debug.Log($"[DAMAGE] : {gameObject.name} が {amount} ダメージを受けた（残りHP: {currentHp_}）");
 
             if (currentHp_ <= 0) {
                 currentHp_ = 0;
-                Debug.Log($"[GAME OVER] : {gameObject.name} が敗北しました");
             }
         }
     }
@@ -1044,7 +983,6 @@ public class Player : MonoBehaviour {
                 Debug.LogWarning($"[KEY SETTING] : 未知のプレイヤーID '{playerID_}'。デフォルト設定を使用します。");
                 break;
         }
-        Debug.Log($"[KEY SETTING] : Player {playerID_} - 左:{moveLeftKey_}, 右:{moveRightKey_}, ジャンプ:{jumpKey_}");
     }
 
     //---------------------------------------------------------------
@@ -1052,14 +990,8 @@ public class Player : MonoBehaviour {
     /// キー設定モードのオン/オフを切り替え
     private void ToggleKeySettingMode() {
         isKeySettingMode_ = !isKeySettingMode_;
-        if (isKeySettingMode_) {
-            Debug.Log($"[KEY SETTING] : Player {playerID_} がキー設定モードに入りました");
-            Debug.Log("1: 左移動キー設定, 2: 右移動キー設定, 3: ジャンプキー設定, ESC: 終了");
-        }
-        else {
-            Debug.Log($"[KEY SETTING] : Player {playerID_} がキー設定モードを終了しました");
+        if (!isKeySettingMode_) {
             settingTarget_ = "";
-            pendingKey_ = KeyCode.None;
         }
     }
 
@@ -1077,15 +1009,12 @@ public class Player : MonoBehaviour {
         if (string.IsNullOrEmpty(settingTarget_)) {
             if (Input.GetKeyDown(KeyCode.Alpha1)) {
                 settingTarget_ = "moveLeft";
-                Debug.Log($"[KEY SETTING] : Player {playerID_} - 左移動キーを設定してください（現在: {moveLeftKey_}）");
             }
             else if (Input.GetKeyDown(KeyCode.Alpha2)) {
                 settingTarget_ = "moveRight";
-                Debug.Log($"[KEY SETTING] : Player {playerID_} - 右移動キーを設定してください（現在: {moveRightKey_}）");
             }
             else if (Input.GetKeyDown(KeyCode.Alpha3)) {
                 settingTarget_ = "jump";
-                Debug.Log($"[KEY SETTING] : Player {playerID_} - ジャンプキーを設定してください（現在: {jumpKey_}）");
             }
         }
         // 設定対象が決まっている場合、キー入力を待機
@@ -1094,7 +1023,6 @@ public class Player : MonoBehaviour {
                 if (Input.GetKeyDown(key) && key != KeyCode.Escape) {
                     SetKey(settingTarget_, key);
                     settingTarget_ = "";
-                    Debug.Log("1: 左移動キー設定, 2: 右移動キー設定, 3: ジャンプキー設定, ESC: 終了");
                     break;
                 }
             }
@@ -1108,15 +1036,12 @@ public class Player : MonoBehaviour {
         switch (target) {
             case "moveLeft":
                 moveLeftKey_ = key;
-                Debug.Log($"[KEY SETTING] : Player {playerID_} の左移動キーを {key} に設定しました");
                 break;
             case "moveRight":
                 moveRightKey_ = key;
-                Debug.Log($"[KEY SETTING] : Player {playerID_} の右移動キーを {key} に設定しました");
                 break;
             case "jump":
                 jumpKey_ = key;
-                Debug.Log($"[KEY SETTING] : Player {playerID_} のジャンプキーを {key} に設定しました");
                 break;
         }
     }
@@ -1151,7 +1076,6 @@ public class Player : MonoBehaviour {
     public float GetGaugePercentage() {
         return (currentComboGauge_ / maxComboGauge_) * 100.0f;
     }
-    //→UIで欲しいのでprivateからpublicへ
 
     /// 現在のゲージレベルを取得（5段階）
     private int GetGaugeLevel() {
@@ -1197,8 +1121,6 @@ public class Player : MonoBehaviour {
         
         // 速度倍率に基づいて連打ゲージを設定
         SetComboGaugeForTargetSpeedMultiplier(targetMultiplier);
-        
-        Debug.Log($"[GAUGE ADJUST] : {gameObject.name} - 目標速度:{targetSpeed:F2} のためゲージを {currentComboGauge_:F1} に調整");
     }
 
     /// 目標とする速度倍率に基づいて連打ゲージを設定
@@ -1233,7 +1155,6 @@ public class Player : MonoBehaviour {
     public void ApplyStun(float stunDuration) {
         isStunned_ = true;
         stunTimer_ = stunDuration;
-        Debug.Log($"[STUN] : {gameObject.name} が {stunDuration}秒間スタンしました");
     }
 
     ///--------------------------------------------------------------
@@ -1260,8 +1181,6 @@ public class Player : MonoBehaviour {
             
             // 移動許可状態が変更された場合のログ出力とリアクティベーション
             if (previousAllowMovement != allowMovement_) {
-                Debug.Log($"[MOVEMENT PERMISSION] : {gameObject.name} の移動許可が {previousAllowMovement} -> {allowMovement_} に変更されました (GameState: {currentState})");
-                
                 // Playing状態になった時は緊急回復処理を実行
                 if (allowMovement_ && currentState == GameManager.GameState.Playing) {
                     ForceReactivate();
@@ -1326,8 +1245,6 @@ public class Player : MonoBehaviour {
         
         // 移動許可状態を一時的にリセット（カウントダウン終了後に有効化される）
         allowMovement_ = false;
-
-        Debug.Log($"[PLAYER RESET] : {gameObject.name} の状態がリセットされました");
     }
     
     ///--------------------------------------------------------------
@@ -1339,7 +1256,7 @@ public class Player : MonoBehaviour {
             rigidbody2D_.velocity = Vector2.zero;
             rigidbody2D_.angularVelocity = 0f;
             rigidbody2D_.drag = dragOnMove_;
-            rigidbody2D_.WakeUp(); // Rigidbody2Dを強制的に起動
+            rigidbody2D_.WakeUp();
             
             // 物理マテリアルも確認
             if (rigidbody2D_.sharedMaterial != null) {
@@ -1364,7 +1281,5 @@ public class Player : MonoBehaviour {
                 currentDirection_ = 1.0f; // デフォルトで右方向
             }
         }
-        
-        Debug.Log($"[FORCE REACTIVATE] : {gameObject.name} が緊急回復処理を実行しました (allowMovement_: {allowMovement_}, currentDirection_: {currentDirection_})");
     }
 }
