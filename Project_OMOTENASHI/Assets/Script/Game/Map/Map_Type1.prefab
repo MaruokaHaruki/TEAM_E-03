@@ -1394,7 +1394,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 677070955773612685, guid: ca41a9ac467b8c746930d2768e86991b, type: 3}
       propertyPath: maxPunchPower_
-      value: 32
+      value: 25
       objectReference: {fileID: 0}
     - target: {fileID: 3454831835191419915, guid: ca41a9ac467b8c746930d2768e86991b, type: 3}
       propertyPath: m_TagString
@@ -1468,7 +1468,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 677070955773612685, guid: ca41a9ac467b8c746930d2768e86991b, type: 3}
       propertyPath: maxPunchPower_
-      value: 32
+      value: 25
       objectReference: {fileID: 0}
     - target: {fileID: 3454831835191419915, guid: ca41a9ac467b8c746930d2768e86991b, type: 3}
       propertyPath: m_TagString

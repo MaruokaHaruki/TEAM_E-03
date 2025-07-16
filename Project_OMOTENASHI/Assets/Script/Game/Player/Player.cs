@@ -492,20 +492,39 @@ public class Player : MonoBehaviour {
         if (!allowMovement_) {
             return;
         }
+        
+                // NOTE:修正予定
+        if (collision.gameObject.CompareTag("Punching"))
+        {
+            var push = collision.gameObject.GetComponentInParent<Push>();
+            float punchPower = (push != null) ? push.CurrentPunchPower : 0f;
+            
+            // 方向転換を実行しない（コメントアウト）
+            //ReverseDirection();
+            
+            float backDirX = -Mathf.Sign(currentDirection_);
+            Vector2 knockDir = new Vector2(backDirX, 1f).normalized; // 斜め後ろ上方向に変更
+            rigidbody2D_.velocity = Vector2.zero; // プレイヤーのフォースをリセット
+            rigidbody2D_.AddForce(knockDir * punchPower, ForceMode2D.Impulse);
+            return;
+        }
 
-        // 踏みつけ判定
-        if (enableStomp_ && collision.gameObject.CompareTag("Player")) {
+        // 踴みつけ判定
+        if (enableStomp_ && collision.gameObject.CompareTag("Player"))
+        {
             Player otherPlayer = collision.gameObject.GetComponent<Player>();
             if (otherPlayer == null || otherPlayer == this) return;
 
             bool isAbove = transform.position.y > otherPlayer.transform.position.y + 0.5f;
             bool isMovingDown = rigidbody2D_.velocity.y < -1.0f;
 
-            if (isAbove && isMovingDown && !otherPlayer.isStunned_) {
+            if (isAbove && isMovingDown && !otherPlayer.isStunned_)
+            {
                 otherPlayer.ApplyStun(stompStunDuration_);
                 rigidbody2D_.velocity = new Vector2(rigidbody2D_.velocity.x, jumpForce_ * 0.7f);
 
-                if (AudioManager.Instance != null) {
+                if (AudioManager.Instance != null)
+                {
                     AudioManager.Instance.PlaySE("Player_Step");
                 }
 
@@ -628,17 +647,6 @@ public class Player : MonoBehaviour {
                     rigidbody2D_.AddForce(knockBackDirToThis * 10f, ForceMode2D.Impulse);
                 }
             }
-        }
-
-        // NOTE:修正予定
-        if (collision.gameObject.CompareTag("Punching"))
-        {
-            var push = collision.gameObject.GetComponentInParent<Push>();
-            float punchPower = (push != null) ? push.CurrentPunchPower : 0f;
-            float backDirX = -Mathf.Sign(currentDirection_);
-            Vector2 knockDir = new Vector2(backDirX, 0f);
-            rigidbody2D_.AddForce(knockDir * punchPower, ForceMode2D.Impulse);
-            return;
         }
 
         if (collision.gameObject.CompareTag("InvincibleItem")) {
