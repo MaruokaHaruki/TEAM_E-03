@@ -1,3 +1,4 @@
+using Unity.VisualScripting.Antlr3.Runtime;
 using UnityEngine;
 
 public class ResultSimpleJump : MonoBehaviour
@@ -17,12 +18,17 @@ public class ResultSimpleJump : MonoBehaviour
     private float JumpTime;
     private float Move;
 
+    [SerializeField] private GameObject PlayerStartSprite;
+    [SerializeField] private GameObject PlayerJumpSprite;
+    [SerializeField] private bool JumpSpriteChangeFlag = true;
+
     void Awake()
     {
         JumpFlag = true;
         GroundFlag = true;
         StartGroundHeight = GroundHeight = this.transform.position.y;
         JumpTime = StartJumpTime;
+        SetPlayerSprite(0);
     }
 
     void FixedUpdate()
@@ -44,6 +50,7 @@ public class ResultSimpleJump : MonoBehaviour
                 {
                     Move = JumpPower;
                     GroundFlag = false;
+                    SetPlayerSprite(1);
                 }
                 else
                 {
@@ -58,7 +65,31 @@ public class ResultSimpleJump : MonoBehaviour
             {
                 GroundFlag = true;
                 JumpTime = SetJumpTime;
+                SetPlayerSprite(0);
             }
+        }
+    }
+
+    private void SetPlayerSprite(int setNumber)
+    {
+        if (JumpSpriteChangeFlag)
+        {
+
+            bool[] set = { false, false };
+
+            switch (setNumber)
+            {
+                case 0:
+                    set[0] = true;
+                    break;
+
+                case 1:
+                    set[1] = true;
+                    break;
+            }
+
+            PlayerStartSprite.SetActive(set[0]);
+            PlayerJumpSprite.SetActive(set[1]);
         }
     }
 }

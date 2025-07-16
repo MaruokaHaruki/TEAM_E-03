@@ -30,6 +30,15 @@ public class ScoreDraw : MonoBehaviour
 
     [SerializeField] private int BlownAwayScore = 3;
 
+    [SerializeField] private GameObject PlayerAStartSprite;
+    [SerializeField] private GameObject PlayerBStartSprite;
+
+    [SerializeField] private GameObject PlayerALoserSprite;
+    [SerializeField] private GameObject PlayerBLoserSprite;
+
+    [SerializeField] private GameObject PlayerAWinnerSprite;
+    [SerializeField] private GameObject PlayerBWinnerSprite;
+
     private int PlayerAScore;
     private int PlayerBScore;
 
@@ -97,6 +106,8 @@ public class ScoreDraw : MonoBehaviour
     {
         JumpPlayerA.JumpFlag = JumpFlag;
         JumpPlayerB.JumpFlag = JumpFlag;
+
+        SetPlayersObjectActive(0);
     }
 
     void FixedUpdate()
@@ -111,7 +122,7 @@ public class ScoreDraw : MonoBehaviour
                 // �v���C���[A�X�R�A�`��
                 if (DrawDoneAScore < PlayerAScore)
                 {
-                    Instantiate(Fish, PlayerA.transform.position, Quaternion.Euler(0.0f, 0.0f, Random.Range(-0.0f, 360.0f))).transform.parent = PlayerA.transform;
+                    Instantiate(Fish, PlayerA.transform.position + (Vector3.forward * 0.5f), Quaternion.Euler(0.0f, 0.0f, Random.Range(-0.0f, 360.0f))).transform.parent = PlayerA.transform;
 
                     DrawDoneAScore++;
                 }
@@ -119,7 +130,7 @@ public class ScoreDraw : MonoBehaviour
                 // �v���C���[B�X�R�A�`��
                 if (DrawDoneBScore < PlayerBScore)
                 {
-                    Instantiate(Fish, PlayerB.transform.position, Quaternion.Euler(0.0f, 0.0f, Random.Range(0.0f, 360.0f))).transform.parent = PlayerB.transform;
+                    Instantiate(Fish, PlayerB.transform.position + (Vector3.forward * 0.5f), Quaternion.Euler(0.0f, 0.0f, Random.Range(0.0f, 360.0f))).transform.parent = PlayerB.transform;
 
                     DrawDoneBScore++;
                 }
@@ -158,6 +169,7 @@ public class ScoreDraw : MonoBehaviour
                     {
                         case 0:
                             DrawEndFlag = true;
+                            SetPlayersObjectActive(3);
                             break;
 
                         case 1:
@@ -181,6 +193,7 @@ public class ScoreDraw : MonoBehaviour
                             {
                                 DrawEndFlag = true;
                                 NextMoveTime = Time.time + PlateUpTime;
+                                SetPlayersObjectActive(2);
                             }
                             break;
 
@@ -205,6 +218,7 @@ public class ScoreDraw : MonoBehaviour
                             {
                                 DrawEndFlag = true;
                                 NextMoveTime = Time.time + PlateUpTime;
+                                SetPlayersObjectActive(1);
                             }
                             break;
                     }
@@ -279,5 +293,37 @@ public class ScoreDraw : MonoBehaviour
 
         // �X�R�A�f�[�^�ݒ肵���̂ŗL����
         SetScoreFlag = true;
+    }
+
+    private void SetPlayersObjectActive(int setNumber)
+    {
+        bool[] set = { false, false, false, false, false, false };
+        switch (setNumber)
+        {
+            case 0:
+                set[0] = true;
+                set[1] = true;
+                break;
+
+            case 1:
+                set[2] = true;
+                set[5] = true;
+                break;
+            case 2:
+                set[4] = true;
+                set[3] = true;
+                break;
+
+            case 3:
+                set[0] = true;
+                set[1] = true;
+                break;
+        }
+        PlayerAStartSprite.SetActive(set[0]);
+        PlayerBStartSprite.SetActive(set[1]);
+        PlayerALoserSprite.SetActive(set[2]);
+        PlayerBLoserSprite.SetActive(set[3]);
+        PlayerAWinnerSprite.SetActive(set[4]);
+        PlayerBWinnerSprite.SetActive(set[5]);
     }
 }
