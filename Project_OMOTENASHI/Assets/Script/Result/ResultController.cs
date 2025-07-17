@@ -2,17 +2,19 @@ using UnityEngine;
 
 public class ResultController : MonoBehaviour
 {
-    /// <summary>ã‚¹ã‚³ã‚¢æç”»ç”¨</summary>
-    [SerializeField, Header("ã‚¹ã‚³ã‚¢æç”»ç”¨")] private ScoreDraw SetScore;
+    /// <summary>ƒXƒRƒA•`‰æ—p</summary>
+    [SerializeField, Header("ƒXƒRƒA•`‰æ—p")] private ScoreDraw SetScore;
 
-    /// <summary>æç”»çµ‚äº†ãƒ•ãƒ©ã‚°</summary>
+    public AudioClip next; // Ÿ‚ÌƒV[ƒ“‚Ö‚ÌŒø‰Ê‰¹
+
+    /// <summary>•`‰æI—¹ƒtƒ‰ƒO</summary>
     internal bool DrawEndFlag;
 
     void Start()
     {
         DrawEndFlag = false;
 
-        // ã‚¹ã‚³ã‚¢æç”»é–‹å§‹
+        // ƒXƒRƒA•`‰æŠJn
         SetScore.SetScore(SceneManagerScript.Instance.Player1_Score, SceneManagerScript.Instance.Player2_Score, this);
     }
 
@@ -22,7 +24,8 @@ public class ResultController : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.Space))
             {
-                Debug.Log("ã‚·ãƒ¼ãƒ³ç§»å‹•");
+                SceneManagerScript.Instance.FadeOutScene("Title");
+                AudioManager.Instance.PlaySE(next); // Œø‰Ê‰¹‚ğÄ¶
             }
         }
     }

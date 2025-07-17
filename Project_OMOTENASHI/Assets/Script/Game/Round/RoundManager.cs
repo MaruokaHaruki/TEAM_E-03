@@ -252,22 +252,8 @@ public class RoundManager : MonoBehaviour
     ///						 個別プレイヤー設定適用
     private void ApplySettingsToPlayer(Player player)
     {
-        Debug.Log($"[ROUND MANAGER] : {player.gameObject.name} への設定適用開始");
-        
         // まずプレイヤーの状態を完全にリセット
         player.ResetPlayerState();
-        
-        // 少し待ってから設定を適用（物理演算の安定化のため）
-        StartCoroutine(DelayedApplySettings(player));
-        
-        Debug.Log($"[ROUND MANAGER] : {player.gameObject.name} への設定適用完了");
-    }
-    
-    ///--------------------------------------------------------------
-    ///						 遅延設定適用
-    private System.Collections.IEnumerator DelayedApplySettings(Player player)
-    {
-        yield return new UnityEngine.WaitForFixedUpdate();
         
         // ラウンド設定を適用
         player.enableDoubleJump_ = currentRoundSettings.enableDoubleJump;
@@ -285,15 +271,12 @@ public class RoundManager : MonoBehaviour
         player.enableGaugeDrainBoost_ = currentRoundSettings.enableGaugeDrainBoost;
         player.gaugeDrainBoostMultiplier_ = currentRoundSettings.gaugeDrainBoostMultiplier;
 
-        // 移動許可を明示的に無効化（カウントダウン終了まで待機）
-        player.allowMovement_ = false;
+        // 移動許可を明示的に有効化（ゲーム開始準備）
+        player.allowMovement_ = false; // カウントダウン終了まで待機
         
-        // プレイヤー状態の完全リセット
-        player.ForceCompleteReset();
-        
-        Debug.Log($"[ROUND MANAGER] : {player.gameObject.name} の遅延設定適用完了");
+        Debug.Log($"[ROUND MANAGER] : {player.gameObject.name} にラウンド{currentRoundNumber}の設定を適用し、状態をリセットしました");
     }
-    
+
     ///--------------------------------------------------------------
     ///						 ラウンド開始演出
     private void StartRoundTransition()
@@ -390,18 +373,6 @@ public class RoundManager : MonoBehaviour
         }
 
         // プレイヤーの移動許可を確実に有効化
-        StartCoroutine(ForceActivatePlayers());
-
-        Debug.Log($"[ROUND MANAGER] : ラウンド {currentRoundNumber} 開始！");
-    }
-    
-    ///--------------------------------------------------------------
-    ///						 プレイヤー強制有効化
-    private System.Collections.IEnumerator ForceActivatePlayers()
-    {
-        // 少し待ってから有効化（UI処理の完了を待つ）
-        yield return new UnityEngine.WaitForSeconds(0.1f);
-        
         if (GameManager.Instance != null)
         {
             if (GameManager.Instance.player1_ != null)
@@ -418,54 +389,10 @@ public class RoundManager : MonoBehaviour
                 Debug.Log($"[ROUND MANAGER] : Player2の移動許可を有効化しました");
             }
         }
-        
-        // さらに確認のため、少し待ってからもう一度チェック
-        yield return new UnityEngine.WaitForSeconds(0.2f);
-        
-        if (GameManager.Instance != null)
-        {
-            if (GameManager.Instance.player1_ != null)
-            {
-                GameManager.Instance.player1_.allowMovement_ = true;
-                GameManager.Instance.player1_.ForceReactivate();
-                // 追加：物理コンポーネントの強制リセット
-                GameManager.Instance.player1_.ForcePhysicsReset();
-                Debug.Log($"[ROUND MANAGER] : Player1の移動許可を再有効化しました");
-            }
-            
-            if (GameManager.Instance.player2_ != null)
-            {
-                GameManager.Instance.player2_.allowMovement_ = true;
-                GameManager.Instance.player2_.ForceReactivate();
-                // 追加：物理コンポーネントの強制リセット
-                GameManager.Instance.player2_.ForcePhysicsReset();
-                Debug.Log($"[ROUND MANAGER] : Player2の移動許可を再有効化しました");
-            }
-        }
-        
-        // 最終確認（さらに0.5秒後）
-        yield return new UnityEngine.WaitForSeconds(0.5f);
-        
-        if (GameManager.Instance != null)
-        {
-            if (GameManager.Instance.player1_ != null && !GameManager.Instance.player1_.allowMovement_)
-            {
-                GameManager.Instance.player1_.allowMovement_ = true;
-                GameManager.Instance.player1_.ForceReactivate();
-                GameManager.Instance.player1_.ForcePhysicsReset();
-                Debug.LogWarning($"[ROUND MANAGER] : Player1の移動許可を最終確認で再有効化しました");
-            }
-            
-            if (GameManager.Instance.player2_ != null && !GameManager.Instance.player2_.allowMovement_)
-            {
-                GameManager.Instance.player2_.allowMovement_ = true;
-                GameManager.Instance.player2_.ForceReactivate();
-                GameManager.Instance.player2_.ForcePhysicsReset();
-                Debug.LogWarning($"[ROUND MANAGER] : Player2の移動許可を最終確認で再有効化しました");
-            }
-        }
+
+        Debug.Log($"[ROUND MANAGER] : ラウンド {currentRoundNumber} 開始！");
     }
-    
+
     ///--------------------------------------------------------------
     ///						 新機能テキスト生成
     private string GetNewFeaturesText()

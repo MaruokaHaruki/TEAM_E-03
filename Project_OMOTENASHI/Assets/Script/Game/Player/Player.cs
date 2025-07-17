@@ -540,15 +540,8 @@ public class Player : MonoBehaviour {
         if (!allowMovement_) {
             return;
         }
-
-        // タグ"Comment"
-        if (collision.gameObject.CompareTag("Comment"))
-        {
-            // コメントオブジェクトと衝突したら練度ゲージを少し上げる
-            currentComboGauge_ += comboGaugePerHit_ * 0.5f;
-        }
-
-        // NOTE:修正予定
+        
+                // NOTE:修正予定
         if (collision.gameObject.CompareTag("Punching"))
         {
             var push = collision.gameObject.GetComponentInParent<Push>();
@@ -557,7 +550,7 @@ public class Player : MonoBehaviour {
             // 向きをプレイヤー同士の相対位置で決める
             Vector2 punchOrigin = collision.transform.position;
             Vector2 myPosition = transform.position;
-
+            
             Vector2 punchDir = (myPosition - punchOrigin).normalized; // パンチ元 → 自分へのベクトル（≒攻撃方向）
             Vector2 knockDir = (punchDir + Vector2.up * 0.5f).normalized; // 上方向を加えて「斜め後ろ上」に
 
@@ -567,7 +560,6 @@ public class Player : MonoBehaviour {
             // ノックバック状態にする
             isKnockedBack_ = true;
             knockBackTimer_ = knockBackDuration_;
-
             return;
         }
 
@@ -696,18 +688,14 @@ public class Player : MonoBehaviour {
                 }
             }
             else if (otherIsAheadOfMe && !amIAheadOfOther) {
-                // 自分が相手の後方から攻撃した場合
                 if (!otherIsInvincible) {
                     otherPlayer.TakeDamage(20);
-                    otherPlayer.ApplyHitEffect(); // 後方攻撃を受けた相手に視覚効果
                     KnockBack(otherPlayer);
                 }
             }
             else if (!otherIsAheadOfMe && amIAheadOfOther) {
-                // 自分が相手から後方攻撃を受けた場合
                 if (!thisIsInvincible) {
                     TakeDamage(20);
-                    ApplyHitEffect(); // 後方攻撃を受けた自分に視覚効果
                     Vector2 knockBackDirToThis = (transform.position - otherPlayer.transform.position).normalized;
                     if (knockBackDirToThis == Vector2.zero) knockBackDirToThis = (Random.insideUnitCircle).normalized;
                     rigidbody2D_.AddForce(knockBackDirToThis * 10f, ForceMode2D.Impulse);
@@ -722,48 +710,10 @@ public class Player : MonoBehaviour {
 
             isInvincible_ = true;
             invincibilityTimer_ = 2.0f;
-            Destroy(collision.gameObject);
+           // Destroy(collision.gameObject);
         }
     }
 
-    /// <summary>
-    /// 攻撃を受けたときの視覚効果（赤い点滅と震え）
-    /// </summary>
-    private void ApplyHitEffect()
-    {
-        if (spriteRenderer_ == null || spriteTransform_ == null) return;
-        
-        // 既存のDOTweenアニメーションを停止して元の状態に戻す
-        spriteRenderer_.DOKill();
-        spriteTransform_.DOKill();
-        spriteRenderer_.color = originalColor_;
-        spriteTransform_.localScale = Vector3.one;
-        
-        // 赤い点滅効果（0.5秒間、3回点滅）
-        Sequence colorSequence = DOTween.Sequence();
-        colorSequence.Append(spriteRenderer_.DOColor(Color.red, 0.08f))
-                    .Append(spriteRenderer_.DOColor(originalColor_, 0.08f))
-                    .Append(spriteRenderer_.DOColor(Color.red, 0.08f))
-                    .Append(spriteRenderer_.DOColor(originalColor_, 0.08f))
-                    .Append(spriteRenderer_.DOColor(Color.red, 0.08f))
-                    .Append(spriteRenderer_.DOColor(originalColor_, 0.1f))
-                    .OnComplete(() => {
-                        // 確実に元の色に戻す
-                        if (spriteRenderer_ != null) {
-                            spriteRenderer_.color = originalColor_;
-                        }
-                    });
-        
-        // 震え効果（0.3秒間）
-        spriteTransform_.DOShakeScale(0.3f, 0.3f, 8, 90, true)
-                      .OnComplete(() => {
-                          // 確実に元のスケールに戻す
-                          if (spriteTransform_ != null) {
-                              spriteTransform_.localScale = Vector3.one;
-                          }
-                      });
-    }
-    
     public void TakeDamage(int amount) {
         if (GameManager.Instance != null && GameManager.Instance.GetGameState() != GameManager.GameState.Playing) {
             return;
@@ -971,10 +921,12 @@ public class Player : MonoBehaviour {
     }
 
     public void ResetPlayerState() {
-        Debug.Log($"[PLAYER] : {playerID_} の状態をリセット開始");
-        
-        // 物理コンポーネントの完全リセット
-        ForcePhysicsReset();
+        if (rigidbody2D_ != null) {
+            rigidbody2D_.velocity = Vector2.zero;
+            rigidbody2D_.angularVelocity = 0f;
+            rigidbody2D_.drag = dragOnStop_;
+            rigidbody2D_.WakeUp();
+        }
 
         inputHorizontal_ = Vector2.zero;
         isJumping_ = false;
@@ -983,7 +935,6 @@ public class Player : MonoBehaviour {
         currentComboGauge_ = 0.0f;
         isSpeedBoosted_ = false;
         speedBoostTimer_ = 0.0f;
-        isGaugeDrainBoosted_ = false;
 
         isStunned_ = false;
         stunTimer_ = 0.0f;
@@ -1009,35 +960,26 @@ public class Player : MonoBehaviour {
         currentRotation_ = 0.0f;
         if (spriteTransform_ != null) {
             spriteTransform_.localRotation = Quaternion.identity;
-            spriteTransform_.localScale = Vector3.one;
         }
 
         wasHittingWall_ = false;
         allowMovement_ = false;
-        
-        // 向きを正しく設定
-        if (currentDirection_ > 0) {
-            transform.localScale = new Vector3(-1, 1, 1);
-        }
-        else {
-            transform.localScale = new Vector3(1, 1, 1);
-        }
-        
-        Debug.Log($"[PLAYER] : {playerID_} の状態リセット完了");
     }
     
     public void ForceReactivate() {
-        Debug.Log($"[PLAYER] : {playerID_} の強制再有効化開始");
+        if (rigidbody2D_ != null) {
+            rigidbody2D_.velocity = Vector2.zero;
+            rigidbody2D_.angularVelocity = 0f;
+            rigidbody2D_.drag = dragOnMove_;
+            rigidbody2D_.WakeUp();
+            
+            if (rigidbody2D_.sharedMaterial != null) {
+                rigidbody2D_.sharedMaterial = null;
+            }
+        }
         
-        // 物理コンポーネントの強制リセット
-        ForcePhysicsReset();
-        
-        // 全ての状態フラグをクリア
         isStunned_ = false;
         stunTimer_ = 0.0f;
-        isKnockedBack_ = false;
-        knockBackTimer_ = 0.0f;
-        isGaugeDrainBoosted_ = false;
         
         inputHorizontal_ = Vector2.zero;
         isJumping_ = false;
@@ -1048,106 +990,6 @@ public class Player : MonoBehaviour {
             if (currentDirection_ == 0.0f) {
                 currentDirection_ = 1.0f;
             }
-        }
-        
-        Debug.Log($"[PLAYER] : {playerID_} の強制再有効化完了 - allowMovement_: {allowMovement_}");
-    }
-    
-    /// <summary>
-    /// プレイヤーの完全リセット（新しいラウンド開始時用）
-    /// </summary>
-    public void ForceCompleteReset() {
-        Debug.Log($"[PLAYER] : {playerID_} の完全リセット開始");
-        
-        // 物理コンポーネントの完全リセット
-        ForcePhysicsReset();
-        
-        // 全ての状態を初期化
-        inputHorizontal_ = Vector2.zero;
-        isJumping_ = false;
-        isGround_ = false;
-        isHitWallFront_ = false;
-        isHitWallBuck_ = false;
-        
-        // 方向を初期化
-        currentDirection_ = 1.0f;
-        wasHittingWall_ = false;
-        
-        // 連打ゲージ関連をリセット
-        currentComboGauge_ = 0.0f;
-        isSpeedBoosted_ = false;
-        speedBoostTimer_ = 0.0f;
-        isGaugeDrainBoosted_ = false;
-        
-        // 特殊状態をリセット
-        isStunned_ = false;
-        stunTimer_ = 0.0f;
-        hasDoubleJumped_ = false;
-        shouldReverseOnLanding_ = false;
-        isKnockedBack_ = false;
-        knockBackTimer_ = 0.0f;
-        
-        // 無敵状態をリセット
-        isInvincible_ = false;
-        invincibilityTimer_ = 0.0f;
-        if (spriteRenderer_ != null) {
-            spriteRenderer_.color = originalColor_;
-        }
-        
-        // アニメーションをリセット
-        if (animator_ != null) {
-            animator_.SetBool("Run", false);
-            animator_.SetBool("Jump", false);
-        }
-        
-        // スプライト回転をリセット
-        targetRotation_ = 0.0f;
-        currentRotation_ = 0.0f;
-        if (spriteTransform_ != null) {
-            spriteTransform_.localRotation = Quaternion.identity;
-            spriteTransform_.localScale = Vector3.one;
-        }
-        
-        // 移動許可は一旦無効化（カウントダウン後に有効化される)
-        allowMovement_ = false;
-        
-        // 向きを正しく設定
-        if (currentDirection_ > 0) {
-            transform.localScale = new Vector3(-1, 1, 1);
-        }
-        else {
-            transform.localScale = new Vector3(1, 1, 1);
-        }
-        
-        Debug.Log($"[PLAYER] : {playerID_} の完全リセット完了");
-    }
-    
-    /// <summary>
-    /// 物理コンポーネントの強制リセット
-    /// </summary>
-    public void ForcePhysicsReset() {
-        if (rigidbody2D_ != null) {
-            // 物理演算を一時停止
-            rigidbody2D_.isKinematic = true;
-            
-            // 速度と回転をリセット
-            rigidbody2D_.velocity = Vector2.zero;
-            rigidbody2D_.angularVelocity = 0f;
-            
-            // 物理マテリアルをリセット
-            if (rigidbody2D_.sharedMaterial != null) {
-                rigidbody2D_.sharedMaterial = null;
-            }
-            
-            // 抵抗を初期化
-            rigidbody2D_.drag = dragOnMove_;
-            rigidbody2D_.angularDrag = 0.05f;
-            
-            // 物理演算を再開
-            rigidbody2D_.isKinematic = false;
-            rigidbody2D_.WakeUp();
-            
-            Debug.Log($"[PLAYER] : {playerID_} の物理コンポーネントリセット完了");
         }
     }
 }

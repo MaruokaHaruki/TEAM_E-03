@@ -2,13 +2,13 @@ using UnityEngine;
 
 public class KeyControllerObject : MonoBehaviour
 {
-    /// <summary>ï¿½ÏXï¿½ï¿½ï¿½ï¿½Lï¿½[</summary>
-    [SerializeField, Header("ï¿½ÏXï¿½ï¿½ï¿½ï¿½Lï¿½[")] private CHANGE_KEY_TYPE ChangeKeyType;
+    /// <summary>•ÏX‚·‚éƒL[</summary>
+    [SerializeField, Header("•ÏX‚·‚éƒL[")] private CHANGE_KEY_TYPE ChangeKeyType;
 
-    /// <summary>ï¿½ÏXï¿½mï¿½Fï¿½pï¿½Iï¿½uï¿½Wï¿½Fï¿½Nï¿½g</summary>
-    [SerializeField, Header("ï¿½ÏXï¿½mï¿½Fï¿½pï¿½Iï¿½uï¿½Wï¿½Fï¿½Nï¿½g")] private GameObject[] ChangeCheckObject;
+    /// <summary>•ÏXŠm”F—pƒIƒuƒWƒFƒNƒg</summary>
+    [SerializeField, Header("•ÏXŠm”F—pƒIƒuƒWƒFƒNƒg")] private GameObject[] ChangeCheckObject;
 
-    /// <summary>ï¿½ÏXï¿½ï¿½ï¿½ï¿½Lï¿½[ï¿½Iï¿½ï¿½penum</summary>
+    /// <summary>•ÏX‚·‚éƒL[‘I‘ğ—penum</summary>
     enum CHANGE_KEY_TYPE
     {
         PLAYER_A_JUMP = 0,
@@ -16,31 +16,31 @@ public class KeyControllerObject : MonoBehaviour
         PLAYER_B_JUMP,
         PLAYER_B_ACCELERATION,
 
-        // ï¿½Ú“ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½]ï¿½Lï¿½[ï¿½İ’ï¿½
+        // ˆÚ“®•ûŒü”½“]ƒL[İ’è
         SET_MOVE_FIELD_CHANGE_KEY,
     }
 
-    /// <summary>ï¿½Jï¿½nï¿½ï¿½ï¿½|ï¿½Wï¿½Vï¿½ï¿½ï¿½ï¿½</summary>
+    /// <summary>ŠJnƒ|ƒWƒVƒ‡ƒ“</summary>
     private Vector3 StartPosition;
 
-    // ï¿½ï¿½ï¿½Ü‚ê‚½ï¿½ï¿½ï¿½Lï¿½ï¿½ï¿½ï¿½
+    // ‹²‚Ü‚ê‚½—LŒø‰»
     [SerializeField] private GameObject GroundObject;
 
     /// <summary>
-    /// ï¿½ï¿½ï¿½Ü‚ï¿½Ä‚ï¿½ï¿½é‚©ï¿½ï¿½ï¿½è‚·ï¿½ï¿½tï¿½ï¿½ï¿½O(ï¿½ï¿½)
+    /// ‹²‚Ü‚ê‚Ä‚¢‚é‚©”»’è‚·‚éƒtƒ‰ƒO(¶)
     /// </summary>
     [SerializeField] private HitCount LeftHitFlag;
     /// <summary>
-    /// ï¿½ï¿½ï¿½Ü‚ï¿½Ä‚ï¿½ï¿½é‚©ï¿½ï¿½ï¿½è‚·ï¿½ï¿½tï¿½ï¿½ï¿½O(ï¿½E
+    /// ‹²‚Ü‚ê‚Ä‚¢‚é‚©”»’è‚·‚éƒtƒ‰ƒO(‰E
     /// </summary>
     [SerializeField] private HitCount RightHitFlag;
 
     /// <summary>
-    /// ï¿½ï¿½ï¿½Wï¿½bï¿½gï¿½{ï¿½fï¿½B
+    /// ƒŠƒWƒbƒgƒ{ƒfƒB
     /// </summary>
     private Rigidbody2D KeyRigidbody2D;
     /// <summary>
-    /// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö‚Ì—ï¿½
+    /// ã•ûŒü‚Ö‚Ì—Í
     /// </summary>
     [SerializeField] private float UpPower;
 
@@ -80,29 +80,6 @@ public class KeyControllerObject : MonoBehaviour
             ChangeCheckObject[i] = set[i] ;
         }
 
-        // MoveFieldã®å‚ç…§ã‚’è‡ªå‹•ã§è¦‹ã¤ã‘ã‚‹
-        if (MoveHieldChangeKey == null && ChangeKeyType == CHANGE_KEY_TYPE.SET_MOVE_FIELD_CHANGE_KEY)
-        {
-            MoveHieldChangeKey = FindObjectOfType<MoveField>();
-        }
-
-        // HitCountã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãŒè¨­å®šã•ã‚Œã¦ã„ãªã„å ´åˆã®è‡ªå‹•è¨­å®š
-        if (LeftHitFlag == null)
-        {
-            GameObject leftHit = new GameObject("LeftHit");
-            leftHit.transform.SetParent(this.transform);
-            leftHit.AddComponent<BoxCollider2D>().isTrigger = true;
-            LeftHitFlag = leftHit.AddComponent<HitCount>();
-        }
-
-        if (RightHitFlag == null)
-        {
-            GameObject rightHit = new GameObject("RightHit");
-            rightHit.transform.SetParent(this.transform);
-            rightHit.AddComponent<BoxCollider2D>().isTrigger = true;
-            RightHitFlag = rightHit.AddComponent<HitCount>();
-        }
-
         SetStartPosition();
     }
     public void SetStartPosition()
@@ -119,38 +96,36 @@ public class KeyControllerObject : MonoBehaviour
     private void Update()
     {
         KeyCode setKey = KeyCode.None;
-        float maxOverlapRange = 0.0f; // æœ€å¤§é‡è¤‡ç¯„å›²ã‚’è¨˜éŒ²
+        float hitRange = 0.0f;
 
-        // ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®å·¦å³ç«¯ã®ä½ç½®
-        Vector2 playerLeftAndRightPos = new Vector2(
-            this.transform.position.x - (this.transform.localScale.x * 0.5f), 
-            this.transform.position.x + (this.transform.localScale.x * 0.5f)
-        );
+        Vector2 playerLeftAndRightPos = new Vector2(this.transform.position.x - (this.transform.localScale.x * 0.5f), this.transform.position.x +(this.transform.localScale.x * 0.5f));
 
-        // å…¨ã¦ã®ã‚­ãƒ¼å¤‰æ›´ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ãƒã‚§ãƒƒã‚¯
         for (int i = 0; i < ChangeCheckObject.Length; i++)
         {
             if (HitCheck(this.transform.position, this.transform.localScale, ChangeCheckObject[i].transform.position, ChangeCheckObject[i].transform.localScale))
             {
-                // ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã¨ã®é‡è¤‡ç¯„å›²ã‚’è¨ˆç®—
-                float objectLeft = ChangeCheckObject[i].transform.position.x - (ChangeCheckObject[i].transform.localScale.x * 0.5f);
-                float objectRight = ChangeCheckObject[i].transform.position.x + (ChangeCheckObject[i].transform.localScale.x * 0.5f);
-                
-                // é‡è¤‡ç¯„å›²ã®è¨ˆç®—
-                float overlapLeft = Mathf.Max(playerLeftAndRightPos.x, objectLeft);
-                float overlapRight = Mathf.Min(playerLeftAndRightPos.y, objectRight);
-                float overlapRange = Mathf.Max(0, overlapRight - overlapLeft);
+                float objectHitRange = 0.0f;
 
-                // æœ€å¤§é‡è¤‡ç¯„å›²ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ã‚­ãƒ¼ã‚’é¸æŠ
-                if (overlapRange > maxOverlapRange)
+                if (playerLeftAndRightPos.x < (ChangeCheckObject[i].transform.position.x - (ChangeCheckObject[i].transform.localScale.x * 0.5f)))
                 {
-                    maxOverlapRange = overlapRange;
+                    objectHitRange = Mathf.Abs((ChangeCheckObject[i].transform.position.x - (ChangeCheckObject[i].transform.localScale.x * 0.5f)) - playerLeftAndRightPos.y);
+                }
+                else if (playerLeftAndRightPos.y > (ChangeCheckObject[i].transform.position.x + (ChangeCheckObject[i].transform.localScale.x * 0.5f)))
+                {
+                    objectHitRange = Mathf.Abs(playerLeftAndRightPos.x - (ChangeCheckObject[i].transform.position.x + (ChangeCheckObject[i].transform.localScale.x * 0.5f)));
+                }
+                else
+                {
+                    objectHitRange = Mathf.Abs(playerLeftAndRightPos.x - playerLeftAndRightPos.y);
+                }
+
+                if (objectHitRange > hitRange)
+                {
                     setKey = ChangeCheckObject[i].GetComponent<KeyObjectData_Field>().SetKey;
                 }
             }
         }
 
-        // ã‚­ãƒ¼ãŒè¨­å®šã•ã‚Œã¦ã„ã‚‹å ´åˆã€å¯¾å¿œã™ã‚‹ã‚­ãƒ¼ã‚’æ›´æ–°
         if (setKey != KeyCode.None)
         {
             switch (ChangeKeyType)
@@ -174,23 +149,17 @@ public class KeyControllerObject : MonoBehaviour
                 case CHANGE_KEY_TYPE.SET_MOVE_FIELD_CHANGE_KEY:
                     if (MoveHieldChangeKey != null)
                     {
-                        MoveHieldChangeKey.ChangeStartKey(setKey);
-                    }
-                    else
-                    {
-                        Debug.LogWarning("MoveHieldChangeKey is null!");
+                        MoveHieldChangeKey.StartKey = setKey;
                     }
                     break;
             }
         }
 
-        // å·¦å³ã®ãƒ’ãƒƒãƒˆåˆ¤å®šä½ç½®ã‚’ãƒªã‚»ãƒƒãƒˆ
         {
             LeftHitFlag.transform.parent.localPosition = Vector3.zero;
             RightHitFlag.transform.parent.localPosition = Vector3.zero;
         }
 
-        // å·¦å³ä¸¡æ–¹ã«ãƒ’ãƒƒãƒˆã—ã¦ã„ã‚‹å ´åˆã€åœ°é¢ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’è¡¨ç¤º
         if ((LeftHitFlag.MyHitCount > 0) && (RightHitFlag.MyHitCount > 0))
         {
             if (!GroundObject.activeSelf)
@@ -213,13 +182,13 @@ public class KeyControllerObject : MonoBehaviour
     {
         bool hitFlag = true;
 
-        // Xï¿½ï¿½
+        // X²
         if (((srcPos.x - (srcSize.x * 0.5f)) >= (dstPos.x + (dstSize.x * 0.5f))) || ((srcPos.x + (srcSize.x * 0.5f)) <= (dstPos.x - (dstSize.x * 0.5f))))
         {
             hitFlag = false;
         }
 
-        // Yï¿½ï¿½
+        // Y²
         if (hitFlag && (((srcPos.y - (srcSize.y * 0.5f)) >= (dstPos.y + (dstSize.y * 0.5f))) || ((srcPos.y + (srcSize.y * 0.5f)) <= (dstPos.y - (dstSize.y * 0.5f)))))
         {
             hitFlag = false;
@@ -232,7 +201,7 @@ public class KeyControllerObject : MonoBehaviour
     {
         if (collision.gameObject.tag == "Player")
         {
-            if ((this.transform.position.y - (this.transform.localScale.y * 0.5f)) >= (collision.transform.position.y + 0.2f/*ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½[ï¿½ÌƒTï¿½Cï¿½Yï¿½ï¿½2ï¿½ÅŠï¿½ï¿½ï¿½ï¿½ÄŒë·ï¿½ï¿½0.1fï¿½ï¿½ï¿½ç‚µï¿½ï¿½ï¿½l*/))
+            if ((this.transform.position.y - (this.transform.localScale.y * 0.5f)) >= (collision.transform.position.y + 0.2f/*ƒvƒŒƒCƒ„[‚ÌƒTƒCƒY‚ğ2‚ÅŠ„‚Á‚ÄŒë·‚Å0.1fŒ¸‚ç‚µ‚½’l*/))
             {
                 KeyRigidbody2D.AddForceY(UpPower, ForceMode2D.Impulse);
             }

@@ -133,14 +133,6 @@ public class CameraController : MonoBehaviour
 
     void Update()
     {
-        // テスト用キー入力処理を無効化
-        /*
-        if (Input.GetKeyDown(KeyCode.T))
-        {
-            // テスト用の処理
-        }
-        */
-        
         if (ObservationFlag)
         {
             ObservationTime -= Time.deltaTime;

@@ -1041,9 +1041,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   commentPrefab: {fileID: 8455506660463978154, guid: e2a12eb63cb4789418f9e3b13575376c, type: 3}
   commentList:
-  - Hello World!
-  - Unko
-  - Sake
+  - Thank you for playing !!!
+  - Thank you for playing !!!
+  - Thank you for playing !!!
   spawnXMin: -5
   spawnXMax: 5
   spawnY: 2

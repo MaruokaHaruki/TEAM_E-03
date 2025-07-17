@@ -37,6 +37,9 @@ public class CameraShake : MonoBehaviour
     public UnityEvent OnShakeStart;
     public UnityEvent OnShakeEnd;
     
+    [Header("デバッグ")]
+    public bool enableDebugKeys = true;
+    
     /// <summary>
     /// 対象となるカメラ
     /// </summary>
@@ -60,6 +63,20 @@ public class CameraShake : MonoBehaviour
     void Start()
     {
         InitializeCamera();
+    }
+
+    /// <summary>
+    /// デバッグ用のキー入力チェック
+    /// </summary>
+    void Update()
+    {
+        // デバッグキーが有効で、シェイク中でない場合のみ処理
+        if (enableDebugKeys && !isShaking)
+        {
+            if (Input.GetKeyDown(KeyCode.Space)) ShakeCamera(ShakeType.Light);
+            else if (Input.GetKeyDown(KeyCode.Return)) ShakeCamera(ShakeType.Medium);
+            else if (Input.GetKeyDown(KeyCode.T)) ShakeCamera(ShakeType.Heavy);
+        }
     }
 
     /// <summary>
