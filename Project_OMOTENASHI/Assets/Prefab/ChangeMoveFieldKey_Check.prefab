@@ -226,12 +226,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d0044fe591e820043b49e5a31e769b32, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MovePower: 5
+  MovePower: 32
   RightMoveFlag: 1
   PlayerRigidBody:
   - {fileID: 0}
   - {fileID: 0}
   StartKey: 98
+  SetAnimation: {fileID: 0}
+  AutoDirectionChange: 1
+  currentKey: 0
 --- !u!61 &1698647168384537594
 BoxCollider2D:
   m_ObjectHideFlags: 0

@@ -81,15 +81,7 @@ public class MoveField : MonoBehaviour {
     }
 
     private void OnTriggerStay2D(Collider2D collision) {
-        if (collision.gameObject.tag != "Player") {
-            return;
-        }
 
-        foreach (Rigidbody2D player in PlayerRigidBody) {
-            if (collision.gameObject == player.gameObject) {
-                player.AddForceX(MovePower * (RightMoveFlag ? 1.0f : -1.0f), ForceMode2D.Impulse);
-            }
-        }
     }
 
     private void OnTriggerEnter2D(Collider2D collision) {
@@ -98,6 +90,17 @@ public class MoveField : MonoBehaviour {
             KeyObjectData_Field keyData = collision.GetComponent<KeyObjectData_Field>();
             if (keyData != null) {
                 ChangeStartKey(keyData.SetKey);
+            }
+        }
+
+
+        if (collision.gameObject.tag != "Player") {
+            return;
+        }
+
+        foreach (Rigidbody2D player in PlayerRigidBody) {
+            if (collision.gameObject == player.gameObject) {
+                player.AddForceX(MovePower * (RightMoveFlag ? 1.0f : -1.0f), ForceMode2D.Impulse);
             }
         }
     }
