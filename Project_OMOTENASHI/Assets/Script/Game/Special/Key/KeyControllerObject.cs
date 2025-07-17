@@ -2,13 +2,13 @@ using UnityEngine;
 
 public class KeyControllerObject : MonoBehaviour
 {
-    /// <summary>•ÏX‚·‚éƒL[</summary>
-    [SerializeField, Header("•ÏX‚·‚éƒL[")] private CHANGE_KEY_TYPE ChangeKeyType;
+    /// <summary>ï¿½ÏXï¿½ï¿½ï¿½ï¿½Lï¿½[</summary>
+    [SerializeField, Header("ï¿½ÏXï¿½ï¿½ï¿½ï¿½Lï¿½[")] private CHANGE_KEY_TYPE ChangeKeyType;
 
-    /// <summary>•ÏXŠm”F—pƒIƒuƒWƒFƒNƒg</summary>
-    [SerializeField, Header("•ÏXŠm”F—pƒIƒuƒWƒFƒNƒg")] private GameObject[] ChangeCheckObject;
+    /// <summary>ï¿½ÏXï¿½mï¿½Fï¿½pï¿½Iï¿½uï¿½Wï¿½Fï¿½Nï¿½g</summary>
+    [SerializeField, Header("ï¿½ÏXï¿½mï¿½Fï¿½pï¿½Iï¿½uï¿½Wï¿½Fï¿½Nï¿½g")] private GameObject[] ChangeCheckObject;
 
-    /// <summary>•ÏX‚·‚éƒL[‘I‘ğ—penum</summary>
+    /// <summary>ï¿½ÏXï¿½ï¿½ï¿½ï¿½Lï¿½[ï¿½Iï¿½ï¿½penum</summary>
     enum CHANGE_KEY_TYPE
     {
         PLAYER_A_JUMP = 0,
@@ -16,31 +16,31 @@ public class KeyControllerObject : MonoBehaviour
         PLAYER_B_JUMP,
         PLAYER_B_ACCELERATION,
 
-        // ˆÚ“®•ûŒü”½“]ƒL[İ’è
+        // ï¿½Ú“ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½]ï¿½Lï¿½[ï¿½İ’ï¿½
         SET_MOVE_FIELD_CHANGE_KEY,
     }
 
-    /// <summary>ŠJnƒ|ƒWƒVƒ‡ƒ“</summary>
+    /// <summary>ï¿½Jï¿½nï¿½ï¿½ï¿½|ï¿½Wï¿½Vï¿½ï¿½ï¿½ï¿½</summary>
     private Vector3 StartPosition;
 
-    // ‹²‚Ü‚ê‚½—LŒø‰»
+    // ï¿½ï¿½ï¿½Ü‚ê‚½ï¿½ï¿½ï¿½Lï¿½ï¿½ï¿½ï¿½
     [SerializeField] private GameObject GroundObject;
 
     /// <summary>
-    /// ‹²‚Ü‚ê‚Ä‚¢‚é‚©”»’è‚·‚éƒtƒ‰ƒO(¶)
+    /// ï¿½ï¿½ï¿½Ü‚ï¿½Ä‚ï¿½ï¿½é‚©ï¿½ï¿½ï¿½è‚·ï¿½ï¿½tï¿½ï¿½ï¿½O(ï¿½ï¿½)
     /// </summary>
     [SerializeField] private HitCount LeftHitFlag;
     /// <summary>
-    /// ‹²‚Ü‚ê‚Ä‚¢‚é‚©”»’è‚·‚éƒtƒ‰ƒO(‰E
+    /// ï¿½ï¿½ï¿½Ü‚ï¿½Ä‚ï¿½ï¿½é‚©ï¿½ï¿½ï¿½è‚·ï¿½ï¿½tï¿½ï¿½ï¿½O(ï¿½E
     /// </summary>
     [SerializeField] private HitCount RightHitFlag;
 
     /// <summary>
-    /// ƒŠƒWƒbƒgƒ{ƒfƒB
+    /// ï¿½ï¿½ï¿½Wï¿½bï¿½gï¿½{ï¿½fï¿½B
     /// </summary>
     private Rigidbody2D KeyRigidbody2D;
     /// <summary>
-    /// ã•ûŒü‚Ö‚Ì—Í
+    /// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö‚Ì—ï¿½
     /// </summary>
     [SerializeField] private float UpPower;
 
@@ -182,13 +182,13 @@ public class KeyControllerObject : MonoBehaviour
     {
         bool hitFlag = true;
 
-        // X²
+        // Xï¿½ï¿½
         if (((srcPos.x - (srcSize.x * 0.5f)) >= (dstPos.x + (dstSize.x * 0.5f))) || ((srcPos.x + (srcSize.x * 0.5f)) <= (dstPos.x - (dstSize.x * 0.5f))))
         {
             hitFlag = false;
         }
 
-        // Y²
+        // Yï¿½ï¿½
         if (hitFlag && (((srcPos.y - (srcSize.y * 0.5f)) >= (dstPos.y + (dstSize.y * 0.5f))) || ((srcPos.y + (srcSize.y * 0.5f)) <= (dstPos.y - (dstSize.y * 0.5f)))))
         {
             hitFlag = false;
@@ -201,7 +201,7 @@ public class KeyControllerObject : MonoBehaviour
     {
         if (collision.gameObject.tag == "Player")
         {
-            if ((this.transform.position.y - (this.transform.localScale.y * 0.5f)) >= (collision.transform.position.y + 0.2f/*ƒvƒŒƒCƒ„[‚ÌƒTƒCƒY‚ğ2‚ÅŠ„‚Á‚ÄŒë·‚Å0.1fŒ¸‚ç‚µ‚½’l*/))
+            if ((this.transform.position.y - (this.transform.localScale.y * 0.5f)) >= (collision.transform.position.y + 0.2f/*ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½[ï¿½ÌƒTï¿½Cï¿½Yï¿½ï¿½2ï¿½ÅŠï¿½ï¿½ï¿½ï¿½ÄŒë·ï¿½ï¿½0.1fï¿½ï¿½ï¿½ç‚µï¿½ï¿½ï¿½l*/))
             {
                 KeyRigidbody2D.AddForceY(UpPower, ForceMode2D.Impulse);
             }

@@ -540,8 +540,11 @@ public class Player : MonoBehaviour {
         if (!allowMovement_) {
             return;
         }
+
+        // 加速器の処理
+
         
-                // NOTE:修正予定
+        // NOTE:修正予定
         if (collision.gameObject.CompareTag("Punching"))
         {
             var push = collision.gameObject.GetComponentInParent<Push>();

@@ -3,14 +3,14 @@ using UnityEngine;
 
 public class MoveField : MonoBehaviour
 {
-    /// <summary>‰Á‚¦‚é—Í</summary>
-    [SerializeField, Header("‰Á‚¦‚é—Í")] private float MovePower;
-    /// <summary>‰EˆÚ“®•ûŒüƒtƒ‰ƒO</summary>
-    [SerializeField, Header("ˆÚ“®•ûŒüƒtƒ‰ƒO")] private bool RightMoveFlag;
-    /// <summary>ƒvƒŒƒCƒ„[</summary>
-    [SerializeField, Header("ƒvƒŒƒCƒ„[")] private Rigidbody2D[] PlayerRigidBody;
+    /// <summary>ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½</summary>
+    [SerializeField, Header("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½")] private float MovePower;
+    /// <summary>ï¿½Eï¿½Ú“ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½tï¿½ï¿½ï¿½O</summary>
+    [SerializeField, Header("ï¿½Ú“ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½tï¿½ï¿½ï¿½O")] private bool RightMoveFlag;
+    /// <summary>ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½[</summary>
+    [SerializeField, Header("ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½[")] private Rigidbody2D[] PlayerRigidBody;
 
-    // ŠJnƒL[
+    // ï¿½Jï¿½nï¿½Lï¿½[
     public KeyCode StartKey = KeyCode.B;
 
     private void Start()
