@@ -24,6 +24,19 @@ public class MoveField : MonoBehaviour
     /// <summary>現在のキーを表示用</summary>
     [SerializeField, Header("現在設定されているキー（表示用）")] private KeyCode currentKey;
 
+    /// <summary>
+    /// 外部からStartKeyを変更するためのメソッド
+    /// </summary>
+    /// <param name="newKey">新しいキー</param>
+    public void ChangeStartKey(KeyCode newKey)
+    {
+        if (StartKey != newKey)
+        {
+            Debug.Log($"MoveField StartKey changed from {StartKey} to {newKey}");
+            StartKey = newKey;
+        }
+    }
+
     private void Start()
     {
         PlayerRigidBody = new Rigidbody2D[2];
@@ -88,7 +101,20 @@ public class MoveField : MonoBehaviour
         {
             if (collision.gameObject == player.gameObject)
             {
-                    player.AddForceX(MovePower * (RightMoveFlag ? 1.0f : -1.0f), ForceMode2D.Impulse);
+                player.AddForceX(MovePower * (RightMoveFlag ? 1.0f : -1.0f), ForceMode2D.Impulse);
+            }
+        }
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        // キーオブジェクトとの接触でキー変更
+        if (collision.gameObject.tag == "KeyData")
+        {
+            KeyObjectData_Field keyData = collision.GetComponent<KeyObjectData_Field>();
+            if (keyData != null)
+            {
+                ChangeStartKey(keyData.SetKey);
             }
         }
     }

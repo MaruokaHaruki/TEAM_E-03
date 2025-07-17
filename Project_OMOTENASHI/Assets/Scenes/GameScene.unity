@@ -3645,6 +3645,8 @@ MonoBehaviour:
   MainCamera: {fileID: 0}
   AllUiTransform:
   - {fileID: 6748056603516564731}
+  - {fileID: 2843288208752567888}
+  - {fileID: 1036118308}
   MoveRatio: 10
   victoryZoomSize: 2.5
   victoryZoomDuration: 3

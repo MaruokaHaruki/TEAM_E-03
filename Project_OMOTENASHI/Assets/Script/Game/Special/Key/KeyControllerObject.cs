@@ -86,6 +86,23 @@ public class KeyControllerObject : MonoBehaviour
             MoveHieldChangeKey = FindObjectOfType<MoveField>();
         }
 
+        // HitCountオブジェクトが設定されていない場合の自動設定
+        if (LeftHitFlag == null)
+        {
+            GameObject leftHit = new GameObject("LeftHit");
+            leftHit.transform.SetParent(this.transform);
+            leftHit.AddComponent<BoxCollider2D>().isTrigger = true;
+            LeftHitFlag = leftHit.AddComponent<HitCount>();
+        }
+
+        if (RightHitFlag == null)
+        {
+            GameObject rightHit = new GameObject("RightHit");
+            rightHit.transform.SetParent(this.transform);
+            rightHit.AddComponent<BoxCollider2D>().isTrigger = true;
+            RightHitFlag = rightHit.AddComponent<HitCount>();
+        }
+
         SetStartPosition();
     }
     public void SetStartPosition()
@@ -157,8 +174,7 @@ public class KeyControllerObject : MonoBehaviour
                 case CHANGE_KEY_TYPE.SET_MOVE_FIELD_CHANGE_KEY:
                     if (MoveHieldChangeKey != null)
                     {
-                        Debug.Log($"MoveField StartKey changed from {MoveHieldChangeKey.StartKey} to {setKey}");
-                        MoveHieldChangeKey.StartKey = setKey;
+                        MoveHieldChangeKey.ChangeStartKey(setKey);
                     }
                     else
                     {
