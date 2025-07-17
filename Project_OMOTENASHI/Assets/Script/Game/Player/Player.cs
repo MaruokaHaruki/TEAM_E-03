@@ -57,6 +57,12 @@ public class Player : MonoBehaviour {
     public float rainbowSpeed_ = 2.0f;
     public float invincibilitySpeedMultiplier_ = 2.0f;
 
+    // ダメージエフェクト設定
+    [Header("ダメージエフェクト設定")]
+    public float damageFlashDuration_ = 1.0f;
+    public float damageFlashInterval_ = 0.1f;
+    public Color damageFlashColor_ = Color.red;
+
     // スプライト回転設定
     [Header("スプライト回転設定")]
     public bool enableSpriteRotation_ = true;
@@ -118,6 +124,12 @@ public class Player : MonoBehaviour {
     private float invincibilityTimer_ = 0.0f;
     private Color originalColor_ = Color.white;
 
+    // ダメージエフェクト関連
+    private bool isDamageFlashing_ = false;
+    private float damageFlashTimer_ = 0.0f;
+    private float damageFlashIntervalTimer_ = 0.0f;
+    private bool isFlashRed_ = false;
+
     // キー設定関連
     private string settingTarget_ = "";
 
@@ -172,13 +184,37 @@ public class Player : MonoBehaviour {
             }
         }
 
+        // ダメージ点滅エフェクトの処理
+        if (isDamageFlashing_) {
+            damageFlashTimer_ -= Time.deltaTime;
+            damageFlashIntervalTimer_ -= Time.deltaTime;
+
+            if (damageFlashIntervalTimer_ <= 0.0f) {
+                isFlashRed_ = !isFlashRed_;
+                damageFlashIntervalTimer_ = damageFlashInterval_;
+                UpdateDamageFlashEffect();
+            }
+
+            if (damageFlashTimer_ <= 0.0f) {
+                isDamageFlashing_ = false;
+                isFlashRed_ = false;
+                if (spriteRenderer_ != null && !isInvincible_) {
+                    spriteRenderer_.color = originalColor_;
+                }
+            }
+        }
+
         if (isInvincible_) {
             invincibilityTimer_ -= Time.deltaTime;
-            UpdateRainbowEffect();
+            
+            // 無敵状態の場合はレインボーエフェクトを優先
+            if (!isDamageFlashing_) {
+                UpdateRainbowEffect();
+            }
             
             if (invincibilityTimer_ <= 0.0f) {
                 isInvincible_ = false;
-                if (spriteRenderer_ != null) {
+                if (spriteRenderer_ != null && !isDamageFlashing_) {
                     spriteRenderer_.color = originalColor_;
                 }
             }
@@ -723,6 +759,9 @@ public class Player : MonoBehaviour {
             return;
         }
 
+        // ダメージ点滅エフェクトを開始
+        StartDamageFlash();
+
         if (GameManager.Instance != null) {
             GameManager.Instance.TakeDamage(playerID_, amount);
             currentHp_ = GameManager.Instance.GetPlayerCurrentHp(playerID_);
@@ -733,7 +772,6 @@ public class Player : MonoBehaviour {
                 currentHp_ = 0;
             }
         }
-
     }
 
     private void KnockBack(Player target) {
@@ -987,6 +1025,12 @@ public class Player : MonoBehaviour {
 
         isInvincible_ = false;
         invincibilityTimer_ = 0.0f;
+        
+        // ダメージエフェクトをリセット
+        isDamageFlashing_ = false;
+        damageFlashTimer_ = 0.0f;
+        isFlashRed_ = false;
+        
         if (spriteRenderer_ != null) {
             spriteRenderer_.color = originalColor_;
         }
@@ -1034,6 +1078,33 @@ public class Player : MonoBehaviour {
             if (currentDirection_ == 0.0f) {
                 currentDirection_ = 1.0f;
             }
+        }
+    }
+
+    /// <summary>
+    /// ダメージ点滅エフェクトを開始
+    /// </summary>
+    private void StartDamageFlash() {
+        isDamageFlashing_ = true;
+        damageFlashTimer_ = damageFlashDuration_;
+        damageFlashIntervalTimer_ = 0.0f;
+        isFlashRed_ = true;
+        UpdateDamageFlashEffect();
+    }
+
+    /// <summary>
+    /// ダメージ点滅エフェクトの色を更新
+    /// </summary>
+    private void UpdateDamageFlashEffect() {
+        if (spriteRenderer_ == null) return;
+
+        if (isFlashRed_) {
+            Color flashColor = damageFlashColor_;
+            flashColor.a = originalColor_.a;
+            spriteRenderer_.color = flashColor;
+        }
+        else {
+            spriteRenderer_.color = originalColor_;
         }
     }
 }
