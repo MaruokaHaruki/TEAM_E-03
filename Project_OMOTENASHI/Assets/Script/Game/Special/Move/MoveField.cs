@@ -13,6 +13,8 @@ public class MoveField : MonoBehaviour
     // �J�n�L�[
     public KeyCode StartKey = KeyCode.B;
 
+    public PopAnimation SetAnimation;
+
     private void Start()
     {
         PlayerRigidBody = new Rigidbody2D[2];
@@ -25,7 +27,8 @@ public class MoveField : MonoBehaviour
         if (Input.GetKeyDown(StartKey))
         {
             RightMoveFlag = !RightMoveFlag;
-            this.transform.localScale = new Vector3(-this.transform.localScale.x, this.transform.localScale.y, this.transform.localScale.z);
+            SetAnimation.PlayAnimation();
+            //this.transform.localScale = new Vector3(-this.transform.localScale.x, this.transform.localScale.y, this.transform.localScale.z);
         }
     }
 

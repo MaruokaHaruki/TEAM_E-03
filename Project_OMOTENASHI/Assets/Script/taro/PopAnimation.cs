@@ -1,82 +1,82 @@
 using UnityEngine;
-using DG.Tweening; // DOTweenã®åå‰ç©ºé–“ã‚’ã‚¤ãƒ³ãƒãƒ¼ãƒˆ
+using DG.Tweening; // DOTween‚ğg—p‚·‚é‚½‚ß‚É•K—v
 
 /// <summary>
-/// ãƒãƒƒãƒ—ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã‚’åˆ¶å¾¡ã™ã‚‹ã‚¯ãƒ©ã‚¹
+/// ƒIƒuƒWƒFƒNƒg‚ğƒ|ƒbƒv‚ÉƒAƒjƒ[ƒVƒ‡ƒ“‚³‚¹‚éƒXƒNƒŠƒvƒgB
 /// </summary>
 public class PopAnimation : MonoBehaviour
 {
-    [Header("ãƒãƒƒãƒ—ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³è¨­å®š")]
-    [Tooltip("ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³é–‹å§‹æ™‚ã®ã‚¹ã‚±ãƒ¼ãƒ«å€ç‡")]
+    [Header("¥ ƒAƒjƒ[ƒVƒ‡ƒ“İ’è")]
+    [Tooltip("—\”õ“®ì‚ÅŠg‘å‚·‚é”{—¦")]
     [SerializeField] private float anticipationScaleFactor_ = 1.2f;
 
-    [Tooltip("ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³å‰åŠã®æŒç¶šæ™‚é–“")]
+    [Tooltip("ƒAƒjƒ[ƒVƒ‡ƒ“‘O”¼‚É‚©‚©‚éŠÔi•bj")]
     [SerializeField] private float firstHalfDuration_ = 0.15f;
 
-    [Tooltip("ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³å¾ŒåŠã®æŒç¶šæ™‚é–“")]
-    [SerializeField] private float secondHalfDuration_ = 0.4f; // ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³å¾ŒåŠã®æŒç¶šæ™‚é–“
+    [Tooltip("ƒAƒjƒ[ƒVƒ‡ƒ“Œã”¼‚É‚©‚©‚éŠÔi•bj")]
+    [SerializeField] private float secondHalfDuration_ = 0.4f; // Œƒ‚µ‚¢“®‚«‚ğŒ©‚¹‚é‚½‚ß­‚µ‰„’·
 
-    [Tooltip("ãƒã‚¦ãƒ³ã‚¹ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã®æŒ¯å¹…")]
+    [Tooltip("ƒoƒEƒ“ƒX‚ÌU‚ê•i‘å‚«‚¢‚Ù‚ÇŒƒ‚µ‚­—h‚ê‚éj")]
     [SerializeField] private float bounceAmplitude_ = 1.5f;
 
-    [Tooltip("ãƒã‚¦ãƒ³ã‚¹ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã®å‘¨æœŸ")]
+    [Tooltip("ƒoƒEƒ“ƒX‚ÌU“®i¬‚³‚¢‚Ù‚Ç×‚©‚­—h‚ê‚éj")]
     [SerializeField] private float bouncePeriod_ = 0.3f;
 
 
-    // åˆæœŸã‚¹ã‚±ãƒ¼ãƒ«
+    // ƒvƒ‰ƒCƒx[ƒg•Ï”
     private Vector3 initialScale_;
     private Sequence currentSequence_;
-    private bool isFlipped_ = false; // ã‚¹ãƒ—ãƒ©ã‚¤ãƒˆã®å‘ããŒåè»¢ã—ã¦ã„ã‚‹ã‹ã©ã†ã‹
+    private bool isFlipped_ = false; // Œ»İ”½“]‚µ‚Ä‚¢‚é‚©‚Ç‚¤‚©‚Ìó‘Ô
 
     private void Awake()
     {
-        // ç¾åœ¨ã®ã‚¹ã‚±ãƒ¼ãƒ«ã‚’å–å¾—
+        // ‚±‚ÌƒXƒNƒŠƒvƒg‚ªƒAƒ^ƒbƒ`‚³‚ê‚½ƒIƒuƒWƒFƒNƒg‚ÌTransform‚ğ‘ÎÛ‚Æ‚·‚é
         Vector3 currentScale = transform.localScale;
         initialScale_ = new Vector3(Mathf.Abs(currentScale.x), currentScale.y, currentScale.z);
 
-        // ã‚¹ãƒ—ãƒ©ã‚¤ãƒˆã®å‘ããŒåè»¢ã—ã¦ã„ã‚‹ã‹ã©ã†ã‹ã‚’åˆ¤å®š
+        // ƒQ[ƒ€ŠJn‚ÌŒü‚«‚©‚çA‰Šú‚Ì”½“]ó‘Ô‚ğ³‚µ‚­İ’è‚·‚é
         isFlipped_ = currentScale.x < 0;
     }
 
     private void Update()
     {
-        // Xã‚­ãƒ¼ãŒæŠ¼ã•ã‚ŒãŸã‚‰ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã‚’å†ç”Ÿ
+        // XƒL[‚ª‰Ÿ‚³‚ê‚½‚çƒAƒjƒ[ƒVƒ‡ƒ“‚ğÄ¶
         if (Input.GetKeyDown(KeyCode.X))
         {
-            PlayAnimation();
+            //PlayAnimation();
         }
     }
 
     /// <summary>
-    /// ï¿½Aï¿½jï¿½ï¿½ï¿½[ï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Äï¿½ï¿½ï¿½ï¿½Ü‚ï¿½ï¿½B
+    /// ƒAƒjƒ[ƒVƒ‡ƒ“‚ğÄ¶‚µ‚Ü‚·B
     /// </summary>
     public void PlayAnimation()
     {
-        // ï¿½ï¿½ï¿½ï¿½ï¿½ÌƒAï¿½jï¿½ï¿½ï¿½[ï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½~ï¿½ï¿½ï¿½ÄAï¿½ï¿½ï¿½ï¿½ï¿½Éï¿½ï¿½ï¿½ï¿½Jï¿½nï¿½ï¿½ï¿½ï¿½
+        // Šù‘¶‚ÌƒAƒjƒ[ƒVƒ‡ƒ“‚ğ’â~‚µ‚ÄA‚·‚®‚ÉŸ‚ğŠJn‚·‚é
         currentSequence_?.Kill();
 
-        // ï¿½ï¿½ï¿½]ï¿½ï¿½Ô‚ï¿½Ø‚ï¿½Ö‚ï¿½ï¿½ï¿½
+        // ”½“]ó‘Ô‚ğØ‚è‘Ö‚¦‚é
         isFlipped_ = !isFlipped_;
 
-        // ï¿½Ú•Wï¿½Æ‚È‚ï¿½Xï¿½Xï¿½Pï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½vï¿½Z
+        // –Ú•W‚Æ‚È‚éXƒXƒP[ƒ‹‚ğŒvZ
         float targetX = isFlipped_ ? -initialScale_.x : initialScale_.x;
 
-        // ï¿½Aï¿½jï¿½ï¿½ï¿½[ï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½Vï¿½[ï¿½Pï¿½ï¿½ï¿½Xï¿½ï¿½ï¿½ì¬
+        // ƒAƒjƒ[ƒVƒ‡ƒ“ƒV[ƒPƒ“ƒX‚ğì¬
         currentSequence_ = DOTween.Sequence();
 
-        // 1. ï¿½\ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Fï¿½ï¿½ï¿½ï¿½ï¿½å‚«ï¿½ï¿½ï¿½È‚ï¿½
+        // 1. —\”õ“®ìF­‚µ‘å‚«‚­‚È‚é
         currentSequence_.Append(
             transform.DOScale(initialScale_ * anticipationScaleFactor_, firstHalfDuration_)
                 .SetEase(Ease.OutSine)
         );
 
-        // 2. ï¿½Ú•Wï¿½ÌƒXï¿½Pï¿½[ï¿½ï¿½ï¿½iXï¿½ï¿½ï¿½ï¿½ï¿½]ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ôjï¿½Éƒoï¿½Eï¿½ï¿½ï¿½Xï¿½ï¿½ï¿½È‚ï¿½ï¿½ï¿½ß‚ï¿½
+        // 2. –Ú•W‚ÌƒXƒP[ƒ‹iX‚ª”½“]‚µ‚½ó‘Ôj‚ÉƒoƒEƒ“ƒX‚µ‚È‚ª‚ç–ß‚é
         currentSequence_.Append(
             transform.DOScale(new Vector3(targetX, initialScale_.y, initialScale_.z), secondHalfDuration_)
-                .SetEase(Ease.OutElastic, bounceAmplitude_, bouncePeriod_) // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ÏXï¿½_ï¿½Fï¿½ï¿½èŒƒï¿½ï¿½ï¿½ï¿½ï¿½oï¿½Eï¿½ï¿½ï¿½Xï¿½É•ÏX ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+                .SetEase(Ease.OutElastic, bounceAmplitude_, bouncePeriod_) // ššš •ÏX“_F‚æ‚èŒƒ‚µ‚¢ƒoƒEƒ“ƒX‚É•ÏX ššš
         );
 
-        // ï¿½Vï¿½[ï¿½Pï¿½ï¿½ï¿½Xï¿½ÌÄï¿½ï¿½İ’ï¿½
+        // ƒV[ƒPƒ“ƒX‚ÌÄ¶İ’è
         currentSequence_.SetLink(gameObject).Play();
     }
 }
