@@ -541,9 +541,13 @@ public class Player : MonoBehaviour {
             return;
         }
 
-        // 加速器の処理
+        // タグ"Comment"
+        if (collision.gameObject.CompareTag("Comment"))
+        {
+            // コメントオブジェクトと衝突したら練度ゲージを少し上げる
+            currentComboGauge_ += comboGaugePerHit_ * 0.5f;
+        }
 
-        
         // NOTE:修正予定
         if (collision.gameObject.CompareTag("Punching"))
         {
@@ -553,7 +557,7 @@ public class Player : MonoBehaviour {
             // 向きをプレイヤー同士の相対位置で決める
             Vector2 punchOrigin = collision.transform.position;
             Vector2 myPosition = transform.position;
-            
+
             Vector2 punchDir = (myPosition - punchOrigin).normalized; // パンチ元 → 自分へのベクトル（≒攻撃方向）
             Vector2 knockDir = (punchDir + Vector2.up * 0.5f).normalized; // 上方向を加えて「斜め後ろ上」に
 
@@ -563,7 +567,7 @@ public class Player : MonoBehaviour {
             // ノックバック状態にする
             isKnockedBack_ = true;
             knockBackTimer_ = knockBackDuration_;
-            
+
             return;
         }
 
