@@ -10,6 +10,7 @@ TagManager:
   - DataManager
   - InvincibleItem
   - Punching
+  - KeyData
   layers:
   - Default
   - TransparentFX
