@@ -1332,6 +1332,18 @@ PrefabInstance:
       propertyPath: m_Color.g
       value: 0.54905653
       objectReference: {fileID: 0}
+    - target: {fileID: 1673676070272414423, guid: f34f5346c6308a54290a08f75258b118, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3877026875168845069, guid: f34f5346c6308a54290a08f75258b118, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4783888977361507202, guid: f34f5346c6308a54290a08f75258b118, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6643886156368618363, guid: f34f5346c6308a54290a08f75258b118, type: 3}
       propertyPath: m_Name
       value: ChangeMoveFieldKey_Check

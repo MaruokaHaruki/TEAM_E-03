@@ -128,15 +128,15 @@ public class MoveField : MonoBehaviour
             }
         }
 
-        // キーオブジェクトとの接触でキー変更
-        if (collision.gameObject.CompareTag("KeyData"))
-        {
-            KeyObjectData_Field keyData = collision.GetComponent<KeyObjectData_Field>();
-            if (keyData != null)
-            {
-                ChangeStartKey(keyData.SetKey);
-            }
-        }
+        //// キーオブジェクトとの接触でキー変更
+        //if (collision.gameObject.CompareTag("KeyData"))
+        //{
+        //    KeyObjectData_Field keyData = collision.GetComponent<KeyObjectData_Field>();
+        //    if (keyData != null)
+        //    {
+        //        ChangeStartKey(keyData.SetKey);
+        //    }
+        //}
     }
 
     private void OnTriggerStay2D(Collider2D collision)
