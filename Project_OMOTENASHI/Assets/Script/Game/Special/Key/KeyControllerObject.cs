@@ -80,6 +80,12 @@ public class KeyControllerObject : MonoBehaviour
             ChangeCheckObject[i] = set[i] ;
         }
 
+        // MoveFieldの参照を自動で見つける
+        if (MoveHieldChangeKey == null && ChangeKeyType == CHANGE_KEY_TYPE.SET_MOVE_FIELD_CHANGE_KEY)
+        {
+            MoveHieldChangeKey = FindObjectOfType<MoveField>();
+        }
+
         SetStartPosition();
     }
     public void SetStartPosition()
@@ -151,7 +157,12 @@ public class KeyControllerObject : MonoBehaviour
                 case CHANGE_KEY_TYPE.SET_MOVE_FIELD_CHANGE_KEY:
                     if (MoveHieldChangeKey != null)
                     {
+                        Debug.Log($"MoveField StartKey changed from {MoveHieldChangeKey.StartKey} to {setKey}");
                         MoveHieldChangeKey.StartKey = setKey;
+                    }
+                    else
+                    {
+                        Debug.LogWarning("MoveHieldChangeKey is null!");
                     }
                     break;
             }
