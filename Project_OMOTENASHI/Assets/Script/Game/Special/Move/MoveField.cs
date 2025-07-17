@@ -13,6 +13,13 @@ public class MoveField : MonoBehaviour
     // 開始キー
     public KeyCode StartKey = KeyCode.B;
 
+    private void Start()
+    {
+        PlayerRigidBody = new Rigidbody2D[2];
+        PlayerRigidBody[0] = GameManager.Instance.player1_.GetComponent<Rigidbody2D>();
+        PlayerRigidBody[1] = GameManager.Instance.player2_.GetComponent<Rigidbody2D>();
+    }
+
     private void Update()
     {
         if (Input.GetKeyDown(StartKey))
