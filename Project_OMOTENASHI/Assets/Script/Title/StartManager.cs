@@ -1,6 +1,7 @@
 using UnityEditor;
 using UnityEngine;
 using TMPro;
+using DG.Tweening; // DOTweenを使用するための名前空間
 
 public class StartManager : MonoBehaviour
 {
@@ -11,8 +12,19 @@ public class StartManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI player1ReadyText;
     [SerializeField] private TextMeshProUGUI player2ReadyText;
 
+    [Header("Canvas Control")]
+    [SerializeField] private GameObject playerReadyCanvas;
+    [SerializeField] private float canvasDisplayDelay = 1f;
+    [SerializeField] private float fadeInDuration = 0.5f;
+    [SerializeField] private float fadeOutDuration = 0.5f;
+    [SerializeField] private float autoHideDelay = 5f; // 無操作時の自動非表示時間
+
     private bool player1Ready = false;
     private bool player2Ready = false;
+    private bool titleLogoCompleted = false;
+    private bool canvasDisplayed = false;
+    private float lastInputTime = 0f;
+    private Tween currentFadeTween;
 
 
 #if UNITY_EDITOR
@@ -29,7 +41,77 @@ public class StartManager : MonoBehaviour
         UpdatePlayerReadyDisplay();
     }
 
+    private void Start()
+    {
+        // タイトルロゴ完了イベントを購読
+        TitleLogController.OnTitleLogoComplete += OnTitleLogoCompleted;
+        
+        // Canvas初期状態を設定
+        if (playerReadyCanvas != null)
+        {
+            // CanvasGroupを取得または追加
+            var canvasGroup = playerReadyCanvas.GetComponent<CanvasGroup>();
+            if (canvasGroup == null)
+            {
+                canvasGroup = playerReadyCanvas.AddComponent<CanvasGroup>();
+            }
+            
+            // 初期状態設定
+            canvasGroup.alpha = 0f;
+            canvasGroup.interactable = false;
+            canvasGroup.blocksRaycasts = false;
+            
+            // スケールも初期化
+            playerReadyCanvas.transform.localScale = Vector3.zero;
+            
+            playerReadyCanvas.SetActive(true); // アクティブにしておいて透明状態
+        }
+    }
+
+    private void OnDestroy()
+    {
+        // イベント購読解除
+        TitleLogController.OnTitleLogoComplete -= OnTitleLogoCompleted;
+    }
+
+    private void OnTitleLogoCompleted()
+    {
+        titleLogoCompleted = true;
+        Debug.Log("タイトルロゴ完了 - 何かキーを押してください");
+    }
+
     private void Update()
+    {
+        // タイトルロゴが完了していない場合は何もしない
+        if (!titleLogoCompleted) return;
+
+        // キー入力チェック
+        if (Input.anyKeyDown)
+        {
+            lastInputTime = Time.time;
+            
+            if (!canvasDisplayed)
+            {
+                ShowCanvas();
+            }
+        }
+
+        // Canvas表示中の処理
+        if (canvasDisplayed)
+        {
+            // 無操作時間チェックでフェードアウト
+            if (Time.time - lastInputTime > autoHideDelay)
+            {
+                HideCanvas();
+                return;
+            }
+
+            // プレイヤー入力処理
+            HandlePlayerInput();
+        }
+    }
+
+    private void HandlePlayerInput()
     {
         // プレイヤー1の準備状態をチェック（A,W,D同時押し）
         bool player1Input = Input.GetKey(KeyCode.A) && Input.GetKey(KeyCode.W) && Input.GetKey(KeyCode.D);
@@ -56,6 +138,61 @@ public class StartManager : MonoBehaviour
             else
             {
                 Debug.LogError("遷移先のシーンが設定されていない");
+            }
+        }
+    }
+
+    private void ShowCanvas()
+    {
+        if (canvasDisplayed) return;
+        
+        canvasDisplayed = true;
+        
+        if (playerReadyCanvas != null)
+        {
+            var canvasGroup = playerReadyCanvas.GetComponent<CanvasGroup>();
+            
+            if (canvasGroup != null)
+            {
+                // 既存のアニメーションを停止
+                currentFadeTween?.Kill();
+                
+                // インタラクションを有効化
+                canvasGroup.interactable = true;
+                canvasGroup.blocksRaycasts = true;
+                
+                // フェードインアニメーション
+                currentFadeTween = canvasGroup.DOFade(1f, fadeInDuration).SetEase(Ease.OutQuart);
+            }
+        }
+    }
+
+    private void HideCanvas()
+    {
+        if (!canvasDisplayed) return;
+        
+        if (playerReadyCanvas != null)
+        {
+            var canvasGroup = playerReadyCanvas.GetComponent<CanvasGroup>();
+            
+            if (canvasGroup != null)
+            {
+                // 既存のアニメーションを停止
+                currentFadeTween?.Kill();
+                
+                // フェードアウトアニメーション
+                currentFadeTween = canvasGroup.DOFade(0f, fadeOutDuration)
+                    .SetEase(Ease.OutQuart)
+                    .OnComplete(() => {
+                        canvasGroup.interactable = false;
+                        canvasGroup.blocksRaycasts = false;
+                        canvasDisplayed = false;
+                        
+                        // 準備状態リセット
+                        player1Ready = false;
+                        player2Ready = false;
+                        UpdatePlayerReadyDisplay();
+                    });
             }
         }
     }
