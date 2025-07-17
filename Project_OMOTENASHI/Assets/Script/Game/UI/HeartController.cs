@@ -2,7 +2,6 @@ using DG.Tweening;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using static Fire_UI;
 
 public class HeartController : MonoBehaviour
 {
@@ -47,7 +46,7 @@ public class HeartController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        UpdateHeartUI();
     }
 
     public void UpdateHeartUI()

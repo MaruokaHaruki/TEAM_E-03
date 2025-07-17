@@ -733,6 +733,7 @@ public class Player : MonoBehaviour {
                 currentHp_ = 0;
             }
         }
+
     }
 
     private void KnockBack(Player target) {
