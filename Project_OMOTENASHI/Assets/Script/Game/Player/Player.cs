@@ -892,6 +892,49 @@ public class Player : MonoBehaviour {
         stunTimer_ = stunDuration;
     }
 
+    /// <summary>
+    /// MoveFieldからの連打ゲージ操作
+    /// </summary>
+    /// <param name="moveFieldDirection">MoveFieldの移動方向（1.0f=右、-1.0f=左）</param>
+    /// <param name="gaugePower">ゲージ変化量</param>
+    public void ApplyMoveFieldEffect(float moveFieldDirection, float gaugePower) {
+        if (!allowMovement_ || !isAutoMode_) return;
+
+        // プレイヤーの現在の移動方向とMoveFieldの方向を比較
+        bool directionsMatch = (currentDirection_ > 0 && moveFieldDirection > 0) || 
+                              (currentDirection_ < 0 && moveFieldDirection < 0);
+
+        if (directionsMatch) {
+            // 方向が一致する場合：ゲージ増加
+            currentComboGauge_ += gaugePower;
+            currentComboGauge_ = Mathf.Min(maxComboGauge_, currentComboGauge_);
+            
+            if (AudioManager.Instance != null) {
+                AudioManager.Instance.PlaySE("Player_Barrage");
+            }
+        }
+        else {
+            // 方向が逆の場合：ゲージ減少
+            currentComboGauge_ -= gaugePower * 0.5f; // 減少量は増加量の半分
+            currentComboGauge_ = Mathf.Max(0.0f, currentComboGauge_);
+            
+            if (AudioManager.Instance != null) {
+                AudioManager.Instance.PlaySE("Player_MoveField_Opposite");
+            }
+        }
+
+        // MoveField効果時の視覚的フィードバック
+        PlayShakeEffect();
+    }
+
+    private void PlayShakeEffect() {
+        if (spriteTransform_ != null) {
+            spriteTransform_.DOShakeScale(0.2f, 1.0f, 5).OnComplete(() => {
+                spriteTransform_.localScale = Vector3.one;
+            });
+        }
+    }
+
     private void UpdateMovementPermission() {
         if (GameManager.Instance != null) {
             GameManager.GameState currentState = GameManager.Instance.GetGameState();

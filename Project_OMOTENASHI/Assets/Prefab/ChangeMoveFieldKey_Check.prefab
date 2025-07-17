@@ -232,6 +232,9 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   StartKey: 98
+  SetAnimation: {fileID: 1545735577493976429}
+  AutoDirectionChange: 1
+  currentKey: 0
 --- !u!61 &1698647168384537594
 BoxCollider2D:
   m_ObjectHideFlags: 0

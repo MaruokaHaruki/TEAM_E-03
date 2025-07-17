@@ -3,31 +3,35 @@ using UnityEngine;
 
 public class MoveField : MonoBehaviour
 {
-    /// <summary>ˆÚ“®—Í</summary>
-    [SerializeField, Header("ˆÚ“®—Í")] private float MovePower;
-    /// <summary>‰EˆÚ“®ƒtƒ‰ƒO</summary>
-    [SerializeField, Header("ˆÚ“®•ûŒüƒtƒ‰ƒO")] private bool RightMoveFlag;
-    /// <summary>ƒvƒŒƒCƒ„[</summary>
-    [SerializeField, Header("ƒvƒŒƒCƒ„[")] private Rigidbody2D[] PlayerRigidBody;
+    /// <summary>ç§»å‹•åŠ›</summary>
+    [SerializeField, Header("ã‚²ãƒ¼ã‚¸å¤‰åŒ–é‡")] private float GaugePower = 15.0f;
+    /// <summary>å³ç§»å‹•ãƒ•ãƒ©ã‚°</summary>
+    [SerializeField, Header("ç§»å‹•æ–¹å‘ãƒ•ãƒ©ã‚°")] private bool RightMoveFlag;
+    /// <summary>ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼</summary>
+    [SerializeField, Header("ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼")] private Player[] Players;
 
-    // ŠJnƒL[
+    // é–‹å§‹ã‚­ãƒ¼
     public KeyCode StartKey = KeyCode.B;
 
     public PopAnimation SetAnimation;
 
-    /// <summary>ˆÊ’u‚É‚æ‚é©“®•ûŒü•ÏX‚ğ—LŒø‚É‚·‚é‚©</summary>
-    [SerializeField, Header("ˆÊ’u‚É‚æ‚é©“®•ûŒü•ÏX")] private bool AutoDirectionChange = true;
+    /// <summary>ä½ç½®ã«ã‚ˆã‚‹è‡ªå‹•æ–¹å‘å¤‰æ›´ã‚’æœ‰åŠ¹ã«ã™ã‚‹ã‹</summary>
+    [SerializeField, Header("ä½ç½®ã«ã‚ˆã‚‹è‡ªå‹•æ–¹å‘å¤‰æ›´")] private bool AutoDirectionChange = true;
 
-    /// <summary>‘O‰ñ‚ÌˆÊ’u</summary>
+    /// <summary>å‰å›ã®ä½ç½®</summary>
     private Vector3 previousPosition;
 
-    /// <summary>Œ»İ‚ÌƒL[‚ğ•\¦—p</summary>
-    [SerializeField, Header("Œ»İİ’è‚³‚ê‚Ä‚¢‚éƒL[i•\¦—pj")] private KeyCode currentKey;
+    /// <summary>ç¾åœ¨ã®ã‚­ãƒ¼è¡¨ç¤ºç”¨</summary>
+    [SerializeField, Header("ç¾åœ¨è¨­å®šã•ã‚Œã¦ã„ã‚‹ã‚­ãƒ¼ï¼ˆè¡¨ç¤ºç”¨ï¼‰")] private KeyCode currentKey;
+
+    /// <summary>é€£ç¶šã§ã‚²ãƒ¼ã‚¸æ“ä½œã‚’é˜²ããŸã‚ã®ã‚¯ãƒ¼ãƒ«ãƒ€ã‚¦ãƒ³</summary>
+    private float cooldownTimer = 0.0f;
+    private const float COOLDOWN_DURATION = 0.1f;
 
     /// <summary>
-    /// ŠO•”‚©‚çStartKey‚ğ•ÏX‚·‚é‚½‚ß‚Ìƒƒ\ƒbƒh
+    /// å¤–éƒ¨ã‹ã‚‰StartKeyã‚’å¤‰æ›´ã™ã‚‹ãŸã‚ã®ãƒ¡ã‚½ãƒƒãƒ‰
     /// </summary>
-    /// <param name="newKey">V‚µ‚¢ƒL[</param>
+    /// <param name="newKey">æ–°ã—ã„ã‚­ãƒ¼</param>
     public void ChangeStartKey(KeyCode newKey)
     {
         if (StartKey != newKey)
@@ -39,26 +43,41 @@ public class MoveField : MonoBehaviour
 
     private void Start()
     {
-        PlayerRigidBody = new Rigidbody2D[2];
-        PlayerRigidBody[0] = GameManager.Instance.player1_.GetComponent<Rigidbody2D>();
-        PlayerRigidBody[1] = GameManager.Instance.player2_.GetComponent<Rigidbody2D>();
+        // GameManagerã‹ã‚‰ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚’å–å¾—
+        if (GameManager.Instance != null)
+        {
+            Players = new Player[2];
+            Players[0] = GameManager.Instance.player1_;
+            Players[1] = GameManager.Instance.player2_;
+        }
+        else
+        {
+            // GameManagerãŒãªã„å ´åˆã¯ã‚·ãƒ¼ãƒ³å†…ã®ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚’æ¤œç´¢
+            Players = FindObjectsOfType<Player>();
+        }
 
-        // ‰ŠúˆÊ’u‚ğ‹L˜^
+        // åˆæœŸä½ç½®ã‚’è¨˜éŒ²
         previousPosition = transform.position;
     }
 
     private void Update()
     {
-        // Œ»İ‚ÌƒL[‚ğ•\¦—p‚ÉXV
+        // ç¾åœ¨ã®ã‚­ãƒ¼è¡¨ç¤ºç”¨ã«æ›´æ–°
         currentKey = StartKey;
 
-        // ˆÊ’u‚É‚æ‚é©“®•ûŒü•ÏX
+        // ã‚¯ãƒ¼ãƒ«ãƒ€ã‚¦ãƒ³ã‚¿ã‚¤ãƒãƒ¼æ›´æ–°
+        if (cooldownTimer > 0)
+        {
+            cooldownTimer -= Time.deltaTime;
+        }
+
+        // ä½ç½®ã«ã‚ˆã‚‹è‡ªå‹•æ–¹å‘å¤‰æ›´
         if (AutoDirectionChange)
         {
             CheckPositionChange();
         }
 
-        // ƒL[“ü—Í‚É‚æ‚éè“®•ÏX
+        // ã‚­ãƒ¼å…¥åŠ›ã«ã‚ˆã‚‹å‹•ä½œå¤‰æ›´
         if (Input.GetKeyDown(StartKey))
         {
             Debug.Log($"Key {StartKey} pressed! Direction changed to {(!RightMoveFlag ? "Right" : "Left")}");
@@ -68,16 +87,16 @@ public class MoveField : MonoBehaviour
     }
 
     /// <summary>
-    /// ˆÊ’u•Ï‰»‚ğƒ`ƒFƒbƒN‚µ‚ÄˆÚ“®•ûŒü‚ğ©“®•ÏX
+    /// ä½ç½®å¤‰åŒ–ã‚’ãƒã‚§ãƒƒã‚¯ã—ã¦ç§»å‹•æ–¹å‘ã‚’è‡ªå‹•å¤‰æ›´
     /// </summary>
     private void CheckPositionChange()
     {
         Vector3 currentPosition = transform.position;
 
-        // XÀ•W‚Ì•Ï‰»‚ğƒ`ƒFƒbƒN
+        // Xåº§æ¨™ã®å¤‰åŒ–ã‚’ãƒã‚§ãƒƒã‚¯
         if (Mathf.Abs(currentPosition.x - previousPosition.x) > 0.01f)
         {
-            // ‰E‚ÉˆÚ“®‚µ‚Ä‚¢‚éê‡‚Í‰EŒü‚«A¶‚ÉˆÚ“®‚µ‚Ä‚¢‚éê‡‚Í¶Œü‚«
+            // å³ã«ç§»å‹•ã—ã¦ã„ã‚‹å ´åˆã¯å³æ–¹å‘ã€å·¦ã«ç§»å‹•ã—ã¦ã„ã‚‹å ´åˆã¯å·¦æ–¹å‘
             bool newDirection = currentPosition.x > previousPosition.x;
 
             if (newDirection != RightMoveFlag)
@@ -90,44 +109,48 @@ public class MoveField : MonoBehaviour
         previousPosition = currentPosition;
     }
 
-    private void OnTriggerStay2D(Collider2D collision)
-    {
-        //if (collision.gameObject.tag != "Player")
-        //{
-        //    return;
-        //}
-
-        //foreach (Rigidbody2D player in PlayerRigidBody)
-        //{
-        //    if (collision.gameObject == player.gameObject)
-        //    {
-        //        player.AddForceX(MovePower * (RightMoveFlag ? 1.0f : -1.0f), ForceMode2D.Impulse);
-        //    }
-        //}
-    }
-
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.tag != "Player")
+        // ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã¨ã®æ¥è§¦å‡¦ç†
+        if (collision.gameObject.CompareTag("Player"))
         {
-            return;
-        }
-
-        foreach (Rigidbody2D player in PlayerRigidBody)
-        {
-            if (collision.gameObject == player.gameObject)
+            Player player = collision.gameObject.GetComponent<Player>();
+            if (player != null && cooldownTimer <= 0)
             {
-                player.AddForceX(MovePower * (RightMoveFlag ? 1.0f : -1.0f), ForceMode2D.Impulse);
+                // é€£æ‰“ã‚²ãƒ¼ã‚¸æ“ä½œã‚’å®Ÿè¡Œ
+                float moveDirection = RightMoveFlag ? 1.0f : -1.0f;
+                player.ApplyMoveFieldEffect(moveDirection, GaugePower);
+                
+                // ã‚¯ãƒ¼ãƒ«ãƒ€ã‚¦ãƒ³è¨­å®š
+                cooldownTimer = COOLDOWN_DURATION;
+                
+                Debug.Log($"MoveField effect applied to {player.playerID_}: Direction={moveDirection}, Power={GaugePower}");
             }
         }
 
-        // ƒL[ƒIƒuƒWƒFƒNƒg‚Æ‚ÌÚG‚ÅƒL[•ÏX
-        if (collision.gameObject.tag == "KeyData")
+        // ã‚­ãƒ¼ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã¨ã®æ¥è§¦ã§ã‚­ãƒ¼å¤‰æ›´
+        if (collision.gameObject.CompareTag("KeyData"))
         {
             KeyObjectData_Field keyData = collision.GetComponent<KeyObjectData_Field>();
             if (keyData != null)
             {
                 ChangeStartKey(keyData.SetKey);
+            }
+        }
+    }
+
+    private void OnTriggerStay2D(Collider2D collision)
+    {
+        // ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ãŒçŸ¢å°å†…ã«ç•™ã¾ã£ã¦ã„ã‚‹é–“ã‚‚é€£ç¶šã§ã‚²ãƒ¼ã‚¸æ“ä½œ
+        if (collision.gameObject.CompareTag("Player") && cooldownTimer <= 0)
+        {
+            Player player = collision.gameObject.GetComponent<Player>();
+            if (player != null)
+            {
+                float moveDirection = RightMoveFlag ? 1.0f : -1.0f;
+                player.ApplyMoveFieldEffect(moveDirection, GaugePower * 0.3f); // Stayæ™‚ã¯åŠ¹æœã‚’å¼±ã‚ã‚‹
+                
+                cooldownTimer = COOLDOWN_DURATION * 2; // Stayæ™‚ã¯ã‚¯ãƒ¼ãƒ«ãƒ€ã‚¦ãƒ³ã‚’é•·ã‚ã«
             }
         }
     }
