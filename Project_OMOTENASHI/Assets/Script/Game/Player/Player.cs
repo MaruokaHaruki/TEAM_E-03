@@ -10,9 +10,9 @@ public class Player : MonoBehaviour {
     // プレイヤー設定
     [Header("プレイヤー設定")]
     public string playerID_ = "A";
-    public int maxHp_ = 100;
-    public int currentHp_ = 100;
-
+    public int maxHp_=3;
+    public int currentHp_=3;
+    public int atk_=1;
     // 移動設定
     [Header("移動設定")]
     public float maxSpeed_ = 5.0f;
@@ -653,7 +653,7 @@ public class Player : MonoBehaviour {
                         AudioManager.Instance.PlaySE("Player_Penguin2Penguin");
                     }
 
-                    otherPlayer.TakeDamage(20);
+                    otherPlayer.TakeDamage(atk_);
                     KnockBack(otherPlayer);
                     ReverseDirection();
                     otherPlayer.ReverseDirection();
@@ -663,7 +663,7 @@ public class Player : MonoBehaviour {
                         AudioManager.Instance.PlaySE("Player_Penguin2Penguin");
                     }
 
-                    TakeDamage(20);
+                    TakeDamage(atk_);
                     Vector2 knockBackDirToThis = (transform.position - otherPlayer.transform.position).normalized;
                     if (knockBackDirToThis == Vector2.zero) knockBackDirToThis = (Random.insideUnitCircle).normalized;
                     rigidbody2D_.AddForce(knockBackDirToThis * 10f, ForceMode2D.Impulse);
@@ -689,13 +689,13 @@ public class Player : MonoBehaviour {
             }
             else if (otherIsAheadOfMe && !amIAheadOfOther) {
                 if (!otherIsInvincible) {
-                    otherPlayer.TakeDamage(20);
+                    otherPlayer.TakeDamage(atk_);
                     KnockBack(otherPlayer);
                 }
             }
             else if (!otherIsAheadOfMe && amIAheadOfOther) {
                 if (!thisIsInvincible) {
-                    TakeDamage(20);
+                    TakeDamage(atk_);
                     Vector2 knockBackDirToThis = (transform.position - otherPlayer.transform.position).normalized;
                     if (knockBackDirToThis == Vector2.zero) knockBackDirToThis = (Random.insideUnitCircle).normalized;
                     rigidbody2D_.AddForce(knockBackDirToThis * 10f, ForceMode2D.Impulse);
