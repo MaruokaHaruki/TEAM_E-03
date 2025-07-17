@@ -621,7 +621,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &279012495
 Transform:
   m_ObjectHideFlags: 0
@@ -2535,6 +2535,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 57518f943959c6a4c9205a69f1ef8d01, type: 3}
+--- !u!4 &1235382612 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2971683852169488960, guid: 6cf4d7de774dbaf46aaa4c029bb31878, type: 3}
+  m_PrefabInstance: {fileID: 1710523326}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1251691831 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1230344536968734018, guid: 57518f943959c6a4c9205a69f1ef8d01, type: 3}
@@ -2818,7 +2823,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   fire_image_: {fileID: 46162965}
   fire_bg_image_: {fileID: 862298915}
-  fire_frame_image_: {fileID: 46162965}
+  fire_frame_image_: {fileID: 1934069884}
   player: 0
   lowColor: {r: 1, g: 0.42352942, b: 0.36078432, a: 1}
   midColor: {r: 1, g: 0.75686276, b: 0.34117648, a: 1}
@@ -2906,8 +2911,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   fire_image_: {fileID: 1506609963}
-  fire_bg_image_: {fileID: 862298915}
-  fire_frame_image_: {fileID: 46162965}
+  fire_bg_image_: {fileID: 285089479}
+  fire_frame_image_: {fileID: 836725061}
   player: 1
   lowColor: {r: 1, g: 0.42352942, b: 0.36078432, a: 1}
   midColor: {r: 1, g: 0.75686276, b: 0.34117648, a: 1}
@@ -2931,6 +2936,14 @@ PrefabInstance:
     - target: {fileID: 1851220988239140345, guid: 86be4eefeb35d23498dc9efcca509af7, type: 3}
       propertyPath: seClips_.Array.size
       value: 14
+      objectReference: {fileID: 0}
+    - target: {fileID: 1851220988239140345, guid: 86be4eefeb35d23498dc9efcca509af7, type: 3}
+      propertyPath: seClips_.Array.data[0].clip
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 1851220988239140345, guid: 86be4eefeb35d23498dc9efcca509af7, type: 3}
+      propertyPath: seClips_.Array.data[0].name
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 1851220988239140345, guid: 86be4eefeb35d23498dc9efcca509af7, type: 3}
       propertyPath: seClips_.Array.data[5].clip
@@ -3368,7 +3381,7 @@ MonoBehaviour:
   playerID_: B
   maxHp_: 100
   currentHp_: 100
-  atk_: 1
+  atk_: 10
   maxSpeed_: 3
   acceleration_: 15
   dragOnStop_: 5
@@ -3392,6 +3405,9 @@ MonoBehaviour:
   invincibilityDuration_: 1
   rainbowSpeed_: 1
   invincibilitySpeedMultiplier_: 1.5
+  damageFlashDuration_: 1
+  damageFlashInterval_: 0.1
+  damageFlashColor_: {r: 1, g: 0, b: 0, a: 1}
   enableSpriteRotation_: 1
   maxRotationAngle_: 45
   rotationSensitivity_: 1
@@ -3529,6 +3545,7 @@ RectTransform:
   m_Children:
   - {fileID: 657063681}
   - {fileID: 1036118308}
+  - {fileID: 1235382612}
   - {fileID: 2843288208752567888}
   - {fileID: 653656975}
   - {fileID: 279012495}
@@ -3962,6 +3979,63 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!1001 &1710523326
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 1517558332}
+    m_Modifications:
+    - target: {fileID: 2971683852169488960, guid: 6cf4d7de774dbaf46aaa4c029bb31878, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2971683852169488960, guid: 6cf4d7de774dbaf46aaa4c029bb31878, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2971683852169488960, guid: 6cf4d7de774dbaf46aaa4c029bb31878, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2971683852169488960, guid: 6cf4d7de774dbaf46aaa4c029bb31878, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2971683852169488960, guid: 6cf4d7de774dbaf46aaa4c029bb31878, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2971683852169488960, guid: 6cf4d7de774dbaf46aaa4c029bb31878, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2971683852169488960, guid: 6cf4d7de774dbaf46aaa4c029bb31878, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2971683852169488960, guid: 6cf4d7de774dbaf46aaa4c029bb31878, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2971683852169488960, guid: 6cf4d7de774dbaf46aaa4c029bb31878, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2971683852169488960, guid: 6cf4d7de774dbaf46aaa4c029bb31878, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7780443467214287937, guid: 6cf4d7de774dbaf46aaa4c029bb31878, type: 3}
+      propertyPath: m_Name
+      value: HP_Icon
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 6cf4d7de774dbaf46aaa4c029bb31878, type: 3}
 --- !u!1 &1716098616
 GameObject:
   m_ObjectHideFlags: 0
@@ -4016,7 +4090,7 @@ MonoBehaviour:
   playerID_: A
   maxHp_: 100
   currentHp_: 100
-  atk_: 1
+  atk_: 10
   maxSpeed_: 3
   acceleration_: 15
   dragOnStop_: 5
@@ -4040,6 +4114,9 @@ MonoBehaviour:
   invincibilityDuration_: 1
   rainbowSpeed_: 1
   invincibilitySpeedMultiplier_: 1.5
+  damageFlashDuration_: 1
+  damageFlashInterval_: 0.1
+  damageFlashColor_: {r: 1, g: 0, b: 0, a: 1}
   enableSpriteRotation_: 1
   maxRotationAngle_: 45
   rotationSensitivity_: 1

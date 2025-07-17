@@ -1,6 +1,7 @@
 using DG.Tweening;
 using TMPro;
 using UnityEngine;
+using System;
 
 enum DOTWEEN_MOVE_TYPE
 {
@@ -43,6 +44,9 @@ public class TitleLogController : MonoBehaviour
 
     private Rigidbody2D MyRigidBody;
     private Animator MyAnimator;
+
+    //[Header("Animation Complete Callback")]
+    public static event Action OnTitleLogoComplete;
 
     void Start()
     {
@@ -108,11 +112,13 @@ public class TitleLogController : MonoBehaviour
                 switch (MoveType)
                 {
                     case DOTWEEN_MOVE_TYPE.SIZE:
-                        this.transform.DOScale(TargetVolume, EndTime).SetEase(SetDotMoveType);
+                        this.transform.DOScale(TargetVolume, EndTime).SetEase(SetDotMoveType)
+                            .OnComplete(() => OnTitleLogoComplete?.Invoke());
                         break;
 
                     case DOTWEEN_MOVE_TYPE.POSITION:
-                        this.transform.DOMove(TargetVolume, EndTime).SetEase(SetDotMoveType);
+                        this.transform.DOMove(TargetVolume, EndTime).SetEase(SetDotMoveType)
+                            .OnComplete(() => OnTitleLogoComplete?.Invoke());
                         break;
 
                     case DOTWEEN_MOVE_TYPE.UP_DOWN_POSITION:

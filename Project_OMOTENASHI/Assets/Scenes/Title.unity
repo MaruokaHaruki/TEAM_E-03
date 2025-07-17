@@ -1389,7 +1389,7 @@ MonoBehaviour:
   player1ReadyText: {fileID: 128753924}
   player2ReadyText: {fileID: 161424293}
   playerReadyCanvas: {fileID: 183875103}
-  canvasDisplayDelay: 2
+  canvasDisplayDelay: 1
   fadeInDuration: 0.5
   fadeOutDuration: 0.5
   autoHideDelay: 5
@@ -1511,6 +1511,14 @@ PrefabInstance:
     - target: {fileID: 1851220988239140345, guid: 86be4eefeb35d23498dc9efcca509af7, type: 3}
       propertyPath: bgmVolume_
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1851220988239140345, guid: 86be4eefeb35d23498dc9efcca509af7, type: 3}
+      propertyPath: seClips_.Array.data[0].clip
+      value: 
+      objectReference: {fileID: 8300000, guid: 33165ce3970cc6444800fd8f36971586, type: 3}
+    - target: {fileID: 1851220988239140345, guid: 86be4eefeb35d23498dc9efcca509af7, type: 3}
+      propertyPath: seClips_.Array.data[0].name
+      value: Player_MoveField_Opposite
       objectReference: {fileID: 0}
     - target: {fileID: 4974692803899297538, guid: 86be4eefeb35d23498dc9efcca509af7, type: 3}
       propertyPath: m_LocalPosition.x
