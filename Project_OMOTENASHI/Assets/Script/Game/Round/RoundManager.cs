@@ -109,7 +109,7 @@ public class RoundManager : MonoBehaviour
                 if (roundStartTimer > 0f)
                 {
                     roundStartTimer -= Time.deltaTime;
-                    Debug.Log($"[ROUND MANAGER] : roundStartTimer: {roundStartTimer:F2}");
+                    //Debug.Log($"[ROUND MANAGER] : roundStartTimer: {roundStartTimer:F2}");
                     
                     if (roundStartTimer <= 0f)
                     {

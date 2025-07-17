@@ -2943,7 +2943,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1851220988239140345, guid: 86be4eefeb35d23498dc9efcca509af7, type: 3}
       propertyPath: seClips_.Array.data[0].name
-      value: 
+      value: Player_MoveField_Opposite
       objectReference: {fileID: 0}
     - target: {fileID: 1851220988239140345, guid: 86be4eefeb35d23498dc9efcca509af7, type: 3}
       propertyPath: seClips_.Array.data[5].clip

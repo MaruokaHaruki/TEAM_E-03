@@ -90,6 +90,8 @@ public class InvincibleItemGeneration : MonoBehaviour {
                 // ����
                 if (CheckObject != null) {
                     CheckObjectBoxCollider = CheckObject.AddComponent<BoxCollider2D>();
+                    Debug.Log("ボックスコライダーを追加したよ！！");
+
                     Rigidbody2D setRigidbody = CheckObject.GetComponent<Rigidbody2D>();
                     if (setRigidbody != null) {
                         setRigidbody.gravityScale = 1.0f;
@@ -145,7 +147,7 @@ public class InvincibleItemGeneration : MonoBehaviour {
     /// <summary>���̃I�u�W�F�N�g�̗L����ݒ�</summary>
     internal void SetActiveFlag(bool activeFlag) {
         if (CheckObject != null) {
-            Destroy(CheckObject);
+            Destroy(CheckObject.gameObject);
         }
 
         this.gameObject.SetActive(activeFlag);
