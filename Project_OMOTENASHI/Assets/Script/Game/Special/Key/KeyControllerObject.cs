@@ -96,36 +96,38 @@ public class KeyControllerObject : MonoBehaviour
     private void Update()
     {
         KeyCode setKey = KeyCode.None;
-        float hitRange = 0.0f;
+        float maxOverlapRange = 0.0f; // 最大重複範囲を記録
 
-        Vector2 playerLeftAndRightPos = new Vector2(this.transform.position.x - (this.transform.localScale.x * 0.5f), this.transform.position.x +(this.transform.localScale.x * 0.5f));
+        // プレイヤーの左右端の位置
+        Vector2 playerLeftAndRightPos = new Vector2(
+            this.transform.position.x - (this.transform.localScale.x * 0.5f), 
+            this.transform.position.x + (this.transform.localScale.x * 0.5f)
+        );
 
+        // 全てのキー変更オブジェクトをチェック
         for (int i = 0; i < ChangeCheckObject.Length; i++)
         {
             if (HitCheck(this.transform.position, this.transform.localScale, ChangeCheckObject[i].transform.position, ChangeCheckObject[i].transform.localScale))
             {
-                float objectHitRange = 0.0f;
+                // オブジェクトとの重複範囲を計算
+                float objectLeft = ChangeCheckObject[i].transform.position.x - (ChangeCheckObject[i].transform.localScale.x * 0.5f);
+                float objectRight = ChangeCheckObject[i].transform.position.x + (ChangeCheckObject[i].transform.localScale.x * 0.5f);
+                
+                // 重複範囲の計算
+                float overlapLeft = Mathf.Max(playerLeftAndRightPos.x, objectLeft);
+                float overlapRight = Mathf.Min(playerLeftAndRightPos.y, objectRight);
+                float overlapRange = Mathf.Max(0, overlapRight - overlapLeft);
 
-                if (playerLeftAndRightPos.x < (ChangeCheckObject[i].transform.position.x - (ChangeCheckObject[i].transform.localScale.x * 0.5f)))
+                // 最大重複範囲のオブジェクトのキーを選択
+                if (overlapRange > maxOverlapRange)
                 {
-                    objectHitRange = Mathf.Abs((ChangeCheckObject[i].transform.position.x - (ChangeCheckObject[i].transform.localScale.x * 0.5f)) - playerLeftAndRightPos.y);
-                }
-                else if (playerLeftAndRightPos.y > (ChangeCheckObject[i].transform.position.x + (ChangeCheckObject[i].transform.localScale.x * 0.5f)))
-                {
-                    objectHitRange = Mathf.Abs(playerLeftAndRightPos.x - (ChangeCheckObject[i].transform.position.x + (ChangeCheckObject[i].transform.localScale.x * 0.5f)));
-                }
-                else
-                {
-                    objectHitRange = Mathf.Abs(playerLeftAndRightPos.x - playerLeftAndRightPos.y);
-                }
-
-                if (objectHitRange > hitRange)
-                {
+                    maxOverlapRange = overlapRange;
                     setKey = ChangeCheckObject[i].GetComponent<KeyObjectData_Field>().SetKey;
                 }
             }
         }
 
+        // キーが設定されている場合、対応するキーを更新
         if (setKey != KeyCode.None)
         {
             switch (ChangeKeyType)
@@ -155,11 +157,13 @@ public class KeyControllerObject : MonoBehaviour
             }
         }
 
+        // 左右のヒット判定位置をリセット
         {
             LeftHitFlag.transform.parent.localPosition = Vector3.zero;
             RightHitFlag.transform.parent.localPosition = Vector3.zero;
         }
 
+        // 左右両方にヒットしている場合、地面オブジェクトを表示
         if ((LeftHitFlag.MyHitCount > 0) && (RightHitFlag.MyHitCount > 0))
         {
             if (!GroundObject.activeSelf)

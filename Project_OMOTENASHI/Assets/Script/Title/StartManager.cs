@@ -1,16 +1,24 @@
 using UnityEditor;
 using UnityEngine;
+using TMPro;
 
 public class StartManager : MonoBehaviour
 {
     [HideInInspector]
     [SerializeField] private string sceneToLoad;
 
+    [Header("æº–å‚™çŠ¶æ…‹è¡¨ç¤ºUI")]
+    [SerializeField] private TextMeshProUGUI player1ReadyText;
+    [SerializeField] private TextMeshProUGUI player2ReadyText;
+
+    private bool player1Ready = false;
+    private bool player2Ready = false;
+
 
 #if UNITY_EDITOR
-    // ƒCƒ“ƒXƒyƒNƒ^‚É•\¦‚·‚é‚½‚ß‚ÌSceneAssetŒ^•Ï”
-    [Header("‘JˆÚæƒV[ƒ“‘I‘ğ")] // ƒCƒ“ƒXƒyƒNƒ^‚ÉŒ©o‚µ‚ğ•\¦
-    [SerializeField] private SceneAsset sceneAsset; // ‚±‚±‚ÉƒV[ƒ“ƒtƒ@ƒCƒ‹‚ğD&D‚·‚é
+    // ã‚¤ãƒ³ã‚¹ãƒšã‚¯ã‚¿ãƒ¼ã«è¡¨ç¤ºã™ã‚‹ãŸã‚ã®SceneAssetå‹å¤‰æ•°
+    [Header("é·ç§»å…ˆã‚·ãƒ¼ãƒ³é¸æŠ")] // ã‚¤ãƒ³ã‚¹ãƒšã‚¯ã‚¿ãƒ¼ã«è¦‹å‡ºã—ã‚’è¡¨ç¤º
+    [SerializeField] private SceneAsset sceneAsset; // ã“ã“ã«ã‚·ãƒ¼ãƒ³ãƒ•ã‚¡ã‚¤ãƒ«ã‚’ãƒ‰ãƒ©ãƒƒã‚°&ãƒ‰ãƒ­ãƒƒãƒ—ã™ã‚‹
 #endif
 
 
@@ -18,39 +26,71 @@ public class StartManager : MonoBehaviour
     private void Awake()
     {
         Application.targetFrameRate = 60;
+        UpdatePlayerReadyDisplay();
     }
+
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {// ‘JˆÚƒV[ƒ“‚ªİ’è‚³‚ê‚Ä‚¢‚½‚ç‚»‚ÌƒV[ƒ“‚É‘JˆÚ‚·‚é
+        // ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼1ã®æº–å‚™çŠ¶æ…‹ã‚’ãƒã‚§ãƒƒã‚¯ï¼ˆA,W,DåŒæ™‚æŠ¼ã—ï¼‰
+        bool player1Input = Input.GetKey(KeyCode.A) && Input.GetKey(KeyCode.W) && Input.GetKey(KeyCode.D);
+        
+        // ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼2ã®æº–å‚™çŠ¶æ…‹ã‚’ãƒã‚§ãƒƒã‚¯ï¼ˆJ,I,LåŒæ™‚æŠ¼ã—ï¼‰
+        bool player2Input = Input.GetKey(KeyCode.J) && Input.GetKey(KeyCode.I) && Input.GetKey(KeyCode.L);
+
+        // æº–å‚™çŠ¶æ…‹ã‚’æ›´æ–°
+        player1Ready = player1Input;
+        player2Ready = player2Input;
+
+        // UIè¡¨ç¤ºã‚’æ›´æ–°
+        UpdatePlayerReadyDisplay();
+
+        // ä¸¡ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ãŒæº–å‚™å®Œäº†ã—ã¦ã„ã‚‹å ´åˆã®ã¿ã‚·ãƒ¼ãƒ³ã‚’åˆ‡ã‚Šæ›¿ãˆã‚‹
+        if (player1Ready && player2Ready)
+        {
+            // é·ç§»ã‚·ãƒ¼ãƒ³ãŒè¨­å®šã•ã‚Œã¦ã„ãŸã‚‰ãã®ã‚·ãƒ¼ãƒ³ã«é·ç§»ã™ã‚‹
             if (!string.IsNullOrEmpty(sceneToLoad))
             {
-
-
-                Debug.Log("ƒV[ƒ“‚ğØ‚è‘Ö‚¦:" + sceneToLoad);
+                Debug.Log("ã‚·ãƒ¼ãƒ³ã‚’åˆ‡ã‚Šæ›¿ãˆ:" + sceneToLoad);
                 SceneManagerScript.Instance.FadeOutScene(sceneToLoad);
             }
             else
             {
-                Debug.LogError("‘JˆÚæ‚ÌƒV[ƒ“–¼‚ªİ’è‚³‚ê‚Ä‚È‚¢");
+                Debug.LogError("é·ç§»å…ˆã®ã‚·ãƒ¼ãƒ³ãŒè¨­å®šã•ã‚Œã¦ã„ãªã„");
             }
         }
     }
 
-    // OnValidateƒƒ\ƒbƒh‚àƒGƒfƒBƒ^ê—p
+    private void UpdatePlayerReadyDisplay()
+    {
+        if (player1ReadyText != null)
+        {
+            player1ReadyText.text = player1Ready ? 
+                "Player 1 Ready!" : 
+                "Player 1: Press A+W+D to Ready";
+        }
+
+        if (player2ReadyText != null)
+        {
+            player2ReadyText.text = player2Ready ? 
+                "Player 2 Ready!" : 
+                "Player 2: Press J+I+L to Ready";
+        }
+    }
+
+    // OnValidateãƒ¡ã‚½ãƒƒãƒ‰ã¯ã‚¨ãƒ‡ã‚£ã‚¿å°‚ç”¨
 #if UNITY_EDITOR
-    // ƒCƒ“ƒXƒyƒNƒ^‚Å’l‚ª•ÏX‚³‚ê‚½‚È‚Ç‚É©“®‚ÅŒÄ‚Î‚ê‚éƒƒ\ƒbƒh
+    // ã‚¤ãƒ³ã‚¹ãƒšã‚¯ã‚¿ãƒ¼ã§å€¤ãŒå¤‰æ›´ã•ã‚ŒãŸæ™‚ãªã©ã«è‡ªå‹•ã§å‘¼ã°ã‚Œã‚‹ãƒ¡ã‚½ãƒƒãƒ‰
     private void OnValidate()
     {
-        // sceneAssetƒtƒB[ƒ‹ƒh‚ÉƒV[ƒ“‚ªİ’è‚³‚ê‚½‚ç
+        // sceneAssetãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã«ã‚·ãƒ¼ãƒ³ãŒè¨­å®šã•ã‚ŒãŸå ´åˆ
         if (sceneAsset != null)
         {
-            // ‚»‚ÌƒV[ƒ“‚Ì–¼‘Oi•¶š—ñj‚ğ sceneToLoad •Ï”‚ÉƒRƒs[‚·‚é
+            // ãã®ã‚·ãƒ¼ãƒ³ã®åå‰ï¼ˆæ–‡å­—åˆ—ï¼‰ã‚’ sceneToLoad å¤‰æ•°ã«ã‚³ãƒ”ãƒ¼ã™ã‚‹
             sceneToLoad = sceneAsset.name;
         }
         else
         {
-            // SceneAsset‚ª–¢İ’è‚È‚ç•¶š—ñ‚à‹ó‚É‚·‚é
+            // SceneAssetãŒæœªè¨­å®šãªã‚‰ç©ºæ–‡å­—ã«ã™ã‚‹
             sceneToLoad = "";
         }
     }

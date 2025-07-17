@@ -835,6 +835,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sceneToLoad: GameScene
+  player1ReadyText: {fileID: 0}
+  player2ReadyText: {fileID: 0}
   sceneAsset: {fileID: 102900000, guid: 9909964daa9e95146be548b037871578, type: 3}
 --- !u!4 &836022727
 Transform:
