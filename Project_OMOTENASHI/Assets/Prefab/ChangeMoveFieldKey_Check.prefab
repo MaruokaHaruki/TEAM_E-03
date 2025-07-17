@@ -232,9 +232,6 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   StartKey: 98
-  SetAnimation: {fileID: 1545735577493976429}
-  AutoDirectionChange: 1
-  currentKey: 0
 --- !u!61 &1698647168384537594
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -308,11 +305,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2222009076419902243, guid: a647b1ef2afa2a7489b10a2f151e2bcb, type: 3}
       propertyPath: m_Color.b
-      value: 0.5415094
+      value: 0.54905653
       objectReference: {fileID: 0}
     - target: {fileID: 2222009076419902243, guid: a647b1ef2afa2a7489b10a2f151e2bcb, type: 3}
       propertyPath: m_Color.g
-      value: 0.5415094
+      value: 0.54905653
       objectReference: {fileID: 0}
     - target: {fileID: 2222009076419902243, guid: a647b1ef2afa2a7489b10a2f151e2bcb, type: 3}
       propertyPath: m_Color.r
@@ -713,11 +710,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2222009076419902243, guid: a647b1ef2afa2a7489b10a2f151e2bcb, type: 3}
       propertyPath: m_Color.g
-      value: 0.7115419
+      value: 0.66596925
       objectReference: {fileID: 0}
     - target: {fileID: 2222009076419902243, guid: a647b1ef2afa2a7489b10a2f151e2bcb, type: 3}
       propertyPath: m_Color.r
-      value: 0.50377357
+      value: 0.6622641
       objectReference: {fileID: 0}
     - target: {fileID: 3673399554919989124, guid: a647b1ef2afa2a7489b10a2f151e2bcb, type: 3}
       propertyPath: m_LocalScale.y
