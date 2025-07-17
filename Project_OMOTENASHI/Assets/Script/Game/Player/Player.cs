@@ -746,7 +746,7 @@ public class Player : MonoBehaviour {
 
             isInvincible_ = true;
             invincibilityTimer_ = 2.0f;
-           // Destroy(collision.gameObject);
+            Destroy(collision.gameObject);
         }
     }
 
