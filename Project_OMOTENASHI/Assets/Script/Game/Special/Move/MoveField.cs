@@ -115,19 +115,25 @@ public class MoveField : MonoBehaviour
         if (collision.gameObject.CompareTag("Player"))
         {
             Player player = collision.gameObject.GetComponent<Player>();
+            
+            // プレイヤーが存在し、クールダウン中でない場合のみ処理
             if (player != null && cooldownTimer <= 0)
             {
-                // 連打ゲージ操作を実行
+                // 移動方向を数値に変換（右=1.0f、左=-1.0f）
                 float moveDirection = RightMoveFlag ? 1.0f : -1.0f;
+                
+                // プレイヤーのゲージに効果を適用
                 player.ApplyMoveFieldEffect(moveDirection, GaugePower);
                 
-                // クールダウン設定
+                // 連続実行を防ぐためのクールダウン設定
                 cooldownTimer = COOLDOWN_DURATION;
                 
+                // デバッグ情報を出力
                 Debug.Log($"MoveField effect applied to {player.playerID_}: Direction={moveDirection}, Power={GaugePower}");
             }
         }
 
+        // キーオブジェクトとの接触でキー変更（現在はコメントアウト）
         //// キーオブジェクトとの接触でキー変更
         //if (collision.gameObject.CompareTag("KeyData"))
         //{
@@ -141,16 +147,20 @@ public class MoveField : MonoBehaviour
 
     private void OnTriggerStay2D(Collider2D collision)
     {
-        // プレイヤーが矢印内に留まっている間も連続でゲージ操作
+        // プレイヤーが矢印内に留まっている間の連続処理
         if (collision.gameObject.CompareTag("Player") && cooldownTimer <= 0)
         {
             Player player = collision.gameObject.GetComponent<Player>();
             if (player != null)
             {
+                // 移動方向を数値に変換
                 float moveDirection = RightMoveFlag ? 1.0f : -1.0f;
-                player.ApplyMoveFieldEffect(moveDirection, GaugePower * 0.3f); // Stay時は効果を弱める
                 
-                cooldownTimer = COOLDOWN_DURATION * 2; // Stay時はクールダウンを長めに
+                // Stay時は効果を弱める（30%の効果）
+                player.ApplyMoveFieldEffect(moveDirection, GaugePower * 0.3f);
+                
+                // Stay時はクールダウンを長めに設定（連続実行を抑制）
+                cooldownTimer = COOLDOWN_DURATION * 2;
             }
         }
     }
