@@ -134,7 +134,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      controller_wiiu_pro_0: 3856888796532059404
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

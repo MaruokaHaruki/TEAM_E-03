@@ -134,7 +134,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      controller_playstation2_0: -7340871130798169647
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

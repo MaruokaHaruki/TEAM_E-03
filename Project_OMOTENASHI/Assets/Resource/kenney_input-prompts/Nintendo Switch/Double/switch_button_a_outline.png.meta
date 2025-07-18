@@ -134,7 +134,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      switch_button_a_outline_0: 3016756688578773
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -134,7 +134,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      playstation_button_cross_outline_0: -2307543290646239319
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -234,7 +234,12 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      steamdeck_trackpad_r_horizontal_outline_0: 6447554550388616675
+      steamdeck_trackpad_r_horizontal_outline_1: 3497059319434537679
+      steamdeck_trackpad_r_horizontal_outline_2: -2212612563664691825
+      steamdeck_trackpad_r_horizontal_outline_3: 7558707356911341332
+      steamdeck_trackpad_r_horizontal_outline_4: -745331782252328115
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

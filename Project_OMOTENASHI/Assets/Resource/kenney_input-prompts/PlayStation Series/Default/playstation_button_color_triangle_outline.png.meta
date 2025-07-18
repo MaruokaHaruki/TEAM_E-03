@@ -134,7 +134,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      playstation_button_color_triangle_outline_0: 3903707180893604085
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

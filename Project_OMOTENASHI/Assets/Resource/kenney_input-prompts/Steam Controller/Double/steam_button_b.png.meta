@@ -134,7 +134,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      steam_button_b_0: 988068324493718584
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

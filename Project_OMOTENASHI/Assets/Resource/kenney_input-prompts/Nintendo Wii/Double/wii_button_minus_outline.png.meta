@@ -134,7 +134,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      wii_button_minus_outline_0: -7635332635423100426
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

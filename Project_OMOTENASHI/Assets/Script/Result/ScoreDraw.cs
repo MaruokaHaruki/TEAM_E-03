@@ -17,6 +17,7 @@ public class ScoreDraw : MonoBehaviour
 
     [Header("��")]
     [SerializeField] private GameObject Fish;
+    [SerializeField] private bool FishChildObjectFlag = false;
 
     [Header("�M")]
     [SerializeField] private Rigidbody2D PlayerAPlate;
@@ -93,9 +94,25 @@ public class ScoreDraw : MonoBehaviour
 
         PlayerAPlate.constraints = RigidbodyConstraints2D.FreezeAll;
         PlayerAPlate.gravityScale = 0.0f;
+        if (FishChildObjectFlag)
+        {
+            PlayerAPlate.gameObject.transform.parent = PlayerA.gameObject.transform;
+        }
+        else
+        {
+            PlayerAPlate.gameObject.transform.parent = null;
+        }
 
         PlayerBPlate.constraints = RigidbodyConstraints2D.FreezeAll;
         PlayerBPlate.gravityScale = 0.0f;
+        if (FishChildObjectFlag)
+        {
+            PlayerBPlate.gameObject.transform.parent = PlayerB.gameObject.transform;
+        }
+        else
+        {
+            PlayerBPlate.gameObject.transform.parent = null;
+        }
 
         NextMoveTime = Time.time + StartTime;
 
@@ -122,7 +139,14 @@ public class ScoreDraw : MonoBehaviour
                 // �v���C���[A�X�R�A�`��
                 if (DrawDoneAScore < PlayerAScore)
                 {
-                    Instantiate(Fish, PlayerA.transform.position + (Vector3.forward * 0.5f), Quaternion.Euler(0.0f, 0.0f, Random.Range(-0.0f, 360.0f))).transform.parent = PlayerA.transform;
+                    if (FishChildObjectFlag)
+                    {
+                        Instantiate(Fish, PlayerA.transform.position + (Vector3.forward * 0.5f), Quaternion.Euler(0.0f, 0.0f, Random.Range(-0.0f, 360.0f))).transform.parent = PlayerA.transform;
+                    }
+                    else
+                    {
+                        Instantiate(Fish, PlayerA.transform.position + (Vector3.forward * 0.5f), Quaternion.Euler(0.0f, 0.0f, Random.Range(-0.0f, 360.0f)));
+                    }
 
                     DrawDoneAScore++;
                 }
@@ -130,7 +154,14 @@ public class ScoreDraw : MonoBehaviour
                 // �v���C���[B�X�R�A�`��
                 if (DrawDoneBScore < PlayerBScore)
                 {
-                    Instantiate(Fish, PlayerB.transform.position + (Vector3.forward * 0.5f), Quaternion.Euler(0.0f, 0.0f, Random.Range(0.0f, 360.0f))).transform.parent = PlayerB.transform;
+                    if (FishChildObjectFlag)
+                    {
+                        Instantiate(Fish, PlayerB.transform.position + (Vector3.forward * 0.5f), Quaternion.Euler(0.0f, 0.0f, Random.Range(0.0f, 360.0f))).transform.parent = PlayerB.transform;
+                    }
+                    else
+                    {
+                        Instantiate(Fish, PlayerB.transform.position + (Vector3.forward * 0.5f), Quaternion.Euler(0.0f, 0.0f, Random.Range(0.0f, 360.0f)));
+                    }
 
                     DrawDoneBScore++;
                 }

@@ -159,7 +159,9 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      generic_joystick_right_0: -935708161136509180
+      generic_joystick_right_1: -7102586785785454724
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

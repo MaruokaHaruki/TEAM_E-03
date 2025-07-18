@@ -159,7 +159,9 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      steamdeck_trackpad_r_down_0: 6166624742612448250
+      steamdeck_trackpad_r_down_1: -5335469084934039665
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
