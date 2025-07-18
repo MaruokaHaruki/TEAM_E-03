@@ -3404,19 +3404,20 @@ MonoBehaviour:
   wallCheckFront_: {fileID: 1467870218}
   wallCheckBuck_: {fileID: 214818669}
   isAutoMode_: 1
-  autoMoveSpeed_: 4
+  autoMoveSpeed_: 2
   speedBoostMultiplier_: 2.5
   speedBoostDuration_: 0.5
   maxComboGauge_: 100
-  comboGaugePerHit_: 16
+  comboGaugePerHit_: 21
   gaugeDrainRate_: 116
-  maxGaugeSpeedMultiplier_: 2
+  maxGaugeSpeedMultiplier_: 3.5
   minEffectiveGauge_: 1
   enableGaugeDrainBoost_: 1
   gaugeDrainBoostMultiplier_: 2
-  invincibilityDuration_: 1
+  invincibilityDuration_: 0.6
   rainbowSpeed_: 1
-  invincibilitySpeedMultiplier_: 1.5
+  invincibilitySpeedMultiplier_: 3.5
+  invincibilityItemTiem: 3
   damageFlashDuration_: 1
   damageFlashInterval_: 0.1
   damageFlashColor_: {r: 1, g: 0, b: 0, a: 1}
@@ -4113,19 +4114,20 @@ MonoBehaviour:
   wallCheckFront_: {fileID: 896691777}
   wallCheckBuck_: {fileID: 1956489830}
   isAutoMode_: 1
-  autoMoveSpeed_: 4
+  autoMoveSpeed_: 2
   speedBoostMultiplier_: 2.5
   speedBoostDuration_: 0.5
   maxComboGauge_: 100
-  comboGaugePerHit_: 16
+  comboGaugePerHit_: 21
   gaugeDrainRate_: 116
-  maxGaugeSpeedMultiplier_: 2
+  maxGaugeSpeedMultiplier_: 3.5
   minEffectiveGauge_: 1
   enableGaugeDrainBoost_: 1
   gaugeDrainBoostMultiplier_: 2
-  invincibilityDuration_: 1
+  invincibilityDuration_: 0.6
   rainbowSpeed_: 1
-  invincibilitySpeedMultiplier_: 1.5
+  invincibilitySpeedMultiplier_: 3.5
+  invincibilityItemTiem: 3
   damageFlashDuration_: 1
   damageFlashInterval_: 0.1
   damageFlashColor_: {r: 1, g: 0, b: 0, a: 1}
@@ -5117,6 +5119,10 @@ PrefabInstance:
       value: RoundManager
       objectReference: {fileID: 0}
     - target: {fileID: 2707897612911867515, guid: 48c2e5760d71b5848979fb00536cc673, type: 3}
+      propertyPath: roundSettingsList.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 2707897612911867515, guid: 48c2e5760d71b5848979fb00536cc673, type: 3}
       propertyPath: roundFeatureImages.Array.size
       value: 5
       objectReference: {fileID: 0}
@@ -5139,11 +5145,11 @@ PrefabInstance:
     - target: {fileID: 2707897612911867515, guid: 48c2e5760d71b5848979fb00536cc673, type: 3}
       propertyPath: 'roundFeatureImages.Array.data[1]'
       value: 
-      objectReference: {fileID: 21300000, guid: ddd9093f0b6780f4daec45151c5d2dc7, type: 3}
+      objectReference: {fileID: 21300000, guid: 1d555a006ab2f25499b22cc50b10577b, type: 3}
     - target: {fileID: 2707897612911867515, guid: 48c2e5760d71b5848979fb00536cc673, type: 3}
       propertyPath: 'roundFeatureImages.Array.data[2]'
       value: 
-      objectReference: {fileID: 21300000, guid: cbb62852dba435a4d8bc2c5cde46d9d2, type: 3}
+      objectReference: {fileID: 21300000, guid: ddd9093f0b6780f4daec45151c5d2dc7, type: 3}
     - target: {fileID: 2707897612911867515, guid: 48c2e5760d71b5848979fb00536cc673, type: 3}
       propertyPath: 'roundFeatureImages.Array.data[3]'
       value: 
@@ -5423,8 +5429,8 @@ SceneRoots:
   - {fileID: 1805055023}
   - {fileID: 493781462}
   - {fileID: 8828112073760328545}
-  - {fileID: 1716098618}
   - {fileID: 1507770439}
+  - {fileID: 1716098618}
   - {fileID: 1517558332}
   - {fileID: 361640537}
   - {fileID: 1300214812}

@@ -21,14 +21,14 @@ MonoBehaviour:
   enableStomp: 1
   enableReverseJump: 0
   enableSpeedTransfer: 1
-  playerMaxHp: 30
+  playerMaxHp: 20
   baseSpeed: 5
   jumpForce: 8
   enableGaugeDrainBoost: 1
   gaugeDrainBoostMultiplier: 0
-  invincibilityDuration: 0
+  invincibilityDuration: 1.5
   stompStunDuration: 2
-  tilemapPrefab: {fileID: 3229168071328024921, guid: 408d11c9bef99794fb7fbce0cc35ba49, type: 3}
+  tilemapPrefab: {fileID: 3229168071328024921, guid: 560a2e69b78df134cb27303d1e696453, type: 3}
   tilemapPosition: {x: 0, y: 0, z: 0}
   tilemapRotation: {x: 0, y: 0, z: 0}
   InvincibleItemFlag: 0

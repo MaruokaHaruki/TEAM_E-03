@@ -56,6 +56,7 @@ public class Player : MonoBehaviour {
     public float invincibilityDuration_ = 3.0f;
     public float rainbowSpeed_ = 2.0f;
     public float invincibilitySpeedMultiplier_ = 2.0f;
+    public float invincibilityItemTiem = 3.0F;
 
     // ダメージエフェクト設定
     [Header("ダメージエフェクト設定")]
@@ -505,7 +506,7 @@ public class Player : MonoBehaviour {
         bool moveInputPressed = Input.GetKeyDown(moveLeftKey_) ||
                                Input.GetKeyDown(moveRightKey_);
 
-        if (moveInputPressed && !isInvincible_) {
+        if (moveInputPressed) {
             if (AudioManager.Instance != null) {
                 AudioManager.Instance.PlaySE("Player_Barrage");
             }
@@ -545,10 +546,6 @@ public class Player : MonoBehaviour {
         
         if (isSpeedBoosted_) {
             currentSpeed *= speedBoostMultiplier_;
-        }
-
-        if (isInvincible_) {
-            currentSpeed *= invincibilitySpeedMultiplier_;
         }
         else {
             float gaugeSpeedMultiplier = GetGaugeSpeedMultiplier();
@@ -745,7 +742,7 @@ public class Player : MonoBehaviour {
             }
 
             isInvincible_ = true;
-            invincibilityTimer_ = 2.0f;
+            invincibilityTimer_ = invincibilityItemTiem;
             Destroy(collision.gameObject);
         }
     }
@@ -888,10 +885,6 @@ public class Player : MonoBehaviour {
         
         if (isSpeedBoosted_) {
             baseSpeed *= speedBoostMultiplier_;
-        }
-
-        if (isInvincible_) {
-            baseSpeed *= invincibilitySpeedMultiplier_;
         }
 
         if (!isInvincible_) {

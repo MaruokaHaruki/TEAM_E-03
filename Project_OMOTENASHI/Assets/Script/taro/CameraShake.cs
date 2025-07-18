@@ -70,13 +70,7 @@ public class CameraShake : MonoBehaviour
     /// </summary>
     void Update()
     {
-        // デバッグキーが有効で、シェイク中でない場合のみ処理
-        if (enableDebugKeys && !isShaking)
-        {
-            if (Input.GetKeyDown(KeyCode.Space)) ShakeCamera(ShakeType.Light);
-            else if (Input.GetKeyDown(KeyCode.Return)) ShakeCamera(ShakeType.Medium);
-            else if (Input.GetKeyDown(KeyCode.T)) ShakeCamera(ShakeType.Heavy);
-        }
+
     }
 
     /// <summary>

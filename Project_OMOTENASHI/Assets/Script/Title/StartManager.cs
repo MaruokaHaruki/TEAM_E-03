@@ -1,14 +1,14 @@
 using UnityEditor;
 using UnityEngine;
 using TMPro;
-using DG.Tweening; // DOTween‚ğg—p‚·‚é‚½‚ß‚Ì–¼‘O‹óŠÔ
+using DG.Tweening; // DOTweenï¿½ï¿½gï¿½pï¿½ï¿½ï¿½é‚½ï¿½ß‚Ì–ï¿½ï¿½Oï¿½ï¿½ï¿½
 
 public class StartManager : MonoBehaviour
 {
     [HideInInspector]
     [SerializeField] private string sceneToLoad;
 
-    [Header("€”õó‘Ô•\¦UI")]
+    [Header("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô•ï¿½ï¿½UI")]
     [SerializeField] private TextMeshProUGUI player1ReadyText;
     [SerializeField] private TextMeshProUGUI player2ReadyText;
 
@@ -17,7 +17,7 @@ public class StartManager : MonoBehaviour
     [SerializeField] private float canvasDisplayDelay = 1f;
     [SerializeField] private float fadeInDuration = 0.5f;
     [SerializeField] private float fadeOutDuration = 0.5f;
-    [SerializeField] private float autoHideDelay = 5f; // –³‘€ì‚Ì©“®”ñ•\¦ŠÔ
+    [SerializeField] private float autoHideDelay = 5f; // ï¿½ï¿½ï¿½ï¿½ï¿½ìï¿½Ìï¿½ï¿½ï¿½ï¿½ï¿½\ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 
     private bool player1Ready = false;
     private bool player2Ready = false;
@@ -28,9 +28,9 @@ public class StartManager : MonoBehaviour
 
 
 #if UNITY_EDITOR
-    // ƒCƒ“ƒXƒyƒNƒ^[‚É•\¦‚·‚é‚½‚ß‚ÌSceneAssetŒ^•Ï”
-    [Header("‘JˆÚæƒV[ƒ“‘I‘ğ")] // ƒCƒ“ƒXƒyƒNƒ^[‚ÉŒ©o‚µ‚ğ•\¦
-    [SerializeField] private SceneAsset sceneAsset; // ‚±‚±‚ÉƒV[ƒ“ƒtƒ@ƒCƒ‹‚ğƒhƒ‰ƒbƒO&ƒhƒƒbƒv‚·‚é
+    // ï¿½Cï¿½ï¿½ï¿½Xï¿½yï¿½Nï¿½^ï¿½[ï¿½É•\ï¿½ï¿½ï¿½ï¿½ï¿½é‚½ï¿½ß‚ï¿½SceneAssetï¿½^ï¿½Ïï¿½
+    [Header("ï¿½Jï¿½Úï¿½Vï¿½[ï¿½ï¿½ï¿½Iï¿½ï¿½")] // ï¿½Cï¿½ï¿½ï¿½Xï¿½yï¿½Nï¿½^ï¿½[ï¿½ÉŒï¿½ï¿½oï¿½ï¿½ï¿½ï¿½\ï¿½ï¿½
+    [SerializeField] private SceneAsset sceneAsset; // ï¿½ï¿½ï¿½ï¿½ï¿½ÉƒVï¿½[ï¿½ï¿½ï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½ï¿½hï¿½ï¿½ï¿½bï¿½O&ï¿½hï¿½ï¿½ï¿½bï¿½vï¿½ï¿½ï¿½ï¿½
 #endif
 
 
@@ -43,49 +43,49 @@ public class StartManager : MonoBehaviour
 
     private void Start()
     {
-        // ƒ^ƒCƒgƒ‹ƒƒSŠ®—¹ƒCƒxƒ“ƒg‚ğw“Ç
+        // ï¿½^ï¿½Cï¿½gï¿½ï¿½ï¿½ï¿½ï¿½Sï¿½ï¿½ï¿½ï¿½ï¿½Cï¿½xï¿½ï¿½ï¿½gï¿½ï¿½wï¿½ï¿½
         TitleLogController.OnTitleLogoComplete += OnTitleLogoCompleted;
 
-        // Canvas‰Šúó‘Ô‚ğİ’è
+        // Canvasï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô‚ï¿½İ’ï¿½
         if (playerReadyCanvas != null)
         {
-            // CanvasGroup‚ğæ“¾‚Ü‚½‚Í’Ç‰Á
+            // CanvasGroupï¿½ï¿½æ“¾ï¿½Ü‚ï¿½ï¿½Í’Ç‰ï¿½
             var canvasGroup = playerReadyCanvas.GetComponent<CanvasGroup>();
             if (canvasGroup == null)
             {
                 canvasGroup = playerReadyCanvas.AddComponent<CanvasGroup>();
             }
 
-            // ‰Šúó‘Ôİ’è
+            // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ôİ’ï¿½
             canvasGroup.alpha = 0f;
             canvasGroup.interactable = false;
             canvasGroup.blocksRaycasts = false;
 
-            // ƒXƒP[ƒ‹‚à‰Šú‰»
+            // ï¿½Xï¿½Pï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
             playerReadyCanvas.transform.localScale = Vector3.zero;
 
-            playerReadyCanvas.SetActive(true); // ƒAƒNƒeƒBƒu‚É‚µ‚Ä‚¨‚¢‚Ä“§–¾ó‘Ô
+            playerReadyCanvas.SetActive(true); // ï¿½Aï¿½Nï¿½eï¿½Bï¿½uï¿½É‚ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ï¿½Ä“ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         }
     }
 
     private void OnDestroy()
     {
-        // ƒCƒxƒ“ƒgw“Ç‰ğœ
+        // ï¿½Cï¿½xï¿½ï¿½ï¿½gï¿½wï¿½Ç‰ï¿½ï¿½
         TitleLogController.OnTitleLogoComplete -= OnTitleLogoCompleted;
     }
 
     private void OnTitleLogoCompleted()
     {
         titleLogoCompleted = true;
-        Debug.Log("ƒ^ƒCƒgƒ‹ƒƒSŠ®—¹ - ‰½‚©ƒL[‚ğ‰Ÿ‚µ‚Ä‚­‚¾‚³‚¢");
+        Debug.Log("ï¿½^ï¿½Cï¿½gï¿½ï¿½ï¿½ï¿½ï¿½Sï¿½ï¿½ï¿½ï¿½ - ï¿½ï¿½ï¿½ï¿½ï¿½Lï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½");
     }
 
     private void Update()
     {
-        // ƒ^ƒCƒgƒ‹ƒƒS‚ªŠ®—¹‚µ‚Ä‚¢‚È‚¢ê‡‚Í‰½‚à‚µ‚È‚¢
+        // ï¿½^ï¿½Cï¿½gï¿½ï¿½ï¿½ï¿½ï¿½Sï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½È‚ï¿½ï¿½ê‡ï¿½Í‰ï¿½ï¿½ï¿½ï¿½ï¿½È‚ï¿½
         if (!titleLogoCompleted) return;
 
-        // ƒL[“ü—Íƒ`ƒFƒbƒN
+        // ï¿½Lï¿½[ï¿½ï¿½ï¿½Íƒ`ï¿½Fï¿½bï¿½N
         if (Input.anyKeyDown)
         {
             lastInputTime = Time.time;
@@ -96,48 +96,48 @@ public class StartManager : MonoBehaviour
             }
         }
 
-        // Canvas•\¦’†‚Ìˆ—
+        // Canvasï¿½\ï¿½ï¿½ï¿½ï¿½ï¿½Ìï¿½ï¿½ï¿½
         if (canvasDisplayed)
         {
-            // –³‘€ìŠÔƒ`ƒFƒbƒN‚ÅƒtƒF[ƒhƒAƒEƒg
+            // ï¿½ï¿½ï¿½ï¿½ï¿½ìï¿½Ôƒ`ï¿½Fï¿½bï¿½Nï¿½Åƒtï¿½Fï¿½[ï¿½hï¿½Aï¿½Eï¿½g
             if (Time.time - lastInputTime > autoHideDelay)
             {
                 HideCanvas();
                 return;
             }
 
-            // ƒvƒŒƒCƒ„[“ü—Íˆ—
+            // ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½Íï¿½ï¿½ï¿½
             HandlePlayerInput();
         }
     }
 
     private void HandlePlayerInput()
     {
-        // ƒvƒŒƒCƒ„[1‚Ì€”õó‘Ô‚ğƒ`ƒFƒbƒNiA,W,D“¯‰Ÿ‚µj
-        bool player1Input = Input.GetKey(KeyCode.A) && Input.GetKey(KeyCode.W) && Input.GetKey(KeyCode.D);
+        // ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½[1ï¿½Ìï¿½ï¿½ï¿½ï¿½ï¿½Ô‚ï¿½`ï¿½Fï¿½bï¿½Nï¿½iA,W,Dï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½j
+        bool player1Input = Input.GetKey(KeyCode.W);
 
-        // ƒvƒŒƒCƒ„[2‚Ì€”õó‘Ô‚ğƒ`ƒFƒbƒNiJ,I,L“¯‰Ÿ‚µj
-        bool player2Input = Input.GetKey(KeyCode.J) && Input.GetKey(KeyCode.I) && Input.GetKey(KeyCode.L);
+        // ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½[2ï¿½Ìï¿½ï¿½ï¿½ï¿½ï¿½Ô‚ï¿½`ï¿½Fï¿½bï¿½Nï¿½iJ,I,Lï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½j
+        bool player2Input = Input.GetKey(KeyCode.I);
 
-        // €”õó‘Ô‚ğXV
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô‚ï¿½Xï¿½V
         player1Ready = player1Input;
         player2Ready = player2Input;
 
-        // UI•\¦‚ğXV
+        // UIï¿½\ï¿½ï¿½ï¿½ï¿½Xï¿½V
         UpdatePlayerReadyDisplay();
 
-        // —¼ƒvƒŒƒCƒ„[‚ª€”õŠ®—¹‚µ‚Ä‚¢‚éê‡‚Ì‚İƒV[ƒ“‚ğØ‚è‘Ö‚¦‚é
+        // ï¿½ï¿½ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ê‡ï¿½Ì‚İƒVï¿½[ï¿½ï¿½ï¿½ï¿½Ø‚ï¿½Ö‚ï¿½ï¿½ï¿½
         if (player1Ready && player2Ready)
         {
-            // ‘JˆÚƒV[ƒ“‚ªİ’è‚³‚ê‚Ä‚¢‚½‚ç‚»‚ÌƒV[ƒ“‚É‘JˆÚ‚·‚é
+            // ï¿½Jï¿½ÚƒVï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½İ’è‚³ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ï¿½ç‚»ï¿½ÌƒVï¿½[ï¿½ï¿½ï¿½É‘Jï¿½Ú‚ï¿½ï¿½ï¿½
             if (!string.IsNullOrEmpty(sceneToLoad))
             {
-                Debug.Log("ƒV[ƒ“‚ğØ‚è‘Ö‚¦:" + sceneToLoad);
+                Debug.Log("ï¿½Vï¿½[ï¿½ï¿½ï¿½ï¿½Ø‚ï¿½Ö‚ï¿½:" + sceneToLoad);
                 SceneManagerScript.Instance.FadeOutScene(sceneToLoad);
             }
             else
             {
-                Debug.LogError("‘JˆÚæ‚ÌƒV[ƒ“‚ªİ’è‚³‚ê‚Ä‚¢‚È‚¢");
+                Debug.LogError("ï¿½Jï¿½Úï¿½ÌƒVï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½İ’è‚³ï¿½ï¿½Ä‚ï¿½ï¿½È‚ï¿½");
             }
         }
     }
@@ -154,14 +154,14 @@ public class StartManager : MonoBehaviour
 
             if (canvasGroup != null)
             {
-                // Šù‘¶‚ÌƒAƒjƒ[ƒVƒ‡ƒ“‚ğ’â~
+                // ï¿½ï¿½ï¿½ï¿½ï¿½ÌƒAï¿½jï¿½ï¿½ï¿½[ï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½~
                 currentFadeTween?.Kill();
 
-                // ƒCƒ“ƒ^ƒ‰ƒNƒVƒ‡ƒ“‚ğ—LŒø‰»
+                // ï¿½Cï¿½ï¿½ï¿½^ï¿½ï¿½ï¿½Nï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Lï¿½ï¿½ï¿½ï¿½
                 canvasGroup.interactable = true;
                 canvasGroup.blocksRaycasts = true;
 
-                // ƒtƒF[ƒhƒCƒ“ƒAƒjƒ[ƒVƒ‡ƒ“
+                // ï¿½tï¿½Fï¿½[ï¿½hï¿½Cï¿½ï¿½ï¿½Aï¿½jï¿½ï¿½ï¿½[ï¿½Vï¿½ï¿½ï¿½ï¿½
                 currentFadeTween = canvasGroup.DOFade(1f, fadeInDuration).SetEase(Ease.OutQuart);
             }
         }
@@ -177,10 +177,10 @@ public class StartManager : MonoBehaviour
 
             if (canvasGroup != null)
             {
-                // Šù‘¶‚ÌƒAƒjƒ[ƒVƒ‡ƒ“‚ğ’â~
+                // ï¿½ï¿½ï¿½ï¿½ï¿½ÌƒAï¿½jï¿½ï¿½ï¿½[ï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½~
                 currentFadeTween?.Kill();
 
-                // ƒtƒF[ƒhƒAƒEƒgƒAƒjƒ[ƒVƒ‡ƒ“
+                // ï¿½tï¿½Fï¿½[ï¿½hï¿½Aï¿½Eï¿½gï¿½Aï¿½jï¿½ï¿½ï¿½[ï¿½Vï¿½ï¿½ï¿½ï¿½
                 currentFadeTween = canvasGroup.DOFade(0f, fadeOutDuration)
                     .SetEase(Ease.OutQuart)
                     .OnComplete(() => {
@@ -188,7 +188,7 @@ public class StartManager : MonoBehaviour
                         canvasGroup.blocksRaycasts = false;
                         canvasDisplayed = false;
 
-                        // €”õó‘ÔƒŠƒZƒbƒg
+                        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ôƒï¿½ï¿½Zï¿½bï¿½g
                         player1Ready = false;
                         player2Ready = false;
                         UpdatePlayerReadyDisplay();
@@ -214,20 +214,20 @@ public class StartManager : MonoBehaviour
         }
     }
 
-    // OnValidateƒƒ\ƒbƒh‚ÍƒGƒfƒBƒ^ê—p
+    // OnValidateï¿½ï¿½ï¿½\ï¿½bï¿½hï¿½ÍƒGï¿½fï¿½Bï¿½^ï¿½ï¿½p
 #if UNITY_EDITOR
-    // ƒCƒ“ƒXƒyƒNƒ^[‚Å’l‚ª•ÏX‚³‚ê‚½‚È‚Ç‚É©“®‚ÅŒÄ‚Î‚ê‚éƒƒ\ƒbƒh
+    // ï¿½Cï¿½ï¿½ï¿½Xï¿½yï¿½Nï¿½^ï¿½[ï¿½Å’lï¿½ï¿½ï¿½ÏXï¿½ï¿½ï¿½ê‚½ï¿½ï¿½ï¿½È‚Ç‚Éï¿½ï¿½ï¿½ï¿½ÅŒÄ‚Î‚ï¿½éƒï¿½\ï¿½bï¿½h
     private void OnValidate()
     {
-        // sceneAssetƒtƒB[ƒ‹ƒh‚ÉƒV[ƒ“‚ªİ’è‚³‚ê‚½ê‡
+        // sceneAssetï¿½tï¿½Bï¿½[ï¿½ï¿½ï¿½hï¿½ÉƒVï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½İ’è‚³ï¿½ê‚½ï¿½ê‡
         if (sceneAsset != null)
         {
-            // ‚»‚ÌƒV[ƒ“‚Ì–¼‘Oi•¶š—ñj‚ğ sceneToLoad •Ï”‚ÉƒRƒs[‚·‚é
+            // ï¿½ï¿½ï¿½ÌƒVï¿½[ï¿½ï¿½ï¿½Ì–ï¿½ï¿½Oï¿½iï¿½ï¿½ï¿½ï¿½ï¿½ï¿½jï¿½ï¿½ sceneToLoad ï¿½Ïï¿½ï¿½ÉƒRï¿½sï¿½[ï¿½ï¿½ï¿½ï¿½
             sceneToLoad = sceneAsset.name;
         }
         else
         {
-            // SceneAsset‚ª–¢İ’è‚È‚ç‹ó•¶š‚É‚·‚é
+            // SceneAssetï¿½ï¿½ï¿½ï¿½ï¿½İ’ï¿½È‚ï¿½ó•¶ï¿½ï¿½É‚ï¿½ï¿½ï¿½
             sceneToLoad = "";
         }
     }
