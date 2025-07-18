@@ -3410,7 +3410,7 @@ MonoBehaviour:
   maxComboGauge_: 100
   comboGaugePerHit_: 21
   gaugeDrainRate_: 116
-  maxGaugeSpeedMultiplier_: 1.5
+  maxGaugeSpeedMultiplier_: 1.8
   minEffectiveGauge_: 1
   enableGaugeDrainBoost_: 1
   gaugeDrainBoostMultiplier_: 2
@@ -4120,7 +4120,7 @@ MonoBehaviour:
   maxComboGauge_: 100
   comboGaugePerHit_: 21
   gaugeDrainRate_: 116
-  maxGaugeSpeedMultiplier_: 1.5
+  maxGaugeSpeedMultiplier_: 1.8
   minEffectiveGauge_: 1
   enableGaugeDrainBoost_: 1
   gaugeDrainBoostMultiplier_: 2
