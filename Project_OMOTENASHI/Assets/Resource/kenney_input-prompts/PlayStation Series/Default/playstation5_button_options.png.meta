@@ -134,7 +134,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      playstation5_button_options_0: -7507003779341690557
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

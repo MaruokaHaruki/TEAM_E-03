@@ -134,7 +134,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      playstation4_touchpad_0: -921436944789408533
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

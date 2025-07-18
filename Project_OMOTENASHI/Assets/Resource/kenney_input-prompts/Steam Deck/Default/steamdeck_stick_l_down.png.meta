@@ -134,7 +134,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      steamdeck_stick_l_down_0: -2379403273914900558
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

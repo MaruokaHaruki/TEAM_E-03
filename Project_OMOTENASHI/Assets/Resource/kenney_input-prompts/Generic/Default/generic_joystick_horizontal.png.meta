@@ -209,7 +209,11 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      generic_joystick_horizontal_0: -7068405847072993698
+      generic_joystick_horizontal_1: -3065546234569926471
+      generic_joystick_horizontal_2: -4919399451740864620
+      generic_joystick_horizontal_3: 6604701173532118208
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

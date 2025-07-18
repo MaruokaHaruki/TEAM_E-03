@@ -209,7 +209,11 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      playstation5_button_create_outline_0: -66865984014807627
+      playstation5_button_create_outline_1: -4727161716648741887
+      playstation5_button_create_outline_2: -8399346971577057872
+      playstation5_button_create_outline_3: -6832415762800232184
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

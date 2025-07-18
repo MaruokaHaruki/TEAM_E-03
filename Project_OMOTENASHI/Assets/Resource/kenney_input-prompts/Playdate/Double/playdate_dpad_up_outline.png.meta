@@ -134,7 +134,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      playdate_dpad_up_outline_0: -4357488870145200334
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

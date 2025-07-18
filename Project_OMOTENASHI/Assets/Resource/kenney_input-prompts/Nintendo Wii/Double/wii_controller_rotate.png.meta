@@ -134,7 +134,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      wii_controller_rotate_0: 7898137617188823211
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

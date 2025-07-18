@@ -259,7 +259,13 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      playstation4_button_share_outline_0: 3033680884252749578
+      playstation4_button_share_outline_1: 5079766071885992651
+      playstation4_button_share_outline_2: 5003627897718090202
+      playstation4_button_share_outline_3: 8328682056551346061
+      playstation4_button_share_outline_4: 8036615696037254057
+      playstation4_button_share_outline_5: -8087937243866456472
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -134,7 +134,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      xbox_dpad_0: -5197839481415047839
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -134,7 +134,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      xbox_button_color_x_outline_0: -6173462402354363414
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

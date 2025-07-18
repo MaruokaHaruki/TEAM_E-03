@@ -134,7 +134,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      playstation_trigger_r1_alternative_outline_0: -3242152659190333482
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
