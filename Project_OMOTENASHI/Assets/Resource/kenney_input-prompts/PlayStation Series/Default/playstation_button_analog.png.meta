@@ -284,7 +284,14 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      playstation_button_analog_0: -6374843167259989680
+      playstation_button_analog_1: 1097808604610922751
+      playstation_button_analog_2: 1504172967554758974
+      playstation_button_analog_3: 7929971966630885911
+      playstation_button_analog_4: 1495639415809942211
+      playstation_button_analog_5: -177991982153809888
+      playstation_button_analog_6: 5501152609208388381
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

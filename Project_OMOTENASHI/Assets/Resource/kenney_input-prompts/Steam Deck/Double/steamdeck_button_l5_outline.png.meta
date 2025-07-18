@@ -134,7 +134,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      steamdeck_button_l5_outline_0: -772664731685496788
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

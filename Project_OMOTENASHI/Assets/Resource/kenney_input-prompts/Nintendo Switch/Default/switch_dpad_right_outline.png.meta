@@ -134,7 +134,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      switch_dpad_right_outline_0: 544230931789077968
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -309,7 +309,15 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      playstation4_button_options_outline_0: -1001759381279394375
+      playstation4_button_options_outline_1: -1985537353579183004
+      playstation4_button_options_outline_2: -1794660114285574970
+      playstation4_button_options_outline_3: 8611990934957806053
+      playstation4_button_options_outline_4: -3699597710618630126
+      playstation4_button_options_outline_5: -6872250066381245677
+      playstation4_button_options_outline_6: -1137200808967054588
+      playstation4_button_options_outline_7: 8645549174293265060
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

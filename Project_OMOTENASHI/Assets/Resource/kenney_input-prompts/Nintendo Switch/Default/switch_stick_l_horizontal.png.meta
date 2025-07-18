@@ -234,7 +234,12 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      switch_stick_l_horizontal_0: -5347710746055372754
+      switch_stick_l_horizontal_1: -3869392020659730514
+      switch_stick_l_horizontal_2: 4098832103732339891
+      switch_stick_l_horizontal_3: 1013198996341336606
+      switch_stick_l_horizontal_4: 6415618079681934452
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

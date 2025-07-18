@@ -70,7 +70,19 @@ public class CameraShake : MonoBehaviour
     /// </summary>
     void Update()
     {
-
+        //↓デバッグ用
+        //if(Input.GetKeyDown(KeyCode.Alpha1))
+        //{
+        //    ShakeCamera(ShakeType.Light);
+        //}
+        //if (Input.GetKeyDown(KeyCode.Alpha2))
+        //{
+        //    ShakeCamera(ShakeType.Medium);
+        //}
+        //if (Input.GetKeyDown(KeyCode.Alpha3))
+        //{
+        //    ShakeCamera(ShakeType.Heavy);
+        //}
     }
 
     /// <summary>
@@ -156,15 +168,41 @@ public class CameraShake : MonoBehaviour
         Vector3 shakeVector = settings.randomness ? 
             new Vector3(settings.strength, settings.strength, 0f) : 
             Vector3.one * settings.strength;
-        
-        // DOTweenを使用してカメラを揺らす
-        currentTween = targetCamera.transform.DOShakePosition(
-            settings.duration, 
-            shakeVector, 
-            (int)settings.speed, 
-            90f, 
+
+        Vector3 shakeRotation = new Vector3(0f, 0f, settings.strength * 20f); // Z回転用（強度は調整可）
+
+        Sequence shakeSequence = DOTween.Sequence();
+
+        shakeSequence.Join(targetCamera.transform.DOShakePosition(
+            settings.duration,
+            shakeVector,
+            (int)settings.speed,
+            90f,
             settings.randomness
-        ).OnComplete(() => ReturnToOriginalPosition(settings.fadeOut));
+        ));
+
+        shakeSequence.Join(targetCamera.transform.DOShakeRotation(
+            settings.duration,
+            shakeRotation,
+            (int)settings.speed,
+            90f,
+            settings.randomness
+        ));
+
+        shakeSequence.OnComplete(() => ReturnToOriginalPosition(settings.fadeOut));
+
+        currentTween = shakeSequence;
+
+
+        //↓OLD
+        //// DOTweenを使用してカメラを揺らす
+        //currentTween = targetCamera.transform.DOShakePosition(
+        //    settings.duration, 
+        //    shakeVector, 
+        //    (int)settings.speed, 
+        //    90f, 
+        //    settings.randomness
+        //).OnComplete(() => ReturnToOriginalPosition(settings.fadeOut));
     }
 
     /// <summary>
@@ -178,6 +216,7 @@ public class CameraShake : MonoBehaviour
                 isShaking = false;
                 OnShakeEnd?.Invoke(); // シェイク終了イベント発火
             });
+        //targetCamera.transform.position = originalPosition; // 元の位置に戻す
     }
 
     /// <summary>

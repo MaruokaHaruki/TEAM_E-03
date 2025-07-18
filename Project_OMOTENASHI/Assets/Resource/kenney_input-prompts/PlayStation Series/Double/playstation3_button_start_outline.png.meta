@@ -259,7 +259,13 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      playstation3_button_start_outline_0: 3324756036159213361
+      playstation3_button_start_outline_1: 2315897975852532125
+      playstation3_button_start_outline_2: -2512779747334228809
+      playstation3_button_start_outline_3: -8280197152707837483
+      playstation3_button_start_outline_4: 3758376117939430933
+      playstation3_button_start_outline_5: -1121982315033303174
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -209,7 +209,11 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      switch_buttons_0: -8548029715000147074
+      switch_buttons_1: -7123799023176175324
+      switch_buttons_2: -3143686806780469064
+      switch_buttons_3: 2334535872366869371
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

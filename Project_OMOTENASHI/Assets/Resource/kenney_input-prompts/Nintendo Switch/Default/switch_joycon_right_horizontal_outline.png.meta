@@ -184,7 +184,10 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      switch_joycon_right_horizontal_outline_0: 3848418673236492838
+      switch_joycon_right_horizontal_outline_1: -1687538524509738381
+      switch_joycon_right_horizontal_outline_2: 4790044588621156732
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

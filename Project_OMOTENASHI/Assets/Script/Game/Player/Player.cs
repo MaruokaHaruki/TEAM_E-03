@@ -757,7 +757,9 @@ public class Player : MonoBehaviour {
 
         // ダメージ点滅エフェクトを開始
         StartDamageFlash();
-
+        cameraShake_.ShakeCamera(CameraShake.ShakeType.Light);
+        
+        // ダメージ処理
         if (GameManager.Instance != null) {
             GameManager.Instance.TakeDamage(playerID_, amount);
             currentHp_ = GameManager.Instance.GetPlayerCurrentHp(playerID_);
