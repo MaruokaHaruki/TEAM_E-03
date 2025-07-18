@@ -28,7 +28,7 @@ MonoBehaviour:
   gaugeDrainBoostMultiplier: 0
   invincibilityDuration: 1
   stompStunDuration: 2
-  tilemapPrefab: {fileID: 3229168071328024921, guid: 995a62c1bc7182f46a97a90db9e46488, type: 3}
+  tilemapPrefab: {fileID: 3229168071328024921, guid: e062d202314f88f4187303e9209316bf, type: 3}
   tilemapPosition: {x: 0, y: 0, z: 0}
   tilemapRotation: {x: 0, y: 0, z: 0}
   InvincibleItemFlag: 0

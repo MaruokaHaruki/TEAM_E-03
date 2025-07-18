@@ -3404,19 +3404,19 @@ MonoBehaviour:
   wallCheckFront_: {fileID: 1467870218}
   wallCheckBuck_: {fileID: 214818669}
   isAutoMode_: 1
-  autoMoveSpeed_: 2
+  autoMoveSpeed_: 5
   speedBoostMultiplier_: 2.5
   speedBoostDuration_: 0.5
   maxComboGauge_: 100
   comboGaugePerHit_: 21
   gaugeDrainRate_: 116
-  maxGaugeSpeedMultiplier_: 3.5
+  maxGaugeSpeedMultiplier_: 1.5
   minEffectiveGauge_: 1
   enableGaugeDrainBoost_: 1
   gaugeDrainBoostMultiplier_: 2
   invincibilityDuration_: 0.6
   rainbowSpeed_: 1
-  invincibilitySpeedMultiplier_: 3.5
+  invincibilitySpeedMultiplier_: 2
   invincibilityItemTiem: 3
   damageFlashDuration_: 1
   damageFlashInterval_: 0.1
@@ -4114,19 +4114,19 @@ MonoBehaviour:
   wallCheckFront_: {fileID: 896691777}
   wallCheckBuck_: {fileID: 1956489830}
   isAutoMode_: 1
-  autoMoveSpeed_: 2
+  autoMoveSpeed_: 5
   speedBoostMultiplier_: 2.5
   speedBoostDuration_: 0.5
   maxComboGauge_: 100
   comboGaugePerHit_: 21
   gaugeDrainRate_: 116
-  maxGaugeSpeedMultiplier_: 3.5
+  maxGaugeSpeedMultiplier_: 1.5
   minEffectiveGauge_: 1
   enableGaugeDrainBoost_: 1
   gaugeDrainBoostMultiplier_: 2
   invincibilityDuration_: 0.6
   rainbowSpeed_: 1
-  invincibilitySpeedMultiplier_: 3.5
+  invincibilitySpeedMultiplier_: 2
   invincibilityItemTiem: 3
   damageFlashDuration_: 1
   damageFlashInterval_: 0.1
