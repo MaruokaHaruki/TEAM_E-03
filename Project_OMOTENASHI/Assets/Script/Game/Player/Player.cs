@@ -757,12 +757,14 @@ public class Player : MonoBehaviour {
 
         // ダメージ点滅エフェクトを開始
         StartDamageFlash();
-        cameraShake_.ShakeCamera(CameraShake.ShakeType.Light);
         
         // ダメージ処理
         if (GameManager.Instance != null) {
             GameManager.Instance.TakeDamage(playerID_, amount);
             currentHp_ = GameManager.Instance.GetPlayerCurrentHp(playerID_);
+            if (currentHp_ > 0) {
+                cameraShake_.ShakeCamera(CameraShake.ShakeType.Light);
+            }
         }
         else {
             currentHp_ -= amount;
