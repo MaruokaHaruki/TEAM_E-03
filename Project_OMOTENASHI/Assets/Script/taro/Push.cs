@@ -199,8 +199,8 @@ public class Push : MonoBehaviour
                 comboTimer_ += Time.deltaTime;
                 if (comboTimer_ >= comboTimeLimit_)
                 {
-                    // 時間切れ - チャージ状態に移行して自動発射
-                    TransitionToChargedWait();
+                    // 時間切れ - 即座に発射
+                    ReleaseCharge();
                 }
                 break;
 
@@ -223,10 +223,10 @@ public class Push : MonoBehaviour
                 {
                     ReleaseCharge();
                 }
-                // チャージが完了したら待機状態へ
+                // チャージが完了したら即座に発射
                 else if (currentChargeTime_ >= maxChargeTime_)
                 {
-                    SetState(MachineState.ChargedWait);
+                    ReleaseCharge();
                 }
                 break;
 
@@ -277,10 +277,10 @@ public class Push : MonoBehaviour
         currentComboCount_++;
         UpdateComboCharge();
 
-        // 最大コンボ数に達したら自動発射
+        // 最大コンボ数に達したら即座に発射
         if (currentComboCount_ >= maxComboCount_)
         {
-            TransitionToChargedWait();
+            ReleaseCharge();
         }
     }
 
@@ -335,7 +335,7 @@ public class Push : MonoBehaviour
     /// </summary>
     private void ReleaseCharge()
     {
-        if (currentState_ != MachineState.Charging && currentState_ != MachineState.ChargedWait) return;
+        if (currentState_ != MachineState.Charging && currentState_ != MachineState.ChargedWait && currentState_ != MachineState.Combo) return;
 
         // 揺れを止めて位置を補正
         punchingCollider_.transform.localPosition = new Vector3(basePos_.x - currentChargeDistance_, basePos_.y, basePos_.z);
