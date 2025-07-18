@@ -3412,13 +3412,11 @@ MonoBehaviour:
   gaugeDrainRate_: 116
   maxGaugeSpeedMultiplier_: 2.3
   minEffectiveGauge_: 1
-  exponentialBase_: 4
-  exponentialScale_: 1
   enableGaugeDrainBoost_: 1
   gaugeDrainBoostMultiplier_: 2
-  invincibilityDuration_: 0.6
+  invincibilityDuration_: 0.2
   rainbowSpeed_: 1
-  invincibilitySpeedMultiplier_: 2
+  invincibilitySpeedMultiplier_: 0.2
   invincibilityItemTiem: 3
   damageFlashDuration_: 1
   damageFlashInterval_: 0.1
@@ -4124,13 +4122,11 @@ MonoBehaviour:
   gaugeDrainRate_: 116
   maxGaugeSpeedMultiplier_: 2.3
   minEffectiveGauge_: 1
-  exponentialBase_: 4
-  exponentialScale_: 1
   enableGaugeDrainBoost_: 1
   gaugeDrainBoostMultiplier_: 2
-  invincibilityDuration_: 0.6
+  invincibilityDuration_: 0.2
   rainbowSpeed_: 1
-  invincibilitySpeedMultiplier_: 2
+  invincibilitySpeedMultiplier_: 0.2
   invincibilityItemTiem: 3
   damageFlashDuration_: 1
   damageFlashInterval_: 0.1
