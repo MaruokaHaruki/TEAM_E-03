@@ -1502,6 +1502,14 @@ PrefabInstance:
     m_TransformParent: {fileID: 5277176611754733958}
     m_Modifications:
     - target: {fileID: 677070955773612685, guid: ca41a9ac467b8c746930d2768e86991b, type: 3}
+      propertyPath: comboKey1_
+      value: 97
+      objectReference: {fileID: 0}
+    - target: {fileID: 677070955773612685, guid: ca41a9ac467b8c746930d2768e86991b, type: 3}
+      propertyPath: comboKey2_
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 677070955773612685, guid: ca41a9ac467b8c746930d2768e86991b, type: 3}
       propertyPath: maxPunchPower_
       value: 25
       objectReference: {fileID: 0}
@@ -1571,6 +1579,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 5277176611754733958}
     m_Modifications:
+    - target: {fileID: 677070955773612685, guid: ca41a9ac467b8c746930d2768e86991b, type: 3}
+      propertyPath: comboKey1_
+      value: 106
+      objectReference: {fileID: 0}
+    - target: {fileID: 677070955773612685, guid: ca41a9ac467b8c746930d2768e86991b, type: 3}
+      propertyPath: comboKey2_
+      value: 108
+      objectReference: {fileID: 0}
     - target: {fileID: 677070955773612685, guid: ca41a9ac467b8c746930d2768e86991b, type: 3}
       propertyPath: triggerKey_
       value: 48

@@ -23,6 +23,7 @@ public class Push : MonoBehaviour
         Charging,       // チャージ中
         ChargedWait,    // チャージ完了待機中
         Action,         // 発射〜戻りまでの動作中
+        Combo,          // コンボ入力中
     }
 
     //================================================
@@ -32,6 +33,16 @@ public class Push : MonoBehaviour
     [Header("▼ 起動キー設定")]
     [Tooltip("アクションを起動するキー")]
     [SerializeField] private KeyCode triggerKey_ = KeyCode.Alpha1;
+
+    [Header("▼ コンボ入力設定")]
+    [Tooltip("コンボ用キー1")]
+    [SerializeField] private KeyCode comboKey1_ = KeyCode.Z;
+    [Tooltip("コンボ用キー2")]
+    [SerializeField] private KeyCode comboKey2_ = KeyCode.X;
+    [Tooltip("コンボでフルチャージになるまでの必要入力回数")]
+    [SerializeField] private int maxComboCount_ = 10;
+    [Tooltip("コンボ入力の制限時間（秒）")]
+    [SerializeField] private float comboTimeLimit_ = 3f;
 
     [Header("▼ チャージ設定")]
     [Tooltip("最大チャージ時に後退するX方向の距離")]
@@ -111,6 +122,10 @@ public class Push : MonoBehaviour
     private float baseSpringScaleY_;            // バネの初期Yスケール
     private float baseSpringDistance_;          // バネの初期距離
 
+    // コンボ関連の変数
+    private int currentComboCount_ = 0;         // 現在のコンボ数
+    private float comboTimer_ = 0f;             // コンボ制限時間のタイマー
+
     //================================================
     // 【Unity ライフサイクル】
     //================================================
@@ -167,6 +182,26 @@ public class Push : MonoBehaviour
                 {
                     StartCharge();
                 }
+                else if (Input.GetKeyDown(comboKey1_) || Input.GetKeyDown(comboKey2_))
+                {
+                    StartCombo();
+                }
+                break;
+
+            case MachineState.Combo:
+                // コンボ入力の検出
+                if (Input.GetKeyDown(comboKey1_) || Input.GetKeyDown(comboKey2_))
+                {
+                    AddComboInput();
+                }
+
+                // コンボ制限時間の管理
+                comboTimer_ += Time.deltaTime;
+                if (comboTimer_ >= comboTimeLimit_)
+                {
+                    // 時間切れ - チャージ状態に移行して自動発射
+                    TransitionToChargedWait();
+                }
                 break;
 
             case MachineState.Charging:
@@ -221,6 +256,61 @@ public class Push : MonoBehaviour
     private void StartCharge()
     {
         SetState(MachineState.Charging);
+    }
+
+    /// <summary>
+    /// コンボ入力を開始する
+    /// </summary>
+    private void StartCombo()
+    {
+        SetState(MachineState.Combo);
+        currentComboCount_ = 1; // 最初の入力をカウント
+        comboTimer_ = 0f;
+        UpdateComboCharge();
+    }
+
+    /// <summary>
+    /// コンボ入力を追加する
+    /// </summary>
+    private void AddComboInput()
+    {
+        currentComboCount_++;
+        UpdateComboCharge();
+
+        // 最大コンボ数に達したら自動発射
+        if (currentComboCount_ >= maxComboCount_)
+        {
+            TransitionToChargedWait();
+        }
+    }
+
+    /// <summary>
+    /// コンボ数に応じてチャージ状態を更新する
+    /// </summary>
+    private void UpdateComboCharge()
+    {
+        // コンボ率を計算 (0.0 ~ 1.0)
+        float comboRatio = Mathf.Clamp01((float)currentComboCount_ / maxComboCount_);
+
+        // Ease.OutQuadを再現: t * (2 - t)
+        float easedRatio = comboRatio * (2 - comboRatio);
+
+        // 現在の後退距離と位置を更新
+        currentChargeDistance_ = maxChargeDistance_ * easedRatio;
+        punchingCollider_.transform.localPosition = new Vector3(basePos_.x - currentChargeDistance_, basePos_.y, basePos_.z);
+
+        Debug.Log($"[COMBO] : {currentComboCount_}/{maxComboCount_} (距離: {currentChargeDistance_:F2})");
+    }
+
+    /// <summary>
+    /// コンボ状態からチャージ完了待機状態に移行する
+    /// </summary>
+    private void TransitionToChargedWait()
+    {
+        SetState(MachineState.ChargedWait);
+        // 揺れの基準となる位置を保存
+        chargedPos_ = punchingCollider_.transform.localPosition;
+        chargedWaitTimer_ = 0f;
     }
 
     /// <summary>
@@ -330,6 +420,12 @@ public class Push : MonoBehaviour
         if (state == MachineState.Wait || state == MachineState.Charging)
         {
             currentChargeTime_ = 0f;
+            currentChargeDistance_ = 0f;
+        }
+        else if (state == MachineState.Combo)
+        {
+            currentComboCount_ = 0;
+            comboTimer_ = 0f;
             currentChargeDistance_ = 0f;
         }
         else if (state == MachineState.ChargedWait)
