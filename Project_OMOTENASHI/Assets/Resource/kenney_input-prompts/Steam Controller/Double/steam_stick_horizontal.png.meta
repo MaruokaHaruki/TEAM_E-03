@@ -234,7 +234,12 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      steam_stick_horizontal_0: 6349717818739458039
+      steam_stick_horizontal_1: 1333932988983899791
+      steam_stick_horizontal_2: -7608699610320622399
+      steam_stick_horizontal_3: -6476677131165864342
+      steam_stick_horizontal_4: -2237228859097913869
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

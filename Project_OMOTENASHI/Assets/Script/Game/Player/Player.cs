@@ -150,7 +150,8 @@ public class Player : MonoBehaviour {
 
     private CameraShake cameraShake_;
 
-    private void Start() {
+    private void Start() 
+    {
         cameraShake_ = FindObjectOfType<CameraShake>();
 
         Transform spriteChild = transform.Find("Sprite");
@@ -566,60 +567,50 @@ public class Player : MonoBehaviour {
     }
 
     private void OnCollisionEnter2D(Collision2D collision) {
-        // ゲーム状態チェック：ゲームが停止中の場合は処理をスキップ
         if (GameManager.Instance != null && GameManager.Instance.GetGameState() != GameManager.GameState.Playing) {
             return;
         }
 
-        // 移動許可チェック：移動が許可されていない場合は処理をスキップ
         if (!allowMovement_) {
             return;
         }
         
-        // パンチング判定：パンチオブジェクトとの衝突処理
-        // NOTE:修正予定
+                // NOTE:修正予定
         if (collision.gameObject.CompareTag("Punching"))
         {
-            // パンチコンポーネントからパンチ力を取得
             var push = collision.gameObject.GetComponentInParent<Push>();
             float punchPower = (push != null) ? push.CurrentPunchPower : 0f;
 
-            // ノックバック方向の計算：パンチ元から自分への方向ベクトルを算出
+            // 向きをプレイヤー同士の相対位置で決める
             Vector2 punchOrigin = collision.transform.position;
             Vector2 myPosition = transform.position;
             
             Vector2 punchDir = (myPosition - punchOrigin).normalized; // パンチ元 → 自分へのベクトル（≒攻撃方向）
             Vector2 knockDir = (punchDir + Vector2.up * 0.5f).normalized; // 上方向を加えて「斜め後ろ上」に
 
-            // 物理的なノックバック処理
             rigidbody2D_.velocity = Vector2.zero; // 現在の速度をリセット
             rigidbody2D_.AddForce(knockDir * punchPower, ForceMode2D.Impulse);
 
-            // ノックバック状態を設定（一定時間行動不能にする）
+            // ノックバック状態にする
             isKnockedBack_ = true;
             knockBackTimer_ = knockBackDuration_;
             return;
         }
 
-        // 踏みつけ判定：他プレイヤーへの踏みつけ攻撃処理
+        // 踴みつけ判定
         if (enableStomp_ && collision.gameObject.CompareTag("Player"))
         {
             Player otherPlayer = collision.gameObject.GetComponent<Player>();
             if (otherPlayer == null || otherPlayer == this) return;
 
-            // 踏みつけ条件の判定
-            bool isAbove = transform.position.y > otherPlayer.transform.position.y + 0.5f; // 相手より上にいるか
-            bool isMovingDown = rigidbody2D_.velocity.y < -1.0f; // 下方向に移動しているか
+            bool isAbove = transform.position.y > otherPlayer.transform.position.y + 0.5f;
+            bool isMovingDown = rigidbody2D_.velocity.y < -1.0f;
 
-            // 踏みつけ成功時の処理
             if (isAbove && isMovingDown && !otherPlayer.isStunned_)
             {
-                // 相手をスタン状態にする
                 otherPlayer.ApplyStun(stompStunDuration_);
-                // 自分は小ジャンプで跳ね返る
                 rigidbody2D_.velocity = new Vector2(rigidbody2D_.velocity.x, jumpForce_ * 0.7f);
 
-                // 踏みつけ効果音の再生
                 if (AudioManager.Instance != null)
                 {
                     AudioManager.Instance.PlaySE("Player_Step");
@@ -629,12 +620,11 @@ public class Player : MonoBehaviour {
             }
         }
 
-        // プレイヤー同士の衝突判定：メインの衝突処理
         if (collision.gameObject.CompareTag("Player")) {
             Player otherPlayer = collision.gameObject.GetComponent<Player>();
             if (otherPlayer == null || otherPlayer == this) return;
 
-            // 衝突時の視覚的フィードバック：両プレイヤーのスプライトに震え効果
+            // プレイヤー衝突時の震え効果
             if (spriteTransform_ != null) {
                 spriteTransform_.DOShakeScale(0.2f, 1.0f, 5).OnComplete(() => {
                     spriteTransform_.localScale = Vector3.one;
@@ -646,54 +636,44 @@ public class Player : MonoBehaviour {
                 });
             }
 
-            // 重複処理防止：オブジェクトIDの低い方だけが処理を実行
             if (gameObject.GetInstanceID() < otherPlayer.gameObject.GetInstanceID()) {
                 return;
             }
 
-            // 速度交換システム：自動モード時の速度交換処理
+            // 速度交換ロジック
             if (isAutoMode_ && otherPlayer.isAutoMode_ && enableSpeedTransfer_ && otherPlayer.enableSpeedTransfer_) {
                 float mySpeed = GetCurrentEffectiveSpeed();
                 float otherSpeed = otherPlayer.GetCurrentEffectiveSpeed();
 
-                // 速度差がある場合のみ交換を実行
                 if (Mathf.Abs(mySpeed - otherSpeed) > 0.5f) {
                     float tempMySpeed = mySpeed;
                     float tempOtherSpeed = otherSpeed;
 
-                    // 互いの速度を交換（ゲージ調整により実現）
                     AdjustGaugeToAchieveSpeed(tempOtherSpeed);
                     otherPlayer.AdjustGaugeToAchieveSpeed(tempMySpeed);
                 }
             }
 
-            // 無敵状態の確認
             bool thisIsInvincible = isInvincible_;
             bool otherIsInvincible = otherPlayer.isInvincible_;
 
-            // 相対位置による攻撃判定の計算
-            // 各プレイヤーの移動方向と相手の位置関係を分析
             float relativeXToOther = otherPlayer.transform.position.x - transform.position.x;
             float myDirSign = Mathf.Sign(currentDirection_);
-            bool otherIsAheadOfMe = Mathf.Sign(relativeXToOther) == myDirSign; // 相手が自分の進行方向前方にいるか
+            bool otherIsAheadOfMe = Mathf.Sign(relativeXToOther) == myDirSign;
 
             float relativeXToMe = transform.position.x - otherPlayer.transform.position.x;
             float otherDirSign = Mathf.Sign(otherPlayer.currentDirection_);
-            bool amIAheadOfOther = Mathf.Sign(relativeXToMe) == otherDirSign; // 自分が相手の進行方向前方にいるか
+            bool amIAheadOfOther = Mathf.Sign(relativeXToMe) == otherDirSign;
 
-            // 正面衝突の判定と処理
             if (otherIsAheadOfMe && amIAheadOfOther) {
-                // 両者が無敵状態の場合：相互ノックバック
                 if (thisIsInvincible && otherIsInvincible) {
                     if (AudioManager.Instance != null) {
                         AudioManager.Instance.PlaySE("Player_Penguin2Penguin");
                     }
 
-                    // 両者の移動方向を反転
                     ReverseDirection();
                     otherPlayer.ReverseDirection();
 
-                    // 相互にノックバック力を適用
                     Vector2 knockBackDirToMe = (transform.position - otherPlayer.transform.position).normalized;
                     if (knockBackDirToMe == Vector2.zero) knockBackDirToMe = (Random.insideUnitCircle).normalized;
                     rigidbody2D_.AddForce(knockBackDirToMe * 5f, ForceMode2D.Impulse);
@@ -702,7 +682,6 @@ public class Player : MonoBehaviour {
                     if (knockBackDirToOther == Vector2.zero) knockBackDirToOther = (Random.insideUnitCircle).normalized;
                     otherPlayer.rigidbody2D_.AddForce(knockBackDirToOther * 5f, ForceMode2D.Impulse);
                 }
-                // 自分のみ無敵の場合：相手にダメージ
                 else if (thisIsInvincible && !otherIsInvincible) {
                     if (AudioManager.Instance != null) {
                         AudioManager.Instance.PlaySE("Player_Penguin2Penguin");
@@ -713,7 +692,6 @@ public class Player : MonoBehaviour {
                     ReverseDirection();
                     otherPlayer.ReverseDirection();
                 }
-                // 相手のみ無敵の場合：自分がダメージ
                 else if (!thisIsInvincible && otherIsInvincible) {
                     if (AudioManager.Instance != null) {
                         AudioManager.Instance.PlaySE("Player_Penguin2Penguin");
@@ -726,17 +704,14 @@ public class Player : MonoBehaviour {
                     ReverseDirection();
                     otherPlayer.ReverseDirection();
                 }
-                // 両者とも通常状態の場合：相互ノックバック（ダメージなし）
                 else {
                     if (AudioManager.Instance != null) {
                         AudioManager.Instance.PlaySE("Player_Penguin2Penguin");
                     }
 
-                    // 両者の移動方向を反転
                     ReverseDirection();
                     otherPlayer.ReverseDirection();
 
-                    // 相互にノックバック力を適用
                     Vector2 knockBackDirToMe = (transform.position - otherPlayer.transform.position).normalized;
                     if (knockBackDirToMe == Vector2.zero) knockBackDirToMe = (Random.insideUnitCircle).normalized;
                     rigidbody2D_.AddForce(knockBackDirToMe * 5f, ForceMode2D.Impulse);
@@ -746,16 +721,12 @@ public class Player : MonoBehaviour {
                     otherPlayer.rigidbody2D_.AddForce(knockBackDirToOther * 5f, ForceMode2D.Impulse);
                 }
             }
-            // 自分が後ろから追突した場合：相手にダメージ
             else if (otherIsAheadOfMe && !amIAheadOfOther) {
                 if (!otherIsInvincible) {
                     otherPlayer.TakeDamage(atk_);
                     KnockBack(otherPlayer);
                 }
-                // 追突後に自分も反転
-                ReverseDirection();
             }
-            // 相手が後ろから追突した場合：自分がダメージ
             else if (!otherIsAheadOfMe && amIAheadOfOther) {
                 if (!thisIsInvincible) {
                     TakeDamage(atk_);
@@ -763,22 +734,16 @@ public class Player : MonoBehaviour {
                     if (knockBackDirToThis == Vector2.zero) knockBackDirToThis = (Random.insideUnitCircle).normalized;
                     rigidbody2D_.AddForce(knockBackDirToThis * 10f, ForceMode2D.Impulse);
                 }
-                // 追突された相手も反転
-                otherPlayer.ReverseDirection();
             }
         }
 
-        // 無敵アイテムとの衝突判定：無敵状態付与処理
         if (collision.gameObject.CompareTag("InvincibleItem")) {
-            // アイテム取得効果音の再生
             if (AudioManager.Instance != null) {
                 AudioManager.Instance.PlaySE("collision");
             }
 
-            // 無敵状態を付与
             isInvincible_ = true;
             invincibilityTimer_ = invincibilityItemTiem;
-            // アイテムオブジェクトを削除
             Destroy(collision.gameObject);
         }
     }
@@ -805,6 +770,7 @@ public class Player : MonoBehaviour {
                 currentHp_ = 0;
             }
         }
+
     }
 
     private void KnockBack(Player target) {
@@ -965,7 +931,6 @@ public class Player : MonoBehaviour {
     /// <param name="moveFieldDirection">MoveFieldの移動方向（1.0f=右、-1.0f=左）</param>
     /// <param name="gaugePower">ゲージ変化量</param>
     public void ApplyMoveFieldEffect(float moveFieldDirection, float gaugePower) {
-        // 移動許可されていない、または手動モードの場合は処理しない
         if (!allowMovement_ || !isAutoMode_) return;
 
         // プレイヤーの現在の移動方向とMoveFieldの方向を比較
@@ -973,32 +938,41 @@ public class Player : MonoBehaviour {
                               (currentDirection_ < 0 && moveFieldDirection < 0);
 
         if (directionsMatch) {
-            // 方向が一致する場合：ゲージ増加（加速効果）
+            // 方向が一致する場合：ゲージ増加
             currentComboGauge_ += gaugePower;
             currentComboGauge_ = Mathf.Min(maxComboGauge_, currentComboGauge_);
             
-            // 加速時の効果音再生
             if (AudioManager.Instance != null) {
                 AudioManager.Instance.PlaySE("Player_Barrage");
             }
         }
         else {
-            // 方向が逆の場合：ゲージ減少（減速効果）
+            // 方向が逆の場合：ゲージ減少
             currentComboGauge_ -= gaugePower * 0.5f; // 減少量は増加量の半分
             currentComboGauge_ = Mathf.Max(0.0f, currentComboGauge_);
             
-            // 減速時の効果音再生
             if (AudioManager.Instance != null) {
                 AudioManager.Instance.PlaySE("Player_MoveField_Opposite");
             }
         }
 
-        // MoveField効果時の視覚的フィードバック（震え）
+        // MoveField効果時の視覚的フィードバック
         PlayShakeEffect();
     }
 
     private void PlayShakeEffect() {
         if (spriteTransform_ != null) {
+            spriteTransform_.DOShakeScale(0.2f, 1.0f, 5).OnComplete(() => {
+                spriteTransform_.localScale = Vector3.one;
+            });
+        }
+    }
+
+    // CameraShakeの効果をプレイヤーに適用
+    private void CameraShakeEffect()
+    {
+        if (spriteTransform_ != null)
+        {
             spriteTransform_.DOShakeScale(0.2f, 1.0f, 5).OnComplete(() => {
                 spriteTransform_.localScale = Vector3.one;
             });
@@ -1117,13 +1091,10 @@ public class Player : MonoBehaviour {
     /// ダメージ点滅エフェクトを開始
     /// </summary>
     private void StartDamageFlash() {
-        // 点滅エフェクトの初期化
         isDamageFlashing_ = true;
         damageFlashTimer_ = damageFlashDuration_;
         damageFlashIntervalTimer_ = 0.0f;
         isFlashRed_ = true;
-        
-        // 初回の色変更を即座に実行
         UpdateDamageFlashEffect();
     }
 
@@ -1134,13 +1105,11 @@ public class Player : MonoBehaviour {
         if (spriteRenderer_ == null) return;
 
         if (isFlashRed_) {
-            // 赤色に変更（ダメージ表現）
             Color flashColor = damageFlashColor_;
-            flashColor.a = originalColor_.a; // 透明度は元の色を維持
+            flashColor.a = originalColor_.a;
             spriteRenderer_.color = flashColor;
         }
         else {
-            // 元の色に戻す
             spriteRenderer_.color = originalColor_;
         }
     }

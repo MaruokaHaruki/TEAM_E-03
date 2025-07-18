@@ -134,7 +134,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      xbox_dpad_horizontal_outline_0: -6568336944520429784
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

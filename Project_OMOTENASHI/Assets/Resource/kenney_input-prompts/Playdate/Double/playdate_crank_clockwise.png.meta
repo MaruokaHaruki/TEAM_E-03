@@ -184,7 +184,10 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      playdate_crank_clockwise_0: -8926931405252736000
+      playdate_crank_clockwise_1: -2848309728459069243
+      playdate_crank_clockwise_2: 2918330137962076132
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
