@@ -2152,7 +2152,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &1038395256
 Transform:
@@ -2188,21 +2188,21 @@ MonoBehaviour:
     randomness: 1
     fadeOut: 0.1
   lightShake:
-    strength: 0.05
+    strength: 0.5
     speed: 15
-    duration: 0.1
+    duration: 0.2
     randomness: 1
     fadeOut: 0.1
   mediumShake:
-    strength: 0.1
-    speed: 10
+    strength: 0.7
+    speed: 20
     duration: 0.2
     randomness: 1
     fadeOut: 0.1
   heavyShake:
     strength: 1
-    speed: 8
-    duration: 0.5
+    speed: 25
+    duration: 0.2
     randomness: 1
     fadeOut: 0.1
   OnShakeStart:
@@ -3589,7 +3589,7 @@ GameObject:
   m_TagString: MainCamera
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!81 &1569451785
 AudioListener:
