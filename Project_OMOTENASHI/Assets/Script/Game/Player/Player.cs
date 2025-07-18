@@ -46,6 +46,12 @@ public class Player : MonoBehaviour {
     public float maxGaugeSpeedMultiplier_ = 5.0f;
     public float minEffectiveGauge_ = 10.0f;
     
+    [Header("指数関数的加速設定")]
+    [Tooltip("指数関数の底（大きいほど急激に加速）")]
+    public float exponentialBase_ = 2.0f;
+    [Tooltip("指数関数のスケール調整")]
+    public float exponentialScale_ = 1.0f;
+
     // 連打ゲージ減り速度加速設定
     [Header("連打ゲージ減り速度加速設定")]
     public bool enableGaugeDrainBoost_ = true;
@@ -858,11 +864,16 @@ public class Player : MonoBehaviour {
             return 1.0f;
         }
 
+        // ゲージの比率を計算 (0.0 ~ 1.0)
         float gaugeRatio = (currentComboGauge_ - minEffectiveGauge_) / (maxComboGauge_ - minEffectiveGauge_);
         gaugeRatio = Mathf.Clamp01(gaugeRatio);
-        float easedRatio = gaugeRatio * gaugeRatio;
-
-        return Mathf.Lerp(1.0f, maxGaugeSpeedMultiplier_, easedRatio);
+        
+        // 指数関数的な加速計算
+        // f(x) = 1 + (maxMultiplier - 1) * (base^(scale*x) - 1) / (base^scale - 1)
+        float exponentialFactor = (Mathf.Pow(exponentialBase_, exponentialScale_ * gaugeRatio) - 1.0f) / 
+                                 (Mathf.Pow(exponentialBase_, exponentialScale_) - 1.0f);
+        
+        return 1.0f + (maxGaugeSpeedMultiplier_ - 1.0f) * exponentialFactor;
     }
 
     public float GetGaugePercentage() {
@@ -906,9 +917,15 @@ public class Player : MonoBehaviour {
             return;
         }
 
-        float easedRatio = (targetMultiplier - 1.0f) / (maxGaugeSpeedMultiplier_ - 1.0f);
-        easedRatio = Mathf.Clamp01(easedRatio);
-        float requiredRatio = Mathf.Sqrt(easedRatio);
+        // 指数関数の逆算
+        float normalizedMultiplier = (targetMultiplier - 1.0f) / (maxGaugeSpeedMultiplier_ - 1.0f);
+        normalizedMultiplier = Mathf.Clamp01(normalizedMultiplier);
+        
+        // 指数関数の逆関数を使用してゲージ比率を計算
+        float exponentialTerm = normalizedMultiplier * (Mathf.Pow(exponentialBase_, exponentialScale_) - 1.0f) + 1.0f;
+        float requiredRatio = Mathf.Log(exponentialTerm) / (Mathf.Log(exponentialBase_) * exponentialScale_);
+        requiredRatio = Mathf.Clamp01(requiredRatio);
+        
         float requiredGauge = minEffectiveGauge_ + (requiredRatio * (maxComboGauge_ - minEffectiveGauge_));
         currentComboGauge_ = Mathf.Min(requiredGauge, maxComboGauge_);
     }

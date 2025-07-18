@@ -3410,8 +3410,10 @@ MonoBehaviour:
   maxComboGauge_: 100
   comboGaugePerHit_: 21
   gaugeDrainRate_: 116
-  maxGaugeSpeedMultiplier_: 1.8
+  maxGaugeSpeedMultiplier_: 2.3
   minEffectiveGauge_: 1
+  exponentialBase_: 4
+  exponentialScale_: 1
   enableGaugeDrainBoost_: 1
   gaugeDrainBoostMultiplier_: 2
   invincibilityDuration_: 0.6
@@ -4120,8 +4122,10 @@ MonoBehaviour:
   maxComboGauge_: 100
   comboGaugePerHit_: 21
   gaugeDrainRate_: 116
-  maxGaugeSpeedMultiplier_: 1.8
+  maxGaugeSpeedMultiplier_: 2.3
   minEffectiveGauge_: 1
+  exponentialBase_: 4
+  exponentialScale_: 1
   enableGaugeDrainBoost_: 1
   gaugeDrainBoostMultiplier_: 2
   invincibilityDuration_: 0.6
