@@ -159,7 +159,9 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      wiiu_controller_down_outline_0: -6948217790232669061
+      wiiu_controller_down_outline_1: -3235605028102429792
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

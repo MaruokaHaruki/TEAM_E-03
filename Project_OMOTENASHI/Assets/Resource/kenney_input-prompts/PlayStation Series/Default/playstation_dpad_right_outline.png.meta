@@ -209,7 +209,11 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      playstation_dpad_right_outline_0: -3363075799184380196
+      playstation_dpad_right_outline_1: 953554329447689749
+      playstation_dpad_right_outline_2: -6199842865548448186
+      playstation_dpad_right_outline_3: -1290797662877734603
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

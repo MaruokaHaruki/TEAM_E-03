@@ -148,7 +148,7 @@ public class Player : MonoBehaviour {
     private float targetRotation_ = 0.0f;
     private float currentRotation_ = 0.0f;
 
-    private CameraShake cameraShake_;
+    public CameraShake cameraShake_;
 
     private void Start() {
         cameraShake_ = FindObjectOfType<CameraShake>();
@@ -805,6 +805,8 @@ public class Player : MonoBehaviour {
                 currentHp_ = 0;
             }
         }
+        cameraShake_.ShakeCamera(CameraShake.ShakeType.Light);
+        Debug.Log($"cameraShake_{cameraShake_}");
     }
 
     private void KnockBack(Player target) {

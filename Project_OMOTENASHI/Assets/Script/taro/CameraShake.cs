@@ -40,6 +40,8 @@ public class CameraShake : MonoBehaviour
     [Header("デバッグ")]
     public bool enableDebugKeys = true;
     
+
+
     /// <summary>
     /// 対象となるカメラ
     /// </summary>
@@ -62,7 +64,9 @@ public class CameraShake : MonoBehaviour
     /// </summary>
     void Start()
     {
+        if (!Application.isPlaying) return;
         InitializeCamera();
+        Debug.Log("カメラの初期化");
     }
 
     /// <summary>
@@ -70,7 +74,18 @@ public class CameraShake : MonoBehaviour
     /// </summary>
     void Update()
     {
-
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            ShakeCamera(ShakeType.Heavy);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            ShakeCamera(ShakeType.Medium);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha3))
+        {
+            ShakeCamera(ShakeType.Light);
+        }
     }
 
     /// <summary>

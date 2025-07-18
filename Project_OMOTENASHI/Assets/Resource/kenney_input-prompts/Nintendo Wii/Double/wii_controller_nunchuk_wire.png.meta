@@ -134,7 +134,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      wii_controller_nunchuk_wire_0: -3721539669901229841
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
