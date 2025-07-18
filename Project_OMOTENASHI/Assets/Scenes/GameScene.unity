@@ -5120,7 +5120,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2707897612911867515, guid: 48c2e5760d71b5848979fb00536cc673, type: 3}
       propertyPath: roundSettingsList.Array.size
-      value: 3
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 2707897612911867515, guid: 48c2e5760d71b5848979fb00536cc673, type: 3}
       propertyPath: roundFeatureImages.Array.size
@@ -5138,6 +5138,14 @@ PrefabInstance:
       propertyPath: 'roundSettingsList.Array.data[2]'
       value: 
       objectReference: {fileID: 11400000, guid: c09f8d49445fc844b8a742d66ed0bd34, type: 2}
+    - target: {fileID: 2707897612911867515, guid: 48c2e5760d71b5848979fb00536cc673, type: 3}
+      propertyPath: 'roundSettingsList.Array.data[3]'
+      value: 
+      objectReference: {fileID: 11400000, guid: fe833f52d266c2a42a7214aa2d7cb143, type: 2}
+    - target: {fileID: 2707897612911867515, guid: 48c2e5760d71b5848979fb00536cc673, type: 3}
+      propertyPath: 'roundSettingsList.Array.data[4]'
+      value: 
+      objectReference: {fileID: 11400000, guid: bd5fc0b2d42e86b4facaa6967dfa6239, type: 2}
     - target: {fileID: 2707897612911867515, guid: 48c2e5760d71b5848979fb00536cc673, type: 3}
       propertyPath: 'roundFeatureImages.Array.data[0]'
       value: 
