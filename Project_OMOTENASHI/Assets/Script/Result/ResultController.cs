@@ -20,13 +20,13 @@ public class ResultController : MonoBehaviour
 
     void Update()
     {
-        if (DrawEndFlag)
-        {
-            if (Input.GetKeyDown(KeyCode.Space))
-            {
-                SceneManagerScript.Instance.FadeOutScene("Title");
-                AudioManager.Instance.PlaySE(next); // Œø‰Ê‰¹‚ğÄ¶
-            }
-        }
+        //if (DrawEndFlag)
+        //{
+        //    if (Input.GetKeyDown(KeyCode.Space))
+        //    {
+        //        SceneManagerScript.Instance.FadeOutScene("Title");
+        //        AudioManager.Instance.PlaySE(next); // Œø‰Ê‰¹‚ğÄ¶
+        //    }
+        //}
     }
 }
