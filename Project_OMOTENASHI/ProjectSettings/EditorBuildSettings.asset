@@ -17,6 +17,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Result.unity
     guid: 4d2e269676dd16e43820f4bb0ef36976
+  - enabled: 1
+    path: Assets/Scenes/GameScene_Mizuno.unity
+    guid: ae75ce199dfbe0647bc28f1328a4f5be
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   m_UseUCBPForAssetBundles: 0

@@ -99,6 +99,17 @@ public class StartManager : MonoBehaviour
         // Canvas�\�����̏���
         if (canvasDisplayed)
         {
+            if (Input.GetKeyDown(KeyCode.W))
+            {
+                sceneToLoad = "GameScene";
+                SceneManagerScript.Instance.FadeOutScene(sceneToLoad);
+            }
+            else if (Input.GetKeyDown(KeyCode.I))
+            {
+                sceneToLoad = "GameScene_Mizuno";
+                SceneManagerScript.Instance.FadeOutScene(sceneToLoad);
+            }
+
             // �����쎞�ԃ`�F�b�N�Ńt�F�[�h�A�E�g
             if (Time.time - lastInputTime > autoHideDelay)
             {

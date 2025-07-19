@@ -44,7 +44,11 @@ public class GameManager : MonoBehaviour
     
     [Tooltip("プレイヤー2のオブジェクト")]
     public Player player2_;
-    
+
+    public GameObject player1Prefab;
+    public GameObject player2Prefab;
+
+
     [Tooltip("プレイヤー1の名前")]
     public string player1Name_ = "Player 1";
     
@@ -338,51 +342,15 @@ public class GameManager : MonoBehaviour
         SceneManagerScript.Instance.Player1_Score = RoundManager.Instance.player1Score;
         SceneManagerScript.Instance.Player2_Score = RoundManager.Instance.player2Score;
         Debug.Log($"[FINAL GAME OVER] : 全ラウンド終了！最終勝者は {winnerName} です！");
+
     }
 
     ///--------------------------------------------------------------
     ///						 ラウンドリスタート
     public void RestartRound() {
-        // HPを最大値に戻す
-        if (player1_ != null) {
-            // ラウンド設定からHPを取得
-            if (RoundManager.Instance != null && RoundManager.Instance.GetCurrentRoundSettings() != null) {
-                int roundMaxHp = RoundManager.Instance.GetCurrentRoundSettings().playerMaxHp;
-                playerMaxHp_[player1_.playerID_] = roundMaxHp;
-                playerCurrentHp_[player1_.playerID_] = roundMaxHp;
-                player1_.maxHp_ = roundMaxHp;
-                player1_.currentHp_ = roundMaxHp;
-                // プレイヤー1の位置を設定
-                player1_.transform.position = RoundManager.Instance.GetCurrentRoundSettings().player1StartPosition;
-            }
-            else {
-                playerCurrentHp_[player1_.playerID_] = playerMaxHp_[player1_.playerID_];
-                player1_.currentHp_ = playerMaxHp_[player1_.playerID_];
-            }
-            
-            // プレイヤーの状態をリセット
-            player1_.ResetPlayerState();
-        }
 
-        if (player2_ != null) {
-            // ラウンド設定からHPを取得
-            if (RoundManager.Instance != null && RoundManager.Instance.GetCurrentRoundSettings() != null) {
-                int roundMaxHp = RoundManager.Instance.GetCurrentRoundSettings().playerMaxHp;
-                playerMaxHp_[player2_.playerID_] = roundMaxHp;
-                playerCurrentHp_[player2_.playerID_] = roundMaxHp;
-                player2_.maxHp_ = roundMaxHp;
-                player2_.currentHp_ = roundMaxHp;
-                // プレイヤー2の位置を設定
-                player2_.transform.position = RoundManager.Instance.GetCurrentRoundSettings().player2StartPosition;
-            }
-            else {
-                playerCurrentHp_[player2_.playerID_] = playerMaxHp_[player2_.playerID_];
-                player2_.currentHp_ = playerMaxHp_[player2_.playerID_];
-            }
-            
-            // プレイヤーの状態をリセット
-            player2_.ResetPlayerState();
-        }
+        // プレイヤーの生成
+        SpawnPlayers();
 
         // ゲーム状態をプレイ中に戻す
         //CurrentGameState = GameState.Playing;
@@ -497,6 +465,31 @@ public class GameManager : MonoBehaviour
     public GameState GetGameState()
     {
         return CurrentGameState;
+    }
+
+    private void SpawnPlayers()
+    {
+        // 既存プレイヤーを削除
+        if (player1_ != null) Destroy(player1_.gameObject);
+        if (player2_ != null) Destroy(player2_.gameObject);
+
+        // プレハブから新しいプレイヤーを生成
+        Vector3 p1Pos = RoundManager.Instance.GetCurrentRoundSettings().player1StartPosition;
+        Vector3 p2Pos = RoundManager.Instance.GetCurrentRoundSettings().player2StartPosition;
+
+        GameObject p1Obj = Instantiate(player1Prefab, p1Pos, Quaternion.identity);
+        GameObject p2Obj = Instantiate(player2Prefab, p2Pos, Quaternion.identity);
+
+        // Playerスクリプトを取得して登録
+        player1_ = p1Obj.GetComponent<Player>();
+        player2_ = p2Obj.GetComponent<Player>();
+
+        // プレイヤーIDなどを再設定
+        player1_.playerID_ = "A";
+        player2_.playerID_ = "B";
+
+        // HPなどの初期化（RoundManager か RoundSettings に依存）
+        InitializePlayers();  // 現在のInitializePlayersをそのまま再利用可能
     }
 
 }

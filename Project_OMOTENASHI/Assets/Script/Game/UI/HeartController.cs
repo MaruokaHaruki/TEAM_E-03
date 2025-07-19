@@ -40,12 +40,24 @@ public class HeartController : MonoBehaviour
             instplayer = GameManager.Instance.player2_;
         }
 
-        UpdateHeartUI();// 初期ハートUIの更新
+        //UpdateHeartUI();// 初期ハートUIの更新
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (instplayer == null)
+        {
+            if (player == PlayerList.Player1)
+            {
+                instplayer = GameManager.Instance.player1_;
+            }
+            else if (player == PlayerList.Player2)
+            {
+                instplayer = GameManager.Instance.player2_;
+            }
+        }
+    
         UpdateHeartUI();
     }
 
@@ -58,7 +70,8 @@ public class HeartController : MonoBehaviour
         }
         heartObjects.Clear();
 
-        int maxHeart = instplayer.maxHp_/10;
+        int maxHeart = instplayer.GetMaxHP() / 10;
+        Debug.Log($"{instplayer}:Max Heart: {maxHeart}");
         int currentHeart = instplayer.currentHp_/10;
 
         // 並べて配置

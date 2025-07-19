@@ -317,7 +317,7 @@ public class CameraController : MonoBehaviour
             {
                 string mode = shouldReturnVignetteImmediately ? "即座戻し中" : 
                              isVictoryZoom ? "勝利演出中" : "通常戻り中";
-                Debug.Log($"[CAMERA] : ビネット強度更新({mode}): {currentVignetteIntensity:F3} → 目標: {targetVignetteIntensity:F3}");
+               // Debug.Log($"[CAMERA] : ビネット強度更新({mode}): {currentVignetteIntensity:F3} → 目標: {targetVignetteIntensity:F3}");
             }
         }
         else
@@ -328,7 +328,7 @@ public class CameraController : MonoBehaviour
                 currentVignetteIntensity = targetVignetteIntensity;
                 vignette.intensity.value = currentVignetteIntensity;
                 shouldReturnVignetteImmediately = false;
-                Debug.Log($"[CAMERA] : ビネット強度調整完了: {currentVignetteIntensity:F3}");
+               // Debug.Log($"[CAMERA] : ビネット強度調整完了: {currentVignetteIntensity:F3}");
             }
         }
     }

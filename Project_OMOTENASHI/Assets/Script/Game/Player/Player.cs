@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
+using Unity.VisualScripting;
 
 [System.Obsolete]
 [RequireComponent(typeof(Rigidbody2D))]
@@ -572,8 +573,12 @@ public class Player : MonoBehaviour {
         if (!allowMovement_) {
             return;
         }
-        
-                // NOTE:修正予定
+        if (collision.gameObject.CompareTag("Damage"))
+        {
+            TakeDamage(atk_);
+        }
+
+        // NOTE:修正予定
         if (collision.gameObject.CompareTag("Punching"))
         {
             var push = collision.gameObject.GetComponentInParent<Push>();
@@ -973,17 +978,19 @@ public class Player : MonoBehaviour {
         if (GameManager.Instance != null) {
             GameManager.GameState currentState = GameManager.Instance.GetGameState();
             bool previousAllowMovement = allowMovement_;
-            
+           
             switch (currentState) {
                 case GameManager.GameState.Playing:
                     allowMovement_ = true;
                     break;
                 case GameManager.GameState.RoundStart:
+                    allowMovement_ = false;
+
+                    break;
                 case GameManager.GameState.RoundEnd:
                 case GameManager.GameState.GameOver:
                 case GameManager.GameState.Paused:
                 default:
-                    allowMovement_ = false;
                     break;
             }
             
@@ -1102,5 +1109,10 @@ public class Player : MonoBehaviour {
         else {
             spriteRenderer_.color = originalColor_;
         }
+    }
+
+    public int GetMaxHP()
+    {
+        return maxHp_;
     }
 }

@@ -10,22 +10,22 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6541e5f56171b044d9778d5dc8dcc68e, type: 3}
-  m_Name: Round_4
+  m_Name: Round_Syuten
   m_EditorClassIdentifier: 
-  roundNumber: 4
-  roundName: Round 4
-  winPoints: 3
+  roundNumber: 1
+  roundName: Round 1
+  winPoints: 1
   player1StartPosition: {x: -3, y: 0, z: 0}
   player2StartPosition: {x: 3, y: 0, z: 0}
   enableDoubleJump: 1
-  enableStomp: 1
+  enableStomp: 0
   enableReverseJump: 0
   enableSpeedTransfer: 1
-  playerMaxHp: 30
-  baseSpeed: 5
+  playerMaxHp: 50
+  baseSpeed: 0.5
   jumpForce: 8
   enableGaugeDrainBoost: 1
-  gaugeDrainBoostMultiplier: 4
+  gaugeDrainBoostMultiplier: 0
   invincibilityDuration: 0.8
   stompStunDuration: 2
   tilemapPrefab: {fileID: 3229168071328024921, guid: e062d202314f88f4187303e9209316bf, type: 3}
