@@ -22,7 +22,7 @@ MonoBehaviour:
   enableReverseJump: 0
   enableSpeedTransfer: 1
   playerMaxHp: 30
-  baseSpeed: 0.5
+  baseSpeed: 5
   jumpForce: 8
   enableGaugeDrainBoost: 1
   gaugeDrainBoostMultiplier: 0

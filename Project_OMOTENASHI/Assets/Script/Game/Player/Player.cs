@@ -238,7 +238,7 @@ public class Player : MonoBehaviour {
                 player.isSpeedBoosted_ = false;
             }
         }
-
+        
         // キー設定モードの処理
         if (Input.GetKeyDown(KeyCode.F1) && playerID_ == "A") {
             ToggleKeySettingMode();
@@ -576,6 +576,7 @@ public class Player : MonoBehaviour {
         if (collision.gameObject.CompareTag("Damage"))
         {
             TakeDamage(atk_);
+            ReverseDirection();
         }
 
         // NOTE:修正予定

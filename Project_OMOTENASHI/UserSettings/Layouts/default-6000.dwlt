@@ -975,13 +975,13 @@ MonoBehaviour:
   m_AudioPlay: 0
   m_DebugDrawModesUseInteractiveLightBakingData: 0
   m_Position:
-    m_Target: {x: -0.66648024, y: 2.0327585, z: -0.03069223}
+    m_Target: {x: 2.2678907, y: 0.69462717, z: -0.06981086}
     speed: 2
     m_Value: {x: -0.66648024, y: 2.0327585, z: -0.03069223}
   m_RenderMode: 0
   m_CameraMode:
-    drawMode: 2
-    name: Shaded Wireframe
+    drawMode: 0
+    name: Shaded
     section: Shading Mode
   m_ValidateTrueMetals: 0
   m_DoValidateTrueMetals: 0
@@ -1027,7 +1027,7 @@ MonoBehaviour:
     speed: 2
     m_Value: {x: 0, y: 0, z: 0, w: 1}
   m_Size:
-    m_Target: 6.5179954
+    m_Target: 7.6969824
     speed: 2
     m_Value: 6.5179954
   m_Ortho:
@@ -1452,7 +1452,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 51.600006}
     m_SelectedIDs: beb80000
     m_LastClickedID: 47294
-    m_ExpandedIDs: 00000000bab40000
+    m_ExpandedIDs: 00000000f8b50000fab50000fcb50000feb5000000b6000002b6000004b6000006b6000008b600000ab60000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -1481,7 +1481,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: 00000000bab40000
+    m_ExpandedIDs: 00000000f8b50000fab50000fcb50000feb5000000b6000002b6000004b6000006b6000008b600000ab60000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
