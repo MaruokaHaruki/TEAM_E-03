@@ -55,7 +55,7 @@ public class Player : MonoBehaviour {
     // 特殊状態設定
     [Header("無敵状態設定")]
     public float invincibilityDuration_ = 3.0f;
-    public float rainbowSpeed_ = 2.0f;
+    public float invincibilityColorSpeed_ = 3.0f;  // rainbowSpeed_から名前変更
     public float invincibilitySpeedMultiplier_ = 2.0f;
     public float invincibilityItemTiem = 3.0F;
 
@@ -814,10 +814,29 @@ public class Player : MonoBehaviour {
     private void UpdateRainbowEffect() {
         if (spriteRenderer_ == null) return;
 
-        float hue = (Time.time * rainbowSpeed_) % 1.0f;
-        Color rainbowColor = Color.HSVToRGB(hue, 1.0f, 1.0f);
-        rainbowColor.a = originalColor_.a;
-        spriteRenderer_.color = rainbowColor;
+        // プレイヤーIDに基づいて暖色系・寒色系の色変化を作成
+        float time = Time.time * invincibilityColorSpeed_;
+        Color invincibleColor;
+
+        if (playerID_.ToUpper() == "A") {
+            // プレイヤーA: 暖色系（赤→オレンジ→黄色→ピンク）
+            float hue = 0.0f + (Mathf.Sin(time) * 0.15f); // 赤を基準に±15度の範囲
+            float saturation = 0.8f + (Mathf.Sin(time * 1.5f) * 0.2f); // 明度を変化させて光る効果
+            float brightness = 0.9f + (Mathf.Sin(time * 2.0f) * 0.1f); // 高い明度で光って見える
+            
+            invincibleColor = Color.HSVToRGB(hue, saturation, brightness);
+        }
+        else {
+            // プレイヤーB: 寒色系（青→水色→紫→青緑）
+            float hue = 0.6f + (Mathf.Sin(time) * 0.15f); // 青を基準に±15度の範囲
+            float saturation = 0.8f + (Mathf.Sin(time * 1.5f) * 0.2f); // 明度を変化させて光る効果
+            float brightness = 0.9f + (Mathf.Sin(time * 2.0f) * 0.1f); // 高い明度で光って見える
+            
+            invincibleColor = Color.HSVToRGB(hue, saturation, brightness);
+        }
+
+        invincibleColor.a = originalColor_.a;
+        spriteRenderer_.color = invincibleColor;
     }
 
     private void SetDefaultKeys() {

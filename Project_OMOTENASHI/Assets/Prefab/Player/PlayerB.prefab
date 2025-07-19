@@ -458,8 +458,8 @@ MonoBehaviour:
   minEffectiveGauge_: 1
   enableGaugeDrainBoost_: 1
   gaugeDrainBoostMultiplier_: 2
-  invincibilityDuration_: 0.2
-  rainbowSpeed_: 1
+  invincibilityDuration_: 0.8
+  invincibilityColorSpeed_: 3
   invincibilitySpeedMultiplier_: 0.2
   invincibilityItemTiem: 3
   damageFlashDuration_: 1
