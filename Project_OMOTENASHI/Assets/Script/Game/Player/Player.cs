@@ -6,7 +6,7 @@ using DG.Tweening;
 [System.Obsolete]
 [RequireComponent(typeof(Rigidbody2D))]
 
-public class Player : MonoBehaviour {   
+public class Player : MonoBehaviour {
     // プレイヤー設定
     [Header("プレイヤー設定")]
     public string playerID_ = "A";
@@ -49,7 +49,7 @@ public class Player : MonoBehaviour {
     // 連打ゲージ減り速度加速設定
     [Header("連打ゲージ減り速度加速設定")]
     public bool enableGaugeDrainBoost_ = true;
-    public float gaugeDrainBoostMultiplier_ = 2.0f;
+    public float gaugeDrainBoostMultiplier_ = 1.0f;
 
     // 特殊状態設定
     [Header("無敵状態設定")]
@@ -94,45 +94,45 @@ public class Player : MonoBehaviour {
     public float knockBackDuration_ = 0.4f;
 
     // コンポーネント参照
-    private Animator animator_ = null;
-    private Rigidbody2D rigidbody2D_ = null;
-    private SpriteRenderer spriteRenderer_ = null;
-    private Transform spriteTransform_ = null;
+    public Animator animator_ = null;
+    public Rigidbody2D rigidbody2D_ = null;
+    public SpriteRenderer spriteRenderer_ = null;
+    public Transform spriteTransform_ = null;
 
     // 状態フラグ
     public bool isGround_ = false;
     public bool isJumping_ = false;
 
     // 入力データ
-    private Vector2 inputHorizontal_ = Vector2.zero;
+    public Vector2 inputHorizontal_ = Vector2.zero;
 
     // 壁接触状態
-    private bool isHitWallFront_ = false;
-    private bool isHitWallBuck_ = false;
+    public bool isHitWallFront_ = false;
+    public bool isHitWallBuck_ = false;
 
     // 自動移動関連
-    private float currentDirection_ = 1.0f;
-    private bool wasHittingWall_ = false;
-    private float speedBoostTimer_ = 0.0f;
-    private bool isSpeedBoosted_ = false;
+    public float currentDirection_ = 1.0f;
+    public bool wasHittingWall_ = false;
+    public float speedBoostTimer_ = 0.0f;
+    public bool isSpeedBoosted_ = false;
 
     // 連打ゲージ関連
-    private float currentComboGauge_ = 0.0f;
-    private bool isGaugeDrainBoosted_ = false;
+    public float currentComboGauge_ = 0.0f;
+    public bool isGaugeDrainBoosted_ = false;
 
     // 無敵状態関連
-    private bool isInvincible_ = false;
-    private float invincibilityTimer_ = 0.0f;
-    private Color originalColor_ = Color.white;
+    public bool isInvincible_ = false;
+    public float invincibilityTimer_ = 0.0f;
+    public Color originalColor_ = Color.white;
 
     // ダメージエフェクト関連
-    private bool isDamageFlashing_ = false;
-    private float damageFlashTimer_ = 0.0f;
-    private float damageFlashIntervalTimer_ = 0.0f;
-    private bool isFlashRed_ = false;
+    public bool isDamageFlashing_ = false;
+    public float damageFlashTimer_ = 0.0f;
+    public float damageFlashIntervalTimer_ = 0.0f;
+    public bool isFlashRed_ = false;
 
     // キー設定関連
-    private string settingTarget_ = "";
+    public string settingTarget_ = "";
 
     // 特別ルール関連
     public bool hasDoubleJumped_ = false;
@@ -141,14 +141,14 @@ public class Player : MonoBehaviour {
     public bool shouldReverseOnLanding_ = false;
     
     // ノックバック状態関連
-    private bool isKnockedBack_ = false;
-    private float knockBackTimer_ = 0.0f;
+    public bool isKnockedBack_ = false;
+    public float knockBackTimer_ = 0.0f;
 
     // スプライト回転関連
-    private float targetRotation_ = 0.0f;
-    private float currentRotation_ = 0.0f;
+    public float targetRotation_ = 0.0f;
+    public float currentRotation_ = 0.0f;
 
-    private CameraShake cameraShake_;
+    public CameraShake cameraShake_;
 
     private void Start() {
         cameraShake_ = FindObjectOfType<CameraShake>();
@@ -298,7 +298,7 @@ public class Player : MonoBehaviour {
     private void FixedUpdate() {
         bool wasGrounded = isGround_;
         isGround_ = groundCheck_.IsGround();
-        
+
         bool wasHittingWallFront = isHitWallFront_;
         isHitWallFront_ = wallCheckFront_.IsHitWallFront();
         isHitWallBuck_ = wallCheckBuck_.IsHitWallBuck();
@@ -355,6 +355,9 @@ public class Player : MonoBehaviour {
         if (!blockFront && !blockBuck) {
             rigidbody2D_.AddForce(Vector2.right * movement, ForceMode2D.Force);
         }
+        // HOTFIX:
+        Debug.Log($"{movement}");
+
 
         // 動的抵抗制御
         if (Mathf.Abs(inputHorizontal_.x) < 0.01f) {
@@ -483,7 +486,7 @@ public class Player : MonoBehaviour {
 
         // 壁衝突判定と方向転換
         if (isHitWallFront_ && !wasHittingWall_) {
-            currentDirection_ *= -1.0f;
+            ReverseDirection();
             
             if (AudioManager.Instance != null) {
                 AudioManager.Instance.PlaySE("Player_Penguin2Wall");
@@ -572,8 +575,13 @@ public class Player : MonoBehaviour {
         if (!allowMovement_) {
             return;
         }
-        
-                // NOTE:修正予定
+
+        if (collision.gameObject.CompareTag("Damage")) {
+            TakeDamage(atk_);
+            ReverseDirection();
+        }
+
+        // NOTE:修正予定
         if (collision.gameObject.CompareTag("Punching"))
         {
             var push = collision.gameObject.GetComponentInParent<Push>();
@@ -723,6 +731,7 @@ public class Player : MonoBehaviour {
                 if (!otherIsInvincible) {
                     otherPlayer.TakeDamage(atk_);
                     KnockBack(otherPlayer);
+                    ReverseDirection();
                 }
             }
             else if (!otherIsAheadOfMe && amIAheadOfOther) {
@@ -1046,6 +1055,7 @@ public class Player : MonoBehaviour {
             spriteTransform_.localRotation = Quaternion.identity;
         }
 
+        
         wasHittingWall_ = false;
         allowMovement_ = false;
     }

@@ -378,14 +378,14 @@ public class RoundManager : MonoBehaviour
             if (GameManager.Instance.player1_ != null)
             {
                 GameManager.Instance.player1_.allowMovement_ = true;
-                GameManager.Instance.player1_.ForceReactivate();
+                //GameManager.Instance.player1_.ForceReactivate();
                 Debug.Log($"[ROUND MANAGER] : Player1の移動許可を有効化しました");
             }
             
             if (GameManager.Instance.player2_ != null)
             {
                 GameManager.Instance.player2_.allowMovement_ = true;
-                GameManager.Instance.player2_.ForceReactivate();
+                //GameManager.Instance.player2_.ForceReactivate();
                 Debug.Log($"[ROUND MANAGER] : Player2の移動許可を有効化しました");
             }
         }

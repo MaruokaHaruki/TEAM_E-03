@@ -2421,7 +2421,7 @@ Transform:
   m_GameObject: {fileID: 1129193999}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.384, z: 0}
+  m_LocalPosition: {x: 0, y: -0.35, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3414,10 +3414,10 @@ MonoBehaviour:
   minEffectiveGauge_: 1
   enableGaugeDrainBoost_: 1
   gaugeDrainBoostMultiplier_: 2
-  invincibilityDuration_: 0.2
+  invincibilityDuration_: 0.1
   rainbowSpeed_: 1
-  invincibilitySpeedMultiplier_: 0.2
-  invincibilityItemTiem: 3
+  invincibilitySpeedMultiplier_: 0.1
+  invincibilityItemTiem: 1
   damageFlashDuration_: 1
   damageFlashInterval_: 0.1
   damageFlashColor_: {r: 1, g: 0, b: 0, a: 1}
@@ -3436,12 +3436,38 @@ MonoBehaviour:
   enableReverseJump_: 0
   stompStunDuration_: 2
   knockBackDuration_: 0.4
+  animator_: {fileID: 0}
+  rigidbody2D_: {fileID: 0}
+  spriteRenderer_: {fileID: 0}
+  spriteTransform_: {fileID: 0}
   isGround_: 0
   isJumping_: 0
+  inputHorizontal_: {x: 0, y: 0}
+  isHitWallFront_: 0
+  isHitWallBuck_: 0
+  currentDirection_: 1
+  wasHittingWall_: 0
+  speedBoostTimer_: 0
+  isSpeedBoosted_: 0
+  currentComboGauge_: 0
+  isGaugeDrainBoosted_: 0
+  isInvincible_: 0
+  invincibilityTimer_: 0
+  originalColor_: {r: 1, g: 1, b: 1, a: 1}
+  isDamageFlashing_: 0
+  damageFlashTimer_: 0
+  damageFlashIntervalTimer_: 0
+  isFlashRed_: 0
+  settingTarget_: 
   hasDoubleJumped_: 0
   isStunned_: 0
   stunTimer_: 0
   shouldReverseOnLanding_: 0
+  isKnockedBack_: 0
+  knockBackTimer_: 0
+  targetRotation_: 0
+  currentRotation_: 0
+  cameraShake_: {fileID: 0}
 --- !u!4 &1507770439
 Transform:
   m_ObjectHideFlags: 0
@@ -4124,10 +4150,10 @@ MonoBehaviour:
   minEffectiveGauge_: 1
   enableGaugeDrainBoost_: 1
   gaugeDrainBoostMultiplier_: 2
-  invincibilityDuration_: 0.2
+  invincibilityDuration_: 0.1
   rainbowSpeed_: 1
-  invincibilitySpeedMultiplier_: 0.2
-  invincibilityItemTiem: 3
+  invincibilitySpeedMultiplier_: 0.1
+  invincibilityItemTiem: 1
   damageFlashDuration_: 1
   damageFlashInterval_: 0.1
   damageFlashColor_: {r: 1, g: 0, b: 0, a: 1}
@@ -4146,12 +4172,38 @@ MonoBehaviour:
   enableReverseJump_: 0
   stompStunDuration_: 2
   knockBackDuration_: 0.4
+  animator_: {fileID: 0}
+  rigidbody2D_: {fileID: 0}
+  spriteRenderer_: {fileID: 0}
+  spriteTransform_: {fileID: 0}
   isGround_: 0
   isJumping_: 0
+  inputHorizontal_: {x: 0, y: 0}
+  isHitWallFront_: 0
+  isHitWallBuck_: 0
+  currentDirection_: 1
+  wasHittingWall_: 0
+  speedBoostTimer_: 0
+  isSpeedBoosted_: 0
+  currentComboGauge_: 0
+  isGaugeDrainBoosted_: 0
+  isInvincible_: 0
+  invincibilityTimer_: 0
+  originalColor_: {r: 1, g: 1, b: 1, a: 1}
+  isDamageFlashing_: 0
+  damageFlashTimer_: 0
+  damageFlashIntervalTimer_: 0
+  isFlashRed_: 0
+  settingTarget_: 
   hasDoubleJumped_: 0
   isStunned_: 0
   stunTimer_: 0
   shouldReverseOnLanding_: 0
+  isKnockedBack_: 0
+  knockBackTimer_: 0
+  targetRotation_: 0
+  currentRotation_: 0
+  cameraShake_: {fileID: 0}
 --- !u!50 &1716098621
 Rigidbody2D:
   serializedVersion: 5
@@ -5119,8 +5171,12 @@ PrefabInstance:
       value: RoundManager
       objectReference: {fileID: 0}
     - target: {fileID: 2707897612911867515, guid: 48c2e5760d71b5848979fb00536cc673, type: 3}
+      propertyPath: targetScore
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 2707897612911867515, guid: 48c2e5760d71b5848979fb00536cc673, type: 3}
       propertyPath: roundSettingsList.Array.size
-      value: 5
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 2707897612911867515, guid: 48c2e5760d71b5848979fb00536cc673, type: 3}
       propertyPath: roundFeatureImages.Array.size
@@ -5157,7 +5213,7 @@ PrefabInstance:
     - target: {fileID: 2707897612911867515, guid: 48c2e5760d71b5848979fb00536cc673, type: 3}
       propertyPath: 'roundFeatureImages.Array.data[2]'
       value: 
-      objectReference: {fileID: 21300000, guid: ddd9093f0b6780f4daec45151c5d2dc7, type: 3}
+      objectReference: {fileID: 21300000, guid: 703b5f93271e50d4ea26ae8ee40c5f48, type: 3}
     - target: {fileID: 2707897612911867515, guid: 48c2e5760d71b5848979fb00536cc673, type: 3}
       propertyPath: 'roundFeatureImages.Array.data[3]'
       value: 
@@ -5165,7 +5221,7 @@ PrefabInstance:
     - target: {fileID: 2707897612911867515, guid: 48c2e5760d71b5848979fb00536cc673, type: 3}
       propertyPath: 'roundFeatureImages.Array.data[4]'
       value: 
-      objectReference: {fileID: 21300000, guid: 19cb4a6d9f199854d82250fb2ba2483b, type: 3}
+      objectReference: {fileID: 8662384261516989540, guid: dcb83c210b29d284b90f5aacc08ac558, type: 3}
     - target: {fileID: 4993961246582294429, guid: 48c2e5760d71b5848979fb00536cc673, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.1185013
@@ -5427,8 +5483,8 @@ GameObject:
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
-  - {fileID: 1569451787}
   - {fileID: 1594832889}
+  - {fileID: 1569451787}
   - {fileID: 1443981702}
   - {fileID: 7930411116545687488}
   - {fileID: 2066187141870782565}
