@@ -1145,8 +1145,8 @@ MonoBehaviour:
     m_Value: {x: 0, y: 0, z: 0}
   m_RenderMode: 0
   m_CameraMode:
-    drawMode: 0
-    name: Shaded
+    drawMode: 2
+    name: Shaded Wireframe
     section: Shading Mode
   m_ValidateTrueMetals: 0
   m_DoValidateTrueMetals: 0

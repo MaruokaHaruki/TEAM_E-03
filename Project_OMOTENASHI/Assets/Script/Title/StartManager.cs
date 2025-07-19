@@ -213,15 +213,15 @@ public class StartManager : MonoBehaviour
         if (player1ReadyText != null)
         {
             player1ReadyText.text = player1Ready ?
-                "Player 1 Ready!" :
-                "Player 1: Press A+W+D to Ready";
+                "Ready!" :
+                "Press W to GimmickMode Ready";
         }
 
         if (player2ReadyText != null)
         {
             player2ReadyText.text = player2Ready ?
-                "Player 2 Ready!" :
-                "Player 2: Press J+I+L to Ready";
+                "Ready!" :
+                "Press I to SimpleMode Ready";
         }
     }
 

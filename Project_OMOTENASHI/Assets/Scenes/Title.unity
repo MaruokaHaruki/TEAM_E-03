@@ -219,6 +219,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 379713185411651839, guid: e7aa98eff82ec1a4e8d323c31c8cf0bf, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 648501221832614291, guid: e7aa98eff82ec1a4e8d323c31c8cf0bf, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 982281038021242309, guid: e7aa98eff82ec1a4e8d323c31c8cf0bf, type: 3}
       propertyPath: m_Name
       value: RoundKeyConfig_Dire 1
@@ -226,6 +234,10 @@ PrefabInstance:
     - target: {fileID: 982281038021242309, guid: e7aa98eff82ec1a4e8d323c31c8cf0bf, type: 3}
       propertyPath: m_Layer
       value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1059757058065633711, guid: e7aa98eff82ec1a4e8d323c31c8cf0bf, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1797380465010872525, guid: e7aa98eff82ec1a4e8d323c31c8cf0bf, type: 3}
       propertyPath: m_SizeDelta.x
@@ -250,6 +262,10 @@ PrefabInstance:
     - target: {fileID: 2465362759298466412, guid: e7aa98eff82ec1a4e8d323c31c8cf0bf, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: -500
+      objectReference: {fileID: 0}
+    - target: {fileID: 3114154850646121829, guid: e7aa98eff82ec1a4e8d323c31c8cf0bf, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -290,7 +306,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -600, y: 0}
+  m_AnchoredPosition: {x: -600, y: -300}
   m_SizeDelta: {x: 500, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &128753924
@@ -315,15 +331,15 @@ MonoBehaviour:
       m_Calls: []
   m_text: New Text
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 2e498d1c8094910479dc3e1b768306a4, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 2e498d1c8094910479dc3e1b768306a4, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294836164
-  m_fontColor: {r: 0.76792455, g: 1, b: 0.9936126, a: 1}
+    rgba: 4294836223
+  m_fontColor: {r: 1, g: 1, b: 0.9936126, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -510,7 +526,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 600, y: 0}
+  m_AnchoredPosition: {x: 600, y: -300}
   m_SizeDelta: {x: 500, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &161424293
@@ -535,15 +551,15 @@ MonoBehaviour:
       m_Calls: []
   m_text: New Text
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 2e498d1c8094910479dc3e1b768306a4, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 2e498d1c8094910479dc3e1b768306a4, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967263
-  m_fontColor: {r: 0.87358487, g: 1, b: 1, a: 1}
+    rgba: 4294967295
+  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -1570,12 +1586,24 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1851220988239140345, guid: 86be4eefeb35d23498dc9efcca509af7, type: 3}
+      propertyPath: bgmClips_.Array.size
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 1851220988239140345, guid: 86be4eefeb35d23498dc9efcca509af7, type: 3}
       propertyPath: seClips_.Array.data[0].clip
       value: 
       objectReference: {fileID: 8300000, guid: 33165ce3970cc6444800fd8f36971586, type: 3}
     - target: {fileID: 1851220988239140345, guid: 86be4eefeb35d23498dc9efcca509af7, type: 3}
       propertyPath: seClips_.Array.data[0].name
       value: Player_MoveField_Opposite
+      objectReference: {fileID: 0}
+    - target: {fileID: 1851220988239140345, guid: 86be4eefeb35d23498dc9efcca509af7, type: 3}
+      propertyPath: bgmClips_.Array.data[4].clip
+      value: 
+      objectReference: {fileID: 8300000, guid: 8105b128bed65394d901ee0b754add6c, type: 3}
+    - target: {fileID: 1851220988239140345, guid: 86be4eefeb35d23498dc9efcca509af7, type: 3}
+      propertyPath: bgmClips_.Array.data[4].name
+      value: MenuBGM
       objectReference: {fileID: 0}
     - target: {fileID: 4974692803899297538, guid: 86be4eefeb35d23498dc9efcca509af7, type: 3}
       propertyPath: m_LocalPosition.x
