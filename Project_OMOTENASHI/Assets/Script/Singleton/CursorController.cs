@@ -5,12 +5,12 @@ public class CursorController : SingletonMonoBehaviour<CursorController>
     private void Start()
     {
         DontDestroyOnLoad(this.gameObject);
-        Cursor.lockState = CursorLockMode.None;
+        Cursor.lockState = CursorLockMode.Locked;
     }
 
     private void Update()
     {
-        if (Input.GetMouseButtonDown(1))
+        if (Input.GetKeyDown(KeyCode.Escape))
         {
             if (Cursor.lockState != CursorLockMode.Locked)
             {

@@ -199,7 +199,7 @@ public class RoundManager : MonoBehaviour
 
     ///--------------------------------------------------------------
     ///						 ラウンド設定適用
-    private void ApplyRoundSettings()
+    public void ApplyRoundSettings()
     {
         if (currentRoundSettings == null) 
         {
@@ -255,7 +255,7 @@ public class RoundManager : MonoBehaviour
 
     ///--------------------------------------------------------------
     ///						 個別プレイヤー設定適用
-    private void ApplySettingsToPlayer(Player player)
+    public void ApplySettingsToPlayer(Player player)
     {
         // まずプレイヤーの状態を完全にリセット
         player.ResetPlayerState();

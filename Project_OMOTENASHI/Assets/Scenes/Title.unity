@@ -219,6 +219,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 379713185411651839, guid: e7aa98eff82ec1a4e8d323c31c8cf0bf, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 648501221832614291, guid: e7aa98eff82ec1a4e8d323c31c8cf0bf, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 982281038021242309, guid: e7aa98eff82ec1a4e8d323c31c8cf0bf, type: 3}
       propertyPath: m_Name
       value: RoundKeyConfig_Dire 1
@@ -226,6 +234,10 @@ PrefabInstance:
     - target: {fileID: 982281038021242309, guid: e7aa98eff82ec1a4e8d323c31c8cf0bf, type: 3}
       propertyPath: m_Layer
       value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1059757058065633711, guid: e7aa98eff82ec1a4e8d323c31c8cf0bf, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1797380465010872525, guid: e7aa98eff82ec1a4e8d323c31c8cf0bf, type: 3}
       propertyPath: m_SizeDelta.x
@@ -250,6 +262,10 @@ PrefabInstance:
     - target: {fileID: 2465362759298466412, guid: e7aa98eff82ec1a4e8d323c31c8cf0bf, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: -500
+      objectReference: {fileID: 0}
+    - target: {fileID: 3114154850646121829, guid: e7aa98eff82ec1a4e8d323c31c8cf0bf, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1570,12 +1586,24 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1851220988239140345, guid: 86be4eefeb35d23498dc9efcca509af7, type: 3}
+      propertyPath: bgmClips_.Array.size
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 1851220988239140345, guid: 86be4eefeb35d23498dc9efcca509af7, type: 3}
       propertyPath: seClips_.Array.data[0].clip
       value: 
       objectReference: {fileID: 8300000, guid: 33165ce3970cc6444800fd8f36971586, type: 3}
     - target: {fileID: 1851220988239140345, guid: 86be4eefeb35d23498dc9efcca509af7, type: 3}
       propertyPath: seClips_.Array.data[0].name
       value: Player_MoveField_Opposite
+      objectReference: {fileID: 0}
+    - target: {fileID: 1851220988239140345, guid: 86be4eefeb35d23498dc9efcca509af7, type: 3}
+      propertyPath: bgmClips_.Array.data[4].clip
+      value: 
+      objectReference: {fileID: 8300000, guid: 8105b128bed65394d901ee0b754add6c, type: 3}
+    - target: {fileID: 1851220988239140345, guid: 86be4eefeb35d23498dc9efcca509af7, type: 3}
+      propertyPath: bgmClips_.Array.data[4].name
+      value: MenuBGM
       objectReference: {fileID: 0}
     - target: {fileID: 4974692803899297538, guid: 86be4eefeb35d23498dc9efcca509af7, type: 3}
       propertyPath: m_LocalPosition.x

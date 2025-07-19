@@ -17,7 +17,7 @@ public class SceneManagerScript : SingletonMonoBehaviour<SceneManagerScript>
     private GameObject fadeCanvas;         // 実際に使われるフェード用Canvasのインスタンス
     private string nextScene;
     private bool isFading = false;
-   
+
 
     #region シーン遷移メソッド
 
@@ -27,7 +27,7 @@ public class SceneManagerScript : SingletonMonoBehaviour<SceneManagerScript>
     /// <param name="sceneName">遷移先のシーン名</param>
     public void FadeOutScene(string sceneName)
     {
-        if (isFading) 
+        if (isFading)
         {
             Debug.LogWarning("既にフェード中のため、シーン遷移をキャンセルしました");
             return;
@@ -52,7 +52,7 @@ public class SceneManagerScript : SingletonMonoBehaviour<SceneManagerScript>
     /// 即座にシーン遷移（フェードなし）
     /// </summary>
     /// <param name="sceneName">遷移先のシーン名</param>
-    public void LoadSceneByName(string sceneName) 
+    public void LoadSceneByName(string sceneName)
     {
         if (string.IsNullOrEmpty(sceneName))
         {
@@ -92,7 +92,7 @@ public class SceneManagerScript : SingletonMonoBehaviour<SceneManagerScript>
     /// </summary>
     private IEnumerator FadeOutAndLoadScene()
     {
-        if (fadeCanvas == null) 
+        if (fadeCanvas == null)
         {
             Debug.LogError("フェードCanvasが生成されていません");
             yield break;
@@ -230,26 +230,32 @@ public class SceneManagerScript : SingletonMonoBehaviour<SceneManagerScript>
     private string GetBGMNameForScene(string sceneName)
     {
         // シーン名とBGM名のマッピング
-        switch (sceneName.ToLower())
+        string lowerSceneName = sceneName.ToLower();
+
+        switch (lowerSceneName)
         {
             case "title":
             case "titlescene":
                 return "TitleBGM";
-            
+
             case "game":
-            case "gamescene":
             case "main":
                 return "GameBGM";
-            
+
             case "result":
             case "resultscene":
                 return "ResultBGM";
-            
+
             case "menu":
             case "menuscene":
                 return "MenuBGM";
-            
+
             default:
+                // "gamescene"が含まれる場合はGameBGMを再生
+                if (lowerSceneName.Contains("gamescene"))
+                {
+                    return "GameBGM";
+                }
                 return null; // BGMなし
         }
     }

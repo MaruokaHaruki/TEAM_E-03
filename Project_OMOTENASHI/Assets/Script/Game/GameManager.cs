@@ -147,22 +147,25 @@ public class GameManager : MonoBehaviour
     ///						 プレイヤー初期化
     private void InitializePlayers() {
         // プレイヤー1の初期化
-        if (player1_ != null) {
+        if (player1_ != null)
+        {
             string player1Id = player1_.playerID_;
             playerMaxHp_[player1Id] = player1_.maxHp_;
             playerCurrentHp_[player1Id] = player1_.currentHp_;
-           // initialPlayer1Position = player1_.gameObject.transform.position;    //←プレイヤーの初期座標設定
+            // initialPlayer1Position = player1_.gameObject.transform.position;    //←プレイヤーの初期座標設定
             Debug.Log($"[GAME MANAGER] : {player1Name_} (ID: {player1Id}) を登録しました。HP: {playerCurrentHp_[player1Id]}/{playerMaxHp_[player1Id]}");
         }
 
         // プレイヤー2の初期化
-        if (player2_ != null) {
+        if (player2_ != null)
+        {
             string player2Id = player2_.playerID_;
             playerMaxHp_[player2Id] = player2_.maxHp_;
             playerCurrentHp_[player2Id] = player2_.currentHp_;
             //initialPlayer2Position = player2_.gameObject.transform.position;    //←プレイヤーの初期座標設定
             Debug.Log($"[GAME MANAGER] : {player2Name_} (ID: {player2Id}) を登録しました。HP: {playerCurrentHp_[player2Id]}/{playerMaxHp_[player2Id]}");
         }
+
     }
 
     ///--------------------------------------------------------------
@@ -487,9 +490,10 @@ public class GameManager : MonoBehaviour
         // プレイヤーIDなどを再設定
         player1_.playerID_ = "A";
         player2_.playerID_ = "B";
+     
+        RoundManager.Instance.ApplySettingsToPlayer(player1_);
+        RoundManager.Instance.ApplySettingsToPlayer(player2_);
 
-        // HPなどの初期化（RoundManager か RoundSettings に依存）
-        InitializePlayers();  // 現在のInitializePlayersをそのまま再利用可能
     }
 
 }

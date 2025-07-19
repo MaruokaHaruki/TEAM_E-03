@@ -1116,4 +1116,6 @@ public class Player : MonoBehaviour {
     {
         return maxHp_;
     }
+
+
 }
