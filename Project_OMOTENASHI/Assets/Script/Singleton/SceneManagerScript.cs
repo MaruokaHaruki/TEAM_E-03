@@ -13,11 +13,13 @@ public class SceneManagerScript : SingletonMonoBehaviour<SceneManagerScript>
     [HideInInspector] public int Player1_Score;
     [HideInInspector] public int Player2_Score;
 
+    [HideInInspector] public string OldSceneName = ""; //前のシーンネーム
+
     // 内部変数
     private GameObject fadeCanvas;         // 実際に使われるフェード用Canvasのインスタンス
     private string nextScene;
     private bool isFading = false;
-   
+
 
     #region シーン遷移メソッド
 
@@ -38,6 +40,8 @@ public class SceneManagerScript : SingletonMonoBehaviour<SceneManagerScript>
             Debug.LogError("シーン名が無効です");
             return;
         }
+
+        OldSceneName = nextScene;
 
         isFading = true;
         nextScene = sceneName;
