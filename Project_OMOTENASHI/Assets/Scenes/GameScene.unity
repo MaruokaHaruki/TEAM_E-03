@@ -3404,7 +3404,7 @@ MonoBehaviour:
   wallCheckFront_: {fileID: 1467870218}
   wallCheckBuck_: {fileID: 214818669}
   isAutoMode_: 1
-  autoMoveSpeed_: 5
+  autoMoveSpeed_: 4
   speedBoostMultiplier_: 2.5
   speedBoostDuration_: 0.5
   maxComboGauge_: 100
@@ -4140,7 +4140,7 @@ MonoBehaviour:
   wallCheckFront_: {fileID: 896691777}
   wallCheckBuck_: {fileID: 1956489830}
   isAutoMode_: 1
-  autoMoveSpeed_: 5
+  autoMoveSpeed_: 4
   speedBoostMultiplier_: 2.5
   speedBoostDuration_: 0.5
   maxComboGauge_: 100
@@ -5185,15 +5185,15 @@ PrefabInstance:
     - target: {fileID: 2707897612911867515, guid: 48c2e5760d71b5848979fb00536cc673, type: 3}
       propertyPath: 'roundSettingsList.Array.data[0]'
       value: 
-      objectReference: {fileID: 11400000, guid: 51e9856d446579041997f2b1d354eb6d, type: 2}
+      objectReference: {fileID: 11400000, guid: c09f8d49445fc844b8a742d66ed0bd34, type: 2}
     - target: {fileID: 2707897612911867515, guid: 48c2e5760d71b5848979fb00536cc673, type: 3}
       propertyPath: 'roundSettingsList.Array.data[1]'
       value: 
-      objectReference: {fileID: 11400000, guid: 42e453f728060204b9cd6941cc4d058a, type: 2}
+      objectReference: {fileID: 11400000, guid: 51e9856d446579041997f2b1d354eb6d, type: 2}
     - target: {fileID: 2707897612911867515, guid: 48c2e5760d71b5848979fb00536cc673, type: 3}
       propertyPath: 'roundSettingsList.Array.data[2]'
       value: 
-      objectReference: {fileID: 11400000, guid: c09f8d49445fc844b8a742d66ed0bd34, type: 2}
+      objectReference: {fileID: 11400000, guid: 42e453f728060204b9cd6941cc4d058a, type: 2}
     - target: {fileID: 2707897612911867515, guid: 48c2e5760d71b5848979fb00536cc673, type: 3}
       propertyPath: 'roundSettingsList.Array.data[3]'
       value: 

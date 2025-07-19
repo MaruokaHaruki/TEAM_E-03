@@ -52,6 +52,9 @@ public class RoundManager : MonoBehaviour
     [Header("ラウンド演出")]
     [Tooltip("ラウンド間の待機時間")]
     public float roundTransitionDelay = 3.0f;
+    
+    // WIN!
+    //public WinProduction
 
     ///--------------------------------------------------------------
     ///						 private変数
