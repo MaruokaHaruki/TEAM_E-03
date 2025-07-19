@@ -230,14 +230,15 @@ public class SceneManagerScript : SingletonMonoBehaviour<SceneManagerScript>
     private string GetBGMNameForScene(string sceneName)
     {
         // シーン名とBGM名のマッピング
-        switch (sceneName.ToLower())
+        string lowerSceneName = sceneName.ToLower();
+        
+        switch (lowerSceneName)
         {
             case "title":
             case "titlescene":
                 return "TitleBGM";
             
             case "game":
-            case "gamescene":
             case "main":
                 return "GameBGM";
             
@@ -250,6 +251,11 @@ public class SceneManagerScript : SingletonMonoBehaviour<SceneManagerScript>
                 return "MenuBGM";
             
             default:
+                // "gamescene"が含まれる場合はGameBGMを再生
+                if (lowerSceneName.Contains("gamescene"))
+                {
+                    return "GameBGM";
+                }
                 return null; // BGMなし
         }
     }

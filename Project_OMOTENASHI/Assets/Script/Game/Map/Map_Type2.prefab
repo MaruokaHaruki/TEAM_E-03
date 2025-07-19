@@ -1328,14 +1328,6 @@ PrefabInstance:
       propertyPath: m_TagString
       value: Ground
       objectReference: {fileID: 0}
-    - target: {fileID: 2043015455327891419, guid: b340902c0dd7fda4cac513d6fb89e5fb, type: 3}
-      propertyPath: minY
-      value: -2
-      objectReference: {fileID: 0}
-    - target: {fileID: 2043015455327891419, guid: b340902c0dd7fda4cac513d6fb89e5fb, type: 3}
-      propertyPath: speed
-      value: 6
-      objectReference: {fileID: 0}
     - target: {fileID: 3491644217731048674, guid: b340902c0dd7fda4cac513d6fb89e5fb, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -1376,49 +1368,9 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 4368775254733051754, guid: b340902c0dd7fda4cac513d6fb89e5fb, type: 3}
-      propertyPath: m_Size.x
-      value: 1.4949553
-      objectReference: {fileID: 0}
-    - target: {fileID: 4368775254733051754, guid: b340902c0dd7fda4cac513d6fb89e5fb, type: 3}
-      propertyPath: m_Offset.x
-      value: -0.24747777
-      objectReference: {fileID: 0}
-    - target: {fileID: 4893291806078232403, guid: b340902c0dd7fda4cac513d6fb89e5fb, type: 3}
-      propertyPath: m_Size.x
-      value: 1.4729736
-      objectReference: {fileID: 0}
-    - target: {fileID: 4893291806078232403, guid: b340902c0dd7fda4cac513d6fb89e5fb, type: 3}
-      propertyPath: m_Offset.x
-      value: 0.2364868
-      objectReference: {fileID: 0}
-    - target: {fileID: 4906474231275799972, guid: b340902c0dd7fda4cac513d6fb89e5fb, type: 3}
-      propertyPath: m_TagString
-      value: Ground
-      objectReference: {fileID: 0}
     - target: {fileID: 6939042431347790648, guid: b340902c0dd7fda4cac513d6fb89e5fb, type: 3}
       propertyPath: m_Name
       value: dossun
-      objectReference: {fileID: 0}
-    - target: {fileID: 6939042431347790648, guid: b340902c0dd7fda4cac513d6fb89e5fb, type: 3}
-      propertyPath: m_TagString
-      value: Ground
-      objectReference: {fileID: 0}
-    - target: {fileID: 8894883362503533444, guid: b340902c0dd7fda4cac513d6fb89e5fb, type: 3}
-      propertyPath: m_Size.x
-      value: 0.50021625
-      objectReference: {fileID: 0}
-    - target: {fileID: 8894883362503533444, guid: b340902c0dd7fda4cac513d6fb89e5fb, type: 3}
-      propertyPath: m_Offset.x
-      value: -0.24989188
-      objectReference: {fileID: 0}
-    - target: {fileID: 8966561195234964310, guid: b340902c0dd7fda4cac513d6fb89e5fb, type: 3}
-      propertyPath: m_Size.x
-      value: 0.28564706
-      objectReference: {fileID: 0}
-    - target: {fileID: 8966561195234964310, guid: b340902c0dd7fda4cac513d6fb89e5fb, type: 3}
-      propertyPath: m_Offset.x
-      value: 0.35717648
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

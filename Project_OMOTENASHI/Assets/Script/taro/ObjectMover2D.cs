@@ -1,56 +1,56 @@
 using UnityEngine;
-using DG.Tweening; // DOTween‚ÌƒAƒZƒbƒg‚ğg—p‚·‚é‚½‚ß‚É•K—v‚Å‚·
+using DG.Tweening; // DOTweenï¿½ÌƒAï¿½Zï¿½bï¿½gï¿½ï¿½gï¿½pï¿½ï¿½ï¿½é‚½ï¿½ß‚É•Kï¿½vï¿½Å‚ï¿½
 
 public class ObjectMover2D : MonoBehaviour
 {
-    [Header("ƒAƒjƒ[ƒVƒ‡ƒ“İ’è")]
-    [Tooltip("Onó‘Ô‚Ì‚ÉYÀ•W‚ğ‚Ç‚ê‚¾‚¯‚¸‚ç‚·‚©")]
+    [Header("ï¿½Aï¿½jï¿½ï¿½ï¿½[ï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½İ’ï¿½")]
+    [Tooltip("Onï¿½ï¿½Ô‚Ìï¿½ï¿½ï¿½Yï¿½ï¿½ï¿½Wï¿½ï¿½Ç‚ê‚¾ï¿½ï¿½ï¿½ï¿½ï¿½ç‚·ï¿½ï¿½")]
     [SerializeField]
     private float yOffset = 2f;
 
-    [Tooltip("ƒAƒjƒ[ƒVƒ‡ƒ“‚ÌŠÔi•bj")]
+    [Tooltip("ï¿½Aï¿½jï¿½ï¿½ï¿½[ï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½Ìï¿½ï¿½Ôiï¿½bï¿½j")]
     [SerializeField]
     private float duration = 0.4f;
 
-    [Tooltip("ƒAƒjƒ[ƒVƒ‡ƒ“‚Ì•Ï‰»‚Ìd•ûis‚«‚à–ß‚è‚à“¯‚¶“®‚«j")]
+    [Tooltip("ï¿½Aï¿½jï¿½ï¿½ï¿½[ï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½Ì•Ï‰ï¿½ï¿½Ìdï¿½ï¿½ï¿½iï¿½sï¿½ï¿½ï¿½ï¿½ß‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½j")]
     [SerializeField]
-    private Ease ease = Ease.OutBack; // s‚«‚Æ–ß‚è‚Å‹¤’Ê‚ÌEase‚ğg—p
+    private Ease ease = Ease.OutBack; // ï¿½sï¿½ï¿½ï¿½Æ–ß‚ï¿½Å‹ï¿½ï¿½Ê‚ï¿½Easeï¿½ï¿½gï¿½p
 
-    private Vector3 startPosition;       // ƒAƒjƒ[ƒVƒ‡ƒ“‘O‚Ì‰ŠúÀ•W
-    private bool isStateOn = false;      // Œ»İ‚Ìó‘Ô (true: On, false: Off)
+    private Vector3 startPosition;       // ï¿½Aï¿½jï¿½ï¿½ï¿½[ï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½Oï¿½Ìï¿½ï¿½ï¿½ï¿½ï¿½ï¿½W
+    private bool isStateOn = false;      // ï¿½ï¿½ï¿½İ‚Ìï¿½ï¿½ (true: On, false: Off)
 
     void Awake()
     {
-        // ‹N“®‚Ìƒ[ƒ‹ƒhÀ•W‚ğ‰ŠúÀ•W‚Æ‚µ‚Ä•Û‘¶
+        // ï¿½Nï¿½ï¿½ï¿½ï¿½ï¿½Ìƒï¿½ï¿½[ï¿½ï¿½ï¿½hï¿½ï¿½ï¿½Wï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Wï¿½Æ‚ï¿½ï¿½Ä•Û‘ï¿½
         startPosition = transform.position;
     }
 
     void Update()
     {
-        // SpaceƒL[‚ª‰Ÿ‚³‚ê‚½uŠÔ‚ğŒŸo‚µ‚½‚ç
-        if (Input.GetKeyDown(KeyCode.Space))
+        // Spaceï¿½Lï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ê‚½ï¿½uï¿½Ô‚ï¿½ï¿½ï¿½oï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+        if (Input.GetKeyDown(KeyCode.G))
         {
-            // ó‘Ô‚ğØ‚è‘Ö‚¦‚éƒƒ\ƒbƒh‚ğŒÄ‚Ño‚·
+            // ï¿½ï¿½Ô‚ï¿½Ø‚ï¿½Ö‚ï¿½ï¿½éƒï¿½\ï¿½bï¿½hï¿½ï¿½Ä‚Ñoï¿½ï¿½
             ToggleState();
         }
     }
 
     /// <summary>
-    /// ƒIƒuƒWƒFƒNƒg‚Ìó‘Ô‚ğØ‚è‘Ö‚¦‚Ü‚·B
+    /// ï¿½Iï¿½uï¿½Wï¿½Fï¿½Nï¿½gï¿½Ìï¿½Ô‚ï¿½Ø‚ï¿½Ö‚ï¿½ï¿½Ü‚ï¿½ï¿½B
     /// </summary>
     public void ToggleState()
     {
-        // šd—vFŠù‘¶‚ÌƒAƒjƒ[ƒVƒ‡ƒ“‚ğ‚»‚Ìê‚Å’â~‚³‚¹‚é
-        // ‚±‚ê‚É‚æ‚èAƒAƒjƒ[ƒVƒ‡ƒ“‚Ì“r’†‚Å‚àƒXƒ€[ƒY‚É”½“]‚Å‚«‚é
+        // ï¿½ï¿½ï¿½dï¿½vï¿½Fï¿½ï¿½ï¿½ï¿½ï¿½ÌƒAï¿½jï¿½ï¿½ï¿½[ï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ìï¿½Å’ï¿½~ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+        // ï¿½ï¿½ï¿½ï¿½É‚ï¿½ï¿½Aï¿½Aï¿½jï¿½ï¿½ï¿½[ï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½Ì“rï¿½ï¿½ï¿½Å‚ï¿½Xï¿½ï¿½ï¿½[ï¿½Yï¿½É”ï¿½ï¿½]ï¿½Å‚ï¿½ï¿½ï¿½
         transform.DOKill();
 
-        // Œ»İ‚Ìó‘Ô‚ğ”½“]‚³‚¹‚é
+        // ï¿½ï¿½ï¿½İ‚Ìï¿½Ô‚ğ”½“]ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         isStateOn = !isStateOn;
 
-        // Onó‘Ô‚È‚ç–Ú•WˆÊ’u‚ğŒvZ‚µAOffó‘Ô‚È‚ç‰ŠúˆÊ’u‚É–ß‚·
+        // Onï¿½ï¿½Ô‚È‚ï¿½Ú•Wï¿½Ê’uï¿½ï¿½vï¿½Zï¿½ï¿½ï¿½AOffï¿½ï¿½Ô‚È‚ç‰ï¿½ï¿½ï¿½Ê’uï¿½É–ß‚ï¿½
         Vector3 targetPosition = isStateOn ? startPosition + new Vector3(0, yOffset, 0) : startPosition;
 
-        // ŒvZ‚µ‚½–Ú•WˆÊ’u‚ÖƒAƒjƒ[ƒVƒ‡ƒ“‚ğŠJn
+        // ï¿½vï¿½Zï¿½ï¿½ï¿½ï¿½ï¿½Ú•Wï¿½Ê’uï¿½ÖƒAï¿½jï¿½ï¿½ï¿½[ï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Jï¿½n
         transform.DOMove(targetPosition, duration).SetEase(ease);
     }
 }

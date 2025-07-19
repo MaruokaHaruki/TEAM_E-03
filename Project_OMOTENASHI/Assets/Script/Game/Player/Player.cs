@@ -669,6 +669,12 @@ public class Player : MonoBehaviour {
             float otherDirSign = Mathf.Sign(otherPlayer.currentDirection_);
             bool amIAheadOfOther = Mathf.Sign(relativeXToMe) == otherDirSign;
 
+            // 後ろから当たった場合の判定
+            bool iHitOtherFromBehind = !otherIsAheadOfMe && !amIAheadOfOther && 
+                                     Mathf.Sign(relativeXToOther) != myDirSign;
+            bool otherHitMeFromBehind = !otherIsAheadOfMe && !amIAheadOfOther && 
+                                       Mathf.Sign(relativeXToMe) != otherDirSign;
+
             if (otherIsAheadOfMe && amIAheadOfOther) {
                 if (thisIsInvincible && otherIsInvincible) {
                     if (AudioManager.Instance != null) {
@@ -730,6 +736,7 @@ public class Player : MonoBehaviour {
                     otherPlayer.TakeDamage(atk_);
                     KnockBack(otherPlayer);
                 }
+                ReverseDirection();
             }
             else if (!otherIsAheadOfMe && amIAheadOfOther) {
                 if (!thisIsInvincible) {
@@ -738,6 +745,25 @@ public class Player : MonoBehaviour {
                     if (knockBackDirToThis == Vector2.zero) knockBackDirToThis = (Random.insideUnitCircle).normalized;
                     rigidbody2D_.AddForce(knockBackDirToThis * 10f, ForceMode2D.Impulse);
                 }
+                ReverseDirection();
+            }
+            else if (iHitOtherFromBehind || otherHitMeFromBehind) {
+                // 後ろから当たった場合は両方反転
+                if (AudioManager.Instance != null) {
+                    AudioManager.Instance.PlaySE("Player_Penguin2Penguin");
+                }
+
+                ReverseDirection();
+                otherPlayer.ReverseDirection();
+
+                // 軽いノックバック
+                Vector2 knockBackDirToMe = (transform.position - otherPlayer.transform.position).normalized;
+                if (knockBackDirToMe == Vector2.zero) knockBackDirToMe = (Random.insideUnitCircle).normalized;
+                rigidbody2D_.AddForce(knockBackDirToMe * 3f, ForceMode2D.Impulse);
+
+                Vector2 knockBackDirToOther = (otherPlayer.transform.position - transform.position).normalized;
+                if (knockBackDirToOther == Vector2.zero) knockBackDirToOther = (Random.insideUnitCircle).normalized;
+                otherPlayer.rigidbody2D_.AddForce(knockBackDirToOther * 3f, ForceMode2D.Impulse);
             }
         }
 
