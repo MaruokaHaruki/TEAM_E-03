@@ -173,12 +173,12 @@ public class GameManager : MonoBehaviour
     private void InitializeUI() {
         if (UIManager.Instance != null && player1_ != null && player2_ != null)
         {
-            UIManager.Instance.InitializePlayerHPUI(
-                player1_.playerID_, 
-                player2_.playerID_, 
-                playerMaxHp_[player1_.playerID_], 
-                playerMaxHp_[player2_.playerID_]
-            );
+            //UIManager.Instance.InitializePlayerHPUI(
+            //    player1_.playerID_, 
+            //    player2_.playerID_, 
+            //    playerMaxHp_[player1_.playerID_], 
+            //    playerMaxHp_[player2_.playerID_]
+            //);
         }
     }
 
@@ -487,9 +487,9 @@ public class GameManager : MonoBehaviour
         player1_ = p1Obj.GetComponent<Player>();
         player2_ = p2Obj.GetComponent<Player>();
 
-        // プレイヤーIDなどを再設定
-        player1_.playerID_ = "A";
-        player2_.playerID_ = "B";
+        //// プレイヤーIDなどを再設定
+        //player1_.playerID_ = "A";
+        //player2_.playerID_ = "B";
      
         RoundManager.Instance.ApplySettingsToPlayer(player1_);
         RoundManager.Instance.ApplySettingsToPlayer(player2_);

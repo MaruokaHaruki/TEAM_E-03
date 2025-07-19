@@ -464,11 +464,16 @@ public class RoundManager : MonoBehaviour
             case GameManager.Winner.Player1:
                 player1Score += currentRoundSettings.winPoints;
                 winProduction.SetStart("PlayerA", false); // 勝利演出開始
+
+                GameManager.Instance.player2_.transform.rotation = Quaternion.Euler(0, 180, 180); // Player2を反転させる
                 Debug.Log($"[ROUND MANAGER] : Player1 が {currentRoundSettings.winPoints} ポイント獲得！ 総スコア: {player1Score}");
                 break;
             case GameManager.Winner.Player2:
                 player2Score += currentRoundSettings.winPoints;
                 winProduction.SetStart("PlayerB", false); // 勝利演出開始
+
+                GameManager.Instance.player1_.transform.rotation = Quaternion.Euler(0, 180, 180); // Player1を反転させる
+
                 Debug.Log($"[ROUND MANAGER] : Player2 が {currentRoundSettings.winPoints} ポイント獲得！ 総スコア: {player2Score}");
                 break;
         }
