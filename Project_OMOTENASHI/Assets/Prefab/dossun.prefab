@@ -122,7 +122,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: -0.24989188, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -132,7 +132,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 1, y: 0.546875}
+  m_Size: {x: 0.50021625, y: 0.546875}
   m_EdgeRadius: 0
 --- !u!1 &747746624261095720
 GameObject:
@@ -430,7 +430,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: -0.24747777, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -440,7 +440,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 1, y: 0.546875}
+  m_Size: {x: 1.4949553, y: 0.546875}
   m_EdgeRadius: 0
 --- !u!1 &1539475196630567152
 GameObject:
@@ -455,7 +455,7 @@ GameObject:
   - component: {fileID: 4893291806078232403}
   m_Layer: 0
   m_Name: spikes_0
-  m_TagString: Damage
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -564,7 +564,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: 0.2364868, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -574,7 +574,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 1, y: 0.546875}
+  m_Size: {x: 1.4729736, y: 0.546875}
   m_EdgeRadius: 0
 --- !u!1 &2329331096494953060
 GameObject:
@@ -1111,7 +1111,7 @@ GameObject:
   - component: {fileID: 8966561195234964310}
   m_Layer: 0
   m_Name: spikes_0 (1)
-  m_TagString: Damage
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1220,7 +1220,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: 0.35717648, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -1230,7 +1230,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 1, y: 0.546875}
+  m_Size: {x: 0.28564706, y: 0.546875}
   m_EdgeRadius: 0
 --- !u!1 &5207717774987525984
 GameObject:
@@ -1681,7 +1681,7 @@ GameObject:
   - component: {fileID: 2043015455327891419}
   m_Layer: 0
   m_Name: dossun
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1716,8 +1716,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxY: 1.7
-  minY: -1.5
-  speed: 2
+  minY: -2
+  speed: 6
   rightObject: {fileID: 1073076372068449846}
   leftObject: {fileID: 7593315925909240048}
 --- !u!1 &6950452241018488731
