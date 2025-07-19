@@ -53,6 +53,8 @@ public class RoundManager : MonoBehaviour
     [Tooltip("ラウンド間の待機時間")]
     public float roundTransitionDelay = 3.0f;
 
+    public WinProduction winProduction; // 勝利演出のスクリプト(命名分かりやすく書き直してくださいな)
+
     ///--------------------------------------------------------------
     ///						 private変数
     //========================================
@@ -183,6 +185,9 @@ public class RoundManager : MonoBehaviour
 
             // ラウンド開始UI表示
             StartRoundTransition();
+
+            // 1ラウンド勝利演出の初期化(初期化内ならどこでやってもいいです)
+            winProduction.Init();
 
             Debug.Log($"[ROUND MANAGER] : ラウンド {currentRoundNumber} 初期化完了");
         }
@@ -458,10 +463,12 @@ public class RoundManager : MonoBehaviour
         {
             case GameManager.Winner.Player1:
                 player1Score += currentRoundSettings.winPoints;
+                winProduction.SetStart("PlayerA", false); // 勝利演出開始
                 Debug.Log($"[ROUND MANAGER] : Player1 が {currentRoundSettings.winPoints} ポイント獲得！ 総スコア: {player1Score}");
                 break;
             case GameManager.Winner.Player2:
                 player2Score += currentRoundSettings.winPoints;
+                winProduction.SetStart("PlayerB", false); // 勝利演出開始
                 Debug.Log($"[ROUND MANAGER] : Player2 が {currentRoundSettings.winPoints} ポイント獲得！ 総スコア: {player2Score}");
                 break;
         }

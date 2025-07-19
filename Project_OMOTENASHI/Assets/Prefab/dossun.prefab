@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 8894883362503533444}
   m_Layer: 0
   m_Name: spikes_0
-  m_TagString: Damage
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -455,7 +455,7 @@ GameObject:
   - component: {fileID: 4893291806078232403}
   m_Layer: 0
   m_Name: spikes_0
-  m_TagString: Ground
+  m_TagString: Damage
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

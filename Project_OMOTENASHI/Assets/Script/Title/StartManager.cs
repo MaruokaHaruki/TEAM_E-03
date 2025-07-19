@@ -101,12 +101,12 @@ public class StartManager : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.W))
             {
-                sceneToLoad = "GameScene";
+                sceneToLoad = "GameScene_Rantou";
                 SceneManagerScript.Instance.FadeOutScene(sceneToLoad);
             }
             else if (Input.GetKeyDown(KeyCode.I))
             {
-                sceneToLoad = "GameScene_Mizuno";
+                sceneToLoad = "GameScene_Syuuten";
                 SceneManagerScript.Instance.FadeOutScene(sceneToLoad);
             }
 
