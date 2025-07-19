@@ -12,6 +12,7 @@ TagManager:
   - Punching
   - KeyData
   - Comment
+  - Damage
   layers:
   - Default
   - TransparentFX

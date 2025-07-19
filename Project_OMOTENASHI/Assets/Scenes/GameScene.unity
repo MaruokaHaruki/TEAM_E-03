@@ -3920,6 +3920,10 @@ PrefabInstance:
       value: RoundManager
       objectReference: {fileID: 0}
     - target: {fileID: 2707897612911867515, guid: 48c2e5760d71b5848979fb00536cc673, type: 3}
+      propertyPath: targetScore
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 2707897612911867515, guid: 48c2e5760d71b5848979fb00536cc673, type: 3}
       propertyPath: roundSettingsList.Array.size
       value: 4
       objectReference: {fileID: 0}
@@ -3958,7 +3962,7 @@ PrefabInstance:
     - target: {fileID: 2707897612911867515, guid: 48c2e5760d71b5848979fb00536cc673, type: 3}
       propertyPath: 'roundFeatureImages.Array.data[2]'
       value: 
-      objectReference: {fileID: 21300000, guid: ddd9093f0b6780f4daec45151c5d2dc7, type: 3}
+      objectReference: {fileID: 21300000, guid: 703b5f93271e50d4ea26ae8ee40c5f48, type: 3}
     - target: {fileID: 2707897612911867515, guid: 48c2e5760d71b5848979fb00536cc673, type: 3}
       propertyPath: 'roundFeatureImages.Array.data[3]'
       value: 
@@ -3966,7 +3970,7 @@ PrefabInstance:
     - target: {fileID: 2707897612911867515, guid: 48c2e5760d71b5848979fb00536cc673, type: 3}
       propertyPath: 'roundFeatureImages.Array.data[4]'
       value: 
-      objectReference: {fileID: 21300000, guid: 19cb4a6d9f199854d82250fb2ba2483b, type: 3}
+      objectReference: {fileID: 8662384261516989540, guid: dcb83c210b29d284b90f5aacc08ac558, type: 3}
     - target: {fileID: 4993961246582294429, guid: 48c2e5760d71b5848979fb00536cc673, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.1185013
@@ -4115,8 +4119,8 @@ GameObject:
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
-  - {fileID: 1569451787}
   - {fileID: 1594832889}
+  - {fileID: 1569451787}
   - {fileID: 1443981702}
   - {fileID: 7930411116545687488}
   - {fileID: 2066187141870782565}
