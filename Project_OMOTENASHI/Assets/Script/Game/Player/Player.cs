@@ -94,6 +94,17 @@ public class Player : MonoBehaviour {
     // ノックバック設定
     public float knockBackDuration_ = 0.4f;
 
+    // ダミープレイヤー設定
+    [Header("ダミープレイヤー設定")]
+    public bool isDummyPlayer_ = false;
+    public float dummyMoveInterval_ = 2.0f;
+    public float dummyJumpInterval_ = 3.0f;
+    public bool dummyAlwaysInvincible_ = false; // デフォルトをfalseに変更
+    public bool dummyCanMove_ = false;
+    [Header("ダミープレイヤー初期方向設定")]
+    [Tooltip("1.0f = 右向き, -1.0f = 左向き")]
+    public float dummyInitialDirection_ = 1.0f;
+
     // コンポーネント参照
     private Animator animator_ = null;
     private Rigidbody2D rigidbody2D_ = null;
@@ -149,9 +160,39 @@ public class Player : MonoBehaviour {
     private float targetRotation_ = 0.0f;
     private float currentRotation_ = 0.0f;
 
+    // ダミープレイヤー関連
+    private float dummyMoveTimer_ = 0.0f;
+    private float dummyJumpTimer_ = 0.0f;
+    private bool dummyMovingRight_ = true;
+
     private CameraShake cameraShake_;
 
     private void Start() {
+        // ダミープレイヤーの判定
+        if (playerID_.ToUpper() == "D") {
+            isDummyPlayer_ = true;
+            isAutoMode_ = true;
+            allowMovement_ = dummyCanMove_;
+            
+            // ダミープレイヤーの初期方向を設定
+            currentDirection_ = Mathf.Sign(dummyInitialDirection_);
+            if (currentDirection_ == 0.0f) currentDirection_ = 1.0f; // 0の場合は右向きに
+            dummyMovingRight_ = currentDirection_ > 0;
+            
+            // 初期スプライトの向きを設定
+            if (currentDirection_ > 0) {
+                transform.localScale = new Vector3(-1, 1, 1);
+            } else {
+                transform.localScale = new Vector3(1, 1, 1);
+            }
+            
+            // ダミープレイヤーが常に無敵の場合のみ無敵状態を設定
+            if (dummyAlwaysInvincible_) {
+                isInvincible_ = true;
+                invincibilityTimer_ = float.MaxValue; // 無限に近い値
+            }
+        }
+        
         cameraShake_ = FindObjectOfType<CameraShake>();
 
         Transform spriteChild = transform.Find("Sprite");
@@ -170,7 +211,18 @@ public class Player : MonoBehaviour {
     }
 
     private void Update() {
-        UpdateMovementPermission();
+        // ダミープレイヤーの場合はGameManagerの状態チェックをスキップ
+        if (!isDummyPlayer_) {
+            UpdateMovementPermission();
+        } else {
+            allowMovement_ = dummyCanMove_;
+            
+            // ダミープレイヤーの無敵状態を維持
+            if (dummyAlwaysInvincible_) {
+                isInvincible_ = true;
+                invincibilityTimer_ = float.MaxValue;
+            }
+        }
 
         if (isStunned_) {
             stunTimer_ -= Time.deltaTime;
@@ -207,14 +259,17 @@ public class Player : MonoBehaviour {
         }
 
         if (isInvincible_) {
-            invincibilityTimer_ -= Time.deltaTime;
+            // ダミープレイヤーの場合は無敵タイマーを減らさない
+            if (!isDummyPlayer_ || !dummyAlwaysInvincible_) {
+                invincibilityTimer_ -= Time.deltaTime;
+            }
             
             // 無敵状態の場合はレインボーエフェクトを優先
             if (!isDamageFlashing_) {
                 UpdateRainbowEffect();
             }
             
-            if (invincibilityTimer_ <= 0.0f) {
+            if (invincibilityTimer_ <= 0.0f && (!isDummyPlayer_ || !dummyAlwaysInvincible_)) {
                 isInvincible_ = false;
                 if (spriteRenderer_ != null && !isDamageFlashing_) {
                     spriteRenderer_.color = originalColor_;
@@ -254,7 +309,20 @@ public class Player : MonoBehaviour {
 
         // 移動処理
         if (allowMovement_) {
-            if (isAutoMode_) {
+            if (isDummyPlayer_) {
+                if (dummyCanMove_) {
+                    DummyMove();
+                } else {
+                    // 行動しない場合は入力をゼロにしてアニメーション停止
+                    inputHorizontal_ = Vector2.zero;
+                    isJumping_ = false;
+                    
+                    if (animator_ != null) {
+                        animator_.SetBool("Run", false);
+                        animator_.SetBool("Jump", !isGround_);
+                    }
+                }
+            } else if (isAutoMode_) {
                 AutoMove();
             }
             else {
@@ -463,20 +531,14 @@ public class Player : MonoBehaviour {
     }
 
     private void AutoMove() {
-        if (GameManager.Instance != null && GameManager.Instance.GetGameState() != GameManager.GameState.Playing) {
+        // ダミープレイヤーの場合はGameManagerの状態チェックをスキップ
+        if (!isDummyPlayer_ && GameManager.Instance != null && GameManager.Instance.GetGameState() != GameManager.GameState.Playing) {
             inputHorizontal_ = Vector2.zero;
             isJumping_ = false;
             return;
         }
 
         if (!allowMovement_) {
-            inputHorizontal_ = Vector2.zero;
-            isJumping_ = false;
-            return;
-        }
-
-        // ノックバック中は自動移動を停止
-        if (isKnockedBack_) {
             inputHorizontal_ = Vector2.zero;
             isJumping_ = false;
             return;
@@ -565,14 +627,77 @@ public class Player : MonoBehaviour {
         }
     }
 
+    /// <summary>
+    /// ダミープレイヤー専用の移動処理
+    /// </summary>
+    private void DummyMove() {
+        // 行動しない設定の場合は何もしない
+        if (!dummyCanMove_) {
+            inputHorizontal_ = Vector2.zero;
+            isJumping_ = false;
+            return;
+        }
+
+        if (!allowMovement_) {
+            inputHorizontal_ = Vector2.zero;
+            isJumping_ = false;
+            return;
+        }
+
+        // タイマー更新
+        dummyMoveTimer_ += Time.deltaTime;
+        dummyJumpTimer_ += Time.deltaTime;
+
+        // 移動方向変更
+        if (dummyMoveTimer_ >= dummyMoveInterval_) {
+            dummyMovingRight_ = !dummyMovingRight_;
+            dummyMoveTimer_ = 0.0f;
+            currentDirection_ = dummyMovingRight_ ? 1.0f : -1.0f;
+        }
+
+        // 壁衝突時の方向転換
+        if (isHitWallFront_ && !wasHittingWall_) {
+            currentDirection_ *= -1.0f;
+            dummyMovingRight_ = currentDirection_ > 0;
+            dummyMoveTimer_ = 0.0f;
+        }
+        wasHittingWall_ = isHitWallFront_;
+
+        // ジャンプ処理
+        if (dummyJumpTimer_ >= dummyJumpInterval_ && isGround_) {
+            isJumping_ = true;
+            dummyJumpTimer_ = 0.0f;
+        }
+
+        // 自動移動の実行
+        float currentSpeed = autoMoveSpeed_;
+        inputHorizontal_ = new Vector2(currentDirection_ * currentSpeed / maxSpeed_, 0.0f);
+
+        // アニメーション更新
+        if (animator_ != null) {
+            animator_.SetBool("Jump", !isGround_);
+            animator_.SetBool("Run", true);
+        }
+
+        // スプライトの向き更新
+        if (currentDirection_ > 0) {
+            transform.localScale = new Vector3(-1, 1, 1);
+        }
+        else {
+            transform.localScale = new Vector3(1, 1, 1);
+        }
+    }
+
     private void OnCollisionEnter2D(Collision2D collision) {
-        if (GameManager.Instance != null && GameManager.Instance.GetGameState() != GameManager.GameState.Playing) {
+        // ダミープレイヤーの場合はGameManagerの状態チェックをスキップ
+        if (!isDummyPlayer_ && GameManager.Instance != null && GameManager.Instance.GetGameState() != GameManager.GameState.Playing) {
             return;
         }
 
         if (!allowMovement_) {
             return;
         }
+        
         if (collision.gameObject.CompareTag("Damage"))
         {
             TakeDamage(atk_);
@@ -779,6 +904,29 @@ public class Player : MonoBehaviour {
     }
 
     public void TakeDamage(int amount) {
+        // ダミープレイヤーの場合
+        if (isDummyPlayer_) {
+            // 常時無敵設定がtrueの場合のみダメージを無効化
+            if (dummyAlwaysInvincible_) {
+                return;
+            }
+            
+            // ダミープレイヤーはダメージを受けたら即座に消える
+            if (AudioManager.Instance != null) {
+                AudioManager.Instance.PlaySE("Player_Defeat"); // 撃破音があれば再生
+            }
+            
+            // カメラシェイクエフェクト
+            if (cameraShake_ != null) {
+                cameraShake_.ShakeCamera(CameraShake.ShakeType.Light);
+            }
+            
+            // GameObjectを破棄
+            Destroy(gameObject);
+            return;
+        }
+
+        // 通常プレイヤーの処理
         if (GameManager.Instance != null && GameManager.Instance.GetGameState() != GameManager.GameState.Playing) {
             return;
         }
@@ -826,6 +974,14 @@ public class Player : MonoBehaviour {
             
             invincibleColor = Color.HSVToRGB(hue, saturation, brightness);
         }
+        else if (playerID_.ToUpper() == "D") {
+            // ダミープレイヤー: 緑系（緑→黄緑→エメラルドグリーン）
+            float hue = 0.3f + (Mathf.Sin(time) * 0.1f); // 緑を基準に±10度の範囲
+            float saturation = 0.7f + (Mathf.Sin(time * 1.2f) * 0.2f);
+            float brightness = 0.8f + (Mathf.Sin(time * 1.8f) * 0.1f);
+            
+            invincibleColor = Color.HSVToRGB(hue, saturation, brightness);
+        }
         else {
             // プレイヤーB: 寒色系（青→水色→紫→青緑）
             float hue = 0.6f + (Mathf.Sin(time) * 0.15f); // 青を基準に±15度の範囲
@@ -850,6 +1006,12 @@ public class Player : MonoBehaviour {
                 moveLeftKey_ = KeyCode.J;
                 moveRightKey_ = KeyCode.L;
                 jumpKey_ = KeyCode.I;
+                break;
+            case "D":
+                // ダミープレイヤーはキー入力を使わない
+                moveLeftKey_ = KeyCode.None;
+                moveRightKey_ = KeyCode.None;
+                jumpKey_ = KeyCode.None;
                 break;
         }
     }
@@ -1021,6 +1183,12 @@ public class Player : MonoBehaviour {
     }
 
     private void UpdateMovementPermission() {
+        // ダミープレイヤーは常に移動可能
+        if (isDummyPlayer_) {
+            allowMovement_ = true;
+            return;
+        }
+
         if (GameManager.Instance != null) {
             GameManager.GameState currentState = GameManager.Instance.GetGameState();
             bool previousAllowMovement = allowMovement_;
@@ -1061,7 +1229,22 @@ public class Player : MonoBehaviour {
 
         inputHorizontal_ = Vector2.zero;
         isJumping_ = false;
-        currentDirection_ = 1.0f;
+        
+        // ダミープレイヤーの場合は初期方向を使用
+        if (isDummyPlayer_) {
+            currentDirection_ = Mathf.Sign(dummyInitialDirection_);
+            if (currentDirection_ == 0.0f) currentDirection_ = 1.0f;
+            dummyMovingRight_ = currentDirection_ > 0;
+            
+            // スプライトの向きも初期設定に戻す
+            if (currentDirection_ > 0) {
+                transform.localScale = new Vector3(-1, 1, 1);
+            } else {
+                transform.localScale = new Vector3(1, 1, 1);
+            }
+        } else {
+            currentDirection_ = 1.0f;
+        }
 
         currentComboGauge_ = 0.0f;
         isSpeedBoosted_ = false;
@@ -1072,15 +1255,18 @@ public class Player : MonoBehaviour {
         hasDoubleJumped_ = false;
         shouldReverseOnLanding_ = false;
 
-        isInvincible_ = false;
-        invincibilityTimer_ = 0.0f;
+        // ダミープレイヤーの無敵状態は維持
+        if (!isDummyPlayer_ || !dummyAlwaysInvincible_) {
+            isInvincible_ = false;
+            invincibilityTimer_ = 0.0f;
+        }
         
         // ダメージエフェクトをリセット
         isDamageFlashing_ = false;
         damageFlashTimer_ = 0.0f;
         isFlashRed_ = false;
         
-        if (spriteRenderer_ != null) {
+        if (spriteRenderer_ != null && (!isDummyPlayer_ || !dummyAlwaysInvincible_)) {
             spriteRenderer_.color = originalColor_;
         }
 
@@ -1100,7 +1286,13 @@ public class Player : MonoBehaviour {
         }
 
         wasHittingWall_ = false;
-        allowMovement_ = false;
+        
+        // ダミープレイヤーは移動許可の設定を維持
+        if (!isDummyPlayer_) {
+            allowMovement_ = false;
+        } else {
+            allowMovement_ = dummyCanMove_;
+        }
     }
     
     public void ForceReactivate() {
