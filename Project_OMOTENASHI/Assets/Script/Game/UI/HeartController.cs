@@ -20,7 +20,7 @@ public class HeartController : MonoBehaviour
     [SerializeField, Header("ハートのプレハブ")]
     private Image heartPrefab;
 
-    [SerializeField, Header("ハートを並べる親")]
+    [SerializeField, Header("ハートを並べる中心")]
     private Transform heartParent;
 
     [SerializeField, Header("ハート同士の間隔")]
@@ -74,13 +74,35 @@ public class HeartController : MonoBehaviour
         Debug.Log($"{instplayer}:Max Heart: {maxHeart}");
         int currentHeart = instplayer.currentHp_/10;
 
-        // 並べて配置
+        float totalWidth = (maxHeart - 1) * heartSpacing * 1f;
+        float startX = -totalWidth / 2f;
+        //// 並べて配置
+        //for (int i = 0; i < maxHeart; i++)
+        //{
+        //    // 空白ハート
+        //    var blank = Instantiate(heartBlankPrefab, heartParent);
+        //    RectTransform blankRect = blank.GetComponent<RectTransform>();
+        //    blankRect.anchoredPosition = new Vector2(i * heartSpacing, 0);
+        //    heartObjects.Add(blank.gameObject);
+
+        //    // ハート（現在HP以下のみ）
+        //    if (i < currentHeart)
+        //    {
+        //        var heart = Instantiate(heartPrefab, heartParent);
+        //        RectTransform heartRect = heart.GetComponent<RectTransform>();
+        //        heartRect.anchoredPosition = new Vector2(i * heartSpacing, 0);
+        //        heartObjects.Add(heart.gameObject);
+        //    }
+        //}
+
         for (int i = 0; i < maxHeart; i++)
         {
+            float x = startX + i * heartSpacing;
+
             // 空白ハート
             var blank = Instantiate(heartBlankPrefab, heartParent);
             RectTransform blankRect = blank.GetComponent<RectTransform>();
-            blankRect.anchoredPosition = new Vector2(i * heartSpacing, 0);
+            blankRect.anchoredPosition = new Vector2(x, 0);
             heartObjects.Add(blank.gameObject);
 
             // ハート（現在HP以下のみ）
@@ -88,7 +110,7 @@ public class HeartController : MonoBehaviour
             {
                 var heart = Instantiate(heartPrefab, heartParent);
                 RectTransform heartRect = heart.GetComponent<RectTransform>();
-                heartRect.anchoredPosition = new Vector2(i * heartSpacing, 0);
+                heartRect.anchoredPosition = new Vector2(x, 0);
                 heartObjects.Add(heart.gameObject);
             }
         }

@@ -99,15 +99,19 @@ public class StartManager : MonoBehaviour
         // Canvas�\�����̏���
         if (canvasDisplayed)
         {
-            if (Input.GetKeyDown(KeyCode.W))
+            //if (Input.GetKeyDown(KeyCode.W))
+            //{
+            //    sceneToLoad = "GameScene_Rantou";
+                
+            //    SceneManagerScript.Instance.FadeOutScene(sceneToLoad);
+            //}
+            if (Input.GetKeyDown(KeyCode.I)&& Input.GetKeyDown(KeyCode.W))
             {
-                sceneToLoad = "GameScene_Rantou";
+                sceneToLoad = "GameScene_Tutorial";
                 SceneManagerScript.Instance.FadeOutScene(sceneToLoad);
-            }
-            else if (Input.GetKeyDown(KeyCode.I))
-            {
-                sceneToLoad = "GameScene_Syuuten";
-                SceneManagerScript.Instance.FadeOutScene(sceneToLoad);
+
+                //　ごりおし
+                SceneManagerScript.Instance.OldSceneName = sceneToLoad;
             }
 
             // �����쎞�ԃ`�F�b�N�Ńt�F�[�h�A�E�g
@@ -143,6 +147,8 @@ public class StartManager : MonoBehaviour
             // �J�ڃV�[�����ݒ肳��Ă����炻�̃V�[���ɑJ�ڂ���
             if (!string.IsNullOrEmpty(sceneToLoad))
             {
+                sceneToLoad = "GameScene_Tutorial";
+
                 Debug.Log("�V�[����؂�ւ�:" + sceneToLoad);
                 SceneManagerScript.Instance.FadeOutScene(sceneToLoad);
             }
@@ -214,14 +220,14 @@ public class StartManager : MonoBehaviour
         {
             player1ReadyText.text = player1Ready ?
                 "Ready!" :
-                "Press W to GimmickMode Ready";
+                "Press W to Ready";
         }
 
         if (player2ReadyText != null)
         {
             player2ReadyText.text = player2Ready ?
                 "Ready!" :
-                "Press I to SimpleMode Ready";
+                "Press I to Ready";
         }
     }
 

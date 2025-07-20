@@ -23,6 +23,9 @@ public class ResultSceneController : MonoBehaviour
         Debug.Log($"{SceneManagerScript.Instance.Player1_Score},{SceneManagerScript.Instance.Player2_Score}");
 
         OldSceneName =  SceneManagerScript.Instance.OldSceneName;
+        Debug.Log($"{OldSceneName}");
+
+
         SimpleModeSceneName = "GameScene_Syuuten";
         GimmickModeSceneName = "GameScene_Rantou";
 

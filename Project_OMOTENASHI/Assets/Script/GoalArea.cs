@@ -19,7 +19,7 @@ public class GoalArea : MonoBehaviour {
 
     private void OnTriggerExit2D(Collider2D other) {
         if (other.CompareTag("Player")) {
-            playersInArea.Remove(other.gameObject);
+            //playersInArea.Remove(other.gameObject);
         }
     }
 

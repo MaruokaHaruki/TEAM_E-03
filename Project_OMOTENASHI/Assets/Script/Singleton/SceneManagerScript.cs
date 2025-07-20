@@ -63,6 +63,7 @@ public class SceneManagerScript : SingletonMonoBehaviour<SceneManagerScript>
             Debug.LogError("シーン名が無効です");
             return;
         }
+        
         SceneManager.LoadScene(sceneName);
     }
 

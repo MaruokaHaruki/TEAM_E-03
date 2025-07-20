@@ -42,6 +42,14 @@ public class Fire_UI : MonoBehaviour
 
     private void Update()
     {
+        if (player == PlayerList.Player1)
+        {
+            instplayer = GameManager.Instance.player1_;
+        }
+        else if (player == PlayerList.Player2)
+        {
+            instplayer = GameManager.Instance.player2_;
+        }
 
         float value = GetValue();
 
