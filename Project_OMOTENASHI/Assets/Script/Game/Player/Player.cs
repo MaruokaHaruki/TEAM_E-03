@@ -129,7 +129,7 @@ public class Player : MonoBehaviour {
     private bool isSpeedBoosted_ = false;
 
     // 連打ゲージ関連
-    private float currentComboGauge_ = 0.0f;
+    public float currentComboGauge_ = 0.0f;
     private bool isGaugeDrainBoosted_ = false;
 
     // 無敵状態関連
